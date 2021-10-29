@@ -20,12 +20,6 @@ export default function AppParams() {
 						<option value="3">AN</option>
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
-						<option>Sector</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
-					</Form.Select>
-					<Form.Select aria-label="Default select example">
 						<option>Room</option>
 						<option value="1">1</option>
 						<option value="2">2</option>

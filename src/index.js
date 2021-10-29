@@ -58,11 +58,13 @@ ReactDOM.render(
 			<div
 				class="container-full"
 				style={{
+					width: '100%',
 					padding: '1em',
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
 					alignItems: 'center',
+					textAlign: 'center',
 				}}
 			>
 				<h2>LHD - LABORATORY HAZARDS DIRECTORY</h2>
