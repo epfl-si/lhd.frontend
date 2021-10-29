@@ -1,7 +1,12 @@
+import AppTable from '../components/appTable';
+import '../styles/homepage.css';
+
 export default function HomePage() {
 	return (
-		<div>
-			<h1>Hello World !</h1>
+		<div className="wrapper">
+			<div>
+				<AppTable />
+			</div>
 		</div>
 	);
 }

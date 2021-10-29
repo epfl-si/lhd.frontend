@@ -3,12 +3,77 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Base } from '@epfl/epfl-sti-react-library';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<Base
+			asideMenuItems={[
+				{
+					heading: 'Hazards',
+					menus: [
+						{ anchor: 'Bio hazard', link: '/' },
+						{ anchor: 'Chem hazard', link: '/hellotabs' },
+						{ anchor: 'Gas Hazard', link: '/hellovisualizations' },
+					],
+				},
+				{
+					heading: 'Authorisations',
+					menus: [
+						{ anchor: 'Toxic chems', link: '/' },
+						{ anchor: 'OFSP', link: '/hellotabs' },
+					],
+				},
+				{
+					heading: 'Dispensation',
+					menus: [],
+				},
+				{
+					heading: 'Etc...',
+					menus: [],
+				},
+			]}
+			baseTitle="EPFL STI React Library"
+			breadcrumbItems={[
+				{ anchor: '...', link: 'https://www.epfl.ch/schools/' },
+				{ anchor: '...', link: 'https://sti.epfl.ch/' },
+				{ anchor: 'LHD - LABORATORY HAZARDS DIRECTORY', link: '' },
+			]}
+			drawerContents={{ anchor: 'Go to main site', link: 'https://www.epfl.ch' }}
+			homeAnchor="Home"
+			homeLink="/"
+			isBeta
+			isHome
+			showFooter
+			title="Base Component - Default"
+			topMenuItems={[
+				{ anchor: 'About', link: 'https://www.epfl.ch/about/' },
+				{ anchor: 'Education', link: 'https://www.epfl.ch/education' },
+				{ anchor: 'Research', link: 'https://www.epfl.ch/research' },
+				{ anchor: 'Innovation', link: 'https://www.epfl.ch/innovation/' },
+				{ anchor: 'Schools', link: 'https://www.epfl.ch/schools/' },
+				{ anchor: 'Campus', link: 'https://www.epfl.ch/campus/' },
+			]}
+		>
+			<div
+				class="container-full"
+				style={{
+					padding: '1em',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}
+			>
+				<h2>LHD - LABORATORY HAZARDS DIRECTORY</h2>
+				<h4 style={{ fontWeight: 'bold' }}>
+					SAFETY, PREVENTION AND HEALTH DOMAIN DSPS
+				</h4>
+				<App />
+			</div>
+		</Base>
+	</React.StrictMode>,
+	document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
