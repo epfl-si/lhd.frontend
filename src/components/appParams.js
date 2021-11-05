@@ -2,8 +2,17 @@ import { Button } from '@epfl/epfl-sti-react-library';
 import { useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 
-export default function AppParams(buList) {
-	const bl = buList.buList && buList.buList.map(e => <option value="1">{e}</option>);
+export default function AppParams(pList) {
+	const params = {
+		bu: pList.pList.bu.map(e => <option value="1">{e}</option>),
+		ro: pList.pList.ro.map(e => <option value="1">{e}</option>),
+		de: pList.pList.de.map(e => <option value="1">{e}</option>),
+		co: pList.pList.co.map(e => <option value="1">{e}</option>),
+		re: pList.pList.re.map(e => <option value="1">{e}</option>),
+		fa: pList.pList.fa.map(e => <option value="1">{e}</option>),
+		in: pList.pList.in.map(e => <option value="1">{e}</option>),
+		un: pList.pList.un.map(e => <option value="1">{e}</option>),
+	};
 	return (
 		<div
 			style={{
@@ -17,53 +26,39 @@ export default function AppParams(buList) {
 				<Form.Group className="mb-3" controlId="loc">
 					<Form.Select aria-label="Default select example">
 						<option>Building</option>
-						{bl}
+						{params.bu}
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
 						<option>Room</option>
-						<option value="1">1</option>
-						<option value="2">2</option>
-						<option value="3">3</option>
+						{params.ro}
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
 						<option>Designation</option>
-						<option value="1">None</option>
-						<option value="2">Lab</option>
-						<option value="3">Storage</option>
+						{params.de}
 					</Form.Select>
 				</Form.Group>
 				<Form.Group className="mb-3" controlId="pers">
 					<Form.Select aria-label="Default select example">
 						<option>Cosec</option>
-						<option value="1">asdd</option>
-						<option value="2">asd</option>
-						<option value="3">asddsa</option>
+						{params.co}
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
 						<option>Responsible</option>
-						<option value="1">fdsdsf</option>
-						<option value="2">dfsfds</option>
-						<option value="3">sdfsd</option>
+						{params.re}
 					</Form.Select>
 				</Form.Group>
 				<Form.Group className="mb-3" controlId="formGroupEmail">
 					<Form.Select aria-label="Default select example">
 						<option>Faculty</option>
-						<option value="1">fdsdsf</option>
-						<option value="2">dfsfds</option>
-						<option value="3">sdfsd</option>
+						{params.fa}
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
 						<option>Institute</option>
-						<option value="1">fdsdsf</option>
-						<option value="2">dfsfds</option>
-						<option value="3">sdfsd</option>
+						{params.in}
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
 						<option>Unit</option>
-						<option value="1">fdsdsf</option>
-						<option value="2">dfsfds</option>
-						<option value="3">sdfsd</option>
+						{params.un}
 					</Form.Select>
 				</Form.Group>
 			</Form>

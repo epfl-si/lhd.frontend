@@ -6,7 +6,8 @@ import AppParams from '../components/appParams';
 
 export default function AppTable() {
 	const [apiData, setApiData] = useState();
-	const [buList, setBuList] = useState();
+	const [paramsList, setParamsList] = useState();
+
 	let columns = [
 		{ field: 'building', headerName: 'Building', width: 130 },
 		{ field: 'sector', headerName: 'Sector', width: 130 },
@@ -20,17 +21,20 @@ export default function AppTable() {
 		{ field: 'unit', headerName: 'Unit', width: 130 },
 		{ field: 'update', headerName: 'Update', width: 130 },
 	];
-	// useEffect(() => {
-	// 	return fetch('https://retoolapi.dev/s2RCVT/data')
-	// 		.then(r => r.ok && r.json())
-	// 		.then(d => {
-	// 			console.log(d);
-	// 		});
-	// }, []);
 	useEffect(() => {
-		setBuList(uData.map(e => e.building));
+		setParamsList({
+			bu: uData.map(e => e.building),
+			se: uData.map(e => e.sector),
+			fl: uData.map(e => e.floor),
+			ro: uData.map(e => e.room),
+			de: uData.map(e => e.designation),
+			co: uData.map(e => e.cosec),
+			re: uData.map(e => e.responsible),
+			fa: uData.map(e => e.faculty),
+			in: uData.map(e => e.institute),
+			un: uData.map(e => e.unit),
+		});
 	}, []);
-	// console.log(buList);
 	return (
 		<div
 			style={{
@@ -40,7 +44,7 @@ export default function AppTable() {
 				alignItems: 'center',
 			}}
 		>
-			<AppParams buList={buList} />
+			<AppParams pList={paramsList} />
 			<div
 				style={{
 					width: '100%',
