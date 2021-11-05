@@ -1,9 +1,12 @@
 // import { Table } from '@epfl/epfl-sti-react-library';
 import { DataGrid } from '@mui/x-data-grid';
+import { useEffect, useState } from 'react';
+import uData from '../json/example2.json';
 import AppParams from '../components/appParams';
-import exampleData from '../json/example.json';
 
 export default function AppTable() {
+	const [apiData, setApiData] = useState();
+	const [buList, setBuList] = useState();
 	let columns = [
 		{ field: 'building', headerName: 'Building', width: 130 },
 		{ field: 'sector', headerName: 'Sector', width: 130 },
@@ -17,6 +20,17 @@ export default function AppTable() {
 		{ field: 'unit', headerName: 'Unit', width: 130 },
 		{ field: 'update', headerName: 'Update', width: 130 },
 	];
+	// useEffect(() => {
+	// 	return fetch('https://retoolapi.dev/s2RCVT/data')
+	// 		.then(r => r.ok && r.json())
+	// 		.then(d => {
+	// 			console.log(d);
+	// 		});
+	// }, []);
+	useEffect(() => {
+		setBuList(uData.map(e => e.building));
+	}, []);
+	// console.log(buList);
 	return (
 		<div
 			style={{
@@ -26,7 +40,7 @@ export default function AppTable() {
 				alignItems: 'center',
 			}}
 		>
-			<AppParams />
+			<AppParams buList={buList} />
 			<div
 				style={{
 					width: '100%',
@@ -34,7 +48,7 @@ export default function AppTable() {
 				}}
 			>
 				<DataGrid
-					rows={exampleData.datas}
+					rows={uData}
 					columns={columns}
 					pageSize={5}
 					rowsPerPageOptions={[5]}

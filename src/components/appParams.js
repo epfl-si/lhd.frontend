@@ -1,7 +1,9 @@
 import { Button } from '@epfl/epfl-sti-react-library';
+import { useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 
-export default function AppParams() {
+export default function AppParams(buList) {
+	const bl = buList.buList && buList.buList.map(e => <option value="1">{e}</option>);
 	return (
 		<div
 			style={{
@@ -15,9 +17,7 @@ export default function AppParams() {
 				<Form.Group className="mb-3" controlId="loc">
 					<Form.Select aria-label="Default select example">
 						<option>Building</option>
-						<option value="1">AAC</option>
-						<option value="2">AI</option>
-						<option value="3">AN</option>
+						{bl}
 					</Form.Select>
 					<Form.Select aria-label="Default select example">
 						<option>Room</option>
