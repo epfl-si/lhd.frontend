@@ -1,13 +1,10 @@
-// import { Table } from '@epfl/epfl-sti-react-library';
 import { DataGrid } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import uData from '../json/example2.json';
 import AppParams from '../components/appParams';
 
 export default function AppTable() {
-	const [apiData, setApiData] = useState();
 	const [paramsList, setParamsList] = useState();
-
 	let columns = [
 		{ field: 'building', headerName: 'Building', width: 130 },
 		{ field: 'sector', headerName: 'Sector', width: 130 },
@@ -21,19 +18,31 @@ export default function AppTable() {
 		{ field: 'unit', headerName: 'Unit', width: 130 },
 		{ field: 'update', headerName: 'Update', width: 130 },
 	];
+	let rows = {
+		Building: [],
+		Room: [],
+		Designation: [],
+		Cosec: [],
+		Responsible: [],
+		Faculty: [],
+		Institute: [],
+		Unit: [],
+	};
 	useEffect(() => {
-		setParamsList({
-			bu: uData.map(e => e.building),
-			se: uData.map(e => e.sector),
-			fl: uData.map(e => e.floor),
-			ro: uData.map(e => e.room),
-			de: uData.map(e => e.designation),
-			co: uData.map(e => e.cosec),
-			re: uData.map(e => e.responsible),
-			fa: uData.map(e => e.faculty),
-			in: uData.map(e => e.institute),
-			un: uData.map(e => e.unit),
+		uData.forEach(e => {
+			rows.Building.push(e.building);
+			rows.Room.push(e.room);
+			rows.Designation.push(e.designation);
+			rows.Cosec.push(e.cosec);
+			rows.Responsible.push(e.responsible);
+			rows.Faculty.push(e.faculty);
+			rows.Institute.push(e.institute);
+			rows.Unit.push(e.unit);
 		});
+		Object.entries(rows).map(
+			e => (rows[e[0]] = e[1].filter((e, i, a) => a.indexOf(e) === i))
+		);
+		setParamsList(rows);
 	}, []);
 	return (
 		<div
