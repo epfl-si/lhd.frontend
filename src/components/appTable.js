@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState } from 'react';
 import uData from '../json/example2.json';
@@ -36,22 +37,19 @@ export default function AppTable() {
 		setShownData(uData);
 	};
 	return (
-		<div>
-			<AppCategorySearchbar
-				searchCategories={columns}
-				categoryValue={category}
-				statementValue={statement}
-				onCatChange={handleCategoryChange}
-				onStateChange={handleStatementChange}
-				onSearch={onSearch}
-				onClear={onClear}
-			/>
-			<div
-				style={{
-					width: '100%',
-					height: '500px',
-				}}
-			>
+		<Box display="flex" flexDirection="column" alignItems="center">
+			<Box width="100%">
+				<AppCategorySearchbar
+					searchCategories={columns}
+					categoryValue={category}
+					statementValue={statement}
+					onCatChange={handleCategoryChange}
+					onStateChange={handleStatementChange}
+					onSearch={onSearch}
+					onClear={onClear}
+				/>
+			</Box>
+			<Box width="100%" height="500px">
 				<DataGrid
 					rows={shownData}
 					columns={columns}
@@ -59,7 +57,7 @@ export default function AppTable() {
 					rowsPerPageOptions={[5]}
 					checkboxSelection
 				/>
-			</div>
-		</div>
+			</Box>
+		</Box>
 	);
 }

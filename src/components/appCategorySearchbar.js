@@ -1,5 +1,6 @@
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Box, InputAdornment, MenuItem, TextField } from '@material-ui/core';
+import { Search, DeleteForever } from '@mui/icons-material';
 
 export default function AppCategorySearchbar(props) {
 	const {
@@ -18,14 +19,16 @@ export default function AppCategorySearchbar(props) {
 	return (
 		<Box
 			display="flex"
-			flexDirection="row"
+			flexDirection={{ xs: 'column', sm: 'row' }}
 			justifyContent="start"
-			alignItems="center"
+			alignItems={{ xs: 'start', sm: 'center' }}
+			paddingY={2}
 			gridGap={8}
 		>
 			<TextField
 				id="outlined-select-currency"
 				select
+				fullWidth={{ xs: true, sm: false }}
 				style={{
 					minWidth: '200px',
 				}}
@@ -53,8 +56,19 @@ export default function AppCategorySearchbar(props) {
 					),
 				}}
 			></TextField>
-			<Button label="Search" onClickFn={onSearch} />
-			{statementValue !== '' && <Button label="✖︎" onClickFn={onClear} />}
+
+			<Box
+				width="100%"
+				display="flex"
+				flexDirection="row"
+				justifyContent={{ xs: 'space-between', sm: 'start' }}
+				gridGap={8}
+			>
+				<Button label={<Search />} onClickFn={onSearch} />
+				{statementValue !== '' && (
+					<Button label={<DeleteForever />} onClickFn={onClear} />
+				)}
+			</Box>
 		</Box>
 	);
 }
