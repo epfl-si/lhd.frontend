@@ -56,21 +56,27 @@ ReactDOM.render(
 			]}
 		>
 			<div
-				class="container-full"
+				className="container-full"
 				style={{
 					width: '100%',
 					padding: '1em',
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'center',
-					alignItems: 'center',
-					textAlign: 'center',
 				}}
 			>
-				<h2>LHD - LABORATORY HAZARDS DIRECTORY</h2>
-				<h4 style={{ fontWeight: 'bold' }}>
-					SAFETY, PREVENTION AND HEALTH DOMAIN DSPS
-				</h4>
+				<div
+					className="container-full"
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'center',
+						alignItems: 'center',
+						textAlign: 'center',
+					}}
+				>
+					<h2>LHD - LABORATORY HAZARDS DIRECTORY</h2>
+					<h4 style={{ fontWeight: 'bold' }}>
+						SAFETY, PREVENTION AND HEALTH DOMAIN DSPS
+					</h4>
+				</div>
 				<App />
 			</div>
 		</Base>
