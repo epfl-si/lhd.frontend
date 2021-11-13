@@ -1,5 +1,5 @@
 import { Button } from '@epfl/epfl-sti-react-library';
-import { Box, InputAdornment, MenuItem, TextField } from '@material-ui/core';
+import { Box, MenuItem, TextField } from '@material-ui/core';
 import { Search, DeleteForever } from '@mui/icons-material';
 
 export default function AppCategorySearchbar(props) {
@@ -50,11 +50,6 @@ export default function AppCategorySearchbar(props) {
 				variant="outlined"
 				value={statementValue}
 				onChange={onStateChange}
-				InputProps={{
-					startAdornment: (
-						<InputAdornment position="start">{categoryValue}</InputAdornment>
-					),
-				}}
 			></TextField>
 
 			<Box
