@@ -20,7 +20,7 @@ export default function AppTable() {
 	];
 	const [shownData, setShownData] = useState(uData);
 	const [category, setCategory] = useState('building');
-	const [statement, setStatement] = useState();
+	const [statement, setStatement] = useState('');
 	const handleCategoryChange = event => {
 		setCategory(event.target.value);
 	};
@@ -50,13 +50,7 @@ export default function AppTable() {
 				/>
 			</Box>
 			<Box width="100%" height="500px">
-				<DataGrid
-					rows={shownData}
-					columns={columns}
-					pageSize={5}
-					rowsPerPageOptions={[5]}
-					checkboxSelection
-				/>
+				<DataGrid rows={shownData} columns={columns} checkboxSelection />
 			</Box>
 		</Box>
 	);
