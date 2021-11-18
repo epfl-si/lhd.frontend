@@ -1,21 +1,44 @@
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Box, MenuItem, TextField } from '@material-ui/core';
-import { Search, DeleteForever } from '@mui/icons-material';
+import { Search } from '@mui/icons-material';
+import { useEffect, useRef, useState } from 'react';
+import AppParamsList from './appParamsList';
+import { columns } from './appTable';
 
-export default function AppCategorySearchbar(props) {
-	const {
-		searchCategories,
-		categoryValue,
-		statementValue,
-		onStateChange,
-		onCatChange,
-		onSearch,
-		onClear,
-	} = props;
-	const categories = searchCategories.map(e => ({
+export default function AppCategorySearchbar({ paramsData, setParamsData }) {
+	const [searchOptions, setSearchOptions] = useState(columns);
+	const [category, setCategory] = useState('building');
+	const statementRef = useRef();
+
+	const categories = searchOptions.map(e => ({
 		value: e.field,
 		label: e.headerName,
 	}));
+
+	const handleCategoryChange = event => {
+		setCategory(event.target.value);
+	};
+
+	const onSearch = () => {
+		const statement = statementRef.current;
+		if (!statement) return;
+
+		setParamsData([
+			...paramsData,
+			{
+				param: category,
+				label: statement.value,
+			},
+		]);
+
+		statement.value = '';
+	};
+
+	useEffect(() => {
+		setSearchOptions(
+			columns.filter(e => paramsData.every(p => p.param !== e.field))
+		);
+	}, [paramsData]);
 	return (
 		<Box
 			display="flex"
@@ -33,8 +56,8 @@ export default function AppCategorySearchbar(props) {
 					minWidth: '200px',
 				}}
 				label="Select category"
-				value={categoryValue}
-				onChange={onCatChange}
+				value={category}
+				onChange={handleCategoryChange}
 				variant="outlined"
 			>
 				{categories.map(option => (
@@ -48,9 +71,8 @@ export default function AppCategorySearchbar(props) {
 				fullWidth
 				label="Search entries"
 				variant="outlined"
-				value={statementValue}
-				onChange={onStateChange}
-			></TextField>
+				inputRef={statementRef}
+			/>
 
 			<Box
 				width="100%"
@@ -60,10 +82,12 @@ export default function AppCategorySearchbar(props) {
 				gridGap={8}
 			>
 				<Button label={<Search />} onClickFn={onSearch} />
-				{statementValue !== '' && (
-					<Button label={<DeleteForever />} onClickFn={onClear} />
-				)}
 			</Box>
+			<AppParamsList
+				paramsData={paramsData}
+				setParamsData={setParamsData}
+				setSearchOptions={setSearchOptions}
+			/>
 		</Box>
 	);
 }
