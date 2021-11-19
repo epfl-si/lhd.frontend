@@ -1,8 +1,9 @@
-import { Box } from '@material-ui/core';
+import { Box, Switch } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState, useMemo } from 'react';
 import uData from '../json/example2.json';
 import AppCategorySearchbar from './appCategorySearchbar';
+import AppSearchbarAuto from './appSearchbarAuto';
 
 export const columns = [
 	{ field: 'building', headerName: 'Building', width: 130 },
@@ -20,15 +21,34 @@ export const columns = [
 
 export default function AppTable() {
 	const [paramsData, setParamsData] = useState([]);
+	const [checked, setChecked] = useState(true);
+
+	const handleChange = event => {
+		setChecked(event.target.checked);
+	};
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
+			<Switch
+				checked={checked}
+				onChange={handleChange}
+				inputProps={{ 'aria-label': 'controlled' }}
+			/>
 			<Box width="100%">
-				<AppCategorySearchbar
-					searchCategories={columns}
-					paramsData={paramsData}
-					setParamsData={setParamsData}
-				/>
+				{checked ? (
+					<AppSearchbarAuto
+						searchCategories={columns}
+						paramsData={paramsData}
+						setParamsData={setParamsData}
+						tableData={uData}
+					/>
+				) : (
+					<AppCategorySearchbar
+						searchCategories={columns}
+						paramsData={paramsData}
+						setParamsData={setParamsData}
+					/>
+				)}
 			</Box>
 			<Box width="100%" height="500px">
 				<EntriesTable paramsData={paramsData} />
