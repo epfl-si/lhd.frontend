@@ -7,7 +7,7 @@ export default function AppParamsList(props) {
 	const { paramsData, setParamsData, setSearchOptions } = props;
 
 	const handleParamDelete = data => () => {
-		setParamsData(paramsData.filter(p => p.key !== data.key));
+		setParamsData(paramsData.filter(p => p.label !== data.label));
 	};
 
 	const onClear = () => {
@@ -46,7 +46,7 @@ export default function AppParamsList(props) {
 				{paramsData &&
 					paramsData.map(data => {
 						return (
-							<ListItem key={data.key}>
+							<ListItem key={data.label}>
 								<Chip
 									label={
 										<div>

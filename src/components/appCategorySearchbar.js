@@ -7,7 +7,7 @@ import { columns } from './appTable';
 
 export default function AppCategorySearchbar({ paramsData, setParamsData }) {
 	const [searchOptions, setSearchOptions] = useState(columns);
-	const [category, setCategory] = useState('building');
+	const [category, setCategory] = useState(null);
 	const statementRef = useRef();
 
 	const categories = searchOptions.map(e => ({
@@ -38,6 +38,7 @@ export default function AppCategorySearchbar({ paramsData, setParamsData }) {
 		setSearchOptions(
 			columns.filter(e => paramsData.every(p => p.param !== e.field))
 		);
+		setCategory(null);
 	}, [paramsData]);
 	return (
 		<Box
@@ -51,6 +52,7 @@ export default function AppCategorySearchbar({ paramsData, setParamsData }) {
 			<TextField
 				id="outlined-select-currency"
 				select
+				disabled={searchOptions.length < 1 ? true : false}
 				fullWidth={{ xs: true, sm: false }}
 				style={{
 					minWidth: '200px',
@@ -69,6 +71,7 @@ export default function AppCategorySearchbar({ paramsData, setParamsData }) {
 			<TextField
 				id="outlined-select-currency"
 				fullWidth
+				disabled={category === null ? true : false}
 				label="Search entries"
 				variant="outlined"
 				inputRef={statementRef}
