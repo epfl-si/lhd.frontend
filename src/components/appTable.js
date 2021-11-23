@@ -1,7 +1,7 @@
 import { Box, Switch } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
-import uData from '../json/example2.json';
+import uData from '../json/example.json';
 import AppCategorySearchbar from './appCategorySearchbar';
 import AppSearchbarAuto from './appSearchbarAuto';
 
