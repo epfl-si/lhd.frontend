@@ -39,8 +39,8 @@ export default function AppTable() {
 				)
 				.flat()
 				.filter(
-					(thing, index, self) =>
-						index === self.findIndex(t => t.value === thing.value)
+					(compVal2, index, self) =>
+						index === self.findIndex(compVal1 => compVal1.value === compVal2.value)
 				)
 				.filter(e => e.label !== 'id')
 		);
