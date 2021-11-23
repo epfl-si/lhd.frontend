@@ -72,6 +72,9 @@ export default function AppCategorySearchbar({ paramsData, setParamsData }) {
 				id="outlined-select-currency"
 				fullWidth
 				disabled={category === null ? true : false}
+				onKeyDown={event => {
+					event.key === 'Enter' && onSearch();
+				}}
 				label="Search entries"
 				variant="outlined"
 				inputRef={statementRef}
