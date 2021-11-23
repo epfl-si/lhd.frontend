@@ -1,32 +1,10 @@
 import { Box, TextField } from '@material-ui/core';
 import { Autocomplete } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { columns } from './appTable';
+import { useState } from 'react';
 
-export default function AppSearchbarAuto({
-	searchCategories,
-	paramsData,
-	setParamsData,
-	tableData,
-}) {
+export default function AppSearchbarAuto({ tableData }) {
 	const [statement, setStatement] = useState('');
-	// console.log(tableData);
-	const opt = tableData.forEach(e =>
-		Object.entries(e).map(i => {
-			return { value: i[1], label: i[0] };
-		})
-	);
-	console.log(opt);
-
-	const [searchOptions, setSearchOptions] = useState(
-		columns.map(e => {
-			return {
-				text: statement,
-				value: e.field,
-				label: e.headerName,
-			};
-		})
-	);
+	console.log(tableData);
 	const [optionsList, setOptionsList] = useState([]);
 
 	const handleStatementChange = event => {
@@ -37,28 +15,6 @@ export default function AppSearchbarAuto({
 		setOptionsList(value);
 	};
 
-	useEffect(() => {
-		setSearchOptions(
-			columns.map(e => {
-				return {
-					text: statement,
-					value: e.field,
-					label: e.headerName,
-				};
-			})
-		);
-		// setParamsData([
-		// 	...paramsData,
-		// 	optionsList.map(e => {
-		// 		let option = e.split(':');
-		// 		return {
-		// 			param: option[0],
-		// 			label: option[1],
-		// 		};
-		// 	}),
-		// ]);
-		// console.log(paramsData);
-	}, [statement]);
 	return (
 		<Box
 			display="flex"
@@ -70,12 +26,12 @@ export default function AppSearchbarAuto({
 		>
 			<Autocomplete
 				multiple
+				fullWidth
 				value={optionsList}
 				onChange={handleListChange}
-				fullWidth
-				options={searchOptions}
-				getOptionLabel={test => test.label}
-				//filterSelectedOptions
+				options={tableData.sort((a, b) => -b.label.localeCompare(a.label))}
+				groupBy={option => option.label}
+				getOptionLabel={option => option.value}
 				renderInput={params => (
 					<TextField
 						{...params}

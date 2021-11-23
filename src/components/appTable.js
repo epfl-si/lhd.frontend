@@ -1,6 +1,6 @@
 import { Box, Switch } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import uData from '../json/example2.json';
 import AppCategorySearchbar from './appCategorySearchbar';
 import AppSearchbarAuto from './appSearchbarAuto';
@@ -22,10 +22,28 @@ export const columns = [
 export default function AppTable() {
 	const [paramsData, setParamsData] = useState([]);
 	const [checked, setChecked] = useState(true);
+	const [autoComplete, setAutoComplete] = useState();
 
 	const handleChange = event => {
 		setChecked(event.target.checked);
 	};
+
+	useEffect(() => {
+		setAutoComplete(
+			uData
+				.map(e =>
+					Object.entries(e).map(i => {
+						return { value: i[1], label: i[0] };
+					})
+				)
+				.flat()
+				.filter(
+					(thing, index, self) =>
+						index === self.findIndex(t => t.value === thing.value)
+				)
+				.filter(e => e.label !== 'id')
+		);
+	}, []);
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
@@ -36,12 +54,7 @@ export default function AppTable() {
 			/>
 			<Box width="100%">
 				{checked ? (
-					<AppSearchbarAuto
-						searchCategories={columns}
-						paramsData={paramsData}
-						setParamsData={setParamsData}
-						tableData={uData}
-					/>
+					<AppSearchbarAuto tableData={autoComplete} />
 				) : (
 					<AppCategorySearchbar
 						searchCategories={columns}
