@@ -34,7 +34,8 @@ export default function AppTable() {
 			uData
 				.map(e =>
 					Object.entries(e).map(i => {
-						return { value: isNaN(i[1]) ? i[1] : String(i[1]), label: i[0] };
+						const [lab, val] = i;
+						return { value: isNaN(val) ? val : String(val), label: lab };
 					})
 				)
 				.flat()
