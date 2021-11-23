@@ -29,7 +29,7 @@ export default function AppSearchbarAuto({ tableData }) {
 				fullWidth
 				value={optionsList}
 				onChange={handleListChange}
-				options={tableData.sort((a, b) => -b.label.localeCompare(a.label))}
+				options={(tableData || []).sort((a, b) => -b.label.localeCompare(a.label))}
 				groupBy={option => option.label}
 				getOptionLabel={option => option.value}
 				renderInput={params => (
@@ -39,7 +39,8 @@ export default function AppSearchbarAuto({ tableData }) {
 						fullWidth
 						onChange={handleStatementChange}
 						label="Search entries"
-						placeholder="Favorites"
+						placeholder="Entries"
+						variant="outlined"
 					/>
 				)}
 			/>
