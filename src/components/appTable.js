@@ -21,6 +21,7 @@ export const columns = [
 
 export default function AppTable() {
 	const [paramsData, setParamsData] = useState([]);
+	const [optionsList, setOptionsList] = useState([]);
 	const [checked, setChecked] = useState(true);
 	const [autoComplete, setAutoComplete] = useState();
 
@@ -33,7 +34,7 @@ export default function AppTable() {
 			uData
 				.map(e =>
 					Object.entries(e).map(i => {
-						return { value: i[1], label: i[0] };
+						return { value: isNaN(i[1]) ? i[1] : String(i[1]), label: i[0] };
 					})
 				)
 				.flat()
@@ -54,7 +55,11 @@ export default function AppTable() {
 			/>
 			<Box width="100%">
 				{checked ? (
-					<AppSearchbarAuto tableData={autoComplete} />
+					<AppSearchbarAuto
+						optionsList={optionsList}
+						setOptionsList={setOptionsList}
+						tableData={autoComplete}
+					/>
 				) : (
 					<AppCategorySearchbar
 						searchCategories={columns}
@@ -64,13 +69,17 @@ export default function AppTable() {
 				)}
 			</Box>
 			<Box width="100%" height="500px">
-				<EntriesTable paramsData={paramsData} />
+				<EntriesTableCategory
+					paramsData={paramsData}
+					optionsList={optionsList}
+					checked={checked}
+				/>
 			</Box>
 		</Box>
 	);
 }
 
-function EntriesTable({ paramsData }) {
+function EntriesTableCategory({ paramsData, optionsList, checked }) {
 	const shownData = useMemo(
 		() =>
 			paramsData?.length === 0
@@ -82,8 +91,23 @@ function EntriesTable({ paramsData }) {
 				  ),
 		[paramsData]
 	);
+	const shownDataAuto = useMemo(
+		() =>
+			optionsList?.length === 0
+				? uData
+				: uData.filter(e =>
+						optionsList.every(
+							p => String(e[p.label]).toUpperCase() === p.value.toUpperCase()
+						)
+				  ),
+		[optionsList]
+	);
 
 	return (
-		<DataGrid disableSelectionOnClick={true} rows={shownData} columns={columns} />
+		<DataGrid
+			disableSelectionOnClick={true}
+			rows={checked ? shownDataAuto : shownData}
+			columns={columns}
+		/>
 	);
 }

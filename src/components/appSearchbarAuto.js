@@ -1,11 +1,13 @@
-import { Box, TextField } from '@material-ui/core';
+import { Box, Chip, TextField } from '@material-ui/core';
 import { Autocomplete } from '@mui/material';
 import { useState } from 'react';
 
-export default function AppSearchbarAuto({ tableData }) {
+export default function AppSearchbarAuto({
+	tableData,
+	optionsList,
+	setOptionsList,
+}) {
 	const [statement, setStatement] = useState('');
-	console.log(tableData);
-	const [optionsList, setOptionsList] = useState([]);
 
 	const handleStatementChange = event => {
 		setStatement(event.target.value);
@@ -13,6 +15,7 @@ export default function AppSearchbarAuto({ tableData }) {
 
 	const handleListChange = (event, value) => {
 		setOptionsList(value);
+		console.log(optionsList);
 	};
 
 	return (
@@ -32,6 +35,19 @@ export default function AppSearchbarAuto({ tableData }) {
 				options={(tableData || []).sort((a, b) => -b.label.localeCompare(a.label))}
 				groupBy={option => option.label}
 				getOptionLabel={option => option.value}
+				renderTags={(value, getTagProps) =>
+					value.map((option, index) => (
+						<Chip
+							variant="outlined"
+							label={
+								<div>
+									<b>{option.label} |</b> {option.value}
+								</div>
+							}
+							{...getTagProps({ index })}
+						/>
+					))
+				}
 				renderInput={params => (
 					<TextField
 						{...params}
