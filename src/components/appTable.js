@@ -2,8 +2,7 @@ import { Box, Switch } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
 import uData from '../json/example.json';
-import AppCategorySearchbar from './appCategorySearchbar';
-import AppSearchbarAuto from './appSearchbarAuto';
+import TableSmartbar from './Searchbar/TableSmartbar';
 
 export const columns = [
 	{ field: 'building', headerName: 'Building', width: 130 },
@@ -55,19 +54,14 @@ export default function AppTable() {
 				inputProps={{ 'aria-label': 'controlled' }}
 			/>
 			<Box width="100%">
-				{checked ? (
-					<AppSearchbarAuto
-						optionsList={optionsList}
-						setOptionsList={setOptionsList}
-						tableData={autoComplete}
-					/>
-				) : (
-					<AppCategorySearchbar
-						searchCategories={columns}
-						paramsData={paramsData}
-						setParamsData={setParamsData}
-					/>
-				)}
+				<TableSmartbar
+					searchCategories={columns}
+					paramsData={paramsData}
+					setParamsData={setParamsData}
+					optionsList={optionsList}
+					setOptionsList={setOptionsList}
+					tableData={autoComplete}
+				/>
 			</Box>
 			<Box width="100%" height="500px">
 				<EntriesTableCategory

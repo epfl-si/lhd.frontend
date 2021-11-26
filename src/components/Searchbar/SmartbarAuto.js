@@ -2,11 +2,7 @@ import { Box, Chip, TextField } from '@material-ui/core';
 import { Autocomplete } from '@mui/material';
 import { useState } from 'react';
 
-export default function AppSearchbarAuto({
-	tableData,
-	optionsList,
-	setOptionsList,
-}) {
+export default function SmartbarAuto({ tableData, optionsList, setOptionsList }) {
 	const [statement, setStatement] = useState('');
 
 	const handleStatementChange = event => {
@@ -15,12 +11,12 @@ export default function AppSearchbarAuto({
 
 	const handleListChange = (event, value) => {
 		setOptionsList(value);
-		console.log(optionsList);
 	};
 
 	return (
 		<Box
 			display="flex"
+			width="100%"
 			flexDirection={{ xs: 'column', sm: 'row' }}
 			justifyContent="start"
 			alignItems={{ xs: 'start', sm: 'center' }}

@@ -1,11 +1,17 @@
-import { Button } from '@epfl/epfl-sti-react-library';
 import { Box, MenuItem, TextField } from '@material-ui/core';
-import { Search } from '@mui/icons-material';
 import { useEffect, useRef, useState } from 'react';
-import AppParamsList from './appParamsList';
-import { columns } from './appTable';
+import AppParamsList from './SmartbarParams';
+import AppSearchbarAuto from './SmartbarAuto';
+import { columns } from '../AppTable';
+import SmartbarManual from './SmartbarManual';
 
-export default function AppCategorySearchbar({ paramsData, setParamsData }) {
+export default function TableSmartbar({
+	paramsData,
+	setParamsData,
+	optionsList,
+	setOptionsList,
+	tableData,
+}) {
 	const [searchOptions, setSearchOptions] = useState(columns);
 	const [category, setCategory] = useState(null);
 	const statementRef = useRef();
@@ -68,32 +74,23 @@ export default function AppCategorySearchbar({ paramsData, setParamsData }) {
 					</MenuItem>
 				))}
 			</TextField>
-			<TextField
-				id="outlined-select-currency"
-				fullWidth
-				disabled={category === null ? true : false}
-				onKeyDown={event => {
-					event.key === 'Enter' && onSearch();
-				}}
-				label="Search entries"
-				variant="outlined"
-				inputRef={statementRef}
-			/>
 
-			<Box
-				width="100%"
-				display="flex"
-				flexDirection="row"
-				justifyContent={{ xs: 'space-between', sm: 'start' }}
-				gridGap={8}
-			>
-				<Button label={<Search />} onClickFn={onSearch} />
-			</Box>
-			<AppParamsList
-				paramsData={paramsData}
-				setParamsData={setParamsData}
-				setSearchOptions={setSearchOptions}
-			/>
+			{category === null ? (
+				<AppSearchbarAuto
+					optionsList={optionsList}
+					setOptionsList={setOptionsList}
+					tableData={tableData}
+				/>
+			) : (
+				<Box width="100%">
+					<SmartbarManual inputRef={statementRef} onSearch={onSearch} />
+					<AppParamsList
+						paramsData={paramsData}
+						setParamsData={setParamsData}
+						setSearchOptions={setSearchOptions}
+					/>
+				</Box>
+			)}
 		</Box>
 	);
 }
