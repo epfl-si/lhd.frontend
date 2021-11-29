@@ -4,6 +4,8 @@ import AppParamsList from './SmartbarParams';
 import AppSearchbarAuto from './SmartbarAuto';
 import { columns } from '../AppTable';
 import SmartbarManual from './SmartbarManual';
+import { Button } from '@epfl/epfl-sti-react-library';
+import { Close } from '@mui/icons-material';
 
 export default function TableSmartbar({
 	paramsData,
@@ -40,6 +42,10 @@ export default function TableSmartbar({
 		statement.value = '';
 	};
 
+	const onDeleteCategories = () => {
+		setCategory(null);
+	};
+
 	useEffect(() => {
 		setSearchOptions(
 			columns.filter(e => paramsData.every(p => p.param !== e.field))
@@ -55,6 +61,9 @@ export default function TableSmartbar({
 			paddingY={2}
 			gridGap={8}
 		>
+			{category !== null && (
+				<Button label={<Close />} onClickFn={onDeleteCategories} />
+			)}
 			<TextField
 				id="outlined-select-currency"
 				select
@@ -84,13 +93,13 @@ export default function TableSmartbar({
 			) : (
 				<Box width="100%">
 					<SmartbarManual inputRef={statementRef} onSearch={onSearch} />
-					<AppParamsList
-						paramsData={paramsData}
-						setParamsData={setParamsData}
-						setSearchOptions={setSearchOptions}
-					/>
 				</Box>
 			)}
+			<AppParamsList
+				paramsData={paramsData}
+				setParamsData={setParamsData}
+				setSearchOptions={setSearchOptions}
+			/>
 		</Box>
 	);
 }

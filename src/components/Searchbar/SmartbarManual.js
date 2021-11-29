@@ -1,9 +1,16 @@
-import { Box, Button, TextField } from '@material-ui/core';
+import { Box, TextField } from '@material-ui/core';
 import { Search } from '@mui/icons-material';
+import { Button } from '@epfl/epfl-sti-react-library';
 
 export default function SmartbarManual({ inputRef, onSearch }) {
 	return (
-		<Box width="100%">
+		<Box
+			width="100%"
+			display="flex"
+			flexDirection="row"
+			alignItems="center"
+			gridGap={8}
+		>
 			<TextField
 				fullWidth
 				onKeyDown={event => {
