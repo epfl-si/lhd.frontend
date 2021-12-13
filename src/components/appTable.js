@@ -1,4 +1,4 @@
-import { Box, Switch } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
 import uData from '../json/example.json';
@@ -21,12 +21,7 @@ export const columns = [
 export default function AppTable() {
 	const [paramsData, setParamsData] = useState([]);
 	const [optionsList, setOptionsList] = useState([]);
-	const [checked, setChecked] = useState(true);
 	const [autoComplete, setAutoComplete] = useState();
-
-	const handleChange = event => {
-		setChecked(event.target.checked);
-	};
 
 	useEffect(() => {
 		setAutoComplete(
@@ -48,11 +43,6 @@ export default function AppTable() {
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
-			<Switch
-				checked={checked}
-				onChange={handleChange}
-				inputProps={{ 'aria-label': 'controlled' }}
-			/>
 			<Box width="100%">
 				<TableSmartbar
 					searchCategories={columns}
@@ -64,45 +54,33 @@ export default function AppTable() {
 				/>
 			</Box>
 			<Box width="100%" height="500px">
-				<EntriesTableCategory
-					paramsData={paramsData}
-					optionsList={optionsList}
-					checked={checked}
-				/>
+				<EntriesTableCategory optionsList={optionsList} />
 			</Box>
 		</Box>
 	);
 }
 
-function EntriesTableCategory({ paramsData, optionsList, checked }) {
+function EntriesTableCategory({ optionsList }) {
 	const shownData = useMemo(
-		() =>
-			paramsData?.length === 0
-				? uData
-				: uData.filter(e =>
-						paramsData.every(p =>
-							String(e[p.param]).toUpperCase().includes(p.label.toUpperCase())
-						)
-				  ),
-		[paramsData]
-	);
-	const shownDataAuto = useMemo(
 		() =>
 			optionsList?.length === 0
 				? uData
 				: uData.filter(e =>
-						optionsList.every(
-							p => String(e[p.label]).toUpperCase() === p.value.toUpperCase()
+						optionsList.every(p =>
+							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
 						)
 				  ),
 		[optionsList]
 	);
+	console.log(
+		uData.filter(e =>
+			optionsList.every(p =>
+				String(e['responsible']).toUpperCase().includes('pepito'.toUpperCase())
+			)
+		)
+	);
 
 	return (
-		<DataGrid
-			disableSelectionOnClick={true}
-			rows={checked ? shownDataAuto : shownData}
-			columns={columns}
-		/>
+		<DataGrid disableSelectionOnClick={true} rows={shownData} columns={columns} />
 	);
 }

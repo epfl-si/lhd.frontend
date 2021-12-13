@@ -1,8 +1,7 @@
 import { Box, MenuItem, TextField } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
-import AppParamsList from './SmartbarParams';
 import AppSearchbarAuto from './SmartbarAuto';
-import { columns } from '../AppTable';
+import { columns } from '../appTable';
 import SmartbarManual from './SmartbarManual';
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Close } from '@mui/icons-material';
@@ -31,14 +30,14 @@ export default function TableSmartbar({
 		const statement = statementRef.current;
 		if (!statement) return;
 
-		setParamsData([
-			...paramsData,
+		setOptionsList([
+			...optionsList,
 			{
-				param: category,
-				label: statement.value,
+				label: category,
+				value: statement.value,
 			},
 		]);
-
+		console.log(optionsList);
 		statement.value = '';
 	};
 
@@ -95,11 +94,11 @@ export default function TableSmartbar({
 					<SmartbarManual inputRef={statementRef} onSearch={onSearch} />
 				</Box>
 			)}
-			<AppParamsList
+			{/* <AppParamsList
 				paramsData={paramsData}
 				setParamsData={setParamsData}
 				setSearchOptions={setSearchOptions}
-			/>
+			/> */}
 		</Box>
 	);
 }
