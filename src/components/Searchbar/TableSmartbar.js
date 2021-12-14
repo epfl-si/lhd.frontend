@@ -8,7 +8,6 @@ import { Close } from '@mui/icons-material';
 
 export default function TableSmartbar({
 	paramsData,
-	setParamsData,
 	optionsList,
 	setOptionsList,
 	tableData,
@@ -37,7 +36,8 @@ export default function TableSmartbar({
 				value: statement.value,
 			},
 		]);
-		console.log(optionsList);
+		setCategory(null);
+
 		statement.value = '';
 	};
 
@@ -47,10 +47,10 @@ export default function TableSmartbar({
 
 	useEffect(() => {
 		setSearchOptions(
-			columns.filter(e => paramsData.every(p => p.param !== e.field))
+			columns.filter(e => optionsList.every(p => p.label !== e.field))
 		);
 		setCategory(null);
-	}, [paramsData]);
+	}, [optionsList]);
 	return (
 		<Box
 			display="flex"
@@ -64,7 +64,6 @@ export default function TableSmartbar({
 				<Button label={<Close />} onClickFn={onDeleteCategories} />
 			)}
 			<TextField
-				id="outlined-select-currency"
 				select
 				disabled={searchOptions.length < 1 ? true : false}
 				fullWidth={{ xs: true, sm: false }}
