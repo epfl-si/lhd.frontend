@@ -6,12 +6,7 @@ import SmartbarManual from './SmartbarManual';
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Close } from '@mui/icons-material';
 
-export default function TableSmartbar({
-	paramsData,
-	optionsList,
-	setOptionsList,
-	tableData,
-}) {
+export default function TableSmartbar({ optionsList, setOptionsList, tableData }) {
 	const [searchOptions, setSearchOptions] = useState(columns);
 	const [category, setCategory] = useState(null);
 	const statementRef = useRef();
@@ -26,6 +21,7 @@ export default function TableSmartbar({
 	};
 
 	const onSearch = () => {
+		// ! Renders twice after a search, need to refactor that
 		const statement = statementRef.current;
 		if (!statement) return;
 
@@ -57,12 +53,9 @@ export default function TableSmartbar({
 			flexDirection={{ xs: 'column', sm: 'row' }}
 			justifyContent="start"
 			alignItems={{ xs: 'start', sm: 'center' }}
-			paddingY={2}
+			paddingBottom={2}
 			gridGap={8}
 		>
-			{category !== null && (
-				<Button label={<Close />} onClickFn={onDeleteCategories} />
-			)}
 			<TextField
 				select
 				disabled={searchOptions.length < 1 ? true : false}
@@ -81,7 +74,7 @@ export default function TableSmartbar({
 					</MenuItem>
 				))}
 			</TextField>
-
+			{/* Make this into one component (single searchbar) when finding a solution */}
 			{category === null ? (
 				<AppSearchbarAuto
 					optionsList={optionsList}
@@ -92,6 +85,9 @@ export default function TableSmartbar({
 				<Box width="100%">
 					<SmartbarManual inputRef={statementRef} onSearch={onSearch} />
 				</Box>
+			)}
+			{category !== null && (
+				<Button label={<Close />} onClickFn={onDeleteCategories} />
 			)}
 			{/* <AppParamsList
 				paramsData={paramsData}
