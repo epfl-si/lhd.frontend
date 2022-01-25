@@ -1,6 +1,11 @@
 import { Box } from '@material-ui/core';
-import { gridClasses } from '@mui/material';
-import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
+import {
+	DataGrid,
+	GridToolbarColumnsButton,
+	GridToolbarContainer,
+	GridToolbarDensitySelector,
+	GridToolbarExport,
+} from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
 import uData from '../json/example.json';
 import TableSmartbar from './Searchbar/TableSmartbar';
@@ -62,8 +67,10 @@ export default function AppTable() {
 
 function CustomToolbar() {
 	return (
-		<GridToolbarContainer className={gridClasses.toolbarContainer}>
-			<GridToolbarExport printOptions={{ allColumns: true }} />
+		<GridToolbarContainer>
+			<GridToolbarColumnsButton />
+			<GridToolbarDensitySelector />
+			<GridToolbarExport />
 		</GridToolbarContainer>
 	);
 }
