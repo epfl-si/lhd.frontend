@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core';
-import { DataGrid } from '@mui/x-data-grid';
+import { gridClasses } from '@mui/material';
+import { DataGrid, GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
 import uData from '../json/example.json';
 import TableSmartbar from './Searchbar/TableSmartbar';
@@ -40,7 +41,6 @@ export default function AppTable() {
 				.filter(e => e.label !== 'id')
 		);
 	}, []);
-
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
 			<Box width="100%">
@@ -60,6 +60,14 @@ export default function AppTable() {
 	);
 }
 
+function CustomToolbar() {
+	return (
+		<GridToolbarContainer className={gridClasses.toolbarContainer}>
+			<GridToolbarExport printOptions={{ allColumns: true }} />
+		</GridToolbarContainer>
+	);
+}
+
 function EntriesTableCategory({ optionsList }) {
 	const shownData = useMemo(
 		() =>
@@ -72,15 +80,15 @@ function EntriesTableCategory({ optionsList }) {
 				  ),
 		[optionsList]
 	);
-	console.log(
-		uData.filter(e =>
-			optionsList.every(p =>
-				String(e['responsible']).toUpperCase().includes('pepito'.toUpperCase())
-			)
-		)
-	);
 
 	return (
-		<DataGrid disableSelectionOnClick={true} rows={shownData} columns={columns} />
+		<DataGrid
+			disableSelectionOnClick={true}
+			rows={shownData}
+			columns={columns}
+			components={{
+				Toolbar: CustomToolbar,
+			}}
+		/>
 	);
 }
