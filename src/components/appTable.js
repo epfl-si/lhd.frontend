@@ -1,3 +1,4 @@
+import Button from '@epfl/epfl-sti-react-library/dist/Forms/Button';
 import { Box } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
@@ -23,6 +24,27 @@ export default function AppTable() {
 	const [optionsList, setOptionsList] = useState([]);
 	const [autoComplete, setAutoComplete] = useState();
 
+	const onShare = () => {
+		console.log(
+			`${window.location.href}?filters=${optionsList
+				.map(o => `${o.value}:${o.label}`)
+				.join(',')}`
+		);
+	};
+
+	const onLoad = () => {
+		let urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.has('filters')) {
+			let filters = urlParams.get('filters').split(',');
+			console.log(filters);
+			setOptionsList([
+				...optionsList,
+				filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] })),
+			]);
+			console.log(optionsList);
+		}
+	};
+
 	useEffect(() => {
 		setAutoComplete(
 			uData
@@ -39,6 +61,7 @@ export default function AppTable() {
 				)
 				.filter(e => e.label !== 'id')
 		);
+		onLoad();
 	}, []);
 
 	return (
@@ -55,6 +78,9 @@ export default function AppTable() {
 			</Box>
 			<Box width="100%" height="500px">
 				<EntriesTableCategory optionsList={optionsList} />
+			</Box>
+			<Box width="100%">
+				<Button label="Share filters" onClickFn={onShare} />
 			</Box>
 		</Box>
 	);
