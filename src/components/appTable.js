@@ -1,6 +1,12 @@
 import Button from '@epfl/epfl-sti-react-library/dist/Forms/Button';
 import { Box } from '@material-ui/core';
-import { DataGrid } from '@mui/x-data-grid';
+import {
+	DataGrid,
+	GridToolbarColumnsButton,
+	GridToolbarContainer,
+	GridToolbarDensitySelector,
+	GridToolbarExport,
+} from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
 import uData from '../json/example.json';
 import TableSmartbar from './Searchbar/TableSmartbar';
@@ -63,7 +69,6 @@ export default function AppTable() {
 		);
 		onLoad();
 	}, []);
-
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
 			<Box width="100%">
@@ -86,6 +91,16 @@ export default function AppTable() {
 	);
 }
 
+function CustomToolbar() {
+	return (
+		<GridToolbarContainer>
+			<GridToolbarColumnsButton />
+			<GridToolbarDensitySelector />
+			<GridToolbarExport />
+		</GridToolbarContainer>
+	);
+}
+
 function EntriesTableCategory({ optionsList }) {
 	const shownData = useMemo(
 		() =>
@@ -98,15 +113,15 @@ function EntriesTableCategory({ optionsList }) {
 				  ),
 		[optionsList]
 	);
-	console.log(
-		uData.filter(e =>
-			optionsList.every(p =>
-				String(e['responsible']).toUpperCase().includes('pepito'.toUpperCase())
-			)
-		)
-	);
 
 	return (
-		<DataGrid disableSelectionOnClick={true} rows={shownData} columns={columns} />
+		<DataGrid
+			disableSelectionOnClick={true}
+			rows={shownData}
+			columns={columns}
+			components={{
+				Toolbar: CustomToolbar,
+			}}
+		/>
 	);
 }
