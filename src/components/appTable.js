@@ -1,5 +1,6 @@
 import Button from '@epfl/epfl-sti-react-library/dist/Forms/Button';
-import { Box } from '@material-ui/core';
+import { Box, Snackbar } from '@material-ui/core';
+import { Alert } from '@mui/material';
 import {
 	DataGrid,
 	GridToolbarColumnsButton,
@@ -29,25 +30,32 @@ export default function AppTable() {
 	const [paramsData, setParamsData] = useState([]);
 	const [optionsList, setOptionsList] = useState([]);
 	const [autoComplete, setAutoComplete] = useState();
+	const [openNotification, setOpenNotification] = useState(false);
+
+	const handleClose = (event, reason) => {
+		if (reason === 'clickaway') {
+			return;
+		}
+
+		setOpenNotification(false);
+	};
 
 	const onShare = () => {
-		console.log(
-			`${window.location.href}?filters=${optionsList
+		navigator.clipboard.writeText(
+			`${window.location.origin}/?filters=${optionsList
 				.map(o => `${o.value}:${o.label}`)
 				.join(',')}`
 		);
+		setOpenNotification(true);
 	};
 
 	const onLoad = () => {
 		let urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.has('filters')) {
 			let filters = urlParams.get('filters').split(',');
-			console.log(filters);
-			setOptionsList([
-				...optionsList,
-				filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] })),
-			]);
-			console.log(optionsList);
+			setOptionsList(
+				filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] }))
+			);
 		}
 	};
 
@@ -68,7 +76,9 @@ export default function AppTable() {
 				.filter(e => e.label !== 'id')
 		);
 		onLoad();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
 			<Box width="100%">
@@ -84,9 +94,18 @@ export default function AppTable() {
 			<Box width="100%" height="500px">
 				<EntriesTableCategory optionsList={optionsList} />
 			</Box>
-			<Box width="100%">
-				<Button label="Share filters" onClickFn={onShare} />
+			<Box width="100%" paddingY="16px">
+				<Button label="Copy link w/ parameters" onClickFn={onShare} />
 			</Box>
+			<Snackbar
+				open={openNotification}
+				autoHideDuration={3000}
+				onClose={handleClose}
+			>
+				<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+					Successfully copied link w/ parameters to clipboard !
+				</Alert>
+			</Snackbar>
 		</Box>
 	);
 }
