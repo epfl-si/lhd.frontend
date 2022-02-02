@@ -13,10 +13,11 @@ import uData from '../json/example.json';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export const columns = [
-	{ field: 'building', headerName: 'Building', width: 130 },
-	{ field: 'sector', headerName: 'Sector', width: 130 },
-	{ field: 'floor', headerName: 'Floor', width: 130 },
-	{ field: 'room', headerName: 'Room', width: 130 },
+	// { field: 'building', headerName: 'Building', width: 130 },
+	// { field: 'sector', headerName: 'Sector', width: 130 },
+	// { field: 'floor', headerName: 'Floor', width: 130 },
+	// { field: 'room', headerName: 'Room', width: 130 },
+	{ field: 'location', headerName: 'Location', width: 130 },
 	{ field: 'designation', headerName: 'Designation', width: 130 },
 	{ field: 'cosec', headerName: 'Cosec', width: 130 },
 	{ field: 'responsible', headerName: 'Responsible', width: 130 },
@@ -121,16 +122,36 @@ function CustomToolbar() {
 }
 
 function EntriesTableCategory({ optionsList }) {
+	const formattedData = uData.map(entry => ({
+		id: entry.id,
+		location: `${entry.building} ${entry.sector} ${entry.floor} ${entry.room}`,
+		designation: entry.designation,
+		cosec: entry.cosec,
+		responsible: entry.responsible,
+		faculty: entry.faculty,
+		institute: entry.institute,
+		unit: entry.unit,
+		update: entry.update,
+	}));
+
 	const shownData = useMemo(
 		() =>
 			optionsList?.length === 0
-				? uData
-				: uData.filter(e =>
+				? formattedData
+				: formattedData.filter(e =>
 						optionsList.every(p =>
-							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
+							String(
+								e[
+									p.label === 'building' || 'sector' || 'floor' || 'room'
+										? 'location'
+										: p.label
+								]
+							)
+								.toUpperCase()
+								.includes(p.value.toUpperCase())
 						)
 				  ),
-		[optionsList]
+		[optionsList, formattedData]
 	);
 
 	return (
