@@ -9,10 +9,12 @@ import {
 	GridToolbarExport,
 } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import uData from '../json/example.json';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export const columns = [
+	// ? I am keeping these comments for now, just in case there's a better way to do it.
 	// { field: 'building', headerName: 'Building', width: 130 },
 	// { field: 'sector', headerName: 'Sector', width: 130 },
 	// { field: 'floor', headerName: 'Floor', width: 130 },
@@ -28,10 +30,20 @@ export const columns = [
 ];
 
 export default function AppTable() {
+	const notifTypes = [
+		{
+			type: 'success',
+			text: 'Successfully copied link w/ parameters to clipboard !',
+		},
+		{ type: 'error', text: 'You have no query filters to share !' },
+	];
+
 	const [paramsData, setParamsData] = useState([]);
 	const [optionsList, setOptionsList] = useState([]);
 	const [autoComplete, setAutoComplete] = useState();
 	const [openNotification, setOpenNotification] = useState(false);
+	const [notificationType, setNotificationType] = useState(notifTypes[0]);
+	const history = useHistory();
 
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') {
@@ -42,11 +54,14 @@ export default function AppTable() {
 	};
 
 	const onShare = () => {
-		navigator.clipboard.writeText(
-			`${window.location.origin}/?filters=${optionsList
-				.map(o => `${o.value}:${o.label}`)
-				.join(',')}`
-		);
+		optionsList.length > 0 &&
+			navigator.clipboard.writeText(
+				`${window.location.origin}/?filters=${optionsList
+					.map(o => `${o.value}:${o.label}`)
+					.join(',')}`
+			);
+
+		setNotificationType(optionsList.length > 0 ? notifTypes[0] : notifTypes[1]);
 		setOpenNotification(true);
 	};
 
@@ -59,6 +74,18 @@ export default function AppTable() {
 			);
 		}
 	};
+
+	useEffect(() => {
+		onLoad();
+	}, []);
+
+	useEffect(() => {
+		history.replace(
+			optionsList.length > 0
+				? `/?filters=${optionsList.map(o => `${o.value}:${o.label}`).join(',')}`
+				: ''
+		);
+	}, [history, optionsList]);
 
 	useEffect(() => {
 		setAutoComplete(
@@ -76,8 +103,6 @@ export default function AppTable() {
 				)
 				.filter(e => e.label !== 'id')
 		);
-		onLoad();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -103,8 +128,12 @@ export default function AppTable() {
 				autoHideDuration={3000}
 				onClose={handleClose}
 			>
-				<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-					Successfully copied link w/ parameters to clipboard !
+				<Alert
+					onClose={handleClose}
+					severity={notificationType.type}
+					sx={{ width: '100%' }}
+				>
+					{notificationType.text}
 				</Alert>
 			</Snackbar>
 		</Box>
