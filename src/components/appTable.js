@@ -14,12 +14,10 @@ import { useHistory } from 'react-router-dom';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export const columns = [
-	// ? I am keeping these comments for now, just in case there's a better way to do it.
-	// { field: 'building', headerName: 'Building', width: 130 },
-	// { field: 'sector', headerName: 'Sector', width: 130 },
-	// { field: 'floor', headerName: 'Floor', width: 130 },
-	// { field: 'room', headerName: 'Room', width: 130 },
-	{ field: 'location', headerName: 'Location', width: 230 },
+	{ field: 'building', headerName: 'Building', width: 130, hide: true },
+	{ field: 'sector', headerName: 'Sector', width: 130, hide: true },
+	{ field: 'floor', headerName: 'Floor', width: 130, hide: true },
+	{ field: 'room', headerName: 'Room', width: 130 },
 	{ field: 'designation', headerName: 'Designation', width: 130 },
 	{ field: 'cosec', headerName: 'Cosec', width: 130 },
 	{ field: 'responsible', headerName: 'Responsible', width: 130 },
@@ -219,18 +217,10 @@ function EntriesTableCategory({ optionsList, tableData }) {
 	const shownData = useMemo(
 		() =>
 			optionsList?.length === 0
-				? formattedData
-				: formattedData.filter(e =>
+				? tableData
+				: tableData.filter(e =>
 						optionsList.every(p =>
-							String(
-								e[
-									p.label === 'building' || 'sector' || 'floor' || 'room'
-										? 'location'
-										: p.label
-								]
-							)
-								.toUpperCase()
-								.includes(p.value.toUpperCase())
+							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
 						)
 				  ),
 		[optionsList, formattedData]
