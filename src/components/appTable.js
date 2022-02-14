@@ -202,18 +202,6 @@ function CustomToolbar() {
 }
 
 function EntriesTableCategory({ optionsList, tableData }) {
-	const formattedData = tableData.map(entry => ({
-		id: entry.id,
-		location: `${entry.building} ${entry.sector} ${entry.floor} ${entry.room}`,
-		designation: entry.designation,
-		cosec: entry.cosec,
-		responsible: entry.responsible,
-		faculty: entry.faculty,
-		institute: entry.institute,
-		unit: entry.unit,
-		update: entry.update,
-	}));
-
 	const shownData = useMemo(
 		() =>
 			optionsList?.length === 0
@@ -223,7 +211,7 @@ function EntriesTableCategory({ optionsList, tableData }) {
 							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
 						)
 				  ),
-		[optionsList, formattedData]
+		[optionsList, tableData]
 	);
 
 	return (
