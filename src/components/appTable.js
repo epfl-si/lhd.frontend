@@ -64,7 +64,7 @@ export default function AppTable() {
 		setOpenNotification(true);
 	};
 
-	const fetchResults = async unusedForNow__searchParams => {
+	const fetchResults = async searchParams => {
 		const results = await fetch('http://localhost:3001/', {
 			headers: {
 				accept: '*/*',
@@ -79,7 +79,7 @@ export default function AppTable() {
 				'sec-fetch-site': 'cross-site',
 			},
 			referrerPolicy: 'no-referrer-when-downgrade',
-			body: '{"query":"query ExampleQuery {\\n  rooms (where: { building: { equals: \\"BC\\"} }) {\\n    name\\n    occupancies { cosecs { name} }\\n  }\\n}","variables":{},"operationName":"ExampleQuery"}',
+			body: `{"query":"query LHDDataQuery {\\n  rooms (where: { building: { equals: \\"BC\\"} }) {\\n    name\\n    occupancies { cosecs { name} }\\n  }\\n}","variables":{},"operationName":"LHDDataQuery"}`,
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'omit',
@@ -110,6 +110,7 @@ export default function AppTable() {
 			);
 		}
 		fetchResults();
+		//'{\\n  rooms (where: { building: { equals: \\"BC\\"} }) {\\n    name\\n    occupancies { cosecs { name} }\\n  }\\n}'
 	};
 
 	useEffect(() => {
