@@ -114,6 +114,7 @@ export default function AppTable() {
 
 	useEffect(() => {
 		onLoad();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -142,11 +143,13 @@ export default function AppTable() {
 					})
 				)
 				.flat()
+				.filter(e => e.label !== 'id')
 				.filter(
 					(compVal2, index, self) =>
-						index === self.findIndex(compVal1 => compVal1.value === compVal2.value)
+						index ===
+							self.findIndex(compVal1 => compVal1.value === compVal2.value) &&
+						compVal2.label !== 'id'
 				)
-				.filter(e => e.label !== 'id')
 		);
 	}, [tableData]);
 
