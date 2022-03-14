@@ -64,6 +64,7 @@ export default function AppTable() {
 		setOpenNotification(true);
 	};
 
+	// ? I have no idea how to make this reusable, I'll have to ask for help
 	const fetchResults = async searchParams => {
 		const results = await fetch('http://localhost:3001/', {
 			headers: {
@@ -127,6 +128,7 @@ export default function AppTable() {
 	}, [history, optionsList]);
 
 	// ! fix eslint error.
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	async function reloadResults(filter) {
 		setTableData(await fetchResults(filter));
 	}
