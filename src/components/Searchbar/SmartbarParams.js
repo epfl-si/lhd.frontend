@@ -1,7 +1,7 @@
 import { Box, Chip, IconButton, ListItem } from '@material-ui/core';
 import { DeleteForever } from '@mui/icons-material';
 import { Paper } from '@mui/material';
-import { columns } from '../appTable';
+import { columns } from '../AppTable';
 
 export default function SmartbarParams(props) {
 	const { paramsData, setParamsData, setSearchOptions } = props;
