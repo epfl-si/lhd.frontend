@@ -1,5 +1,7 @@
 # pull official base image
 FROM node:16
+# Install serve
+RUN yarn global add serve
 
 # set working directory
 WORKDIR /app
@@ -11,11 +13,12 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY yarn.lock ./
 # Installs all node packages
-RUN yarn install 
-
+RUN yarn install
+# Build production version of app
+RUN yarn build
 
 # Copies everything over to Docker environment
 COPY . ./
 EXPOSE 3000
 # start app
-CMD ["yarn", "start"]
+CMD ["serve", "-s", "build"]
