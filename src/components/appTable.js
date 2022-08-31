@@ -66,7 +66,7 @@ export default function AppTable() {
 
 	// ? I have no idea how to make this reusable, I'll have to ask for help
 	const fetchResults = async searchParams => {
-		const results = await fetch('http://localhost:3001/', {
+		const results = await fetch('//localhost:3001', {
 			headers: {
 				accept: '*/*',
 				'accept-language': 'en-US,en;q=0.9,fr-CH;q=0.8,fr;q=0.7',

@@ -14,11 +14,12 @@ COPY package.json ./
 COPY yarn.lock ./
 # Installs all node packages
 RUN yarn install
-# Build production version of app
-RUN yarn build
 
 # Copies everything over to Docker environment
 COPY . ./
+RUN sed -i '' 's+//localhost:3001+https://lhdv3.epfl.ch/graphql+g' src/components/appTable.js
+# Build production version of app
+RUN yarn build
 EXPOSE 3000
 # start app
 CMD ["serve", "-s", "build"]
