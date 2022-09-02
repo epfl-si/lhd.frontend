@@ -27,7 +27,7 @@ export const columns = [
 	{ field: 'update', headerName: 'Update', width: 130 },
 ];
 
-export default function AppTable() {
+export function AppTable({ graphqlBody, variables }) {
 	const notifTypes = [
 		{
 			type: 'success',
@@ -65,8 +65,9 @@ export default function AppTable() {
 	};
 
 	// ? I have no idea how to make this reusable, I'll have to ask for help
-	const fetchResults = async searchParams => {
-		const results = await fetch('//localhost:3001', {
+	const fetchResults = async () => {
+		const operationName = 'AppTableFetch';
+		const results = await fetch('//localhost:3001/', {
 			headers: {
 				accept: '*/*',
 				'accept-language': 'en-US,en;q=0.9,fr-CH;q=0.8,fr;q=0.7',
@@ -80,24 +81,28 @@ export default function AppTable() {
 				'sec-fetch-site': 'cross-site',
 			},
 			referrerPolicy: 'no-referrer-when-downgrade',
-			body: `{"query":"query LHDDataQuery {\\n  rooms (where: { building: { equals: \\"BC\\"} }) {\\n    name\\n    occupancies { cosecs { name} }\\n  }\\n}","variables":{},"operationName":"LHDDataQuery"}`,
+			body: JSON.stringify({
+				query: `query ${operationName} { ${graphqlBody} }`,
+				variables,
+			}),
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'omit',
 		});
 		const graphQLResponse = await results.json();
-		return graphQLResponse.data.rooms.map(e => ({
-			id: e.name,
-			room: e.name,
-			unit: 'XXX COO',
-			cosec: e.occupancies[0].cosecs[0].name,
-			floor: 'XXX -2',
-			sector: 'XXX H',
-			faculty: 'XXX SV2',
-			building: 'XXX 8',
-			institute: 'XXX Salesforce',
-			designation: 'XXX Storage',
-			responsible: 'XXX Ferdinande Fendt',
+
+		return graphQLResponse.data.rooms.map(room => ({
+			id: room.name,
+			room: room.name,
+			unit: room.occupancies[0].unit.name_unit,
+			cosec: room.occupancies[0].cosecs[0].name,
+			floor: room.floor,
+			sector: room.sector,
+			faculty: room.occupancies[0].unit.institut.faculty.name_faculty,
+			building: room.building,
+			institute: room.occupancies[0].unit.institut.name_institut,
+			designation: room.kind.name,
+			responsible: room.occupancies[0].unit.subunpro.person.name,
 		}));
 	};
 

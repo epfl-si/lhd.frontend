@@ -1,9 +1,9 @@
-import AppTable from '../components/appTable';
+import { RoomTable } from '../components/RoomTable';
 
 export default function HomePage() {
 	return (
 		<div>
-			<AppTable />
+			<RoomTable />
 		</div>
 	);
 }
