@@ -1,7 +1,7 @@
 import { Box, MenuItem, TextField } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
 import AppSearchbarAuto from './SmartbarAuto';
-import { columns } from '../AppTable';
+import { columns } from '../appTable';
 import SmartbarManual from './SmartbarManual';
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Close } from '@mui/icons-material';

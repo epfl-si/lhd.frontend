@@ -138,6 +138,7 @@ export function AppTable({ graphqlBody, variables }) {
 		setTableData(await fetchResults(filter));
 	}
 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(reloadResults, []);
 
 	useEffect(() => {

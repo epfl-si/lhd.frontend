@@ -1,4 +1,4 @@
-import { AppTable } from '../components/AppTable';
+import { AppTable } from '../components/appTable';
 
 export function RoomTable() {
 	return (
