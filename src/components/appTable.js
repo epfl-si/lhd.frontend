@@ -10,7 +10,6 @@ import {
 } from '@mui/x-data-grid';
 import { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-//import uData from '../json/example.json';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export const columns = [
@@ -94,15 +93,16 @@ export function AppTable({ graphqlBody, variables }) {
 		return graphQLResponse.data.rooms.map(room => ({
 			id: room.name,
 			room: room.name,
-			unit: room.occupancies[0].unit.name_unit,
-			cosec: room.occupancies[0].cosecs[0].name,
+			unit: room.occupancies[0]?.unit.name_unit,
+			cosec: room.occupancies[0]?.cosecs[0]?.name,
 			floor: room.floor,
 			sector: room.sector,
-			faculty: room.occupancies[0].unit.institut.faculty.name_faculty,
+			faculty: room.occupancies[0]?.unit.institut.faculty.name_faculty,
 			building: room.building,
-			institute: room.occupancies[0].unit.institut.name_institut,
+			institute: room.occupancies[0]?.unit.institut.name_institut,
 			designation: room.kind.name,
-			responsible: room.occupancies[0].unit.subunpro.person.name,
+			// ? Not sure that it gets what's called "responsible", will need to check that in further developpement.
+			responsible: room.occupancies[0]?.professors[0].name,
 		}));
 	};
 
@@ -116,7 +116,6 @@ export function AppTable({ graphqlBody, variables }) {
 			);
 		}
 		fetchResults();
-		//'{\\n  rooms (where: { building: { equals: \\"BC\\"} }) {\\n    name\\n    occupancies { cosecs { name} }\\n  }\\n}'
 	};
 
 	useEffect(() => {
