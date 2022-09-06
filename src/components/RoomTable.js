@@ -3,11 +3,11 @@ import { AppTable } from '../components/appTable';
 export function RoomTable() {
 	return (
 		<AppTable
-			graphqlBody={`  rooms (where: { building: { equals: "BC"} }) {
+			graphqlBody={`rooms (where: { building: { equals: "BC"} }) {
 				name
 				occupancies { 
           cosecs { name }
-          professor { name }
+          professors { name }
           unit {
             name_unit
             institut {
@@ -16,11 +16,7 @@ export function RoomTable() {
                 name_faculty
               }
             }
-            subunpro {
-              person {
-                name
-              }
-            }
+            sciper_unit
           }
         }
         building
