@@ -9,14 +9,14 @@ export function RoomTable() {
           cosecs { name }
           professors { name }
           unit {
-            name_unit
-            institut {
-              name_institut
-              faculty {
-                name_faculty
+            name
+            institute {
+              name
+              school {
+                name
               }
             }
-            sciper_unit
+            unitId
           }
         }
         building
