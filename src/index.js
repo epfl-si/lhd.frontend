@@ -12,16 +12,16 @@ ReactDOM.render(
 				{
 					heading: 'Hazards',
 					menus: [
-						{ anchor: 'Bio hazard', link: '/' },
-						{ anchor: 'Chem hazard', link: '/hellotabs' },
-						{ anchor: 'Gas Hazard', link: '/hellovisualizations' },
+						{ anchor: 'Bio hazard', link: '/biohazard' },
+						{ anchor: 'Chem hazard', link: '/chemhazard' },
+						{ anchor: 'Gas Hazard', link: '/gazhazard' },
 					],
 				},
 				{
 					heading: 'Authorisations',
 					menus: [
-						{ anchor: 'Toxic chems', link: '/' },
-						{ anchor: 'OFSP', link: '/hellotabs' },
+						{ anchor: 'Toxic chems', link: '/toxicchem' },
+						{ anchor: 'OFSP', link: '/ofsp' },
 					],
 				},
 				{
