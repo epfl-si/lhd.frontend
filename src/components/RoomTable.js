@@ -1,32 +1,11 @@
-import { AppTable } from '../components/appTable';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from '../Keycloak';
+import { RoomAuth } from './RoomAuth';
 
 export function RoomTable() {
 	return (
-		<AppTable
-			graphqlBody={`rooms (where: { building: { equals: "BC"} }) {
-				name
-				occupancies { 
-          cosecs { name }
-          professors { name }
-          unit {
-            name
-            institute {
-              name
-              school {
-                name
-              }
-            }
-            unitId
-          }
-        }
-        building
-        sector
-        floor
-        kind {
-          name
-        }
-			}`}
-			variables={{}}
-		/>
+		<ReactKeycloakProvider authClient={keycloak}>
+			<RoomAuth />
+		</ReactKeycloakProvider>
 	);
 }
