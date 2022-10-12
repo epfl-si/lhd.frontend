@@ -4,7 +4,7 @@ import { RoomAuth } from './RoomAuth';
 
 export function RoomTable() {
 	return (
-		<ReactKeycloakProvider authClient={keycloak}>
+		<ReactKeycloakProvider authClient={keycloak} onTokens={console.debug}>
 			<RoomAuth />
 		</ReactKeycloakProvider>
 	);

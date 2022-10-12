@@ -8,6 +8,7 @@ import {
 	GridToolbarDensitySelector,
 	GridToolbarExport,
 } from '@mui/x-data-grid';
+import { useKeycloak } from '@react-keycloak/web';
 import { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import TableSmartbar from './Searchbar/TableSmartbar';
@@ -52,14 +53,14 @@ export function AppTable({ graphqlBody, variables }) {
 	};
 
 	const onShare = () => {
-		optionsList.length > 0 &&
+		optionsList?.length > 0 &&
 			navigator.clipboard.writeText(
 				`${window.location.origin}/?filters=${optionsList
 					.map(o => `${o.value}:${o.label}`)
 					.join(',')}`
 			);
 
-		setNotificationType(optionsList.length > 0 ? notifTypes[0] : notifTypes[1]);
+		setNotificationType(optionsList?.length > 0 ? notifTypes[0] : notifTypes[1]);
 		setOpenNotification(true);
 	};
 
@@ -78,6 +79,7 @@ export function AppTable({ graphqlBody, variables }) {
 				'sec-fetch-dest': 'empty',
 				'sec-fetch-mode': 'cors',
 				'sec-fetch-site': 'cross-site',
+				authorization: `Bearer ${keycloak.token}`,
 			},
 			referrerPolicy: 'no-referrer-when-downgrade',
 			body: JSON.stringify({
@@ -90,7 +92,7 @@ export function AppTable({ graphqlBody, variables }) {
 		});
 		const graphQLResponse = await results.json();
 
-		return graphQLResponse.data.rooms.map(room => ({
+		return graphQLResponse.data?.rooms.map(room => ({
 			id: room.name,
 			room: room.name,
 			unit: room.occupancies[0]?.unit.name,
@@ -163,6 +165,10 @@ export function AppTable({ graphqlBody, variables }) {
 
 	const Throbber = () => <p>This space unintentionnally left unblank</p>;
 
+	const { keycloak } = useKeycloak();
+
+	const isLoggedIn = keycloak.authenticated;
+
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
 			<Box width="100%">
@@ -184,6 +190,9 @@ export function AppTable({ graphqlBody, variables }) {
 			</Box>
 			<Box width="100%" paddingY="16px">
 				<Button label="Copy link w/ parameters" onClickFn={onShare} />
+				{isLoggedIn && (
+					<Button label="Log out" onClickFn={() => keycloak.logout()} />
+				)}
 			</Box>
 			<Snackbar
 				open={openNotification}
