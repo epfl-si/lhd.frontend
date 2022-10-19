@@ -25,7 +25,7 @@ export default function SmartbarAuto({ tableData, optionsList, setOptionsList })
 		>
 			<Autocomplete
 				multiple
-				fullWidth
+				fullWidth={true}
 				value={optionsList}
 				onChange={handleListChange}
 				options={(tableData || []).sort((a, b) => -b.label.localeCompare(a.label))}
@@ -48,7 +48,7 @@ export default function SmartbarAuto({ tableData, optionsList, setOptionsList })
 					<TextField
 						{...params}
 						value={statement}
-						fullWidth
+						fullWidth={true}
 						onChange={handleStatementChange}
 						label="Search entries"
 						placeholder="Entries"
