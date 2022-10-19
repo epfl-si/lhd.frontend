@@ -13,20 +13,6 @@ import { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
-export const columns = [
-	{ field: 'building', headerName: 'Building', width: 130, hide: true },
-	{ field: 'sector', headerName: 'Sector', width: 130, hide: true },
-	{ field: 'floor', headerName: 'Floor', width: 130, hide: true },
-	{ field: 'room', headerName: 'Room', width: 130 },
-	{ field: 'designation', headerName: 'Designation', width: 130 },
-	{ field: 'cosec', headerName: 'Cosec', width: 130 },
-	{ field: 'responsible', headerName: 'Responsible', width: 130 },
-	{ field: 'school', headerName: 'School', width: 130 },
-	{ field: 'institute', headerName: 'Institute', width: 130 },
-	{ field: 'unit', headerName: 'Unit', width: 130 },
-	{ field: 'update', headerName: 'Update', width: 130 },
-];
-
 export function AppTable({ graphqlBody, variables }) {
 	const notifTypes = [
 		{
@@ -36,6 +22,32 @@ export function AppTable({ graphqlBody, variables }) {
 		{ type: 'error', text: 'You have no query filters to share !' },
 	];
 
+	// parse graphqlBody to create a list of columns
+	// const columns = useMemo(
+	// 	() =>
+	// 		graphqlBody
+	// 			.split('\n')
+	// 			.filter(e => e.includes(':'))
+	// 			.map(e => e.split(':')[0].trim())
+	// 			.map(e => ({ field: e, headerName: e, width: 200 })),
+	// 	[graphqlBody]
+	// );
+
+	const columns = [
+		{ field: 'building', headerName: 'Building', width: 130, hide: true },
+		{ field: 'sector', headerName: 'Sector', width: 130, hide: true },
+		{ field: 'floor', headerName: 'Floor', width: 130, hide: true },
+		{ field: 'room', headerName: 'Room', width: 130 },
+		{ field: 'designation', headerName: 'Designation', width: 130 },
+		{ field: 'cosec', headerName: 'Cosec', width: 130 },
+		{ field: 'responsible', headerName: 'Responsible', width: 130 },
+		{ field: 'school', headerName: 'School', width: 130 },
+		{ field: 'institute', headerName: 'Institute', width: 130 },
+		{ field: 'unit', headerName: 'Unit', width: 130 },
+		{ field: 'update', headerName: 'Update', width: 130 },
+	];
+
+	const [columnsTest, setColumnsTest] = useState(null);
 	const [tableData, setTableData] = useState(null);
 	const [paramsData, setParamsData] = useState([]);
 	const [optionsList, setOptionsList] = useState([]);
@@ -137,6 +149,16 @@ export function AppTable({ graphqlBody, variables }) {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	async function reloadResults(filter) {
 		setTableData(await fetchResults(filter));
+		// generate a list of columns from tableData
+		setColumnsTest(
+			Object.keys(tableData[0]).map(key => ({
+				field: key,
+				headerName: key,
+				width: 130,
+			}))
+		);
+		console.log(columnsTest);
+		console.log(tableData);
 	}
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,11 +201,16 @@ export function AppTable({ graphqlBody, variables }) {
 					optionsList={optionsList}
 					setOptionsList={setOptionsList}
 					tableData={autoComplete}
+					columns={columns}
 				/>
 			</Box>
 			<Box width="100%" height="500px">
 				{tableData !== null ? (
-					<EntriesTableCategory optionsList={optionsList} tableData={tableData} />
+					<EntriesTableCategory
+						optionsList={optionsList}
+						tableData={tableData}
+						columns={columns}
+					/>
 				) : (
 					<Throbber />
 				)}
@@ -221,7 +248,7 @@ function CustomToolbar() {
 	);
 }
 
-function EntriesTableCategory({ optionsList, tableData }) {
+function EntriesTableCategory({ optionsList, tableData, columns }) {
 	const shownData = useMemo(
 		() =>
 			optionsList?.length === 0
