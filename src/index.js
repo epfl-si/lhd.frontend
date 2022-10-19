@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { Base } from '@epfl/epfl-sti-react-library';
 
 ReactDOM.render(
-	<React.StrictMode>
+	<>
 		<Base
 			asideMenuItems={[
 				{
@@ -65,7 +65,7 @@ ReactDOM.render(
 				<App />
 			</div>
 		</Base>
-	</React.StrictMode>,
+	</>,
 	document.getElementById('root')
 );
 

@@ -1,14 +1,18 @@
 import { Box, MenuItem, TextField } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
 import AppSearchbarAuto from './SmartbarAuto';
-import { columns } from '../appTable';
 import SmartbarManual from './SmartbarManual';
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Close } from '@mui/icons-material';
 
-export default function TableSmartbar({ optionsList, setOptionsList, tableData }) {
+export default function TableSmartbar({
+	optionsList,
+	setOptionsList,
+	tableData,
+	columns,
+}) {
 	const [searchOptions, setSearchOptions] = useState(columns);
-	const [category, setCategory] = useState(null);
+	const [category, setCategory] = useState(undefined);
 	const statementRef = useRef();
 
 	const categories = searchOptions.map(e => ({
@@ -46,6 +50,7 @@ export default function TableSmartbar({ optionsList, setOptionsList, tableData }
 			columns.filter(e => optionsList.every(p => p.label !== e.field))
 		);
 		setCategory(null);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [optionsList]);
 	return (
 		<Box
@@ -59,7 +64,8 @@ export default function TableSmartbar({ optionsList, setOptionsList, tableData }
 			<TextField
 				select
 				disabled={searchOptions.length < 1 ? true : false}
-				fullWidth={{ xs: true, sm: false }}
+				// ! normally equals { xs: true, sm: false } but causes warnings. Will fix later.
+				fullWidth={true}
 				style={{
 					minWidth: '200px',
 				}}

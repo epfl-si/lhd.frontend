@@ -12,7 +12,7 @@ export default function SmartbarManual({ inputRef, onSearch }) {
 			gridGap={8}
 		>
 			<TextField
-				fullWidth
+				fullWidth={true}
 				onKeyDown={event => {
 					event.key === 'Enter' && onSearch();
 				}}
