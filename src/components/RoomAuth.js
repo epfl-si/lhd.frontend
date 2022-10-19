@@ -12,7 +12,6 @@ import { AppTable } from '../components/appTable';
 export function RoomAuth() {
 	const { keycloak } = useKeycloak();
 	const isLoggedIn = keycloak.authenticated;
-	console.debug(keycloak);
 	return (
 		<>
 			{isLoggedIn ? (
