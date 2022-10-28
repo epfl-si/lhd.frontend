@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './utils/web/reportWebVitals';
 import { Base } from '@epfl/epfl-sti-react-library';
+import './utils/lang/dictionary';
 
 ReactDOM.render(
 	<>
