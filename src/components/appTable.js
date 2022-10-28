@@ -11,7 +11,12 @@ import {
 import { useKeycloak } from '@react-keycloak/web';
 import { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { generateColumns } from '../utils/queryparsing/graphqltools';
+import {
+	generateColumns,
+	generateFormattedList,
+	getTypeQuery,
+	parse,
+} from '../utils/queryparsing/graphqltools';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export function AppTable({ graphqlBody, variables }) {
@@ -23,30 +28,7 @@ export function AppTable({ graphqlBody, variables }) {
 		{ type: 'error', text: 'You have no query filters to share !' },
 	];
 
-	// parse graphqlBody to create a list of columns
-	// const columns = useMemo(
-	// 	() =>
-	// 		graphqlBody
-	// 			.split('\n')
-	// 			.filter(e => e.includes(':'))
-	// 			.map(e => e.split(':')[0].trim())
-	// 			.map(e => ({ field: e, headerName: e, width: 200 })),
-	// 	[graphqlBody]
-	// );
-
-	const columns = [
-		{ field: 'building', headerName: 'Building', width: 130, hide: true },
-		{ field: 'sector', headerName: 'Sector', width: 130, hide: true },
-		{ field: 'floor', headerName: 'Floor', width: 130, hide: true },
-		{ field: 'room', headerName: 'Room', width: 130 },
-		{ field: 'designation', headerName: 'Designation', width: 130 },
-		{ field: 'cosec', headerName: 'Cosec', width: 130 },
-		{ field: 'responsible', headerName: 'Responsible', width: 130 },
-		{ field: 'school', headerName: 'School', width: 130 },
-		{ field: 'institute', headerName: 'Institute', width: 130 },
-		{ field: 'unit', headerName: 'Unit', width: 130 },
-		{ field: 'update', headerName: 'Update', width: 130 },
-	];
+	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
 	const [columnsTest, setColumnsTest] = useState(null);
 	const [tableData, setTableData] = useState(null);
@@ -105,20 +87,39 @@ export function AppTable({ graphqlBody, variables }) {
 		});
 		const graphQLResponse = await results.json();
 
-		return graphQLResponse.data?.rooms.map(room => ({
-			id: room.name,
-			room: room.name,
-			unit: room.occupancies[0]?.unit.name,
-			cosec: room.occupancies[0]?.cosecs[0]?.name,
-			floor: room.floor,
-			sector: room.sector,
-			school: room.occupancies[0]?.unit.institute.school.name,
-			building: room.building,
-			institute: room.occupancies[0]?.unit.institute.name,
-			designation: room.kind.name,
-			// ? Not sure that it gets what's called "responsible", will need to check that in further developpement.
-			responsible: room.occupancies[0]?.professors[0].name,
-		}));
+		return graphQLResponse.data?.rooms.map((room, index) => {
+			var tempObj = { id: index };
+			const recursiveParse = (data, keys) => {
+				if (keys.length === 1) {
+					return data[keys[0]] ? data[keys[0]] : null;
+				} else {
+					return data[keys[0]]
+						? recursiveParse(
+								data[keys[0]][0] ? data[keys[0]][0] : data[keys[0]],
+								keys.slice(1)
+						  )
+						: null;
+				}
+			};
+
+			generateFormattedList(parse(graphqlBody)).forEach(item => {
+				var splitKey = item.split('.');
+				if (splitKey.length === 1) {
+					tempObj[`${getTypeQuery(graphqlBody)}.${item}`] = room[splitKey[0]]
+						? room[splitKey[0]]
+						: null;
+				} else {
+					tempObj[`${getTypeQuery(graphqlBody)}.${item}`] = room[splitKey[0]]
+						? recursiveParse(
+								room[splitKey[0]][0] ? room[splitKey[0]][0] : room[splitKey[0]],
+								splitKey.slice(1)
+						  )
+						: null;
+				}
+			});
+
+			return tempObj;
+		});
 	};
 
 	const onLoad = () => {
