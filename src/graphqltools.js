@@ -41,3 +41,29 @@ export const parse = message => {
 		return fields;
 	}
 };
+
+export const generateFormattedList = (parsedQuery, prefix = '') => {
+	const columns = [];
+	parsedQuery.forEach(field => {
+		if (field.fields) {
+			columns.push(
+				...generateFormattedList(field.fields, `${prefix}${field.name}.`)
+			);
+		} else {
+			columns.push(`${prefix}${field.name}`);
+		}
+	});
+	return columns;
+};
+
+// generate columns from generated formatted list
+export const generateColumns = (query, prefix = '') => {
+	const formattedList = generateFormattedList(parse(query), prefix);
+	return formattedList.map(field => {
+		return {
+			field: field,
+			headerName: field,
+			width: 130,
+		};
+	});
+};
