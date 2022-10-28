@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './utils/web/reportWebVitals';
 import { Base } from '@epfl/epfl-sti-react-library';
 
 ReactDOM.render(

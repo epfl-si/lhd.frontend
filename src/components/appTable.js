@@ -11,6 +11,7 @@ import {
 import { useKeycloak } from '@react-keycloak/web';
 import { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { generateColumns } from '../utils/queryparsing/graphqltools';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export function AppTable({ graphqlBody, variables }) {
