@@ -1,3 +1,5 @@
+import { translate } from '../lang/dictionary';
+
 const getBody = gql => {
 	var split = gql.split('\n');
 	split.shift();
@@ -57,12 +59,12 @@ export const generateFormattedList = (parsedQuery, prefix = '') => {
 };
 
 // generate columns from generated formatted list
-export const generateColumns = (query, prefix = '') => {
+export const generateColumns = (query, prefix = '', lang) => {
 	const formattedList = generateFormattedList(parse(query), prefix);
 	return formattedList.map(field => {
 		return {
 			field: field,
-			headerName: field,
+			headerName: translate(field, lang),
 			width: 130,
 		};
 	});
