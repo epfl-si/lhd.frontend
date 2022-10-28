@@ -1,8 +1,10 @@
 import { Box, Chip, TextField } from '@material-ui/core';
 import { Autocomplete } from '@mui/material';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function SmartbarAuto({ tableData, optionsList, setOptionsList }) {
+	const { t } = useTranslation();
 	const [statement, setStatement] = useState('');
 
 	const handleStatementChange = event => {
@@ -29,7 +31,7 @@ export default function SmartbarAuto({ tableData, optionsList, setOptionsList })
 				value={optionsList}
 				onChange={handleListChange}
 				options={(tableData || []).sort((a, b) => -b.label.localeCompare(a.label))}
-				groupBy={option => option.label}
+				groupBy={option => t(option.label)}
 				getOptionLabel={option => option.value}
 				renderTags={(value, getTagProps) =>
 					value.map((option, index) => (
@@ -37,7 +39,7 @@ export default function SmartbarAuto({ tableData, optionsList, setOptionsList })
 							variant="outlined"
 							label={
 								<div>
-									<b>{option.label} |</b> {option.value}
+									<b>{t(option.label)} |</b> {option.value}
 								</div>
 							}
 							{...getTagProps({ index })}
@@ -50,8 +52,8 @@ export default function SmartbarAuto({ tableData, optionsList, setOptionsList })
 						value={statement}
 						fullWidth={true}
 						onChange={handleStatementChange}
-						label="Search entries"
-						placeholder="Entries"
+						label={t('searchbar.entries.label')}
+						placeholder={t('searchbar.entries.placeholder')}
 						variant="outlined"
 					/>
 				)}

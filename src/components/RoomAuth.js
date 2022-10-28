@@ -7,10 +7,12 @@ import {
 } from '@material-ui/core';
 import { Alert } from '@mui/material';
 import { useKeycloak } from '@react-keycloak/web';
+import { useTranslation } from 'react-i18next';
 import { AppTable } from '../components/appTable';
 
 export function RoomAuth() {
 	const { keycloak } = useKeycloak();
+	const { t } = useTranslation();
 	const isLoggedIn = keycloak.authenticated;
 	return (
 		<>
@@ -44,15 +46,12 @@ export function RoomAuth() {
 			) : (
 				<Dialog open={true}>
 					<Alert severity="warning">
-						<b>Warning - You are not logged in !</b>
+						<b>{t('login.warning')}</b>
 					</Alert>
-					<DialogTitle>Log in to access LHD</DialogTitle>
-					<DialogContent>
-						You are trying to access sensitive data, please provide credentials to
-						confirm your identity.
-					</DialogContent>
+					<DialogTitle>{t('login.title')}</DialogTitle>
+					<DialogContent>{t('login.content')}</DialogContent>
 					<DialogActions>
-						<Button label="Login" onClickFn={() => keycloak.login()} />
+						<Button label={t('login.button')} onClickFn={() => keycloak.login()} />
 					</DialogActions>
 				</Dialog>
 			)}

@@ -1,4 +1,5 @@
-import { translate } from '../lang/dictionary';
+import i18next from 'i18next';
+import '../lang/dictionary';
 
 const getBody = gql => {
 	var split = gql.split('\n');
@@ -64,7 +65,7 @@ export const generateColumns = (query, prefix = '', lang) => {
 	return formattedList.map(field => {
 		return {
 			field: field,
-			headerName: translate(field, lang),
+			headerName: i18next.t(field),
 			width: 130,
 		};
 	});

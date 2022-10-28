@@ -1,5 +1,5 @@
 import Button from '@epfl/epfl-sti-react-library/dist/Forms/Button';
-import { Box, Snackbar } from '@material-ui/core';
+import { Box, Snackbar, Switch } from '@material-ui/core';
 import { Alert } from '@mui/material';
 import {
 	DataGrid,
@@ -10,6 +10,7 @@ import {
 } from '@mui/x-data-grid';
 import { useKeycloak } from '@react-keycloak/web';
 import { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import {
 	generateColumns,
@@ -20,17 +21,18 @@ import {
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export function AppTable({ graphqlBody, variables }) {
+	const { t, i18n } = useTranslation();
+
 	const notifTypes = [
 		{
 			type: 'success',
-			text: 'Successfully copied link w/ parameters to clipboard !',
+			text: t('copy.success'),
 		},
-		{ type: 'error', text: 'You have no query filters to share !' },
+		{ type: 'error', text: t('copy.error') },
 	];
 
 	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
-	const [columnsTest, setColumnsTest] = useState(null);
 	const [tableData, setTableData] = useState(null);
 	const [paramsData, setParamsData] = useState([]);
 	const [optionsList, setOptionsList] = useState([]);
@@ -59,7 +61,6 @@ export function AppTable({ graphqlBody, variables }) {
 		setOpenNotification(true);
 	};
 
-	// ? I have no idea how to make this reusable, I'll have to ask for help
 	const fetchResults = async () => {
 		const operationName = 'AppTableFetch';
 		const results = await fetch('//localhost:3001/', {
@@ -151,16 +152,6 @@ export function AppTable({ graphqlBody, variables }) {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	async function reloadResults(filter) {
 		setTableData(await fetchResults(filter));
-		// generate a list of columns from tableData
-		setColumnsTest(
-			Object.keys(tableData[0]).map(key => ({
-				field: key,
-				headerName: key,
-				width: 130,
-			}))
-		);
-		console.log(columnsTest);
-		console.log(tableData);
 	}
 
 	// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -195,7 +186,20 @@ export function AppTable({ graphqlBody, variables }) {
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
-			{isLoggedIn && <Button label="Log out" onClickFn={() => keycloak.logout()} />}
+			<Box display="flex" flexDirection="row" alignItems="center">
+				EN{' '}
+				<Switch
+					onChange={event =>
+						event.target.checked
+							? i18n.changeLanguage('fr')
+							: i18n.changeLanguage('en')
+					}
+				/>{' '}
+				FR
+			</Box>
+			{isLoggedIn && (
+				<Button label={t('logout')} onClickFn={() => keycloak.logout()} />
+			)}
 			<Box width="100%">
 				<TableSmartbar
 					searchCategories={columns}
@@ -219,7 +223,7 @@ export function AppTable({ graphqlBody, variables }) {
 				)}
 			</Box>
 			<Box width="100%" paddingY="16px">
-				<Button label="Copy link w/ parameters" onClickFn={onShare} />
+				<Button label={t('copy.params')} onClickFn={onShare} />
 			</Box>
 			<Snackbar
 				open={openNotification}
