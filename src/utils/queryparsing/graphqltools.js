@@ -58,8 +58,8 @@ export const generateFormattedList = (parsedQuery, prefix = '') => {
 	return columns;
 };
 
-// generate columns from generated formatted list
 export const generateColumns = (query, prefix = '', lang) => {
+	prefix = prefix ? prefix + '.' : '';
 	const formattedList = generateFormattedList(parse(query), prefix);
 	return formattedList.map(field => {
 		return {
@@ -68,4 +68,8 @@ export const generateColumns = (query, prefix = '', lang) => {
 			width: 130,
 		};
 	});
+};
+
+export const getTypeQuery = query => {
+	return query.split(' ')[0].replace(/s$/, '');
 };
