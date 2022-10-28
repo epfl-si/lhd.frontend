@@ -195,6 +195,7 @@ export function AppTable({ graphqlBody, variables }) {
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
+			{isLoggedIn && <Button label="Log out" onClickFn={() => keycloak.logout()} />}
 			<Box width="100%">
 				<TableSmartbar
 					searchCategories={columns}
@@ -219,9 +220,6 @@ export function AppTable({ graphqlBody, variables }) {
 			</Box>
 			<Box width="100%" paddingY="16px">
 				<Button label="Copy link w/ parameters" onClickFn={onShare} />
-				{isLoggedIn && (
-					<Button label="Log out" onClickFn={() => keycloak.logout()} />
-				)}
 			</Box>
 			<Snackbar
 				open={openNotification}
