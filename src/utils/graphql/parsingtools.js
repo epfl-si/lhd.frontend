@@ -8,6 +8,10 @@ const getBody = gql => {
 	return split.join('');
 };
 
+export const getTypeQuery = query => {
+	return query.split(' ')[0].replace(/s$/, '');
+};
+
 const normSpaces = message => {
 	return message
 		.replace(/{/g, ' { ')
@@ -71,6 +75,35 @@ export const generateColumns = (query, prefix = '', lang) => {
 	});
 };
 
-export const getTypeQuery = query => {
-	return query.split(' ')[0].replace(/s$/, '');
+export const formatDataToColumns = (graphqlBody, room, index) => {
+	var Row = { id: index };
+	const recursiveJsonParsing = (data, keys) => {
+		if (keys.length === 1) {
+			return data[keys[0]] ? data[keys[0]] : null;
+		} else {
+			return data[keys[0]]
+				? recursiveJsonParsing(
+						data[keys[0]][0] ? data[keys[0]][0] : data[keys[0]],
+						keys.slice(1)
+				  )
+				: null;
+		}
+	};
+
+	generateFormattedList(parse(graphqlBody)).forEach(item => {
+		var splitKey = item.split('.');
+		if (splitKey.length === 1) {
+			Row[`${getTypeQuery(graphqlBody)}.${item}`] = room[splitKey[0]]
+				? room[splitKey[0]]
+				: null;
+		} else {
+			Row[`${getTypeQuery(graphqlBody)}.${item}`] = room[splitKey[0]]
+				? recursiveJsonParsing(
+						room[splitKey[0]][0] ? room[splitKey[0]][0] : room[splitKey[0]],
+						splitKey.slice(1)
+				  )
+				: null;
+		}
+	});
+	return Row;
 };
