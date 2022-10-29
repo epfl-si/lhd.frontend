@@ -1,6 +1,5 @@
-import { Box, TextField } from '@material-ui/core';
+import { Box, IconButton, TextField } from '@material-ui/core';
 import { Search } from '@mui/icons-material';
-import { Button } from '@epfl/epfl-sti-react-library';
 
 export default function SmartbarManual({ inputRef, onSearch }) {
 	return (
@@ -27,7 +26,14 @@ export default function SmartbarManual({ inputRef, onSearch }) {
 				justifyContent={{ xs: 'space-between', sm: 'start' }}
 				gridGap={8}
 			>
-				<Button label={<Search />} onClickFn={onSearch} />
+				<IconButton
+					aria-label="search"
+					size="small"
+					color="primary"
+					onClick={onSearch}
+				>
+					<Search fontSize="small" />
+				</IconButton>
 			</Box>
 		</Box>
 	);
