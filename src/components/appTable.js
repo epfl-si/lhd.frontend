@@ -35,10 +35,10 @@ export function AppTable({ graphqlBody, variables }) {
 
 	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
-	const [tableData, setTableData] = useState(null);
+	const [tableData, setTableData] = useState([]);
 	const [paramsData, setParamsData] = useState([]);
 	const [optionsList, setOptionsList] = useState([]);
-	const [autoComplete, setAutoComplete] = useState();
+	const [autoComplete, setAutoComplete] = useState([]);
 	const [openNotification, setOpenNotification] = useState(false);
 	const [notificationType, setNotificationType] = useState(notifTypes[0]);
 	const history = useHistory();

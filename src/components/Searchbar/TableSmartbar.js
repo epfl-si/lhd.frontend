@@ -1,8 +1,7 @@
-import { Box, MenuItem, TextField } from '@material-ui/core';
+import { Box, IconButton, MenuItem, TextField } from '@material-ui/core';
 import { useEffect, useRef, useState } from 'react';
 import AppSearchbarAuto from './SmartbarAuto';
 import SmartbarManual from './SmartbarManual';
-import { Button } from '@epfl/epfl-sti-react-library';
 import { Close } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 
@@ -14,7 +13,7 @@ export default function TableSmartbar({
 }) {
 	const { t } = useTranslation();
 	const [searchOptions, setSearchOptions] = useState(columns);
-	const [category, setCategory] = useState(undefined);
+	const [category, setCategory] = useState('');
 	const statementRef = useRef();
 
 	const categories = searchOptions.map(e => ({
@@ -38,20 +37,20 @@ export default function TableSmartbar({
 				value: statement.value,
 			},
 		]);
-		setCategory(null);
+		setCategory('');
 
 		statement.value = '';
 	};
 
 	const onDeleteCategories = () => {
-		setCategory(null);
+		setCategory('');
 	};
 
 	useEffect(() => {
 		setSearchOptions(
 			columns.filter(e => optionsList.every(p => p.label !== e.field))
 		);
-		setCategory(null);
+		setCategory('');
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [optionsList]);
 	return (
@@ -64,7 +63,7 @@ export default function TableSmartbar({
 			gridGap={8}
 		>
 			<TextField
-				select
+				select={true}
 				disabled={searchOptions.length < 1 ? true : false}
 				// ! normally equals { xs: true, sm: false } but causes warnings. Will fix later.
 				fullWidth={true}
