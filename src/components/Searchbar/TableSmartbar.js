@@ -95,7 +95,14 @@ export default function TableSmartbar({
 				</Box>
 			)}
 			{category !== null && (
-				<Button label={<Close />} onClickFn={onDeleteCategories} />
+				<IconButton
+					aria-label="delete"
+					size="small"
+					color="primary"
+					onClick={onDeleteCategories}
+				>
+					<Close fontSize="small" />
+				</IconButton>
 			)}
 			{/* <AppParamsList
 				paramsData={paramsData}
