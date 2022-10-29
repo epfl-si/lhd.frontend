@@ -4,6 +4,7 @@ import AppSearchbarAuto from './SmartbarAuto';
 import SmartbarManual from './SmartbarManual';
 import { Button } from '@epfl/epfl-sti-react-library';
 import { Close } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 export default function TableSmartbar({
 	optionsList,
@@ -11,6 +12,7 @@ export default function TableSmartbar({
 	tableData,
 	columns,
 }) {
+	const { t } = useTranslation();
 	const [searchOptions, setSearchOptions] = useState(columns);
 	const [category, setCategory] = useState(undefined);
 	const statementRef = useRef();
@@ -69,7 +71,7 @@ export default function TableSmartbar({
 				style={{
 					minWidth: '200px',
 				}}
-				label="Select category"
+				label={t('searchbar.category')}
 				value={category}
 				onChange={handleCategoryChange}
 				variant="outlined"
