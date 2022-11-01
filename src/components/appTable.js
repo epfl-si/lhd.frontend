@@ -13,7 +13,12 @@ import { useState, useMemo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 import { fetchResults } from '../utils/graphql/fetchingtools';
-import { generateColumns, getTypeQuery } from '../utils/graphql/parsingtools';
+import {
+	generateColumns,
+	generateFormattedList,
+	getTypeQuery,
+	parse,
+} from '../utils/graphql/parsingtools';
 import TableSmartbar from './Searchbar/TableSmartbar';
 
 export function AppTable({ graphqlBody, variables }) {
@@ -25,13 +30,14 @@ export function AppTable({ graphqlBody, variables }) {
 
 	const Throbber = () => <p>This space unintentionnally left unblank</p>;
 
-	const notifTypes = [
-		{
+	const notifTypes = {
+		'copy-success': {
 			type: 'success',
 			text: t('copy.success'),
 		},
-		{ type: 'error', text: t('copy.error') },
-	];
+		'copy-error': { type: 'error', text: t('copy.error') },
+		'params-error': { type: 'error', text: t('params.error') },
+	};
 
 	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
@@ -40,7 +46,7 @@ export function AppTable({ graphqlBody, variables }) {
 	const [optionsList, setOptionsList] = useState([]);
 	const [autoComplete, setAutoComplete] = useState([]);
 	const [openNotification, setOpenNotification] = useState(false);
-	const [notificationType, setNotificationType] = useState(notifTypes[0]);
+	const [notificationType, setNotificationType] = useState('');
 	const history = useHistory();
 
 	const handleClose = (event, reason) => {
@@ -59,19 +65,26 @@ export function AppTable({ graphqlBody, variables }) {
 					.join(',')}`
 			);
 
-		setNotificationType(optionsList?.length > 0 ? notifTypes[0] : notifTypes[1]);
+		setNotificationType(
+			optionsList?.length > 0 ? notifTypes['copy-success'] : notifTypes['copy-error']
+		);
 		setOpenNotification(true);
 	};
 
 	useEffect(() => {
 		const onLoad = () => {
-			// TODO: Will need to put a params checker (returns an error snackbar if url param does not exist).
-			let urlParams = new URLSearchParams(window.location.search);
+			const paramsList = generateFormattedList(parse(graphqlBody), 'room.');
+			const urlParams = new URLSearchParams(window.location.search);
 			if (urlParams.has('filters')) {
 				let filters = urlParams.get('filters').split(',');
-				setOptionsList(
-					filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] }))
-				);
+				if (filters.every(e => paramsList.includes(e.split(':')[1]))) {
+					setOptionsList(
+						filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] }))
+					);
+				} else {
+					setNotificationType(notifTypes['params-error']);
+					setOpenNotification(true);
+				}
 			}
 			fetchResults('//localhost:3001', keycloak.token, graphqlBody, variables);
 		};
