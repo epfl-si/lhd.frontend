@@ -47,6 +47,9 @@ i18next.use(initReactI18next).init({
 					success: 'Successfully copied link w/ parameters to clipboard !',
 					error: 'You have no query filters to share !',
 				},
+				params: {
+					error: 'Invalid parameters !',
+				},
 				searchbar: {
 					category: 'Select a category',
 					entries: {
@@ -97,6 +100,9 @@ i18next.use(initReactI18next).init({
 					params: 'Copier le lien avec les paramètres',
 					success: 'Lien avec paramètres copié avec succès !',
 					error: "Vous n'avez pas de filtres de requête à partager !",
+				},
+				params: {
+					error: 'Paramètres invalides !',
 				},
 				searchbar: {
 					category: 'Sélectionnez une catégorie',
