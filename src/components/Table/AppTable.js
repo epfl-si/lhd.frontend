@@ -1,43 +1,27 @@
 import Button from '@epfl/epfl-sti-react-library/dist/Forms/Button';
-import { Box, Snackbar, Switch } from '@material-ui/core';
+import { Box, Snackbar } from '@material-ui/core';
 import { Alert } from '@mui/material';
-import {
-	DataGrid,
-	GridToolbarColumnsButton,
-	GridToolbarContainer,
-	GridToolbarDensitySelector,
-	GridToolbarExport,
-} from '@mui/x-data-grid';
 import { useKeycloak } from '@react-keycloak/web';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
-import { fetchResults } from '../utils/graphql/fetchingtools';
+import { fetchResults } from '../../utils/graphql/FetchingTools';
 import {
+	generateAutocompleteList,
 	generateColumns,
 	generateFormattedList,
 	getTypeQuery,
 	parse,
-} from '../utils/graphql/parsingtools';
-import TableSmartbar from './Searchbar/TableSmartbar';
+} from '../../utils/graphql/ParsingTools';
+import { notificationsTypes } from '../../utils/ressources/Types';
+import TableSmartbar from '../Searchbar/TableSmartbar';
+import { EntriesTableCategory } from './EntriesTableCategory';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export function AppTable({ graphqlBody, variables }) {
-	const { t, i18n } = useTranslation();
-
+	const { t } = useTranslation();
 	const { keycloak } = useKeycloak();
-
 	const isLoggedIn = keycloak.authenticated;
-
-	const Throbber = () => <p>This space unintentionnally left unblank</p>;
-
-	const notifTypes = {
-		'copy-success': {
-			type: 'success',
-			text: t('copy.success'),
-		},
-		'copy-error': { type: 'error', text: t('copy.error') },
-		'params-error': { type: 'error', text: t('params.error') },
-	};
 
 	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
@@ -50,10 +34,7 @@ export function AppTable({ graphqlBody, variables }) {
 	const history = useHistory();
 
 	const handleClose = (event, reason) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-
+		if (reason === 'clickaway') return;
 		setOpenNotification(false);
 	};
 
@@ -66,7 +47,9 @@ export function AppTable({ graphqlBody, variables }) {
 			);
 
 		setNotificationType(
-			optionsList?.length > 0 ? notifTypes['copy-success'] : notifTypes['copy-error']
+			optionsList?.length > 0
+				? notificationsTypes['copy-success']
+				: notificationsTypes['copy-error']
 		);
 		setOpenNotification(true);
 	};
@@ -82,7 +65,7 @@ export function AppTable({ graphqlBody, variables }) {
 						filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] }))
 					);
 				} else {
-					setNotificationType(notifTypes['params-error']);
+					setNotificationType(notificationsTypes['params-error']);
 					setOpenNotification(true);
 				}
 			}
@@ -115,38 +98,13 @@ export function AppTable({ graphqlBody, variables }) {
 
 	useEffect(() => {
 		if (!tableData) return;
-		setAutoComplete(
-			tableData
-				.map(e =>
-					Object.entries(e).map(i => {
-						const [lab, val] = i;
-						return { value: isNaN(val) ? val : String(val), label: lab };
-					})
-				)
-				.flat()
-				.filter(e => e.label !== 'id')
-				.filter(
-					(compVal2, index, self) =>
-						index ===
-							self.findIndex(compVal1 => compVal1.value === compVal2.value) &&
-						compVal2.label !== 'id'
-				)
-		);
+		setAutoComplete(generateAutocompleteList(tableData));
 	}, [tableData]);
 
 	return (
+		// eslint-disable-next-line react/jsx-no-comment-textnodes
 		<Box display="flex" flexDirection="column" alignItems="center">
-			<Box display="flex" flexDirection="row" alignItems="center">
-				EN{' '}
-				<Switch
-					onChange={event =>
-						event.target.checked
-							? i18n.changeLanguage('fr')
-							: i18n.changeLanguage('en')
-					}
-				/>{' '}
-				FR
-			</Box>
+			<LanguageSwitcher />
 			{isLoggedIn && (
 				<Button label={t('logout')} onClickFn={() => keycloak.logout()} />
 			)}
@@ -169,7 +127,7 @@ export function AppTable({ graphqlBody, variables }) {
 						columns={columns}
 					/>
 				) : (
-					<Throbber />
+					<p>This space unintentionnally left unblank</p>
 				)}
 			</Box>
 			<Box width="100%" paddingY="16px">
@@ -189,40 +147,5 @@ export function AppTable({ graphqlBody, variables }) {
 				</Alert>
 			</Snackbar>
 		</Box>
-	);
-}
-
-function CustomToolbar() {
-	return (
-		<GridToolbarContainer>
-			<GridToolbarColumnsButton />
-			<GridToolbarDensitySelector />
-			<GridToolbarExport />
-		</GridToolbarContainer>
-	);
-}
-
-function EntriesTableCategory({ optionsList, tableData, columns }) {
-	const shownData = useMemo(
-		() =>
-			optionsList?.length === 0
-				? tableData
-				: tableData.filter(e =>
-						optionsList.every(p =>
-							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
-						)
-				  ),
-		[optionsList, tableData]
-	);
-
-	return (
-		<DataGrid
-			disableSelectionOnClick={true}
-			rows={shownData}
-			columns={columns}
-			components={{
-				Toolbar: CustomToolbar,
-			}}
-		/>
 	);
 }

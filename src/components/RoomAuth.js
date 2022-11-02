@@ -8,7 +8,7 @@ import {
 import { Alert } from '@mui/material';
 import { useKeycloak } from '@react-keycloak/web';
 import { useTranslation } from 'react-i18next';
-import { AppTable } from '../components/appTable';
+import { AppTable } from './Table/AppTable';
 
 export function RoomAuth() {
 	const { keycloak } = useKeycloak();

@@ -1,4 +1,4 @@
-import { formatDataToColumns } from './parsingtools';
+import { formatDataToColumns } from './ParsingTools';
 
 export const fetchResults = async (address, authToken, graphqlBody, variables) => {
 	const operationName = 'AppTableFetch';
