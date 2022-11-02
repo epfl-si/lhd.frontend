@@ -27,7 +27,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "mocha --reporter-option diffSize=5000",
     "eject": "react-scripts eject"
