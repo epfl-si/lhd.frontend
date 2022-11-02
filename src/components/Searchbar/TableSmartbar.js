@@ -51,8 +51,8 @@ export default function TableSmartbar({
 			columns.filter(e => optionsList.every(p => p.label !== e.field))
 		);
 		setCategory('');
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [optionsList]);
+	}, [optionsList, columns]);
+
 	return (
 		<Box
 			display="flex"
@@ -82,7 +82,7 @@ export default function TableSmartbar({
 				))}
 			</TextField>
 			{/* Make this into one component (single searchbar) when finding a solution */}
-			{category === null ? (
+			{category === '' ? (
 				<AppSearchbarAuto
 					optionsList={optionsList}
 					setOptionsList={setOptionsList}
@@ -93,7 +93,7 @@ export default function TableSmartbar({
 					<SmartbarManual inputRef={statementRef} onSearch={onSearch} />
 				</Box>
 			)}
-			{category !== null && (
+			{category !== '' && (
 				<IconButton
 					aria-label="delete"
 					size="small"
@@ -103,11 +103,6 @@ export default function TableSmartbar({
 					<Close fontSize="small" />
 				</IconButton>
 			)}
-			{/* <AppParamsList
-				paramsData={paramsData}
-				setParamsData={setParamsData}
-				setSearchOptions={setSearchOptions}
-			/> */}
 		</Box>
 	);
 }

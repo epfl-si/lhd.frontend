@@ -1,15 +1,15 @@
 import i18next from 'i18next';
-import '../lang/dictionary';
+import '../lang/Dictionary';
+
+export const getTypeQuery = query => {
+	return query.split(' ')[0].replace(/s$/, '');
+};
 
 const getBody = gql => {
 	var split = gql.split('\n');
 	split.shift();
 	split.pop();
 	return split.join('');
-};
-
-export const getTypeQuery = query => {
-	return query.split(' ')[0].replace(/s$/, '');
 };
 
 const normSpaces = message => {
@@ -106,4 +106,21 @@ export const formatDataToColumns = (graphqlBody, room, index) => {
 		}
 	});
 	return Row;
+};
+
+export const generateAutocompleteList = tableData => {
+	return tableData
+		.map(e =>
+			Object.entries(e).map(i => {
+				const [lab, val] = i;
+				return { value: isNaN(val) ? val : String(val), label: lab };
+			})
+		)
+		.flat()
+		.filter(e => e.label !== 'id')
+		.filter(
+			(compVal2, index, self) =>
+				index === self.findIndex(compVal1 => compVal1.value === compVal2.value) &&
+				compVal2.label !== 'id'
+		);
 };
