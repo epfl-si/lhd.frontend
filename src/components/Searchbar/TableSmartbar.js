@@ -61,6 +61,7 @@ export default function TableSmartbar({
 			alignItems={{ xs: 'start', sm: 'center' }}
 			paddingBottom={2}
 			gridGap={8}
+			width="100%"
 		>
 			<TextField
 				select={true}

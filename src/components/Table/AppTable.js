@@ -1,6 +1,4 @@
-import Button from '@epfl/epfl-sti-react-library/dist/Forms/Button';
-import { Box, Snackbar } from '@material-ui/core';
-import { Alert } from '@mui/material';
+import { Box, Button } from '@material-ui/core';
 import { useKeycloak } from '@react-keycloak/web';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -17,6 +15,7 @@ import { notificationsTypes } from '../../utils/ressources/Types';
 import TableSmartbar from '../Searchbar/TableSmartbar';
 import { EntriesTableCategory } from './EntriesTableCategory';
 import LanguageSwitcher from './LanguageSwitcher';
+import Notifications from './Notifications';
 
 export function AppTable({ graphqlBody, variables }) {
 	const { t } = useTranslation();
@@ -102,50 +101,37 @@ export function AppTable({ graphqlBody, variables }) {
 	}, [tableData]);
 
 	return (
-		// eslint-disable-next-line react/jsx-no-comment-textnodes
 		<Box display="flex" flexDirection="column" alignItems="center">
 			<LanguageSwitcher />
 			{isLoggedIn && (
-				<Button label={t('logout')} onClickFn={() => keycloak.logout()} />
+				<Button variant="outlined" onClick={() => keycloak.logout()}>
+					{t('logout')}
+				</Button>
 			)}
-			<Box width="100%">
-				<TableSmartbar
-					searchCategories={columns}
-					paramsData={paramsData}
-					setParamsData={setParamsData}
-					optionsList={optionsList}
-					setOptionsList={setOptionsList}
-					tableData={autoComplete}
-					columns={columns}
-				/>
-			</Box>
-			<Box width="100%" height="500px">
-				{tableData !== null ? (
-					<EntriesTableCategory
-						optionsList={optionsList}
-						tableData={tableData}
-						columns={columns}
-					/>
-				) : (
-					<p>This space unintentionnally left unblank</p>
-				)}
-			</Box>
+			<TableSmartbar
+				searchCategories={columns}
+				paramsData={paramsData}
+				setParamsData={setParamsData}
+				optionsList={optionsList}
+				setOptionsList={setOptionsList}
+				tableData={autoComplete}
+				columns={columns}
+			/>
+			<EntriesTableCategory
+				optionsList={optionsList}
+				tableData={tableData}
+				columns={columns}
+			/>
 			<Box width="100%" paddingY="16px">
-				<Button label={t('copy.params')} onClickFn={onShare} />
+				<Button onClick={onShare} variant="outlined">
+					{t('copy.params')}
+				</Button>
 			</Box>
-			<Snackbar
+			<Notifications
 				open={openNotification}
-				autoHideDuration={3000}
-				onClose={handleClose}
-			>
-				<Alert
-					onClose={handleClose}
-					severity={notificationType.type}
-					sx={{ width: '100%' }}
-				>
-					{notificationType.text}
-				</Alert>
-			</Snackbar>
+				notification={notificationType}
+				close={handleClose}
+			/>
 		</Box>
 	);
 }
