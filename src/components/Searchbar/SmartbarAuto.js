@@ -1,4 +1,4 @@
-import { Box, Chip, TextField } from '@material-ui/core';
+import { Box, Button, Chip, TextField } from '@material-ui/core';
 import { Autocomplete } from '@mui/material';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,7 @@ export default function SmartbarAuto({ tableData, optionsList, setOptionsList })
 				options={(tableData || []).sort((a, b) => -b.label.localeCompare(a.label))}
 				groupBy={option => t(option.label)}
 				getOptionLabel={option => option.value}
+				isOptionEqualToValue={(option, value) => option.value === value.value}
 				renderTags={(value, getTagProps) =>
 					value.map((option, index) => (
 						<Chip
