@@ -1,3 +1,4 @@
+import { Box } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useMemo } from 'react';
 import { TableToolbar } from './TableToolbar';
@@ -16,13 +17,19 @@ export function EntriesTableCategory({ optionsList, tableData, columns }) {
 	);
 
 	return (
-		<DataGrid
-			disableSelectionOnClick={true}
-			rows={shownData}
-			columns={columns}
-			components={{
-				Toolbar: TableToolbar,
-			}}
-		/>
+		<Box width="100%" height="500px">
+			{tableData !== null ? (
+				<DataGrid
+					disableSelectionOnClick={true}
+					rows={shownData}
+					columns={columns}
+					components={{
+						Toolbar: TableToolbar,
+					}}
+				/>
+			) : (
+				<p>This space unintentionnally left unblank</p>
+			)}
+		</Box>
 	);
 }
