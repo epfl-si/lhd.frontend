@@ -12,6 +12,7 @@ import {
 	parse,
 } from '../../utils/graphql/ParsingTools';
 import { notificationsTypes } from '../../utils/ressources/Types';
+import { copyLinkParams } from '../../utils/web/URLUtils';
 import TableSmartbar from '../Searchbar/TableSmartbar';
 import { EntriesTableCategory } from './EntriesTableCategory';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -38,13 +39,7 @@ export function AppTable({ graphqlBody, variables }) {
 	};
 
 	const onShare = () => {
-		optionsList?.length > 0 &&
-			navigator.clipboard.writeText(
-				`${window.location.origin}/?filters=${optionsList
-					.map(o => `${o.value}:${o.label}`)
-					.join(',')}`
-			);
-
+		copyLinkParams(optionsList);
 		setNotificationType(
 			optionsList?.length > 0
 				? notificationsTypes['copy-success']
