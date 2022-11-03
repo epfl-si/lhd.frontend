@@ -6,3 +6,13 @@ export const copyLinkParams = optionsList => {
 				.join(',')}`
 		);
 };
+
+export const setUrlParams = optionsList => {
+	window.history.replaceState(
+		null,
+		null,
+		optionsList.length > 0
+			? `/?filters=${optionsList.map(o => `${o.value}:${o.label}`).join(',')}`
+			: '/'
+	);
+};
