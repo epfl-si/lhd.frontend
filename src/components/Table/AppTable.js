@@ -2,7 +2,6 @@ import { Box, Button } from '@material-ui/core';
 import { useKeycloak } from '@react-keycloak/web';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useHistory } from 'react-router-dom';
 import { fetchResults } from '../../utils/graphql/FetchingTools';
 import {
 	generateAutocompleteList,
@@ -12,7 +11,7 @@ import {
 	parse,
 } from '../../utils/graphql/ParsingTools';
 import { notificationsTypes } from '../../utils/ressources/Types';
-import { copyLinkParams } from '../../utils/web/URLUtils';
+import { copyLinkParams, setUrlParams } from '../../utils/web/URLUtils';
 import TableSmartbar from '../Searchbar/TableSmartbar';
 import { EntriesTableCategory } from './EntriesTableCategory';
 import LanguageSwitcher from './LanguageSwitcher';
@@ -31,7 +30,6 @@ export function AppTable({ graphqlBody, variables }) {
 	const [autoComplete, setAutoComplete] = useState([]);
 	const [openNotification, setOpenNotification] = useState(false);
 	const [notificationType, setNotificationType] = useState('');
-	const history = useHistory();
 
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') return;
@@ -83,12 +81,8 @@ export function AppTable({ graphqlBody, variables }) {
 	}, [graphqlBody, keycloak.token, variables]);
 
 	useEffect(() => {
-		history.replace(
-			optionsList.length > 0
-				? `/?filters=${optionsList.map(o => `${o.value}:${o.label}`).join(',')}`
-				: ''
-		);
-	}, [history, optionsList]);
+		setUrlParams(optionsList);
+	}, [optionsList]);
 
 	useEffect(() => {
 		if (!tableData) return;
