@@ -17,7 +17,7 @@ RUN yarn install
 
 # Copies everything over to Docker environment
 COPY . ./
-RUN sed -i 's+//localhost:3001+https://lhdv3.epfl.ch/graphql+g' src/components/appTable.js
+RUN sed -i 's+//localhost:3001+https://lhdv3.epfl.ch/graphql+g' src/components/Table/AppTable.js
 # Build production version of app
 RUN yarn build
 EXPOSE 3000
