@@ -12,15 +12,14 @@ import {
 } from '../../utils/graphql/ParsingTools';
 import { notificationsTypes } from '../../utils/ressources/Types';
 import { copyLinkParams, setUrlParams } from '../../utils/web/URLUtils';
+import ControlsBar from '../global/ControlsBar';
 import TableSmartbar from '../Searchbar/TableSmartbar';
 import { EntriesTableCategory } from './EntriesTableCategory';
-import LanguageSwitcher from './LanguageSwitcher';
 import Notifications from './Notifications';
 
 export function AppTable({ graphqlBody, variables }) {
 	const { t } = useTranslation();
 	const { keycloak } = useKeycloak();
-	const isLoggedIn = keycloak.authenticated;
 
 	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
@@ -91,12 +90,7 @@ export function AppTable({ graphqlBody, variables }) {
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
-			<LanguageSwitcher />
-			{isLoggedIn && (
-				<Button variant="outlined" onClick={() => keycloak.logout()}>
-					{t('logout')}
-				</Button>
-			)}
+			<ControlsBar />
 			<TableSmartbar
 				searchCategories={columns}
 				paramsData={paramsData}
