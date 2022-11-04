@@ -1,19 +1,18 @@
-import { Box, Switch } from '@material-ui/core';
+import { FormControl, MenuItem, Select } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 
 export default function LanguageSwitcher() {
 	const { i18n } = useTranslation();
 	return (
-		<Box display="flex" flexDirection="row" alignItems="center">
-			EN{' '}
-			<Switch
-				onChange={event =>
-					event.target.checked
-						? i18n.changeLanguage('fr')
-						: i18n.changeLanguage('en')
-				}
-			/>{' '}
-			FR
-		</Box>
+		<FormControl x={{ m: 1, minWidth: 120 }} size="small">
+			<Select
+				value={i18n.language}
+				onChange={event => i18n.changeLanguage(event.target.value)}
+				variant="outlined"
+			>
+				<MenuItem value="fr">Français</MenuItem>
+				<MenuItem value="en">English</MenuItem>
+			</Select>
+		</FormControl>
 	);
 }
