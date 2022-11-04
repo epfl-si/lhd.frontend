@@ -9,6 +9,7 @@ import { Alert } from '@mui/material';
 import { useKeycloak } from '@react-keycloak/web';
 import { useTranslation } from 'react-i18next';
 import { AppTable } from './Table/AppTable';
+import LanguageSwitcher from './Table/LanguageSwitcher';
 
 export function RoomAuth() {
 	const { keycloak } = useKeycloak();
@@ -48,6 +49,7 @@ export function RoomAuth() {
 					<Alert severity="warning">
 						<b>{t('login.warning')}</b>
 					</Alert>
+					<LanguageSwitcher />
 					<DialogTitle>{t('login.title')}</DialogTitle>
 					<DialogContent>{t('login.content')}</DialogContent>
 					<DialogActions>
