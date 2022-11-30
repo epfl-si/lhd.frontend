@@ -1,13 +1,8 @@
-import { Box, Button } from '@material-ui/core';
-import { useKeycloak } from '@react-keycloak/web';
-import { useTranslation } from 'react-i18next';
+import { LoginButton } from '@epfl-si/react-appauth';
+import { Box } from '@material-ui/core';
 import LanguageSwitcher from '../Table/LanguageSwitcher';
 
 export default function ControlsBar() {
-	const { keycloak } = useKeycloak();
-	const isLoggedIn = keycloak.authenticated;
-
-	const { t } = useTranslation();
 	return (
 		<Box
 			display="flex"
@@ -18,11 +13,7 @@ export default function ControlsBar() {
 			width="100%"
 		>
 			<LanguageSwitcher />
-			{isLoggedIn && (
-				<Button variant="outlined" onClick={() => keycloak.logout()}>
-					{t('logout')}
-				</Button>
-			)}
+			<LoginButton />
 		</Box>
 	);
 }

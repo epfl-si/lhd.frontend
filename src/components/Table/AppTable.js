@@ -1,5 +1,5 @@
+import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
 import { Box, Button } from '@material-ui/core';
-import { useKeycloak } from '@react-keycloak/web';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fetchResults } from '../../utils/graphql/FetchingTools';
@@ -19,7 +19,7 @@ import Notifications from './Notifications';
 
 export function AppTable({ graphqlBody, variables }) {
 	const { t } = useTranslation();
-	const { keycloak } = useKeycloak();
+	const oidc = useOpenIDConnectContext();
 
 	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
 
@@ -60,7 +60,7 @@ export function AppTable({ graphqlBody, variables }) {
 					setOpenNotification(true);
 				}
 			}
-			fetchResults('//localhost:3001', keycloak.token, graphqlBody, variables);
+			fetchResults('//localhost:3001', oidc.accessToken, graphqlBody, variables);
 		};
 
 		onLoad();
@@ -69,7 +69,7 @@ export function AppTable({ graphqlBody, variables }) {
 			setTableData(
 				await fetchResults(
 					'//localhost:3001',
-					keycloak.token,
+					oidc.accessToken,
 					graphqlBody,
 					variables
 				)
@@ -77,7 +77,7 @@ export function AppTable({ graphqlBody, variables }) {
 		}
 
 		reloadResults();
-	}, [graphqlBody, keycloak.token, variables]);
+	}, [graphqlBody, oidc.accessToken, variables]);
 
 	useEffect(() => {
 		setUrlParams(optionsList);
