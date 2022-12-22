@@ -1,4 +1,8 @@
-import { Button } from '@epfl/epfl-sti-react-library';
+import {
+	LoginButton,
+	StateEnum,
+	useOpenIDConnectContext,
+} from '@epfl-si/react-appauth';
 import {
 	Dialog,
 	DialogActions,
@@ -6,15 +10,15 @@ import {
 	DialogTitle,
 } from '@material-ui/core';
 import { Alert } from '@mui/material';
-import { useKeycloak } from '@react-keycloak/web';
 import { useTranslation } from 'react-i18next';
 import { AppTable } from './Table/AppTable';
 import LanguageSwitcher from './Table/LanguageSwitcher';
 
 export function RoomAuth() {
-	const { keycloak } = useKeycloak();
 	const { t } = useTranslation();
-	const isLoggedIn = keycloak.authenticated;
+	const oidc = useOpenIDConnectContext();
+	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
+	console.log(isLoggedIn);
 	return (
 		<>
 			{isLoggedIn ? (
@@ -53,7 +57,7 @@ export function RoomAuth() {
 					<DialogTitle>{t('login.title')}</DialogTitle>
 					<DialogContent>{t('login.content')}</DialogContent>
 					<DialogActions>
-						<Button label={t('login.button')} onClickFn={() => keycloak.login()} />
+						<LoginButton />
 					</DialogActions>
 				</Dialog>
 			)}

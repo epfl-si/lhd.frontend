@@ -1,11 +1,13 @@
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-import keycloak from '../utils/auth/Keycloak';
+import { OIDCContext } from '@epfl-si/react-appauth';
 import { RoomAuth } from './RoomAuth';
 
 export function RoomTable() {
 	return (
-		<ReactKeycloakProvider authClient={keycloak}>
+		<OIDCContext
+			authServerUrl={'http://localhost:8080/realms/LHD'}
+			client={{ clientId: 'React', redirectUri: 'http://localhost:3000/' }}
+		>
 			<RoomAuth />
-		</ReactKeycloakProvider>
+		</OIDCContext>
 	);
 }
