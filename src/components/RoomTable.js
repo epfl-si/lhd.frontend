@@ -5,7 +5,7 @@ export function RoomTable() {
 	return (
 		<OIDCContext
 			authServerUrl={'http://localhost:8080/realms/LHD'}
-			client={{ clientId: 'React', redirectUri: 'http://localhost:3000/' }}
+			client={{ clientId: 'LHDv3', redirectUri: 'http://localhost:3000/' }}
 		>
 			<RoomAuth />
 		</OIDCContext>
