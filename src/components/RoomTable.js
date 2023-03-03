@@ -4,8 +4,8 @@ import { RoomAuth } from './RoomAuth';
 export function RoomTable() {
 	return (
 		<OIDCContext
-			authServerUrl={'http://localhost:8080/realms/LHD'}
-			client={{ clientId: 'LHDv3', redirectUri: 'http://localhost:3000/' }}
+			authServerUrl={ process.env.REACT_APP_AUTH_SERVER_URL }
+			client={{ clientId: 'LHDv3', redirectUri: process.env.REACT_APP_HOMEPAGE_URL }}
 		>
 			<RoomAuth />
 		</OIDCContext>

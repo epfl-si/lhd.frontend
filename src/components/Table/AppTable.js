@@ -60,7 +60,7 @@ export function AppTable({ graphqlBody, variables }) {
 					setOpenNotification(true);
 				}
 			}
-			fetchResults('//localhost:3001', oidc.accessToken, graphqlBody, variables);
+			fetchResults(process.env.REACT_APP_GRAPHQL_ENDPOINT_URL, oidc.accessToken, graphqlBody, variables);
 		};
 
 		onLoad();
@@ -68,7 +68,7 @@ export function AppTable({ graphqlBody, variables }) {
 		async function reloadResults() {
 			setTableData(
 				await fetchResults(
-					'//localhost:3001',
+					process.env.REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					graphqlBody,
 					variables
