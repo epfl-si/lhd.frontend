@@ -22,4 +22,4 @@ RUN yarn build
 
 EXPOSE 3000
 # start app
-CMD ["serve", "-s", "build"]
+CMD ["./docker-entrypoint.sh"]
