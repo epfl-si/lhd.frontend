@@ -1,11 +1,12 @@
 import { OIDCContext } from '@epfl-si/react-appauth';
 import { RoomAuth } from './RoomAuth';
+import { env } from '../utils/env';
 
 export function RoomTable() {
 	return (
 		<OIDCContext
-			authServerUrl={ process.env.REACT_APP_AUTH_SERVER_URL }
-			client={{ clientId: 'LHDv3', redirectUri: process.env.REACT_APP_HOMEPAGE_URL }}
+			authServerUrl={ env().REACT_APP_AUTH_SERVER_URL }
+			client={{ clientId: 'LHDv3', redirectUri: env().REACT_APP_HOMEPAGE_URL }}
 		>
 			<RoomAuth />
 		</OIDCContext>

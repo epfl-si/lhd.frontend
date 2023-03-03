@@ -16,6 +16,7 @@ import ControlsBar from '../global/ControlsBar';
 import TableSmartbar from '../Searchbar/TableSmartbar';
 import { EntriesTableCategory } from './EntriesTableCategory';
 import Notifications from './Notifications';
+import { env } from '../../utils/env';
 
 export function AppTable({ graphqlBody, variables }) {
 	const { t } = useTranslation();
@@ -60,7 +61,7 @@ export function AppTable({ graphqlBody, variables }) {
 					setOpenNotification(true);
 				}
 			}
-			fetchResults(process.env.REACT_APP_GRAPHQL_ENDPOINT_URL, oidc.accessToken, graphqlBody, variables);
+			fetchResults(env().REACT_APP_GRAPHQL_ENDPOINT_URL, oidc.accessToken, graphqlBody, variables);
 		};
 
 		onLoad();
@@ -68,7 +69,7 @@ export function AppTable({ graphqlBody, variables }) {
 		async function reloadResults() {
 			setTableData(
 				await fetchResults(
-					process.env.REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					graphqlBody,
 					variables
