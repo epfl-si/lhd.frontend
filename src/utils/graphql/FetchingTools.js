@@ -25,9 +25,17 @@ export const fetchResults = async (address, authToken, graphqlBody, variables) =
 		mode: 'cors',
 		credentials: 'omit',
 	});
+
+	if (results.status !== 200) {
+		return { status: results.status, data: await results.text() };
+	}
+
 	const graphQLResponse = await results.json();
 
-	return graphQLResponse.data?.rooms.map((room, index) =>
-		formatDataToColumns(graphqlBody, room, index)
-	);
+	return {
+		status: results.status,
+		data: graphQLResponse.data?.rooms.map((room, index) =>
+			formatDataToColumns(graphqlBody, room, index)
+		),
+	};
 };

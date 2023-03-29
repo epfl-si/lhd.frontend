@@ -1,5 +1,12 @@
-import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import { Box, Button } from '@material-ui/core';
+import { LoginButton, useOpenIDConnectContext } from '@epfl-si/react-appauth';
+import {
+	Box,
+	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+} from '@material-ui/core';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { fetchResults } from '../../utils/graphql/FetchingTools';
@@ -17,6 +24,8 @@ import TableSmartbar from '../Searchbar/TableSmartbar';
 import { EntriesTableCategory } from './EntriesTableCategory';
 import Notifications from './Notifications';
 import { env } from '../../utils/env';
+import { Alert } from '@mui/material';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export function AppTable({ graphqlBody, variables }) {
 	const { t } = useTranslation();
@@ -30,6 +39,11 @@ export function AppTable({ graphqlBody, variables }) {
 	const [autoComplete, setAutoComplete] = useState([]);
 	const [openNotification, setOpenNotification] = useState(false);
 	const [notificationType, setNotificationType] = useState('');
+	const [dataError, setDataError] = useState({
+		active: false,
+		status: 0,
+		message: 'null',
+	});
 
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') return;
@@ -61,20 +75,27 @@ export function AppTable({ graphqlBody, variables }) {
 					setOpenNotification(true);
 				}
 			}
-			fetchResults(env().REACT_APP_GRAPHQL_ENDPOINT_URL, oidc.accessToken, graphqlBody, variables);
 		};
 
 		onLoad();
 
 		async function reloadResults() {
-			setTableData(
-				await fetchResults(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-					oidc.accessToken,
-					graphqlBody,
-					variables
-				)
+			const results = await fetchResults(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				graphqlBody,
+				variables
 			);
+
+			if (results.status === 200) {
+				setTableData(results.data[getTypeQuery(graphqlBody)]);
+			} else {
+				setDataError({
+					active: true,
+					message: results.data,
+					status: results.status,
+				});
+			}
 		}
 
 		reloadResults();
@@ -91,31 +112,76 @@ export function AppTable({ graphqlBody, variables }) {
 
 	return (
 		<Box display="flex" flexDirection="column" alignItems="center">
-			<ControlsBar />
-			<TableSmartbar
-				searchCategories={columns}
-				paramsData={paramsData}
-				setParamsData={setParamsData}
-				optionsList={optionsList}
-				setOptionsList={setOptionsList}
-				tableData={autoComplete}
-				columns={columns}
-			/>
-			<EntriesTableCategory
-				optionsList={optionsList}
-				tableData={tableData}
-				columns={columns}
-			/>
-			<Box width="100%" paddingY="16px">
-				<Button onClick={onShare} variant="outlined">
-					{t('copy.params')}
-				</Button>
-			</Box>
-			<Notifications
-				open={openNotification}
-				notification={notificationType}
-				close={handleClose}
-			/>
+			{!dataError.active ? (
+				<>
+					<ControlsBar />
+					<TableSmartbar
+						searchCategories={columns}
+						paramsData={paramsData}
+						setParamsData={setParamsData}
+						optionsList={optionsList}
+						setOptionsList={setOptionsList}
+						tableData={autoComplete}
+						columns={columns}
+					/>
+					<EntriesTableCategory
+						optionsList={optionsList}
+						tableData={tableData}
+						columns={columns}
+					/>
+					<Box width="100%" paddingY="16px">
+						<Button onClick={onShare} variant="outlined">
+							{t('copy.params')}
+						</Button>
+					</Box>
+					<Notifications
+						open={openNotification}
+						notification={notificationType}
+						close={handleClose}
+					/>
+				</>
+			) : (
+				<Dialog open={true}>
+					<Alert severity="error">
+						<b>{t(`fetchError.header`)}</b>
+					</Alert>
+					<LanguageSwitcher />
+					<DialogTitle>{`${dataError.status} ${t(
+						`fetchError.code.${dataError.status}.title`
+					)}`}</DialogTitle>
+					<DialogContent>
+						{t(`fetchError.code.${dataError.status}.content`)}
+						<Box
+							component="div"
+							sx={{
+								whiteSpace: 'normal',
+								my: 2,
+								p: 1,
+								bgcolor: 'black',
+								opacity: 0.8,
+								color: 'white',
+								border: '1px solid',
+								borderColor: 'grey.300',
+								borderRadius: 5,
+								fontSize: '0.875rem',
+								fontWeight: '700',
+							}}
+						>
+							<Box
+								sx={{
+									color: 'red',
+								}}
+							>
+								{t(`fetchError.serverMessage`)}
+							</Box>
+							{dataError.message}
+						</Box>
+					</DialogContent>
+					<DialogActions>
+						<LoginButton />
+					</DialogActions>
+				</Dialog>
+			)}
 		</Box>
 	);
 }

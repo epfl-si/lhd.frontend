@@ -57,6 +57,36 @@ i18next.use(initReactI18next).init({
 						placeholder: 'Entries',
 					},
 				},
+				fetchError: {
+					header: 'An error has occurred',
+					serverMessage: 'Server returned the following message: ',
+					code: {
+						500: {
+							title: 'Internal Server Error',
+							content: 'An internal server error has occurred.',
+						},
+						400: {
+							title: 'Bad Request',
+							content: 'The request was malformed.',
+						},
+						401: {
+							title: 'Unauthorized',
+							content: 'You are not authorized to access this resource.',
+						},
+						403: {
+							title: 'Forbidden',
+							content: 'You are not allowed to access this resource.',
+						},
+						404: {
+							title: 'Not Found',
+							content: 'The resource you are looking for was not found.',
+						},
+						408: {
+							title: 'Request Timeout',
+							content: 'The request timed out.',
+						},
+					},
+				},
 			},
 		},
 		fr: {
@@ -109,6 +139,36 @@ i18next.use(initReactI18next).init({
 					entries: {
 						label: 'Rechercher des entrées',
 						placeholder: 'Entrées',
+					},
+				},
+				fetchError: {
+					header: 'Erreur de chargement',
+					serverMessage: 'Le serveur a retourné le message suivant : ',
+					code: {
+						500: {
+							title: 'Erreur interne du serveur',
+							content: 'Une erreur interne du serveur s’est produite.',
+						},
+						400: {
+							title: 'Mauvaise requête',
+							content: 'La requête était malformée.',
+						},
+						401: {
+							title: 'Non autorisé',
+							content: "Vous n'êtes pas autorisé à accéder à cette ressource.",
+						},
+						403: {
+							title: 'Interdit',
+							content: "Vous n'êtes pas autorisé à accéder à cette ressource.",
+						},
+						404: {
+							title: 'Non trouvé',
+							content: 'La ressource que vous recherchez n’a pas été trouvée.',
+						},
+						408: {
+							title: 'Temps d’attente de la requête dépassé',
+							content: 'La requête a expiré.',
+						},
 					},
 				},
 			},
