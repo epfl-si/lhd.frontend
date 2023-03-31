@@ -88,7 +88,11 @@ export function AppTable({ graphqlBody, variables }) {
 			);
 
 			if (results.status === 200) {
-				setTableData(results.data[getTypeQuery(graphqlBody)]);
+				if (results.data) {
+					setTableData(results.data);
+				} else {
+					console.error("Bad GraphQL results", results);
+				}
 			} else {
 				setDataError({
 					active: true,
