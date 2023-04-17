@@ -33,19 +33,16 @@ ReactDOM.render(
 					menus: [],
 				},
 			]}
-			baseTitle="EPFL STI React Library"
-			breadcrumbItems={[
-				{ anchor: '...', link: 'https://www.epfl.ch/schools/' },
-				{ anchor: '...', link: 'https://sti.epfl.ch/' },
-				{ anchor: 'LHD - LABORATORY HAZARDS DIRECTORY', link: '' },
-			]}
+			baseTitle="LHD"
+			breadcrumbItems={[{ anchor: 'LHD - LABORATORY HAZARDS DIRECTORY', link: '' }]}
 			drawerContents={{ anchor: 'Go to main site', link: 'https://www.epfl.ch' }}
 			homeAnchor="Home"
 			homeLink="/"
 			isBeta
 			isHome
 			showFooter
-			title="Base Component - Default"
+			useLightFooter
+			title="Home"
 			topMenuItems={[
 				{ anchor: 'About', link: 'https://www.epfl.ch/about/' },
 				{ anchor: 'Education', link: 'https://www.epfl.ch/education' },
