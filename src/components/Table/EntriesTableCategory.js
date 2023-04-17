@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useMemo } from 'react';
 import { TableToolbar } from './TableToolbar';
 
-export function EntriesTableCategory({ optionsList, tableData, columns }) {
+export function EntriesTableCategory({ optionsList, tableData, columns, loading }) {
 	const shownData = useMemo(
 		() =>
 			optionsList?.length === 0
@@ -20,6 +20,7 @@ export function EntriesTableCategory({ optionsList, tableData, columns }) {
 		<Box width="100%" height="500px">
 			{tableData !== null ? (
 				<DataGrid
+					loading={loading}
 					disableSelectionOnClick={true}
 					rows={shownData}
 					columns={columns}

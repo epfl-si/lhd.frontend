@@ -44,6 +44,7 @@ export function AppTable({ graphqlBody, variables }) {
 		status: 0,
 		message: 'null',
 	});
+	const [loading, setLoading] = useState(false);
 
 	const handleClose = (event, reason) => {
 		if (reason === 'clickaway') return;
@@ -80,12 +81,14 @@ export function AppTable({ graphqlBody, variables }) {
 		onLoad();
 
 		async function reloadResults() {
+			setLoading(true);
 			const results = await fetchResults(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
 				graphqlBody,
 				variables
 			);
+			setLoading(false);
 
 			if (results.status === 200) {
 				if (results.data) {
@@ -132,6 +135,7 @@ export function AppTable({ graphqlBody, variables }) {
 						optionsList={optionsList}
 						tableData={tableData}
 						columns={columns}
+						loading={loading}
 					/>
 					<Box width="100%" paddingY="16px">
 						<Button onClick={onShare} variant="outlined">
