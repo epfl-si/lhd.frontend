@@ -57,6 +57,7 @@
     "@types/react-router-dom": "^5.3.3",
     "chai": "^4.3.6",
     "eslint": "^8.38.0",
+    "eslint-config-react-app": "^7.0.1",
     "mocha": "^10.1.0",
     "typescript": "^5.0.4"
   }
