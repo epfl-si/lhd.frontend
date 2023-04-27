@@ -1303,10 +1303,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.3.0.tgz#ea89004119dc42db2e1dba0f97d553f7372f6fcb"
   integrity sha512-AHPmaAx+RYfZz0eYu6Gviiagpmiyw98ySSlQvCUhVGDRtDFe4DBS0x1bSjdF3gqUDYOczB+yYvBTtEylYSdRhg==
 
-"@epfl-si/react-appauth@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@epfl-si/react-appauth/-/react-appauth-0.7.0.tgz#0c0b250d915f9c816e4db537ea6a257484b9531f"
-  integrity sha512-lIQ8yZ1p5ZmnfVwUb5nfjQYRG2OfYcVGaDwq/1ib8qSrEWXb1PHnziaDEQScndexXdeQTDqUKyqc8v3awTkOhg==
+"@epfl-si/react-appauth@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.npmjs.org/@epfl-si/react-appauth/-/react-appauth-0.9.0.tgz#425273aff9737e39b7996bfe6d034d05214f6bec"
+  integrity sha512-EETesLZSh6Dnf8XLgJVJI2kKTp4q3UI9oGLQF4tL7VdO82f2tw6UUBrMr9gKK6RPaCCRlGWYCEEhAK8zEqzYRQ==
   dependencies:
     "@openid/appauth" "^1.3.1"
     core-js "^3.25.5"
