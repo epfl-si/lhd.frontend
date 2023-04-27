@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { AppTable } from './Table/AppTable';
 import LanguageSwitcher from './Table/LanguageSwitcher';
 
-export function RoomAuth() {
+export function RoomAuth({ gQuery }) {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
@@ -23,29 +23,7 @@ export function RoomAuth() {
 		<>
 			{isLoggedIn ? (
 				<AppTable
-					graphqlBody={`rooms (where: { building: { equals: "BC"} }) {
-    name
-    occupancies { 
-      cosecs { name }
-      professors { name }
-      unit {
-        name
-        institute {
-          name
-          school {
-            name
-          }
-        }
-        unitId
-      }
-    }
-    building
-    sector
-    floor
-    kind {
-      name
-    }
-  }`}
+					graphqlBody={gQuery}
 					variables={{}}
 				/>
 			) : (
