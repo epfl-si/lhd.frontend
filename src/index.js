@@ -11,7 +11,6 @@ ReactDOM.render(
 		authServerUrl={env().REACT_APP_AUTH_SERVER_URL}
 		client={{
 			clientId: 'LHDv3',
-			redirectUri: env().REACT_APP_HOMEPAGE_URL,
 			scope: env().REACT_APP_OPENID_SCOPE,
 		}}
 	>
