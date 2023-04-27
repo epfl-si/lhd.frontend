@@ -33,6 +33,15 @@ i18next.use(initReactI18next).init({
 					kind: {
 						name: 'Designation',
 					},
+					bio: {
+						bio_level: 'Bio level',
+						comment: 'Comment',
+						bio_org_lab: {
+							bio_org: {
+								organism: 'Organism',
+							},
+						},
+					},
 				},
 				logout: 'Logout',
 				login: {
@@ -116,6 +125,15 @@ i18next.use(initReactI18next).init({
 					floor: 'Étage',
 					kind: {
 						name: 'Désignation',
+					},
+					bio: {
+						bio_level: 'Niveau bio',
+						comment: 'Commentaire',
+						bio_org_lab: {
+							bio_org: {
+								organism: 'Organisme',
+							},
+						},
 					},
 				},
 				logout: 'Déconnexion',
