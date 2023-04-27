@@ -61,7 +61,7 @@ function App() {
 
 					<Switch>
 						<Route path="/biohazard">
-							<NothingHereNow />
+							<BioHazard />
 						</Route>
 						<Route path="/">
 							<HomePage />
@@ -75,11 +75,3 @@ function App() {
 }
 
 export default App;
-
-function NothingHereNow() {
-	return (
-		<div>
-			<Link to="/">NothingHereNow</Link>
-		</div>
-	);
-}
