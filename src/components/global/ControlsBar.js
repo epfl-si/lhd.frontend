@@ -1,4 +1,3 @@
-import { LoginButton } from '@epfl-si/react-appauth';
 import { Box } from '@material-ui/core';
 import LanguageSwitcher from '../Table/LanguageSwitcher';
 
@@ -13,7 +12,6 @@ export default function ControlsBar() {
 			width="100%"
 		>
 			<LanguageSwitcher />
-			<LoginButton />
 		</Box>
 	);
 }

@@ -61,7 +61,7 @@ function App() {
                          	<Base.User>
                          		<Avatar>
                          			<Avatar.Image peopleSciper={ "169419" } />
-                         			<p>{ oidc.idToken.given_name } { oidc.idToken.family_name }</p>
+                         			<p><LoginButton /></p>
                          		</Avatar>
                          	</Base.User>
 
