@@ -2,8 +2,41 @@ import { Base } from './epfl-elements/Base.tsx'
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import BioHazard from './pages/biohazard';
 import HomePage from './pages/homepage';
+import {
+	LoginButton,
+	StateEnum,
+	useOpenIDConnectContext,
+} from '@epfl-si/react-appauth';
+import {
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+} from '@material-ui/core';
+import { Alert } from '@mui/material';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from './components/Table/LanguageSwitcher';
 
 function App() {
+	const { t } = useTranslation();
+	const oidc = useOpenIDConnectContext();
+	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
+	if (! isLoggedIn) {
+		return (
+			<Dialog open={true}>
+				<Alert severity="warning">
+					<b>{t('login.warning')}</b>
+				</Alert>
+				<LanguageSwitcher />
+				<DialogTitle>{t('login.title')}</DialogTitle>
+				<DialogContent>{t('login.content')}</DialogContent>
+				<DialogActions>
+					<LoginButton />
+				</DialogActions>
+			</Dialog>
+		);
+
+	}
 	return (
 		<BrowserRouter>
 			<Base>
