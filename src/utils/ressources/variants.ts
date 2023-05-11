@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 
-export const notificationsTypes = {
+export const notificationsVariants = {
 	'copy-success': {
 		type: 'success',
 		text: t('copy.success'),

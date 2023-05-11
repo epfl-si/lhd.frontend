@@ -1,4 +1,4 @@
-import { AppTable } from './Table/AppTable';
+import { AppTable } from './Table/AppTable.tsx';
 
 export function RoomAuth({ gQuery }) {
 	return <AppTable graphqlBody={gQuery} variables={{}} />;

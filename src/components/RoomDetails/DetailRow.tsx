@@ -3,7 +3,7 @@ import React from 'react';
 
 type DetailRowProps = {
 	title: string;
-	value: string;
+	value: string | undefined;
 };
 
 export default function DetailRow({ title, value }: DetailRowProps) {

@@ -1,4 +1,4 @@
-import { LoginButton, useOpenIDConnectContext } from '@epfl-si/react-appauth';
+import { LoginButton, State, useOpenIDConnectContext } from '@epfl-si/react-appauth';
 import {
 	Box,
 	Button,
@@ -17,7 +17,6 @@ import {
 	getTypeQuery,
 	parse,
 } from '../../utils/graphql/ParsingTools';
-import { notificationsTypes } from '../../utils/ressources/Types';
 import { copyLinkParams, setUrlParams } from '../../utils/web/URLUtils';
 import ControlsBar from '../global/ControlsBar';
 import TableSmartbar from '../Searchbar/TableSmartbar';
@@ -26,19 +25,35 @@ import Notifications from './Notifications';
 import { env } from '../../utils/env';
 import { Alert } from '@mui/material';
 import LanguageSwitcher from './LanguageSwitcher';
+import {
+	columnType,
+	notificationType,
+	parameterType,
+} from '../../utils/ressources/types';
+import { notificationsVariants } from '../../utils/ressources/variants';
 
-export function AppTable({ graphqlBody, variables }) {
+type AppTableProps = {
+	graphqlBody: string;
+	variables: object;
+};
+
+export function AppTable({ graphqlBody, variables }: AppTableProps) {
 	const { t } = useTranslation();
-	const oidc = useOpenIDConnectContext();
+	const oidc: State = useOpenIDConnectContext();
 
-	const columns = generateColumns(graphqlBody, getTypeQuery(graphqlBody), 'en');
+	const columns: columnType[] = generateColumns(
+		graphqlBody,
+		getTypeQuery(graphqlBody)
+	);
 
-	const [tableData, setTableData] = useState([]);
-	const [paramsData, setParamsData] = useState([]);
-	const [optionsList, setOptionsList] = useState([]);
-	const [autoComplete, setAutoComplete] = useState([]);
-	const [openNotification, setOpenNotification] = useState(false);
-	const [notificationType, setNotificationType] = useState('');
+	const [tableData, setTableData] = useState<Object[]>([]);
+	const [optionsList, setOptionsList] = useState<parameterType[]>([]);
+	const [autoComplete, setAutoComplete] = useState<parameterType[]>([]);
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: '',
+		text: '',
+	});
 	const [dataError, setDataError] = useState({
 		active: false,
 		status: 0,
@@ -46,7 +61,7 @@ export function AppTable({ graphqlBody, variables }) {
 	});
 	const [loading, setLoading] = useState(false);
 
-	const handleClose = (event, reason) => {
+	const handleClose = (event: Event, reason: string) => {
 		if (reason === 'clickaway') return;
 		setOpenNotification(false);
 	};
@@ -55,8 +70,8 @@ export function AppTable({ graphqlBody, variables }) {
 		copyLinkParams(optionsList);
 		setNotificationType(
 			optionsList?.length > 0
-				? notificationsTypes['copy-success']
-				: notificationsTypes['copy-error']
+				? notificationsVariants['copy-success']
+				: notificationsVariants['copy-error']
 		);
 		setOpenNotification(true);
 	};
@@ -66,13 +81,13 @@ export function AppTable({ graphqlBody, variables }) {
 			const paramsList = generateFormattedList(parse(graphqlBody), 'room.');
 			const urlParams = new URLSearchParams(window.location.search);
 			if (urlParams.has('filters')) {
-				let filters = urlParams.get('filters').split(',');
-				if (filters.every(e => paramsList.includes(e.split(':')[1]))) {
+				let filters = urlParams?.get('filters')?.split(',');
+				if (filters?.every(e => paramsList.includes(e.split(':')[1]))) {
 					setOptionsList(
-						filters.map(e => ({ value: e.split(':')[0], label: e.split(':')[1] }))
+						filters?.map(e => ({ value: e?.split(':')[0], label: e?.split(':')[1] }))
 					);
 				} else {
-					setNotificationType(notificationsTypes['params-error']);
+					setNotificationType(notificationsVariants['params-error']);
 					setOpenNotification(true);
 				}
 			}
@@ -92,7 +107,10 @@ export function AppTable({ graphqlBody, variables }) {
 
 			if (results.status === 200) {
 				if (results.data) {
-					setTableData(results.data);
+					// Only setTableData if results.data is not a string
+					if (typeof results.data !== 'string') {
+						setTableData(results.data);
+					}
 				} else {
 					console.error('Bad GraphQL results', results);
 				}
@@ -123,9 +141,6 @@ export function AppTable({ graphqlBody, variables }) {
 				<>
 					<ControlsBar />
 					<TableSmartbar
-						searchCategories={columns}
-						paramsData={paramsData}
-						setParamsData={setParamsData}
 						optionsList={optionsList}
 						setOptionsList={setOptionsList}
 						tableData={autoComplete}
@@ -161,7 +176,7 @@ export function AppTable({ graphqlBody, variables }) {
 						{t(`fetchError.code.${dataError.status}.content`)}
 						<Box
 							component="div"
-							sx={{
+							style={{
 								whiteSpace: 'normal',
 								my: 2,
 								p: 1,
