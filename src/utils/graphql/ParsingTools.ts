@@ -1,6 +1,6 @@
 import i18next from 'i18next';
 import '../lang/Dictionary';
-import { columnType, parameterType } from '../ressources/types';
+import { columnType, parameterType, roomType } from '../ressources/types';
 
 type fieldType = {
 	name: string | undefined;
@@ -88,8 +88,8 @@ export const generateColumns = (
 };
 
 export const formatDataToColumns = (
-	graphqlBody: string | undefined,
-	room: Object,
+	graphqlBody: string,
+	room: roomType,
 	index: number
 ): Object => {
 	type RowType = {

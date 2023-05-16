@@ -43,3 +43,7 @@ export type roomDetailsType = {
 	occupancies: occupanciesType[];
 	yearly_audits?: number;
 };
+
+export type roomType = {
+	[key: string]: roomType | any;
+};

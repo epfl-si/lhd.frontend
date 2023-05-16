@@ -1,4 +1,4 @@
-import { roomDetailsType } from '../ressources/types';
+import { roomDetailsType, roomType } from '../ressources/types';
 import { formatDataToColumns } from './ParsingTools';
 
 type fetchResultsType = {
@@ -14,7 +14,7 @@ type fetchRoomResultsType = {
 export const fetchResults = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	graphqlBody: string | null,
+	graphqlBody: string,
 	variables: Object
 ): Promise<fetchResultsType> => {
 	const operationName = 'AppTableFetch';
@@ -53,7 +53,7 @@ export const fetchResults = async (
 
 	return {
 		status: results.status,
-		data: graphQLResponse.data?.rooms.map((room: Object, index: number) =>
+		data: graphQLResponse.data?.rooms.map((room: roomType, index: number) =>
 			formatDataToColumns(graphqlBody, room, index)
 		),
 	};
@@ -102,6 +102,17 @@ export const fetchRoomDetails = async (
 						}
 					}
 					yearly_audits
+					dispensations {
+						slug
+						versions {
+							subject
+							date_end
+							status
+							holders {
+								name
+							}
+						}
+					}
 				},
 			}`,
 						variables,
