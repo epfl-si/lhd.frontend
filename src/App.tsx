@@ -55,9 +55,6 @@ function App() {
 								<li>
 									<Link to="/biohazard">Bio hazards</Link>
 								</li>
-								<li>
-									<Link to="/roomdetails">Details Test</Link>
-								</li>
 							</ul>
 						</li>
 					</ul>

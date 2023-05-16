@@ -2,6 +2,7 @@ import {
 	Accordion,
 	AccordionDetails,
 	AccordionSummary,
+	Box,
 	Typography,
 } from '@material-ui/core';
 import React from 'react';
@@ -19,7 +20,13 @@ export default function DetailDrawer({ title, children }: DetailDrawerProps) {
 				<Typography>{title}</Typography>
 			</AccordionSummary>
 			<AccordionDetails>
-				<Typography>{children}</Typography>
+				<Typography
+					style={{
+						width: '100%',
+					}}
+				>
+					{children}
+				</Typography>
 			</AccordionDetails>
 		</Accordion>
 	);

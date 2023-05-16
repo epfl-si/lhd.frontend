@@ -7,6 +7,7 @@ import { fetchRoomDetails } from '../utils/graphql/FetchingTools';
 import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
 import { roomDetailsType } from '../utils/ressources/types';
+import DispensationTable from '../components/RoomDetails/DispensationTable';
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
@@ -44,7 +45,7 @@ export default function RoomDetails() {
 			gridGap={16}
 		>
 			<Typography variant="h3">Details on room {data[0]?.name}</Typography>
-			<Card style={{ minWidth: 500 }}>
+			<Card style={{ minWidth: 350, width: '30%' }}>
 				<CardContent>
 					<Typography variant="caption">Basic information on room</Typography>
 					<Stack>
@@ -71,10 +72,25 @@ export default function RoomDetails() {
 				<DetailDrawer title="Audit Reports">none</DetailDrawer>
 				<DetailDrawer title="Hazards">none</DetailDrawer>
 				<DetailDrawer title="Authorisations">none</DetailDrawer>
-				<DetailDrawer title="Dispensations">none</DetailDrawer>
+				<DetailDrawer title="Dispensations">
+					{data[0]?.dispensations?.length !== 0 && (
+						<DispensationTable data={data[0]?.dispensations} />
+					)}
+				</DetailDrawer>
 				<DetailDrawer title="Cadastre">none</DetailDrawer>
 				<DetailDrawer title="Supplies interruptions">none</DetailDrawer>
 			</Box>
 		</Box>
 	);
 }
+// dispensations {
+// 	slug
+// 	versions {
+// 		subject
+// 		date_end
+// 		status
+// 		holders {
+// 			name
+// 		}
+// 	}
+// }
