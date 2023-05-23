@@ -1,6 +1,6 @@
 import React from 'react';
-import { Base } from './epfl-elements/Base.tsx';
-import { Avatar } from './epfl-elements/Avatar.tsx';
+import { Base } from './epfl-elements/Base';
+import { Avatar } from './epfl-elements/Avatar';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import BioHazard from './pages/biohazard';
 import HomePage from './pages/homepage';
@@ -18,7 +18,8 @@ import {
 import { Alert } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './components/Table/LanguageSwitcher';
-import RoomDetails from './pages/roomdetails.tsx';
+import RoomDetails from './pages/roomdetails';
+import DispensationControls from './pages/dispensationcontrols';
 
 function App() {
 	const { t } = useTranslation();
@@ -57,6 +58,16 @@ function App() {
 								</li>
 							</ul>
 						</li>
+						<li className="active">
+							<a href="#">Control records</a>
+						</li>
+						<li>
+							<ul>
+								<li>
+									<Link to="/dispcontrol">Dispensations</Link>
+								</li>
+							</ul>
+						</li>
 					</ul>
 				</Base.AsideMenu>
 				<Base.Breadcrumbs>
@@ -67,12 +78,16 @@ function App() {
 						<Avatar.Image peopleSciper={'169419'} />
 						<p>
 							<LoginButton />
+							<LanguageSwitcher />
 						</p>
 					</Avatar>
 				</Base.User>
 
 				<div className="container-full" style={{ width: '100%', padding: '1em' }}>
 					<Switch>
+						<Route path="/dispcontrol">
+							<DispensationControls />
+						</Route>
 						<Route path="/roomdetails">
 							<RoomDetails />
 						</Route>

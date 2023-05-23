@@ -47,3 +47,11 @@ export type roomDetailsType = {
 export type roomType = {
 	[key: string]: roomType | any;
 };
+
+export type dispensationRequestType = {
+	subject: string;
+	startDate: string;
+	endDate: string;
+	requirements: string;
+	comment: string;
+};

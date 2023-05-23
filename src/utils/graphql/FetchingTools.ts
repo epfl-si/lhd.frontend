@@ -65,7 +65,7 @@ export const fetchRoomDetails = async (
 	room: string | null,
 	variables: Object
 ): Promise<fetchRoomResultsType> => {
-	const operationName = 'AppTableFetch';
+	const operationName = 'SingleRoomFetch';
 	const results =
 		typeof address === 'string'
 			? await fetch(address, {
