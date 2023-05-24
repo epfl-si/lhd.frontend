@@ -8,23 +8,31 @@ import {
 	InputLabel,
 	MenuItem,
 	Select,
-	Snackbar,
 } from '@material-ui/core';
-import { Alert, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { createDispensation } from '../../utils/graphql/PostingTools';
 import { State, useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import { dispensationRequestType } from '../../utils/ressources/types';
+import {
+	dispensationRequestType,
+	notificationType,
+} from '../../utils/ressources/types';
 import { env } from '../../utils/env';
 import { useState } from 'react';
+import Notifications from '../Table/Notifications';
+import { notificationsVariants } from '../../utils/ressources/variants';
 
 export default function NewDispForm() {
 	const handleClose = (event: Event, reason: string) => {
 		if (reason === 'clickaway') return;
 		setOpenNotification(false);
 	};
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: '',
+		text: '',
+	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [slug, setSlug] = useState<string>('');
+	const [addInfo, setAddInfo] = useState<string>('');
 	const { register, handleSubmit, control } = useForm();
 	const oidc: State = useOpenIDConnectContext();
 	const onSubmit = (data: any) =>
@@ -35,7 +43,8 @@ export default function NewDispForm() {
 			{}
 		).then(res => {
 			if (res.status === 200) {
-				setSlug(res.data.createDispensation.slug);
+				setAddInfo(res.data.createDispensation.slug);
+				setNotificationType(notificationsVariants['disp-success']);
 				setOpenNotification(true);
 			}
 		});
@@ -87,22 +96,6 @@ export default function NewDispForm() {
 						)}
 					/>
 				</LocalizationProvider>
-				{/* <FormControl style={{ maxWidth: '250px' }}>
-					<InputLabel>Room</InputLabel>
-					<Select>
-						<MenuItem value={10}>Ten</MenuItem>
-						<MenuItem value={20}>Twenty</MenuItem>
-						<MenuItem value={30}>Thirty</MenuItem>
-					</Select>
-				</FormControl> */}
-				{/* <FormControl style={{ maxWidth: '250px' }}>
-					<InputLabel>Holder</InputLabel>
-					<Select>
-						<MenuItem value={10}>Ten</MenuItem>
-						<MenuItem value={20}>Twenty</MenuItem>
-						<MenuItem value={30}>Thirty</MenuItem>
-					</Select>
-				</FormControl> */}
 				<FormControl style={{ minWidth: '350px', maxWidth: '30%' }}>
 					<FormLabel>Requirements</FormLabel>
 					<Controller
@@ -137,15 +130,12 @@ export default function NewDispForm() {
 				</FormControl>
 				<Button onClick={handleSubmit(onSubmit)}>Submit</Button>
 			</Stack>
-			<Snackbar
+			<Notifications
 				open={openNotification}
-				autoHideDuration={3000}
-				onClose={handleClose}
-			>
-				<Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-					Dispensation {slug} has been successfully created
-				</Alert>
-			</Snackbar>
+				notification={notificationType}
+				close={handleClose}
+				additionalInfo={addInfo}
+			/>
 		</form>
 	);
 }

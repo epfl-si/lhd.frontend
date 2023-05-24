@@ -1,5 +1,7 @@
+import { AlertColor } from '@mui/material';
+
 export type notificationType = {
-	type: string;
+	type: AlertColor;
 	text: string;
 };
 

@@ -1,7 +1,46 @@
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Tab, Tabs, Typography } from '@material-ui/core';
 import NewDispForm from '../components/DispensationControls/NewDispForm';
+import { useState } from 'react';
+
+interface TabPanelProps {
+	children?: React.ReactNode;
+	index: number;
+	value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+	const { children, value, index, ...other } = props;
+
+	return (
+		<div
+			role="tabpanel"
+			hidden={value !== index}
+			id={`simple-tabpanel-${index}`}
+			aria-labelledby={`simple-tab-${index}`}
+			{...other}
+		>
+			{value === index && (
+				<Box sx={{ p: 3 }}>
+					<Typography>{children}</Typography>
+				</Box>
+			)}
+		</div>
+	);
+}
+
+function a11yProps(index: number) {
+	return {
+		id: `simple-tab-${index}`,
+		'aria-controls': `simple-tabpanel-${index}`,
+	};
+}
 
 export default function DispensationControls() {
+	const [value, setValue] = useState(0);
+
+	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+		setValue(newValue);
+	};
 	return (
 		<Box
 			display="flex"
@@ -11,14 +50,21 @@ export default function DispensationControls() {
 			width="100%"
 			gridGap={8}
 		>
-			<Typography variant="h3">
+			<Typography variant="h5">
 				What would you want to do with dispensations ?
 			</Typography>
-			<Box display="flex" flexDirection="row" gridGap={8}>
-				<Button variant="contained">Add a new record</Button>
-				<Button variant="contained">Update an existing record</Button>
+			<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+				<Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+					<Tab label="Create Dispensation" {...a11yProps(0)} />
+					<Tab label="Update Dispensation" {...a11yProps(1)} />
+				</Tabs>
 			</Box>
-			<NewDispForm />
+			<TabPanel value={value} index={0}>
+				<NewDispForm />
+			</TabPanel>
+			<TabPanel value={value} index={1}>
+				Item Two
+			</TabPanel>
 		</Box>
 	);
 }
