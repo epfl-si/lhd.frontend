@@ -1,6 +1,7 @@
 import { Box, Button, Tab, Tabs, Typography } from '@material-ui/core';
 import NewDispForm from '../components/DispensationControls/NewDispForm';
 import { useState } from 'react';
+import UpdateDispForm from '../components/DispensationControls/UpdateDispForm';
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -63,7 +64,7 @@ export default function DispensationControls() {
 				<NewDispForm />
 			</TabPanel>
 			<TabPanel value={value} index={1}>
-				Item Two
+				<UpdateDispForm />
 			</TabPanel>
 		</Box>
 	);

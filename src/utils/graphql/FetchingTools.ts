@@ -23,12 +23,7 @@ export const fetchResults = async (
 			? await fetch(address, {
 					headers: {
 						accept: '*/*',
-						'accept-language': 'en-US,en;q=0.9,fr-CH;q=0.8,fr;q=0.7',
 						'content-type': 'application/json',
-						'sec-ch-ua':
-							'" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
-						'sec-ch-ua-mobile': '?0',
-						'sec-ch-ua-platform': '"macOS"',
 						'sec-fetch-dest': 'empty',
 						'sec-fetch-mode': 'cors',
 						'sec-fetch-site': 'cross-site',
@@ -71,12 +66,7 @@ export const fetchRoomDetails = async (
 			? await fetch(address, {
 					headers: {
 						accept: '*/*',
-						'accept-language': 'en-US,en;q=0.9,fr-CH;q=0.8,fr;q=0.7',
 						'content-type': 'application/json',
-						'sec-ch-ua':
-							'" Not A;Brand";v="99", "Chromium";v="98", "Google Chrome";v="98"',
-						'sec-ch-ua-mobile': '?0',
-						'sec-ch-ua-platform': '"macOS"',
 						'sec-fetch-dest': 'empty',
 						'sec-fetch-mode': 'cors',
 						'sec-fetch-site': 'cross-site',
@@ -132,5 +122,102 @@ export const fetchRoomDetails = async (
 	return {
 		status: results.status,
 		data: graphQLResponse.data?.rooms,
+	};
+};
+
+export const fetchSlugs = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	variables: Object
+): Promise<any> => {
+	const operationName = 'getSlugs';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+					headers: {
+						accept: '*/*',
+						'content-type': 'application/json',
+						'sec-ch-ua-mobile': '?0',
+						'sec-fetch-dest': 'empty',
+						'sec-fetch-mode': 'cors',
+						'sec-fetch-site': 'cross-site',
+						authorization: `Bearer ${authToken}`,
+					},
+					referrerPolicy: 'no-referrer-when-downgrade',
+					body: JSON.stringify({
+						query: `query ${operationName} {
+							dispensations {
+								slug
+							}
+						}
+						`,
+						variables,
+					}),
+					method: 'POST',
+					mode: 'cors',
+					credentials: 'omit',
+			  })
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data?.dispensations,
+	};
+};
+
+export const fetchSingleDispensation = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	slug: string | null,
+	variables: Object
+): Promise<any> => {
+	const operationName = 'SingleDispensationFetch';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+					headers: {
+						accept: '*/*',
+						'content-type': 'application/json',
+						'sec-fetch-dest': 'empty',
+						'sec-fetch-mode': 'cors',
+						'sec-fetch-site': 'cross-site',
+						authorization: `Bearer ${authToken}`,
+					},
+					referrerPolicy: 'no-referrer-when-downgrade',
+					body: JSON.stringify({
+						query: `query ${operationName} { 
+							dispensations (where: { slug: { contains: "${slug}" }}) {
+								versions {
+									subject
+									date_start
+									date_end
+									description
+									comment
+								}
+								},
+							}`,
+						variables,
+					}),
+					method: 'POST',
+					mode: 'cors',
+					credentials: 'omit',
+			  })
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data?.dispensations[0]?.versions[0],
 	};
 };

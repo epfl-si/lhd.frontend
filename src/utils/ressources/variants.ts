@@ -12,4 +12,12 @@ export const notificationsVariants = {
 		text: 'Dispensation has successfully been created: ',
 	},
 	'disp-error': { type: 'error', text: 'Dispensation creation failed: ' },
+	'disp-update-success': {
+		type: 'success',
+		text: 'Dispensation has successfully been updated',
+	},
+	'disp-update-error': {
+		type: 'error',
+		text: 'Dispensation update failed',
+	},
 };

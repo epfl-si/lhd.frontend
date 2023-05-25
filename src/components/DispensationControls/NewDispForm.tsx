@@ -39,7 +39,7 @@ export default function NewDispForm() {
 		createDispensation(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			test(data),
+			formatData(data),
 			{}
 		).then(res => {
 			if (res.status === 200) {
@@ -49,7 +49,7 @@ export default function NewDispForm() {
 			}
 		});
 
-	const test = (data: any): dispensationRequestType => {
+	const formatData = (data: any): dispensationRequestType => {
 		data.startDate = data.startDate.format('YYYY-MM-DD');
 		data.endDate = data.endDate.format('YYYY-MM-DD');
 		return data;
@@ -59,12 +59,12 @@ export default function NewDispForm() {
 		<form style={{ width: '100%' }}>
 			<Stack spacing={2} width="100%">
 				<FormControl style={{ maxWidth: '250px' }}>
+					<InputLabel variant="outlined">Subject</InputLabel>
 					<Controller
 						control={control}
 						name="subject"
 						render={({ field }) => (
-							<Select {...field} required>
-								<InputLabel>Subject</InputLabel>
+							<Select {...field} required variant="outlined">
 								<MenuItem value={'Gas'}>Gas</MenuItem>
 								<MenuItem value={'Oxydising Gas'}>Oxydising Gas</MenuItem>
 								<MenuItem value={'Inert Gas'}>Inert Gas</MenuItem>
