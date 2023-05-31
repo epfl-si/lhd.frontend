@@ -50,10 +50,20 @@ export type roomType = {
 	[key: string]: roomType | any;
 };
 
+type dispensationRequestRoomType = {
+	id: number;
+};
+
+type dispensationRequestHolderType = {
+	sciper: number;
+};
+
 export type dispensationRequestType = {
 	subject: string;
 	startDate: string;
 	endDate: string;
 	requirements: string;
 	comment: string;
+	rooms: dispensationRequestRoomType[];
+	holders: dispensationRequestHolderType[];
 };

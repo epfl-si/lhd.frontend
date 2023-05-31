@@ -171,6 +171,57 @@ export const fetchSlugs = async (
 	};
 };
 
+export const fetchDispFormDetails = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	variables: Object
+): Promise<any> => {
+	const operationName = 'getDispensationFormDetails';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+					headers: {
+						accept: '*/*',
+						'content-type': 'application/json',
+						'sec-ch-ua-mobile': '?0',
+						'sec-fetch-dest': 'empty',
+						'sec-fetch-mode': 'cors',
+						'sec-fetch-site': 'cross-site',
+						authorization: `Bearer ${authToken}`,
+					},
+					referrerPolicy: 'no-referrer-when-downgrade',
+					body: JSON.stringify({
+						query: `query ${operationName} {
+							rooms {
+								id
+								name
+							}
+							people {
+								name
+								sciper
+							}
+						}
+						`,
+						variables,
+					}),
+					method: 'POST',
+					mode: 'cors',
+					credentials: 'omit',
+			  })
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data,
+	};
+};
+
 export const fetchSingleDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -199,6 +250,14 @@ export const fetchSingleDispensation = async (
 									date_end
 									description
 									comment
+									rooms {
+										id
+										name
+									}
+									holders {
+										name
+										sciper
+									}
 								}
 								},
 							}`,

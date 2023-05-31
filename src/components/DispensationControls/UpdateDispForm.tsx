@@ -12,11 +12,8 @@ import {
 } from '@material-ui/core';
 import { Autocomplete, Stack } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import {
-	createDispensation,
-	updateDispensation,
-} from '../../utils/graphql/PostingTools';
 import { State, useOpenIDConnectContext } from '@epfl-si/react-appauth';
+import { updateDispensation } from '../../utils/graphql/PostingTools';
 import {
 	dispensationRequestType,
 	notificationType,
@@ -26,12 +23,15 @@ import { useEffect, useState } from 'react';
 import Notifications from '../Table/Notifications';
 import { notificationsVariants } from '../../utils/ressources/variants';
 import {
+	fetchDispFormDetails,
 	fetchSingleDispensation,
 	fetchSlugs,
 } from '../../utils/graphql/FetchingTools';
 import dayjs, { Dayjs } from 'dayjs';
 
 export default function UpdateDispForm() {
+	const [roomData, setRoomData] = useState<any>([]);
+	const [holderData, setHolderData] = useState<any>([]);
 	const oidc: State = useOpenIDConnectContext();
 	const { register, handleSubmit, control, setValue } = useForm();
 
@@ -52,6 +52,11 @@ export default function UpdateDispForm() {
 				oidc.accessToken,
 				{}
 			);
+			const resultsDetails = await fetchDispFormDetails(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				{}
+			);
 			if (results.status === 200) {
 				if (results.data) {
 					if (typeof results.data !== 'string') {
@@ -59,6 +64,18 @@ export default function UpdateDispForm() {
 							results.data.map((d: any) => ({
 								label: d.slug,
 								value: d.slug,
+							}))
+						);
+						setHolderData(
+							resultsDetails.data.people.map((d: any) => ({
+								label: d.name ? d.name : '',
+								value: `${d.sciper}`,
+							}))
+						);
+						setRoomData(
+							resultsDetails.data.rooms.map((d: any) => ({
+								label: d.name ? d.name : '',
+								value: d.id,
 							}))
 						);
 						if (urlParams.get('slug')) {
@@ -95,6 +112,23 @@ export default function UpdateDispForm() {
 	const formatData = (data: any): dispensationRequestType => {
 		data.startDate = data.startDate.format('YYYY-MM-DD');
 		data.endDate = data.endDate.format('YYYY-MM-DD');
+		typeof data.rooms === 'string' &&
+			(data.rooms = data.rooms
+				.split(',')
+				.map(e => roomData.find((o: any) => o.value === parseInt(e))));
+		typeof data.holders === 'string' &&
+			(data.holders = data.holders
+				.split(',')
+				.map(e => holderData.find((o: any) => o.value === e)));
+		data.rooms =
+			data.rooms.length > 0
+				? `[${data.rooms.map(r => `{ id: ${r.value} }`).join(', ')}]`
+				: null;
+		data.holders =
+			data.holders.length > 0
+				? `[${data.holders.map(h => `{ sciper: "${h.value}" }`).join(', ')}]`
+				: null;
+		console.log('test', data);
 		return data;
 	};
 
@@ -108,6 +142,7 @@ export default function UpdateDispForm() {
 			if (res.status === 200) {
 				if (res.data) {
 					if (typeof res.data !== 'string') {
+						console.log(res.data);
 						setSelectedDisp(res.data);
 						setSlug(data);
 						setValue('subject', res.data.subject);
@@ -115,6 +150,11 @@ export default function UpdateDispForm() {
 						setValue('endDate', dayjs(res.data.date_end));
 						setValue('requirements', res.data.description);
 						setValue('comment', res.data.comment);
+						setValue('rooms', res.data.rooms.map((d: any) => d.id).join(','));
+						setValue(
+							'holders',
+							res.data.holders.map((d: any) => d.sciper).join(',')
+						);
 					}
 				} else {
 				}
@@ -200,6 +240,79 @@ export default function UpdateDispForm() {
 								)}
 							/>
 						</LocalizationProvider>
+						<Controller
+							control={control}
+							name="rooms"
+							render={({ field }) => {
+								const { onChange, onBlur, value } = field;
+								return (
+									<Autocomplete
+										multiple
+										limitTags={6}
+										options={roomData}
+										filterSelectedOptions
+										style={{ minWidth: '350px', maxWidth: '30%' }}
+										renderInput={params => (
+											<TextField
+												{...params}
+												variant="outlined"
+												label="Rooms"
+												placeholder="Search"
+											/>
+										)}
+										onChange={(event, selectedOptions) => {
+											console.log(selectedOptions);
+											onChange(selectedOptions);
+										}}
+										onBlur={onBlur}
+										value={
+											typeof value === 'string'
+												? value
+														.split(',')
+														.map(e =>
+															roomData.find((o: any) => o.value === parseInt(e))
+														)
+												: value || []
+										}
+									/>
+								);
+							}}
+						/>
+						<Controller
+							control={control}
+							name="holders"
+							render={({ field }) => {
+								const { onChange, onBlur, value } = field;
+								return (
+									<Autocomplete
+										multiple
+										limitTags={3}
+										options={holderData}
+										filterSelectedOptions
+										style={{ minWidth: '350px', maxWidth: '30%' }}
+										renderInput={params => (
+											<TextField
+												{...params}
+												variant="outlined"
+												label="Holders"
+												placeholder="Search"
+											/>
+										)}
+										onChange={(event, selectedOptions) => {
+											onChange(selectedOptions);
+										}}
+										onBlur={onBlur}
+										value={
+											typeof value === 'string'
+												? value
+														.split(',')
+														.map(e => holderData.find((o: any) => o.value === e))
+												: value || []
+										}
+									/>
+								);
+							}}
+						/>
 						<FormControl style={{ minWidth: '350px', maxWidth: '30%' }}>
 							<FormLabel>Requirements</FormLabel>
 							<Controller

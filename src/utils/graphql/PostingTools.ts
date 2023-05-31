@@ -27,7 +27,9 @@ export const createDispensation = async (
 							dispensation.requirements
 						}", comment: "${dispensation.comment}", date_start: "${
 							dispensation.startDate
-						}", date_end: "${dispensation.endDate}") {
+						}", date_end: "${dispensation.endDate}", rooms: ${
+							dispensation.rooms
+						}, holders: ${dispensation.holders}) {
                 errors {
                   message
                 }
@@ -77,7 +79,7 @@ export const updateDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-              editDraftDispensation(slug: "${slug}", subject: "${dispensation.subject}", description: "${dispensation.requirements}", comment: "${dispensation.comment}", date_start: "${dispensation.startDate}", date_end: "${dispensation.endDate}") {
+              editDraftDispensation(slug: "${slug}", subject: "${dispensation.subject}", description: "${dispensation.requirements}", comment: "${dispensation.comment}", date_start: "${dispensation.startDate}", date_end: "${dispensation.endDate}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
                 errors {
                   message
                 }
