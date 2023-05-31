@@ -61,6 +61,9 @@ export default function UpdateDispForm() {
 								value: d.slug,
 							}))
 						);
+						if (urlParams.get('slug')) {
+							setSlug(urlParams.get('slug') as string);
+						}
 					}
 					console.error('Bad GraphQL results', results);
 				} else {
@@ -127,6 +130,7 @@ export default function UpdateDispForm() {
 						disablePortal
 						options={data}
 						style={{ width: 300 }}
+						value={slug}
 						renderInput={params => (
 							<TextField
 								{...params}

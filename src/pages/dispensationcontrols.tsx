@@ -1,6 +1,6 @@
 import { Box, Button, Tab, Tabs, Typography } from '@material-ui/core';
 import NewDispForm from '../components/DispensationControls/NewDispForm';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UpdateDispForm from '../components/DispensationControls/UpdateDispForm';
 
 interface TabPanelProps {
@@ -37,11 +37,23 @@ function a11yProps(index: number) {
 }
 
 export default function DispensationControls() {
+	const tabs = {
+		create: 0,
+		update: 1,
+	};
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue);
 	};
+
+	useEffect(() => {
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('tab')) {
+			setValue(tabs[urlParams.get('tab') as string]);
+		}
+	});
+
 	return (
 		<Box
 			display="flex"

@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Typography } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Typography } from '@material-ui/core';
 import { Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DetailRow from '../components/RoomDetails/DetailRow';
@@ -65,6 +65,7 @@ export default function RoomDetails() {
 							title="Number of audits per year"
 							value={data[0]?.yearly_audits?.toString()}
 						/>
+						<Button color="secondary">Access ISIDOR</Button>
 					</Stack>
 				</CardContent>
 			</Card>

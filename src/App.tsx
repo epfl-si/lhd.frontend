@@ -10,6 +10,7 @@ import {
 	useOpenIDConnectContext,
 } from '@epfl-si/react-appauth';
 import {
+	Box,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -20,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
+import NewDispForm from './components/DispensationControls/NewDispForm';
 
 function App() {
 	const { t } = useTranslation();
@@ -76,10 +78,16 @@ function App() {
 				<Base.User>
 					<Avatar>
 						<Avatar.Image peopleSciper={'169419'} />
-						<p>
+						<Box
+							display="flex"
+							flexDirection="row"
+							alignItems="center"
+							justifyContent="center"
+							gridGap={4}
+						>
 							<LoginButton />
 							<LanguageSwitcher />
-						</p>
+						</Box>
 					</Avatar>
 				</Base.User>
 

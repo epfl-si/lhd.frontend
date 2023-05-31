@@ -139,7 +139,6 @@ export function AppTable({ graphqlBody, variables }: AppTableProps) {
 		<Box display="flex" flexDirection="column" alignItems="center">
 			{!dataError.active ? (
 				<>
-					<ControlsBar />
 					<TableSmartbar
 						optionsList={optionsList}
 						setOptionsList={setOptionsList}

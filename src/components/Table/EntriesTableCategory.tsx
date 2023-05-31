@@ -44,7 +44,6 @@ export function EntriesTableCategory({
 					}}
 					onRowClick={e => {
 						history.push(`/roomdetails?room=${e.row['room.name']}`);
-						console.log(e.row['room.name']);
 					}}
 				/>
 			) : (
