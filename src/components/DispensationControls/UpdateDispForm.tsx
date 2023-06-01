@@ -2,7 +2,13 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Textarea from '@mui/joy/Textarea';
 import {
+	Box,
 	Button,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
 	FormControl,
 	FormLabel,
 	InputLabel,
@@ -13,7 +19,10 @@ import {
 import { Autocomplete, Stack } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { State, useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import { updateDispensation } from '../../utils/graphql/PostingTools';
+import {
+	deleteDispensation,
+	updateDispensation,
+} from '../../utils/graphql/PostingTools';
 import {
 	dispensationRequestType,
 	notificationType,
@@ -36,6 +45,7 @@ export default function UpdateDispForm() {
 	const { register, handleSubmit, control, setValue } = useForm();
 
 	const [data, setData] = useState<any>([]);
+	const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: '',
 		text: '',
@@ -106,6 +116,21 @@ export default function UpdateDispForm() {
 			if (res.status === 200) {
 				setNotificationType(notificationsVariants['disp-update-success']);
 				setOpenNotification(true);
+			}
+		});
+
+	const onDelete = () =>
+		deleteDispensation(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			slug,
+			{}
+		).then(res => {
+			if (res.status === 200) {
+				setDialogOpen(false);
+				setNotificationType(notificationsVariants['disp-delete-success']);
+				setOpenNotification(true);
+				setSlug('');
 			}
 		});
 
@@ -347,7 +372,20 @@ export default function UpdateDispForm() {
 								)}
 							/>
 						</FormControl>
-						<Button onClick={handleSubmit(onUpdate)}>Update</Button>
+						<Box
+							width="100%"
+							display="flex"
+							flexDirection="row"
+							justifyContent="center"
+							gridGap={8}
+						>
+							<Button color="primary" onClick={handleSubmit(onUpdate)}>
+								Update
+							</Button>
+							<Button color="secondary" onClick={() => setDialogOpen(true)}>
+								Delete
+							</Button>
+						</Box>
 					</>
 				)}
 			</Stack>
@@ -356,6 +394,24 @@ export default function UpdateDispForm() {
 				notification={notificationType}
 				close={handleClose}
 			/>
+			<Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
+				<DialogTitle>
+					Are you sure you want to delete dispensation {slug}?
+				</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Deleting a dispensation is irreversible.
+					</DialogContentText>
+				</DialogContent>
+				<DialogActions>
+					<Button color="primary" onClick={() => setDialogOpen(false)}>
+						No
+					</Button>
+					<Button color="secondary" onClick={handleSubmit(onDelete)} autoFocus>
+						Yes, I'm sure
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</form>
 	);
 }
