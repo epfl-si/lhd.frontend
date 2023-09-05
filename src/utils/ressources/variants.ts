@@ -20,4 +20,12 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Dispensation update failed',
 	},
+	'disp-delete-success': {
+		type: 'success',
+		text: 'Dispensation has successfully been deleted',
+	},
+	'disp-delete-error': {
+		type: 'error',
+		text: 'Dispensation deletion failed',
+	},
 };

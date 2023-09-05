@@ -57,6 +57,56 @@ export const createDispensation = async (
 	};
 };
 
+export const deleteDispensation = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	slug: string | null,
+	variables: Object
+): Promise<any> => {
+	const operationName = 'deleteDispensation';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+					headers: {
+						accept: '*/*',
+						'content-type': 'application/json',
+						'sec-fetch-dest': 'empty',
+						'sec-fetch-mode': 'cors',
+						'sec-fetch-site': 'cross-site',
+						authorization: `Bearer ${authToken}`,
+					},
+					referrerPolicy: 'no-referrer-when-downgrade',
+					body: JSON.stringify({
+						query: `mutation ${operationName} {
+              deleteDispensation(slug: "${slug}") {
+								errors {
+									message
+									extensions {
+										code
+									}
+								}
+							}
+            }`,
+						variables,
+					}),
+					method: 'POST',
+					mode: 'cors',
+					credentials: 'omit',
+			  })
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data,
+	};
+};
+
 export const updateDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -79,7 +129,13 @@ export const updateDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-              editDraftDispensation(slug: "${slug}", subject: "${dispensation.subject}", description: "${dispensation.requirements}", comment: "${dispensation.comment}", date_start: "${dispensation.startDate}", date_end: "${dispensation.endDate}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
+               (slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
+							dispensation.subject
+						}", description: "${dispensation.requirements}", comment: "${
+							dispensation.comment
+						}", date_start: "${dispensation.startDate}", date_end: "${
+							dispensation.endDate
+						}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
                 errors {
                   message
                 }
