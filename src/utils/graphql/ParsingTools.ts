@@ -1,18 +1,24 @@
 import i18next from 'i18next';
 import '../lang/Dictionary';
+import { columnType, parameterType, roomType } from '../ressources/types';
 
-export const getTypeQuery = query => {
+type fieldType = {
+	name: string | undefined;
+	fields: fieldType[] | undefined;
+};
+
+export const getTypeQuery = (query: string): string => {
 	return query.split(' ')[0].replace(/s$/, '');
 };
 
-const getBody = gql => {
-	var split = gql.split('\n');
-	split.shift();
-	split.pop();
-	return split.join('');
+const getBody = (gql: string | undefined): string => {
+	var split = gql?.split('\n');
+	split?.shift();
+	split?.pop();
+	return split ? split.join('') : '';
 };
 
-const normSpaces = message => {
+const normSpaces = (message: string): string => {
 	return message
 		.replace(/{/g, ' { ')
 		.replace(/}/g, ' } ')
@@ -20,28 +26,28 @@ const normSpaces = message => {
 		.trim();
 };
 
-export const parse = message => {
-	var tokens = normSpaces(getBody(message)).split(' ');
+export const parse = (message: string | undefined): fieldType[] => {
+	var tokens: string[] = normSpaces(getBody(message)).split(' ');
 
 	return consumeFields(tokens);
-	function consumeField(toks) {
+	function consumeField(toks: string[]): fieldType {
 		if (toks[0] === '{') {
 			toks.shift();
-			const retval = { fields: consumeFields(toks) };
+			const retval: fieldType = { name: undefined, fields: consumeFields(toks) };
 			if (toks.shift() !== '}') {
 				throw new Error('Expected }');
 			}
 			return retval;
 		} else {
-			const field = { name: toks.shift() };
+			const field: fieldType = { name: toks.shift(), fields: undefined };
 			if (toks[0] === '{') {
 				field.fields = consumeField(toks).fields;
 			}
 			return field;
 		}
 	}
-	function consumeFields(toks) {
-		const fields = [];
+	function consumeFields(toks: string[]): fieldType[] {
+		const fields: fieldType[] = [];
 		while (toks.length > 0 && toks[0] !== '}') {
 			fields.push(consumeField(toks));
 		}
@@ -49,8 +55,11 @@ export const parse = message => {
 	}
 };
 
-export const generateFormattedList = (parsedQuery, prefix = '') => {
-	const columns = [];
+export const generateFormattedList = (
+	parsedQuery: fieldType[],
+	prefix: string = ''
+): string[] => {
+	const columns: string[] = [];
 	parsedQuery.forEach(field => {
 		if (field.fields) {
 			columns.push(
@@ -63,7 +72,10 @@ export const generateFormattedList = (parsedQuery, prefix = '') => {
 	return columns;
 };
 
-export const generateColumns = (query, prefix = '', lang) => {
+export const generateColumns = (
+	query: string,
+	prefix: string = ''
+): columnType[] => {
 	prefix = prefix ? prefix + '.' : '';
 	const formattedList = generateFormattedList(parse(query), prefix);
 	return formattedList.map(field => {
@@ -75,9 +87,17 @@ export const generateColumns = (query, prefix = '', lang) => {
 	});
 };
 
-export const formatDataToColumns = (graphqlBody, room, index) => {
-	var Row = { id: index };
-	const recursiveJsonParsing = (data, keys) => {
+export const formatDataToColumns = (
+	graphqlBody: string,
+	room: roomType,
+	index: number
+): Object => {
+	type RowType = {
+		id: number;
+		[key: string]: any;
+	};
+	var Row: RowType = { id: index };
+	const recursiveJsonParsing = (data: any[], keys: any[]): any[] | null => {
 		if (keys.length === 1) {
 			return data[keys[0]] ? data[keys[0]] : null;
 		} else {
@@ -108,7 +128,7 @@ export const formatDataToColumns = (graphqlBody, room, index) => {
 	return Row;
 };
 
-export const generateAutocompleteList = tableData => {
+export const generateAutocompleteList = (tableData: Object[]): parameterType[] => {
 	return tableData
 		.map(e =>
 			Object.entries(e).map(i => {

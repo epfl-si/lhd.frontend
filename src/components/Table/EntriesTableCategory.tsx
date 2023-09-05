@@ -2,14 +2,29 @@ import { Box } from '@material-ui/core';
 import { DataGrid } from '@mui/x-data-grid';
 import { useMemo } from 'react';
 import { TableToolbar } from './TableToolbar';
+import { useHistory } from 'react-router-dom';
+import { columnType, parameterType } from '../../utils/ressources/types';
 
-export function EntriesTableCategory({ optionsList, tableData, columns, loading }) {
+type EntriesTableCategoryProps = {
+	optionsList: parameterType[];
+	tableData: Object[];
+	columns: columnType[];
+	loading: boolean;
+};
+
+export function EntriesTableCategory({
+	optionsList,
+	tableData,
+	columns,
+	loading,
+}: EntriesTableCategoryProps) {
+	const history = useHistory();
 	const shownData = useMemo(
 		() =>
 			optionsList?.length === 0
 				? tableData
 				: tableData.filter(e =>
-						optionsList.every(p =>
+						optionsList.every((p: parameterType) =>
 							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
 						)
 				  ),
@@ -26,6 +41,9 @@ export function EntriesTableCategory({ optionsList, tableData, columns, loading 
 					columns={columns}
 					components={{
 						Toolbar: TableToolbar,
+					}}
+					onRowClick={e => {
+						history.push(`/roomdetails?room=${e.row['room.name']}`);
 					}}
 				/>
 			) : (
