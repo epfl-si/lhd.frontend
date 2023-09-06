@@ -129,7 +129,7 @@ export const updateDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-               (slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
+               editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
 							dispensation.subject
 						}", description: "${dispensation.requirements}", comment: "${
 							dispensation.comment
