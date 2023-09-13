@@ -173,8 +173,8 @@ export default function UpdateDispForm() {
 						setValue('subject', res.data.subject);
 						setValue('startDate', dayjs(res.data.date_start));
 						setValue('endDate', dayjs(res.data.date_end));
-						setValue('requirements', res.data.description);
-						setValue('comment', res.data.comment);
+						setValue('requirements', res.data.description.replaceAll('\\n', /\n/g));
+						setValue('comment', res.data.comment.replaceAll('\\n', /\n/g));
 						setValue('rooms', res.data.rooms.map((d: any) => d.id).join(','));
 						setValue(
 							'holders',

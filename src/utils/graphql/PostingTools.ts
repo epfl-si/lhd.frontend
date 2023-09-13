@@ -24,8 +24,8 @@ export const createDispensation = async (
               createDispensation(subject: "${
 								dispensation.subject
 							}", author: "${'TEST'}", sciper_author: 312067, description: "${
-							dispensation.requirements
-						}", comment: "${dispensation.comment}", date_start: "${
+							dispensation.requirements.replaceAll(/\n/g, '\\n')
+						}", comment: "${dispensation.comment.replaceAll(/\n/g, '\\n')}", date_start: "${
 							dispensation.startDate
 						}", date_end: "${dispensation.endDate}", rooms: ${
 							dispensation.rooms
@@ -78,15 +78,16 @@ export const deleteDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-              deleteDispensation(slug: "${slug}") {
+              				deleteDispensation(slug: "${slug}") {
 								errors {
 									message
 									extensions {
 										code
 									}
 								}
+								isSuccess
 							}
-            }`,
+						}`,
 						variables,
 					}),
 					method: 'POST',
@@ -131,8 +132,8 @@ export const updateDispensation = async (
 						query: `mutation ${operationName} {
                editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
 							dispensation.subject
-						}", description: "${dispensation.requirements}", comment: "${
-							dispensation.comment
+						}", description: "${dispensation.requirements.replaceAll(/\n/g, '\\n')}", comment: "${
+							dispensation.comment.replaceAll(/\n/g, '\\n')
 						}", date_start: "${dispensation.startDate}", date_end: "${
 							dispensation.endDate
 						}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
