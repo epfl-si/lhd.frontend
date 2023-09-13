@@ -274,9 +274,10 @@ export const fetchSingleDispensation = async (
 	}
 
 	const graphQLResponse = await results.json();
+	const version = graphQLResponse.data?.dispensations[0]?.versions;
 
 	return {
 		status: results.status,
-		data: graphQLResponse.data?.dispensations[0]?.versions[0],
+		data: version[version.length-1],
 	};
 };
