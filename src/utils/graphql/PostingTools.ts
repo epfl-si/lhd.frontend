@@ -24,8 +24,8 @@ export const createDispensation = async (
               createDispensation(subject: "${
 								dispensation.subject
 							}", author: "${'TEST'}", sciper_author: 312067, description: "${
-							dispensation.requirements.replaceAll(/\n/g, '\\n')
-						}", comment: "${dispensation.comment.replaceAll(/\n/g, '\\n')}", date_start: "${
+							escapeGraphQL(dispensation.requirements)
+						}", comment: "${escapeGraphQL(dispensation.comment)}", date_start: "${
 							dispensation.startDate
 						}", date_end: "${dispensation.endDate}", rooms: ${
 							dispensation.rooms
@@ -56,6 +56,13 @@ export const createDispensation = async (
 		data: graphQLResponse.data,
 	};
 };
+
+const escapeGraphQL = (unquotedString: string): string => {
+	return unquotedString
+		.replaceAll(/\\/g,'\\\\')
+		.replaceAll(/\n/g, '\\n')
+		.replaceAll('"', '&#34;');
+}
 
 export const deleteDispensation = async (
 	address: string | undefined,
@@ -132,8 +139,8 @@ export const updateDispensation = async (
 						query: `mutation ${operationName} {
                editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
 							dispensation.subject
-						}", description: "${dispensation.requirements.replaceAll(/\n/g, '\\n')}", comment: "${
-							dispensation.comment.replaceAll(/\n/g, '\\n')
+						}", description: "${escapeGraphQL(dispensation.requirements)}", comment: "${
+							escapeGraphQL(dispensation.comment)
 						}", date_start: "${dispensation.startDate}", date_end: "${
 							dispensation.endDate
 						}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
