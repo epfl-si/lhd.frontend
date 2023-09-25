@@ -59,9 +59,8 @@ export const createDispensation = async (
 
 const escapeGraphQL = (unquotedString: string): string => {
 	return unquotedString
-		.replaceAll(/\\/g,'\\\\')
+		.replaceAll(/("|\\)/g, '\\$1')
 		.replaceAll(/\n/g, '\\n')
-		.replaceAll('"', '&#34;');
 }
 
 export const deleteDispensation = async (

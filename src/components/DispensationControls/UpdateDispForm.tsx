@@ -157,12 +157,6 @@ export default function UpdateDispForm() {
 		return data;
 	};
 
-	const escapeGraphQL = (unquotedString: string): string => {
-		return unquotedString.replaceAll('\\\\', /\\/g)
-			.replaceAll('\\n', /\n/g)
-			.replaceAll('&#34;','"');
-	}
-
 	const getDispensation = (data: any) => {
 		fetchSingleDispensation(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -179,8 +173,8 @@ export default function UpdateDispForm() {
 						setValue('subject', res.data.subject);
 						setValue('startDate', dayjs(res.data.date_start));
 						setValue('endDate', dayjs(res.data.date_end));
-						setValue('requirements', escapeGraphQL(res.data.description));
-						setValue('comment', escapeGraphQL(res.data.comment));
+						setValue('requirements', res.data.description);
+						setValue('comment', res.data.comment);
 						setValue('rooms', res.data.rooms.map((d: any) => d.id).join(','));
 						setValue(
 							'holders',
