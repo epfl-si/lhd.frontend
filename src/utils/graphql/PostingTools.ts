@@ -24,8 +24,8 @@ export const createDispensation = async (
               createDispensation(subject: "${
 								dispensation.subject
 							}", author: "${'TEST'}", sciper_author: 312067, description: "${
-							dispensation.requirements
-						}", comment: "${dispensation.comment}", date_start: "${
+							escapeGraphQL(dispensation.requirements)
+						}", comment: "${escapeGraphQL(dispensation.comment)}", date_start: "${
 							dispensation.startDate
 						}", date_end: "${dispensation.endDate}", rooms: ${
 							dispensation.rooms
@@ -57,6 +57,12 @@ export const createDispensation = async (
 	};
 };
 
+const escapeGraphQL = (unquotedString: string): string => {
+	return unquotedString
+		.replaceAll(/("|\\)/g, '\\$1')
+		.replaceAll(/\n/g, '\\n')
+}
+
 export const deleteDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -78,15 +84,16 @@ export const deleteDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-              deleteDispensation(slug: "${slug}") {
+              				deleteDispensation(slug: "${slug}") {
 								errors {
 									message
 									extensions {
 										code
 									}
 								}
+								isSuccess
 							}
-            }`,
+						}`,
 						variables,
 					}),
 					method: 'POST',
@@ -129,10 +136,10 @@ export const updateDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-               (slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
+               editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
 							dispensation.subject
-						}", description: "${dispensation.requirements}", comment: "${
-							dispensation.comment
+						}", description: "${escapeGraphQL(dispensation.requirements)}", comment: "${
+							escapeGraphQL(dispensation.comment)
 						}", date_start: "${dispensation.startDate}", date_end: "${
 							dispensation.endDate
 						}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
