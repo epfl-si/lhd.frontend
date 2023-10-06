@@ -19,9 +19,9 @@ setup('authenticate', async ({ page }) => {
         await button.click();
 
         // eslint-disable-next-line testing-library/prefer-screen-queries
-        await page.getByRole('textbox', {name: /username/i}).fill('rosa');
+        await page.getByRole('textbox', {name: /username/i}).fill('demo');
         // eslint-disable-next-line testing-library/prefer-screen-queries
-        await page.getByRole('textbox', {name: /password/i}).fill('rosa2');
+        await page.getByRole('textbox', {name: /password/i}).fill('demo');
         // eslint-disable-next-line testing-library/prefer-screen-queries
         await page.getByRole('button', {name: /Sign In/i}).click();
         await page.waitForLoadState();
