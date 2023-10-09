@@ -193,7 +193,6 @@ export const fetchDispFormDetails = async (
 					body: JSON.stringify({
 						query: `query ${operationName} {
 							rooms {
-								id
 								name
 							}
 							people {
@@ -251,7 +250,6 @@ export const fetchSingleDispensation = async (
 									description
 									comment
 									rooms {
-										id
 										name
 									}
 									holders {
