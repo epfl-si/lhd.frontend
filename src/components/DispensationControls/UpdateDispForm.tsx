@@ -85,7 +85,7 @@ export default function UpdateDispForm() {
 						setRoomData(
 							resultsDetails.data.rooms.map((d: any) => ({
 								label: d.name ? d.name : '',
-								value: d.id,
+								value: d.name,
 							}))
 						);
 						if (urlParams.get('slug')) {
@@ -147,7 +147,7 @@ export default function UpdateDispForm() {
 				.map(e => holderData.find((o: any) => o.value === e)));
 		data.rooms =
 			data.rooms.length > 0
-				? `[${data.rooms.map(r => `{ id: ${r.value} }`).join(', ')}]`
+				? `[${data.rooms.map(r => `{ name: "${r.value}" }`).join(', ')}]`
 				: null;
 		data.holders =
 			data.holders.length > 0
@@ -175,7 +175,7 @@ export default function UpdateDispForm() {
 						setValue('endDate', dayjs(res.data.date_end));
 						setValue('requirements', res.data.description);
 						setValue('comment', res.data.comment);
-						setValue('rooms', res.data.rooms.map((d: any) => d.id).join(','));
+						setValue('rooms', res.data.rooms.map((d: any) => d.name).join(','));
 						setValue(
 							'holders',
 							res.data.holders.map((d: any) => d.sciper).join(',')
@@ -295,7 +295,7 @@ export default function UpdateDispForm() {
 												? value
 														.split(',')
 														.map(e =>
-															roomData.find((o: any) => o.value === parseInt(e))
+															roomData.find((o: any) => o.value === e)
 														)
 												: value || []
 										}
