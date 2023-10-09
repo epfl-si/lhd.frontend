@@ -60,7 +60,7 @@ export default function NewDispForm() {
 						setRoomData(
 							results.data.rooms.map((d: any) => ({
 								label: d.name ? d.name : '',
-								value: d.id,
+								value: d.name,
 							}))
 						);
 					}
@@ -94,7 +94,7 @@ export default function NewDispForm() {
 		data.endDate = data.endDate.format('YYYY-MM-DD');
 		data.rooms =
 			data.rooms.length > 0
-				? `[${data.rooms.map(r => `{ id: ${r.value} }`).join(', ')}]`
+				? `[${data.rooms.map(r => `{ name: "${r.value}" }`).join(', ')}]`
 				: null;
 		data.holders =
 			data.holders.length > 0
