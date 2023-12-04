@@ -54,6 +54,9 @@ async function devServer () {
     ...commonBuildConfig
   });
 
+  // https://esbuild.github.io/api/#live-reload
+  await ctx.watch();
+
   // https://esbuild.github.io/api/#serve-proxy
   let server = await ctx.serve();
 
@@ -73,7 +76,8 @@ async function devServer () {
   }
 
   await http.createServer(async (req, res) => {
-    if (req.url.endsWith('/lhd3-frontend.js')) {
+    if (req.url.endsWith('/lhd3-frontend.js') ||
+      req.url.endsWith('/esbuild')) {
       doProxy(req, res);
     } else {
       res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -82,4 +86,5 @@ async function devServer () {
   }).listen(3000);
 
   console.log("🚀 Browse the LHD frontend at http://localhost:3000/");
+  console.log("\n🔥 Hot reload is enabled!");
 }
