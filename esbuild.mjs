@@ -1,6 +1,5 @@
 import * as esbuild from 'esbuild';
 import * as process from 'node:process';
-import { basename } from 'node:path';
 import inlineImage from 'esbuild-plugin-inline-image';
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';
@@ -27,6 +26,9 @@ if (cmd === "build") {
     color: true,
     logLevel: 'info',
     minify: true,
+    define: {
+      "window.IS_PRODUCTION": `true`
+    },
     ...commonBuildConfig
   }));
 } else if (cmd === "dev") {
@@ -46,6 +48,9 @@ async function catchy (continuation) {
 
 async function devServer () {
   const ctx = await esbuild.context({
+    define: {
+      "window.IS_PRODUCTION": `false`
+    },
     ...commonBuildConfig
   });
 
