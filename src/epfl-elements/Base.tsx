@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Logo } from '@epfl/epfl-sti-react-library';
+import { Logo } from './Logo.tsx';
 import { Drawer } from './Drawer.tsx';
 import { Breadcrumbs } from './Breadcrumbs.tsx';
 import { filterChildren, pickChildrenOfFirst } from './utils/children.ts';
