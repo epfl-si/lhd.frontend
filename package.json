@@ -30,10 +30,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "react-scripts build",
-    "test": "mocha --reporter-option diffSize=5000",
-    "eject": "react-scripts eject"
+    "start": "node esbuild.mjs dev",
+    "build": "node esbuild.mjs build",
+    "test": "mocha --reporter-option diffSize=5000"
   },
   "eslintConfig": {
     "extends": [
