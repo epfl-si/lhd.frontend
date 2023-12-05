@@ -32,12 +32,15 @@
   "scripts": {
     "start": "node esbuild.mjs dev",
     "build": "node esbuild.mjs build",
-    "test": "mocha --reporter-option diffSize=5000"
+    "test": "mocha --reporter-option diffSize=5000",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
-      "react-app/jest"
+      "react-app/jest",
+      "plugin:storybook/recommended"
     ]
   },
   "browserslist": {
@@ -54,6 +57,14 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.38.1",
+    "@storybook/addon-essentials": "^7.6.3",
+    "@storybook/addon-interactions": "^7.6.3",
+    "@storybook/addon-links": "^7.6.3",
+    "@storybook/addon-onboarding": "^1.0.9",
+    "@storybook/blocks": "^7.6.3",
+    "@storybook/react": "^7.6.3",
+    "@storybook/react-vite": "^7.6.3",
+    "@storybook/test": "^7.6.3",
     "@types/mocha": "^10.0.0",
     "@types/node": "^20.7.0",
     "@types/react": "^18.0.37",
@@ -64,7 +75,10 @@
     "esbuild-plugin-inline-image": "^0.0.9",
     "eslint": "^8.38.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-storybook": "^0.6.15",
     "mocha": "^10.1.0",
-    "typescript": "^5.0.4"
+    "storybook": "^7.6.3",
+    "typescript": "^5.0.4",
+    "vite": "^5.0.5"
   }
 }
