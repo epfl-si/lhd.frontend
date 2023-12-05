@@ -17,6 +17,7 @@ const commonBuildConfig = {
   outfile: 'dist/lhd3-frontend.js',
   loader: {
     ".js": "jsx",
+    ".css": "global-css",
   },
   plugins: [inlineImage()],
 };
@@ -77,6 +78,7 @@ async function devServer () {
 
   await http.createServer(async (req, res) => {
     if (req.url.endsWith('/lhd3-frontend.js') ||
+      req.url.endsWith('/lhd3-frontend.css') ||
       req.url.endsWith('/esbuild')) {
       doProxy(req, res);
     } else {
