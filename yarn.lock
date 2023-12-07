@@ -8922,6 +8922,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"epfl-elements-react@file:../epfl-elements-react::locator=lhd3-frontend%40workspace%3A.":
+  version: 0.0.0
+  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=7115af&locator=lhd3-frontend%40workspace%3A."
+  dependencies:
+    epfl-elements: "npm:^4.6.1"
+  peerDependencies:
+    react: ^17 || ^18
+  checksum: cdacfe0672df70468814d8c39eab080495c5ca6a830464a3d970b5ef9709f126bc937759a9c21153c7adde7288abd65770dde399de9aefbcddb2595469d1ba88
+  languageName: node
+  linkType: hard
+
 "epfl-elements@npm:^4.6.1":
   version: 4.6.1
   resolution: "epfl-elements@npm:4.6.1"
@@ -11835,6 +11846,7 @@ __metadata:
     chai: "npm:^4.3.6"
     dayjs: "npm:^1.11.10"
     epfl-elements: "npm:^4.6.1"
+    epfl-elements-react: "file:../epfl-elements-react"
     esbuild: "npm:^0.19.8"
     esbuild-plugin-inline-image: "npm:^0.0.9"
     eslint: "npm:^8.38.0"
