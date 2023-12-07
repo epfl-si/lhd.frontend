@@ -8849,9 +8849,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"epfl-elements@npm:^4.6.0":
-  version: 4.6.0
-  resolution: "epfl-elements@npm:4.6.0"
+"epfl-elements@npm:^4.6.1":
+  version: 4.6.1
+  resolution: "epfl-elements@npm:4.6.1"
   dependencies:
     "@selectize/selectize": ^0.13.6
     bootstrap: ^4.6.2
@@ -8870,7 +8870,7 @@ __metadata:
     pickadate: ^3.6.4
     popper.js: ^1.16.1
     tablesaw: ^3.1.2
-  checksum: e8a075fbd39f79aa55a576be4fdd8cbfc6bf556e30cab1ebeace9371dab4e05ce1cafd9e834c909d367d9489a09a41b9980280e63777ea29918d928aee589831
+  checksum: 71f5f7c37b0246254ab601730eaadb15b2c8a8ec497b47bbac412dc2a4080c5abd364632b14241dbebb317992d8ae70f0b6f6326bebc83b33a44f85054da7960
   languageName: node
   linkType: hard
 
@@ -11758,7 +11758,7 @@ __metadata:
     caniuse-lite: ^1.0.30001304
     chai: ^4.3.6
     dayjs: ^1.11.10
-    epfl-elements: ^4.6.0
+    epfl-elements: ^4.6.1
     esbuild: ^0.19.8
     esbuild-plugin-inline-image: ^0.0.9
     eslint: ^8.38.0
