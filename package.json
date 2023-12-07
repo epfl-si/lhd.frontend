@@ -78,5 +78,6 @@
     "storybook": "^7.6.3",
     "typescript": "^5.0.4",
     "vite": "^5.0.5"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }
