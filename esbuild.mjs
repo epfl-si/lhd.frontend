@@ -14,11 +14,13 @@ function usage() {
 const commonBuildConfig = {
   entryPoints: ['src/index.js'],
   bundle: true,
-  outfile: 'dist/lhd3-frontend.js',
   loader: {
     ".js": "jsx",
     ".css": "global-css",
   },
+  outfile: 'dist/lhd3-frontend.js',  // and implicitly,
+                                     // dist/lhd3-frontend.css for all
+                                     // the css
   plugins: [inlineImage()],
 };
 
