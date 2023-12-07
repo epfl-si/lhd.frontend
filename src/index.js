@@ -6,6 +6,12 @@ import './utils/lang/Dictionary';
 import { OIDCContext } from '@epfl-si/react-appauth';
 import { env } from './utils/env';
 
+import "epfl-elements/dist/css/elements.css";
+
+if (! window.IS_PRODUCTION) {
+	new EventSource('/esbuild').addEventListener('change', () => window.location.reload())
+}
+
 ReactDOM.render(
 	<OIDCContext
 		authServerUrl={env().REACT_APP_AUTH_SERVER_URL}
