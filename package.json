@@ -33,7 +33,7 @@
     "start": "node esbuild.mjs dev",
     "build": "node esbuild.mjs build",
     "test": "mocha --reporter-option diffSize=5000",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6008",
     "build-storybook": "storybook build"
   },
   "eslintConfig": {
