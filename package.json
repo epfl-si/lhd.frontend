@@ -22,6 +22,7 @@
     "caniuse-lite": "^1.0.30001304",
     "dayjs": "^1.11.10",
     "epfl-elements": "^4.6.1",
+    "epfl-elements-react": "file:../epfl-elements-react",
     "i18next": "^22.0.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0",
