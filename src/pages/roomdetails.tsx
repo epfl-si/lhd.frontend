@@ -1,5 +1,5 @@
-import { Box, Button, Card, CardContent, Typography } from '@material-ui/core';
-import { Stack } from '@mui/material';
+import {Box, Button, Card, CardContent, TextField, Typography} from '@material-ui/core';
+import {FormControlLabel, Stack} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DetailRow from '../components/RoomDetails/DetailRow';
 import DetailDrawer from '../components/RoomDetails/DetailDrawer';
@@ -8,10 +8,17 @@ import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
 import { roomDetailsType } from '../utils/ressources/types';
 import DispensationTable from '../components/RoomDetails/DispensationTable';
+import { Tabs } from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
+import { Autocomplete, Switch } from '@mui/material';
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType[]>([]);
+	const designationList = ['Storage', 'Laboratory'];
+	const [designation, setDesignation] = React.useState<string | null>(null);
+	const [designationInputValue, setDesignationInputValue] = React.useState('');
+	const [volume, setVolume] = React.useState<number>(0);
+	const [ventilation, setVentilation] = React.useState<boolean>(false);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -26,6 +33,16 @@ export default function RoomDetails() {
 				if (results.data) {
 					if (typeof results.data !== 'string') {
 						setData(results.data);
+						if (results.data[0]?.kind) {
+							setDesignation(results.data[0]?.kind?.name);
+						}
+						if (results.data[0]?.vol) {
+							setVolume(results.data[0]?.vol);
+						}
+						if (results.data[0]?.vent) {
+							setVentilation(results.data[0]?.vent === 'y');
+							console.log(ventilation);
+						}
 					}
 				} else {
 					console.error('Bad GraphQL results', results);
@@ -37,6 +54,72 @@ export default function RoomDetails() {
 	}, [oidc.accessToken]);
 
 	return (
+		<Box>
+			<Typography variant="h5" gutterBottom>Details on room {data[0]?.name}</Typography>
+			<Tabs>
+				<Tabs.Tab id="1">
+					<Tabs.Tab.Title>
+						<span style={{fontWeight: 'bold'}}>Details</span>
+					</Tabs.Tab.Title>
+					<Tabs.Tab.Content>
+						<Stack spacing={2} width="30%">
+							<Autocomplete
+								value={designation}
+								onChange={(event: any, newValue: string | null) => {
+									setDesignation(newValue);
+								}}
+								inputValue={designationInputValue}
+								onInputChange={(event, newInputValue) => {
+									setDesignationInputValue(newInputValue);
+								}}
+								id="designation"
+								options={designationList}
+								renderInput={(params) => <TextField {...params} label="Designation" />}
+							/>
+							<TextField
+								id="standard-number"
+								label="Volume"
+								type="number"
+								InputLabelProps={{
+									shrink: true,
+								}}
+								variant="standard"
+								value={volume}
+								onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+									setVolume(event.target.value);
+								}}
+							/>
+							<FormControlLabel
+								control={
+									<Switch
+										checked={ventilation}
+										name="ventilation"
+										onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+											setVentilation(event.target.checked);
+										}}/>
+								}
+								label="Ventilation"
+							/>
+						</Stack>
+					</Tabs.Tab.Content>
+				</Tabs.Tab>
+				<Tabs.Tab id="2">
+					<Tabs.Tab.Title>
+						<span style={{fontWeight: 'bold'}}>Hazards</span>
+					</Tabs.Tab.Title>
+					<Tabs.Tab.Content>
+
+					</Tabs.Tab.Content>
+				</Tabs.Tab>
+			</Tabs>
+		</Box>
+	);
+}
+
+/*
+
+
+
 		<Box
 			display="flex"
 			justifyContent="center"
@@ -81,9 +164,7 @@ export default function RoomDetails() {
 				<DetailDrawer title="Cadastre">none</DetailDrawer>
 				<DetailDrawer title="Supplies interruptions">none</DetailDrawer>
 			</Box>
-		</Box>
-	);
-}
+		</Box>*/
 // dispensations {
 // 	slug
 // 	versions {
