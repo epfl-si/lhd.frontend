@@ -92,6 +92,8 @@ export const fetchRoomDetails = async (
 						}
 					}
 					yearly_audits
+					vol
+					vent
 					dispensations {
 						slug
 						versions {

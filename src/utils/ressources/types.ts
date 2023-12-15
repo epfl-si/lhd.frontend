@@ -42,6 +42,8 @@ export type roomDetailsType = {
 	id: number;
 	name: string;
 	kind?: kindType;
+	vol?: number;
+	vent?: string;
 	occupancies: occupanciesType[];
 	yearly_audits?: number;
 };
