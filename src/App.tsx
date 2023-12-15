@@ -48,7 +48,7 @@ function App() {
 				<Base.AsideMenu>
 					<ul>
 						<li className="active">
-							<a href="#">Hazards</a>
+							<a href="#">Rooms / Hazards</a>
 						</li>
 						<li>
 							<ul>
