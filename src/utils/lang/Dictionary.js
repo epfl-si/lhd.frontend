@@ -66,6 +66,9 @@ i18next.use(initReactI18next).init({
 						placeholder: 'Entries',
 					},
 				},
+				room_details: {
+					details: 'Details'
+				},
 				fetchError: {
 					header: 'An error has occurred',
 					serverMessage: 'Server returned the following message: ',
@@ -158,6 +161,9 @@ i18next.use(initReactI18next).init({
 						label: 'Rechercher des entrées',
 						placeholder: 'Entrées',
 					},
+				},
+				room_details: {
+					details: 'Détails'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
