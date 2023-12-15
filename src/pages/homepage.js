@@ -1,10 +1,10 @@
 import { RoomTable } from '../components/RoomTable';
 
 export default function HomePage() {
-	return (
+	return (//(where: { building: { equals: "BC"} })
 		<div>
 			<RoomTable
-				gQuery={`rooms (where: { building: { equals: "BC"} }) {
+				gQuery={`rooms { 
 					name
 					occupancies { 
 						cosecs { name }
