@@ -6,9 +6,10 @@ import DetailDrawer from '../components/RoomDetails/DetailDrawer';
 import { fetchRoomDetails } from '../utils/graphql/FetchingTools';
 import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import { roomDetailsType } from '../utils/ressources/types';
+import {lhdUnitsType, roomDetailsType} from '../utils/ressources/types';
 import DispensationTable from '../components/RoomDetails/DispensationTable';
 import { Tabs } from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
+import { Card } from 'epfl-elements-react/src/stories/molecules/Card.tsx';
 import { Autocomplete, Switch } from '@mui/material';
 
 export default function RoomDetails() {
@@ -52,6 +53,10 @@ export default function RoomDetails() {
 		};
 		loadFetch();
 	}, [oidc.accessToken]);
+
+	function getUnitTitle(unit: lhdUnitsType) {
+		return (unit.institute?.school?.name).concat(' ').concat(unit.institute?.name).concat(' ').concat(unit.name);
+	}
 
 	return (
 		<Box>
@@ -100,6 +105,36 @@ export default function RoomDetails() {
 								}
 								label="Ventilation"
 							/>
+
+
+							{data[0]?.lhd_units.map(unit => (
+								<Card
+									icon="#trash-2"
+									onClickIcon={() => {}}
+									onClickItem={() => {}}
+									title={getUnitTitle(unit)}
+									style={{
+										"background-color": '#f3f3f3',
+										"border-radius": '10px',
+										padding: '10px',
+										display: 'flex',
+										"flex-direction": 'row'
+									}}
+								>
+									<div>
+										<small className="text-muted">
+											<b>Prof:</b> {unit.professors?.map(professor => professor.name.concat(' ').concat(professor.surname)).join(', ')}
+										</small>
+										<br />
+										<small className="text-muted">
+											<b>Cosec:</b> {unit.cosecs?.map(cosec => cosec.name.concat(' ').concat(cosec.surname)).join(', ')}
+										</small>
+									</div>
+								</Card>
+							))}
+
+
+
 						</Stack>
 					</Tabs.Tab.Content>
 				</Tabs.Tab>

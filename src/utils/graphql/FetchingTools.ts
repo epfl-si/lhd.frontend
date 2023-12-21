@@ -77,34 +77,32 @@ export const fetchRoomDetails = async (
 						query: `query ${operationName} { 
 				rooms (where: { name: { equals: "${room}"} }) {
 					name
+					building
+					sector
+					floor
+					vol
+					vent
 					kind {
 						name
 					}
-					occupancies {
-						cosecs {
+					lhd_units {
+						name
+						institute {
 							name
-						}
-						professors {
-							name
-						}
-						unit {
-							name
-						}
-					}
-					yearly_audits
-					vol
-					vent
-					dispensations {
-						slug
-						versions {
-							subject
-							date_end
-							status
-							holders {
+							school {
 								name
 							}
 						}
+						cosecs {
+							name
+							surname
+						}
+						professors {
+							name
+							surname
+						}
 					}
+					
 				},
 			}`,
 						variables,
@@ -114,6 +112,18 @@ export const fetchRoomDetails = async (
 					credentials: 'omit',
 			  })
 			: null;
+
+			/*dispensations {
+						slug
+						versions {
+							subject
+							date_end
+							status
+							holders {
+								name
+							}
+						}
+					}*/
 
 	if (results?.status !== 200) {
 		return { status: results?.status, data: await results?.text() };

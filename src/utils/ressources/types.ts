@@ -20,6 +20,22 @@ type kindType = {
 	name: string;
 };
 
+export type lhdUnitsType = {
+	name: string;
+	cosecs?: cosecsType[];
+	professors?: professorsType[];
+	institute?: instituteType;
+};
+
+type instituteType = {
+	name?: string;
+	school?: schoolType;
+}
+
+type schoolType = {
+	name?: string;
+}
+
 type occupanciesType = {
 	cosecs?: cosecsType[];
 	professors?: professorsType[];
@@ -44,7 +60,7 @@ export type roomDetailsType = {
 	kind?: kindType;
 	vol?: number;
 	vent?: string;
-	occupancies: occupanciesType[];
+	lhd_units: lhdUnitsType[];
 	yearly_audits?: number;
 };
 
