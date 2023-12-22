@@ -15,7 +15,7 @@
  *
  *       GENERIC_PACKAGE_NAME=epfl-elements-react
  *       GENERIC_PACKAGE_DIR=../epfl-elements-react
- *       yarn add "$GENERIC_PACKAGE_NAME"@file:"$GENERIC_PACKAGE_DIR"
+ *       yarn add "$GENERIC_PACKAGE_NAME"@file:"$GENERIC_PACKAGE_DIR"   yarn add epfl-elements-react@file:../epfl-elements-react
  *
  * - The imports from the “generic” package must be rewritten (on a
  *   temporary basis) to reach directly into its source tree in the
@@ -61,7 +61,7 @@ export const Primary: Story = {
 // This is the *development* version; it will only work if
 // the conditions described at the top of this file are met.
 /* eslint-disable */
-import { Button } from 'epfl-elements-react/src/stories/Button';
+import { Button } from 'epfl-elements-react/src/stories/molecules/Button.tsx';
 /* eslint-enable */
 // In production, the following will have to be made to work instead:
 // import { Button } from 'epfl-elements-react';
