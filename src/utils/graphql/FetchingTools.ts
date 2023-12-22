@@ -1,5 +1,6 @@
-import { roomDetailsType, roomType } from '../ressources/types';
+import {kindType, lhdUnitsSimpleType, roomDetailsType, roomType} from '../ressources/types';
 import { formatDataToColumns } from './ParsingTools';
+import {UnitType} from "dayjs";
 
 type fetchResultsType = {
 	status?: number;
@@ -9,6 +10,16 @@ type fetchResultsType = {
 type fetchRoomResultsType = {
 	status?: number;
 	data?: roomDetailsType[] | string;
+};
+
+type fetchKindRoomType = {
+	status?: number;
+	data?: kindType[] | string;
+};
+
+type fetchUnitsType = {
+	status?: number;
+	data?: lhdUnitsSimpleType[] | string;
 };
 
 export const fetchResults = async (
@@ -134,6 +145,107 @@ export const fetchRoomDetails = async (
 	return {
 		status: results.status,
 		data: graphQLResponse.data?.rooms,
+	};
+};
+
+
+export const fetchRoomTypes = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<fetchKindRoomType> => {
+	const operationName = 'KindRoomFetch';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+				headers: {
+					accept: '*/*',
+					'content-type': 'application/json',
+					'sec-fetch-dest': 'empty',
+					'sec-fetch-mode': 'cors',
+					'sec-fetch-site': 'cross-site',
+					authorization: `Bearer ${authToken}`,
+				},
+				referrerPolicy: 'no-referrer-when-downgrade',
+				body: JSON.stringify({
+					query: `query ${operationName} { 
+						roomKinds {
+							name
+						}
+					}`
+				}),
+				method: 'POST',
+				mode: 'cors',
+				credentials: 'omit',
+			})
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data?.roomKinds,
+	};
+};
+
+
+export const fetchUnits = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<fetchUnitsType> => {
+	const operationName = 'KindRoomFetch';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+				headers: {
+					accept: '*/*',
+					'content-type': 'application/json',
+					'sec-fetch-dest': 'empty',
+					'sec-fetch-mode': 'cors',
+					'sec-fetch-site': 'cross-site',
+					authorization: `Bearer ${authToken}`,
+				},
+				referrerPolicy: 'no-referrer-when-downgrade',
+				body: JSON.stringify({
+					query: `query ${operationName} { 
+						units {
+							name
+							unitId
+							institute {
+								name
+								school {
+									name
+								}
+							}
+							cosecs {
+								name
+								surname
+							}
+							professors {
+								name
+								surname
+							}
+						}
+					}`
+				}),
+				method: 'POST',
+				mode: 'cors',
+				credentials: 'omit',
+			})
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data?.units,
 	};
 };
 

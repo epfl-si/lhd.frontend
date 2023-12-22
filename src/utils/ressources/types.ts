@@ -16,15 +16,21 @@ export type columnType = {
 	width: number;
 };
 
-type kindType = {
+export type kindType = {
 	name: string;
 };
 
 export type lhdUnitsType = {
 	name: string;
+	unitId: number;
 	cosecs?: cosecsType[];
 	professors?: professorsType[];
 	institute?: instituteType;
+};
+
+export type lhdUnitsSimpleType = {
+	name: string;
+	unitId: number;
 };
 
 type instituteType = {
