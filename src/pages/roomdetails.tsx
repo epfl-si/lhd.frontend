@@ -3,23 +3,29 @@ import {FormControlLabel, Stack} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import DetailRow from '../components/RoomDetails/DetailRow';
 import DetailDrawer from '../components/RoomDetails/DetailDrawer';
-import { fetchRoomDetails } from '../utils/graphql/FetchingTools';
+import {fetchRoomDetails, fetchRoomTypes, fetchUnits} from '../utils/graphql/FetchingTools';
 import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import {lhdUnitsType, roomDetailsType} from '../utils/ressources/types';
+import {lhdUnitsType, roomDetailsType, kindType, lhdUnitsSimpleType} from '../utils/ressources/types';
 import DispensationTable from '../components/RoomDetails/DispensationTable';
 import { Tabs } from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
 import { Card } from 'epfl-elements-react/src/stories/molecules/Card.tsx';
 import { Autocomplete, Switch } from '@mui/material';
+import '../../css/styles.css'
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType[]>([]);
-	const designationList = ['Storage', 'Laboratory'];
 	const [designation, setDesignation] = React.useState<string | null>(null);
 	const [designationInputValue, setDesignationInputValue] = React.useState('');
 	const [volume, setVolume] = React.useState<number>(0);
 	const [ventilation, setVentilation] = React.useState<boolean>(false);
+	const [roomKind, setRoomKind] = useState<kindType[]>([]);
+	const [units, setUnits] = useState<lhdUnitsType[]>([]);
+	const [selectedUnits, setSelectedUnits] = useState<lhdUnitsType[]>([]);
+	const [saveddUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
+	const [unit, setUnit] = React.useState<string | null>(null);
+	const [unitInputValue, setUnitInputValue] = React.useState('');
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -42,14 +48,37 @@ export default function RoomDetails() {
 						}
 						if (results.data[0]?.vent) {
 							setVentilation(results.data[0]?.vent === 'y');
-							console.log(ventilation);
+						}
+						if (results.data[0]?.lhd_units) {
+							setSelectedUnits(results.data[0]?.lhd_units);
+							setSavedUnits(results.data[0]?.lhd_units);
 						}
 					}
 				} else {
 					console.error('Bad GraphQL results', results);
 				}
 			}
-			console.log(results);
+			const resultsRoomTypes = await fetchRoomTypes(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken
+			);
+
+			if (resultsRoomTypes.status === 200) {
+				if ( resultsRoomTypes.data ) {
+					setRoomKind(resultsRoomTypes.data);
+				}
+			}
+
+			const resultsUnits = await fetchUnits(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken
+			);
+
+			if (resultsUnits.status === 200) {
+				if ( resultsUnits.data ) {
+					setUnits(resultsUnits.data);
+				}
+			}
 		};
 		loadFetch();
 	}, [oidc.accessToken]);
@@ -78,7 +107,7 @@ export default function RoomDetails() {
 									setDesignationInputValue(newInputValue);
 								}}
 								id="designation"
-								options={designationList}
+								options={roomKind.flatMap(k => k.name)}
 								renderInput={(params) => <TextField {...params} label="Designation" />}
 							/>
 							<TextField
@@ -106,20 +135,31 @@ export default function RoomDetails() {
 								label="Ventilation"
 							/>
 
+							<Autocomplete
+								value={unit}
+								onChange={(event: any, newValue: string | null) => {
+									setUnit(newValue);
+									if (newValue) {
+										const selectedUnit = units.find(u => u.name === newValue);
+										setSelectedUnits([...selectedUnits, selectedUnit]);
+									}
+								}}
+								inputValue={unitInputValue}
+								onInputChange={(event, newInputValue) => {
+									setUnitInputValue(newInputValue);
+								}}
+								id="unit"
+								options={units.flatMap(k => k.name)}
+								renderInput={(params) => <TextField {...params} label="Chose unit" />}
+							/>
 
-							{data[0]?.lhd_units.map(unit => (
-								<Card
+							{selectedUnits.map(unit => {
+								return (<Card
 									icon="#trash-2"
 									onClickIcon={() => {}}
 									onClickItem={() => {}}
 									title={getUnitTitle(unit)}
-									style={{
-										"background-color": '#f3f3f3',
-										"border-radius": '10px',
-										padding: '10px',
-										display: 'flex',
-										"flex-direction": 'row'
-									}}
+									className={saveddUnits.includes(unit) ? 'solid_card' : 'dashed-card'}
 								>
 									<div>
 										<small className="text-muted">
@@ -130,8 +170,8 @@ export default function RoomDetails() {
 											<b>Cosec:</b> {unit.cosecs?.map(cosec => cosec.name.concat(' ').concat(cosec.surname)).join(', ')}
 										</small>
 									</div>
-								</Card>
-							))}
+								</Card>)
+							})}
 
 
 
