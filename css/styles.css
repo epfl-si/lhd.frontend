@@ -1,0 +1,19 @@
+.dashed-card {
+    background-color: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-color: black;
+    border-style: dashed;
+}
+
+.solid_card {
+    background-color: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-color: unset;
+    border-style: unset;
+}
