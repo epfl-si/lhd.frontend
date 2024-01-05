@@ -97,6 +97,8 @@ export const fetchRoomDetails = async (
 						name
 					}
 					lhd_units {
+            id
+            unitId
 						name
 						institute {
 							name

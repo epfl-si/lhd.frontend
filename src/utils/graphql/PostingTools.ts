@@ -1,4 +1,4 @@
-import { dispensationRequestType } from '../ressources/types';
+import {dispensationRequestType, roomDetailsType} from '../ressources/types';
 
 export const createDispensation = async (
 	address: string | undefined,
@@ -155,6 +155,58 @@ export const updateDispensation = async (
 					mode: 'cors',
 					credentials: 'omit',
 			  })
+			: null;
+
+	if (results?.status !== 200) {
+		return { status: results?.status, data: await results?.text() };
+	}
+
+	const graphQLResponse = await results.json();
+
+	return {
+		status: results.status,
+		data: graphQLResponse.data,
+	};
+};
+
+export const updateRoom = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	room: roomDetailsType,
+	variables: Object
+): Promise<any> => {
+	const operationName = 'updateRoom';
+	const results =
+		typeof address === 'string'
+			? await fetch(address, {
+				headers: {
+					accept: '*/*',
+					'content-type': 'application/json',
+					'sec-fetch-dest': 'empty',
+					'sec-fetch-mode': 'cors',
+					'sec-fetch-site': 'cross-site',
+					authorization: `Bearer ${authToken}`,
+				},
+				referrerPolicy: 'no-referrer-when-downgrade',
+				body: JSON.stringify({
+					query: `mutation ${operationName} {
+               updateRoom(
+               name: "${room.name}",
+							 vol: ${room.vol},
+							 vent: "${room.vent}",
+							 units: ${room.lhd_units}) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`,
+					variables,
+				}),
+				method: 'POST',
+				mode: 'cors',
+				credentials: 'omit',
+			})
 			: null;
 
 	if (results?.status !== 200) {
