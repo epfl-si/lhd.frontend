@@ -6,12 +6,21 @@ import DetailDrawer from '../components/RoomDetails/DetailDrawer';
 import {fetchRoomDetails, fetchRoomTypes, fetchUnits} from '../utils/graphql/FetchingTools';
 import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import {lhdUnitsType, roomDetailsType, kindType, lhdUnitsSimpleType} from '../utils/ressources/types';
+import {
+	lhdUnitsType,
+	roomDetailsType,
+	kindType,
+	lhdUnitsSimpleType,
+	dispensationRequestType, roomDetailsForSaveType
+} from '../utils/ressources/types';
 import DispensationTable from '../components/RoomDetails/DispensationTable';
 import { Tabs } from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
 import { Card } from 'epfl-elements-react/src/stories/molecules/Card.tsx';
+import { Button } from 'epfl-elements-react/src/stories/molecules/Button.tsx'
 import { Autocomplete, Switch } from '@mui/material';
 import '../../css/styles.css'
+import {updateDispensation, updateRoom} from "../utils/graphql/PostingTools";
+import {notificationsVariants} from "../utils/ressources/variants";
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
@@ -23,7 +32,7 @@ export default function RoomDetails() {
 	const [roomKind, setRoomKind] = useState<kindType[]>([]);
 	const [units, setUnits] = useState<lhdUnitsType[]>([]);
 	const [selectedUnits, setSelectedUnits] = useState<lhdUnitsType[]>([]);
-	const [saveddUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
+	const [savedUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
 	const [unit, setUnit] = React.useState<string | null>(null);
 	const [unitInputValue, setUnitInputValue] = React.useState('');
 
@@ -86,6 +95,33 @@ export default function RoomDetails() {
 	function getUnitTitle(unit: lhdUnitsType) {
 		return (unit.institute?.school?.name).concat(' ').concat(unit.institute?.name).concat(' ').concat(unit.name);
 	}
+
+	function saveRoomDetails() {
+		updateRoom(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			formatData(),
+			{}
+		).then(res => {
+			console.log(res.status)
+			if (res.status === 200) {
+				//setNotificationType(notificationsVariants['disp-update-success']);
+				//setOpenNotification(true);
+			}
+		});
+	}
+
+	const formatData = (): roomDetailsForSaveType => {
+		let room: roomDetailsForSaveType = {};
+		room.name = data[0]?.name;
+		room.kind = designation;
+		room.vol = volume;
+		room.vent = ventilation ? 'y' : 'n';
+		const unitIds = selectedUnits.map(u => u.id);
+		room.lhd_units = unitIds;
+		console.log('test', room);
+		return room;
+	};
 
 	return (
 		<Box>
@@ -159,7 +195,7 @@ export default function RoomDetails() {
 									onClickIcon={() => {}}
 									onClickItem={() => {}}
 									title={getUnitTitle(unit)}
-									className={saveddUnits.includes(unit) ? 'solid_card' : 'dashed-card'}
+									className={savedUnits.find(u => u.name == unit.name) ? 'solid_card' : 'dashed-card'}
 								>
 									<div>
 										<small className="text-muted">
@@ -173,7 +209,26 @@ export default function RoomDetails() {
 								</Card>)
 							})}
 
-
+							<div style={{marginTop: '50px'}}>
+								<Button
+								onClick={() => saveRoomDetails()}
+								primary
+							>
+								<svg
+									aria-hidden="true"
+									className="icon"
+								>
+									<use xlinkHref="#save" />
+								</svg>
+								<span
+									style={{
+										marginLeft: '5px'
+									}}
+								>
+									Save
+								</span>
+							</Button>
+							</div>
 
 						</Stack>
 					</Tabs.Tab.Content>

@@ -22,7 +22,7 @@ export type kindType = {
 
 export type lhdUnitsType = {
 	name: string;
-	unitId: number;
+	unitId?: number;
 	id: number;
 	cosecs?: cosecsType[];
 	professors?: professorsType[];
@@ -70,6 +70,14 @@ export type roomDetailsType = {
 	vent?: string;
 	lhd_units: lhdUnitsType[];
 	yearly_audits?: number;
+};
+
+export type roomDetailsForSaveType = {
+	name: string;
+	kind?: string;
+	vol?: number;
+	vent?: string;
+	lhd_units: number[];
 };
 
 export type roomType = {

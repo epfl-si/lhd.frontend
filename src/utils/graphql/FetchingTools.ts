@@ -115,7 +115,6 @@ export const fetchRoomDetails = async (
 							surname
 						}
 					}
-					
 				},
 			}`,
 						variables,
@@ -216,6 +215,7 @@ export const fetchUnits = async (
 						units {
 							name
 							unitId
+							id
 							institute {
 								name
 								school {

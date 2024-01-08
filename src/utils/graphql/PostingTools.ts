@@ -1,4 +1,4 @@
-import {dispensationRequestType, roomDetailsType} from '../ressources/types';
+import {dispensationRequestType, roomDetailsForSaveType, roomDetailsType} from '../ressources/types';
 
 export const createDispensation = async (
 	address: string | undefined,
@@ -172,10 +172,25 @@ export const updateDispensation = async (
 export const updateRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	room: roomDetailsType,
+	room: roomDetailsForSaveType,
 	variables: Object
 ): Promise<any> => {
 	const operationName = 'updateRoom';
+	const query = `mutation ${operationName} {
+               updateRoom(
+               name: "${room.name}",
+               kind: "${room.kind}",
+							 vol: ${room.vol},
+							 vent: "${room.vent}",
+							 units: [${room.lhd_units}] ) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	console.log(query);
 	const results =
 		typeof address === 'string'
 			? await fetch(address, {
@@ -189,18 +204,7 @@ export const updateRoom = async (
 				},
 				referrerPolicy: 'no-referrer-when-downgrade',
 				body: JSON.stringify({
-					query: `mutation ${operationName} {
-               updateRoom(
-               name: "${room.name}",
-							 vol: ${room.vol},
-							 vent: "${room.vent}",
-							 units: ${room.lhd_units}) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`,
+					query,
 					variables,
 				}),
 				method: 'POST',
