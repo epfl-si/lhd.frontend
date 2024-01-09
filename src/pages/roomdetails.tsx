@@ -1,8 +1,6 @@
 import {Box, Button, Card, CardContent, TextField, Typography} from '@material-ui/core';
 import {FormControlLabel, Stack} from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import DetailRow from '../components/RoomDetails/DetailRow';
-import DetailDrawer from '../components/RoomDetails/DetailDrawer';
 import {fetchRoomDetails, fetchRoomTypes, fetchUnits} from '../utils/graphql/FetchingTools';
 import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
@@ -10,17 +8,16 @@ import {
 	lhdUnitsType,
 	roomDetailsType,
 	kindType,
-	lhdUnitsSimpleType,
-	dispensationRequestType, roomDetailsForSaveType
+	notificationType, roomDetailsForSaveType
 } from '../utils/ressources/types';
-import DispensationTable from '../components/RoomDetails/DispensationTable';
 import { Tabs } from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
 import { Card } from 'epfl-elements-react/src/stories/molecules/Card.tsx';
 import { Button } from 'epfl-elements-react/src/stories/molecules/Button.tsx'
 import { Autocomplete, Switch } from '@mui/material';
 import '../../css/styles.css'
-import {updateDispensation, updateRoom} from "../utils/graphql/PostingTools";
+import {updateRoom} from "../utils/graphql/PostingTools";
 import {notificationsVariants} from "../utils/ressources/variants";
+import Notifications from "../components/Table/Notifications";
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
@@ -35,6 +32,11 @@ export default function RoomDetails() {
 	const [savedUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
 	const [unit, setUnit] = React.useState<string | null>(null);
 	const [unitInputValue, setUnitInputValue] = React.useState('');
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -103,11 +105,12 @@ export default function RoomDetails() {
 			formatData(),
 			{}
 		).then(res => {
-			console.log(res.status)
 			if (res.status === 200) {
-				//setNotificationType(notificationsVariants['disp-update-success']);
-				//setOpenNotification(true);
+				setNotificationType(notificationsVariants['room-update-success']);
+			} else {
+				setNotificationType(notificationsVariants['room-update-error']);
 			}
+			setOpenNotification(true);
 		});
 	}
 
@@ -121,6 +124,11 @@ export default function RoomDetails() {
 		room.lhd_units = unitIds;
 		console.log('test', room);
 		return room;
+	};
+
+	const handleClose = (event: Event, reason: string) => {
+		if (reason === 'clickaway') return;
+		setOpenNotification(false);
 	};
 
 	return (
@@ -177,7 +185,9 @@ export default function RoomDetails() {
 									setUnit(newValue);
 									if (newValue) {
 										const selectedUnit = units.find(u => u.name === newValue);
-										setSelectedUnits([...selectedUnits, selectedUnit]);
+										if (selectedUnit) {
+											setSelectedUnits([...selectedUnits, selectedUnit]);
+										}
 									}
 								}}
 								inputValue={unitInputValue}
@@ -231,6 +241,11 @@ export default function RoomDetails() {
 							</div>
 
 						</Stack>
+						<Notifications
+							open={openNotification}
+							notification={notificationType}
+							close={handleClose}
+						/>
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 				<Tabs.Tab id="2">
