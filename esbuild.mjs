@@ -2,7 +2,7 @@ import * as esbuild from 'esbuild';
 import * as process from 'node:process';
 import inlineImage from 'esbuild-plugin-inline-image';
 import http from 'node:http';
-import { readFile } from 'node:fs/promises';
+import { readFile, stat } from 'node:fs/promises';
 
 const cmd = process.argv[process.argv.length - 1];
 
@@ -79,9 +79,8 @@ async function devServer () {
   }
 
   await http.createServer(async (req, res) => {
-    if (req.url.endsWith('/lhd3-frontend.js') ||
-      req.url.endsWith('/lhd3-frontend.css') ||
-      req.url.endsWith('/esbuild')) {
+    if (req.url.endsWith('/esbuild') ||
+      await fileExistsInDist(req.url)) {
       doProxy(req, res);
     } else {
       res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -91,4 +90,27 @@ async function devServer () {
 
   console.log("🚀 Browse the LHD frontend at http://localhost:3000/");
   console.log("\n🔥 Hot reload is enabled!");
+}
+
+/**
+ * @return True iff `uri` points to a file that exists under dist/.
+ */
+async function fileExistsInDist(uri) {
+  const path = uri.split('?')[0];
+  const pathElements = path.split('/');
+  if (pathElements.filter((p) => p == "..").length > 0) {
+    // Attack detected!!
+    throw new Error("No dotdots");
+  } else {
+    try {
+      const st = await stat(`dist/${path}`);
+      return st.isFile();
+    } catch (e) {
+      if (e.code === 'ENOENT') {
+        return false;
+      } else {
+        throw e;
+      }
+    }
+  }
 }
