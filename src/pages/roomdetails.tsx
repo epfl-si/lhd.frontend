@@ -18,6 +18,7 @@ import '../../css/styles.css'
 import {updateRoom} from "../utils/graphql/PostingTools";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
@@ -228,7 +229,7 @@ export default function RoomDetails() {
 									aria-hidden="true"
 									className="icon"
 								>
-									<use xlinkHref="#save" />
+									<use xlinkHref={`${featherIcons}#save`} />
 								</svg>
 								<span
 									style={{
