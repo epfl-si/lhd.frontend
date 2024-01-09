@@ -10,6 +10,7 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
+	page:  'room' | 'unit';
 };
 
 export function EntriesTableCategory({
@@ -17,6 +18,7 @@ export function EntriesTableCategory({
 	tableData,
 	columns,
 	loading,
+	page
 }: EntriesTableCategoryProps) {
 	const history = useHistory();
 	const shownData = useMemo(
@@ -43,7 +45,13 @@ export function EntriesTableCategory({
 						Toolbar: TableToolbar,
 					}}
 					onRowClick={e => {
-						history.push(`/roomdetails?room=${e.row['room.name']}`);
+						switch ( page ) {
+							case "room":
+								history.push(`/roomdetails?room=${e.row['room.name']}`);
+								break;
+							case "unit":
+								history.push(`/unitdetails?unit=${e.row['unit.name']}`);
+						}
 					}}
 				/>
 			) : (

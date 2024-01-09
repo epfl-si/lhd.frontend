@@ -35,9 +35,10 @@ import { notificationsVariants } from '../../utils/ressources/variants';
 type AppTableProps = {
 	graphqlBody: string;
 	variables: object;
+	page:  'room' | 'unit';
 };
 
-export function AppTable({ graphqlBody, variables }: AppTableProps) {
+export function AppTable({ graphqlBody, variables, page }: AppTableProps) {
 	const { t } = useTranslation();
 	const oidc: State = useOpenIDConnectContext();
 
@@ -150,6 +151,7 @@ export function AppTable({ graphqlBody, variables }: AppTableProps) {
 						tableData={tableData}
 						columns={columns}
 						loading={loading}
+						page={page}
 					/>
 					<Box width="100%" paddingY="16px">
 						<Button onClick={onShare} variant="outlined">
