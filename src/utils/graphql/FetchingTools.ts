@@ -1,4 +1,4 @@
-import {kindType, lhdUnitsSimpleType, roomDetailsType, roomType} from '../ressources/types';
+import {kindType, lhdUnitsSimpleType, lhdUnitsType, roomDetailsType, roomType} from '../ressources/types';
 import { formatDataToColumns } from './ParsingTools';
 import {UnitType} from "dayjs";
 
@@ -19,7 +19,7 @@ type fetchKindRoomType = {
 
 type fetchUnitsType = {
 	status?: number;
-	data?: lhdUnitsSimpleType[] | string;
+	data?: lhdUnitsType[] | string;
 };
 
 export const fetchResults = async (
@@ -197,7 +197,7 @@ export const fetchUnits = async (
 	address: string | undefined,
 	authToken: string | undefined
 ): Promise<fetchUnitsType> => {
-	const operationName = 'KindRoomFetch';
+	const operationName = 'UnitFetch';
 	const results =
 		typeof address === 'string'
 			? await fetch(address, {

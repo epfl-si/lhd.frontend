@@ -22,6 +22,7 @@ import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
 import NewDispForm from './components/DispensationControls/NewDispForm';
+import UnitControl from "./pages/units";
 
 function App() {
 	const { t } = useTranslation();
@@ -47,28 +48,14 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
-						<li className="active">
-							<a href="#">Rooms / Hazards</a>
+						<li>
+							<Link to="/">Rooms / Hazards</Link>
 						</li>
 						<li>
-							<ul>
-								<li>
-									<Link to="/">Home</Link>
-								</li>
-								<li>
-									<Link to="/biohazard">Bio hazards</Link>
-								</li>
-							</ul>
-						</li>
-						<li className="active">
-							<a href="#">Control records</a>
+							<Link to="/unitcontrol">Units</Link>
 						</li>
 						<li>
-							<ul>
-								<li>
-									<Link to="/dispcontrol">Dispensations</Link>
-								</li>
-							</ul>
+							<Link to="/dispcontrol">Dispensations</Link>
 						</li>
 					</ul>
 				</Base.AsideMenu>
@@ -93,6 +80,9 @@ function App() {
 
 				<div className="container-full" style={{ width: '100%', padding: '1em' }}>
 					<Switch>
+						<Route path="/unitcontrol">
+							<UnitControl />
+						</Route>
 						<Route path="/dispcontrol">
 							<DispensationControls />
 						</Route>
