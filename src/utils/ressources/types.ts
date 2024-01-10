@@ -24,8 +24,8 @@ export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
 	id: number;
-	cosecs?: cosecsType[];
-	professors?: professorsType[];
+	cosecs: personType[];
+	professors: personType[];
 	institute?: instituteType;
 };
 
@@ -57,6 +57,12 @@ type cosecsType = {
 type professorsType = {
 	name: string;
 	surname: string;
+};
+
+export type personType = {
+	name: string;
+	surname: string;
+	sciper: string;
 };
 
 type unitType = {
