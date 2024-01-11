@@ -36,7 +36,6 @@ export default function UnitControl() {
 			);
 			if (results.status === 200) {
 				if (results.data) {
-					console.log(results.data);
 					setTableData(results.data);
 				} else {
 					console.error('Bad GraphQL results', results);

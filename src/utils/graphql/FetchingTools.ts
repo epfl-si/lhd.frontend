@@ -156,7 +156,6 @@ export const fetchUnitDetails = async (
 	variables: Object
 ): Promise<fetchUnitsType> => {
 	const operationName = 'SingleUnitFetch';
-	debugger;
 	const results =
 		typeof address === 'string'
 			? await fetch(address, {
