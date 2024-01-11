@@ -62,7 +62,8 @@ type professorsType = {
 export type personType = {
 	name: string;
 	surname: string;
-	sciper: string;
+	sciper: number;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
 type unitType = {

@@ -50,7 +50,7 @@ export function EntriesTableCategory({
 								history.push(`/roomdetails?room=${e.row['room.name']}`);
 								break;
 							case "unit":
-								history.push(`/unitdetails?unit=${e.row['unit.name']}`);
+								history.push(`/unitdetails?unit=${e.row['name']}`);
 						}
 					}}
 				/>
