@@ -23,6 +23,7 @@ import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
 import NewDispForm from './components/DispensationControls/NewDispForm';
 import UnitControl from "./pages/units";
+import UnitDetails from "./pages/unitdetails";
 
 function App() {
 	const { t } = useTranslation();
@@ -82,6 +83,9 @@ function App() {
 					<Switch>
 						<Route path="/unitcontrol">
 							<UnitControl />
+						</Route>
+						<Route path="/unitdetails">
+							<UnitDetails />
 						</Route>
 						<Route path="/dispcontrol">
 							<DispensationControls />
