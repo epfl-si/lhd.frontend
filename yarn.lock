@@ -8111,7 +8111,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:3.5.3, chokidar@npm:^3.5.3":
+"chokidar@npm:3.5.3, chokidar@npm:>=3.0.0 <4.0.0, chokidar@npm:^3.5.3":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -9004,7 +9004,7 @@ __metadata:
 
 "epfl-elements-react@file:../epfl-elements-react::locator=lhd3-frontend%40workspace%3A.":
   version: 0.0.0
-  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=c9082c&locator=lhd3-frontend%40workspace%3A."
+  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=81219e&locator=lhd3-frontend%40workspace%3A."
   dependencies:
     bootstrap: "npm:^4"
     csstype: "npm:^3.1.3"
@@ -9012,7 +9012,7 @@ __metadata:
     react-bootstrap: "npm:^2.9.1"
   peerDependencies:
     react: ^17 || ^18
-  checksum: cdaf0a72a015e3bf1b399ac7bf430b6f94982a6d472104f307abe4e5770b5e28a6af2fdff70a84e2058ca35556e34df73585f69979c0c099857cf13e3e15dbe1
+  checksum: b0683f1ade14e92aea6d7817a64713d5938e0b2a14470557f57ca0f85411d7b0d3a0ab823efbb66ed317316f7ce218e11ee8b805c2a9541a7506357b0beae7cd
   languageName: node
   linkType: hard
 
@@ -9154,6 +9154,18 @@ __metadata:
   peerDependencies:
     esbuild: ">=0.12 <1"
   checksum: af6874ce9b5fcdb0974c9d9e9f16530a5b9bd80c699b2ba9d7ace33439c1af1be6948535c775d9a6439e2bf23fb31cfd54ac882cfa38308a3f182039f4b98a01
+  languageName: node
+  linkType: hard
+
+"esbuild-sass-plugin@npm:^2.16.1":
+  version: 2.16.1
+  resolution: "esbuild-sass-plugin@npm:2.16.1"
+  dependencies:
+    resolve: "npm:^1.22.6"
+    sass: "npm:^1.7.3"
+  peerDependencies:
+    esbuild: ^0.19.4
+  checksum: 2fcfa390b4455b47db05622a7ad88c2a6c7e2b09c6c5ec6af9efcd72daac0f1deb6b6db51f7d98c5b49c903d50c0ea3349695e7dbf9ebdcb4d0ddf69efd32a3a
   languageName: node
   linkType: hard
 
@@ -10895,6 +10907,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"immutable@npm:^4.0.0":
+  version: 4.3.4
+  resolution: "immutable@npm:4.3.4"
+  checksum: ea187acc1eec9dcfaa0823bae59e1ae0ea82e7a40d2ace9fb84d467875d5506ced684a79b68e70451f1e1761a387a958ba724171f93aa10330998b026fcb5d29
+  languageName: node
+  linkType: hard
+
 "import-fresh@npm:^3.0.0, import-fresh@npm:^3.2.1":
   version: 3.3.0
   resolution: "import-fresh@npm:3.3.0"
@@ -11932,6 +11951,7 @@ __metadata:
     epfl-elements-react: "file:../epfl-elements-react"
     esbuild: "npm:^0.19.8"
     esbuild-plugin-inline-image: "npm:^0.0.9"
+    esbuild-sass-plugin: "npm:^2.16.1"
     eslint: "npm:^8.38.0"
     eslint-config-react-app: "npm:^7.0.1"
     eslint-plugin-storybook: "npm:^0.6.15"
@@ -14042,7 +14062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.10.0, resolve@npm:^1.22.1":
+"resolve@npm:^1.10.0, resolve@npm:^1.22.1, resolve@npm:^1.22.6":
   version: 1.22.8
   resolution: "resolve@npm:1.22.8"
   dependencies:
@@ -14081,7 +14101,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>":
+"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.6#optional!builtin<compat/resolve>":
   version: 1.22.8
   resolution: "resolve@patch:resolve@npm%3A1.22.8#optional!builtin<compat/resolve>::version=1.22.8&hash=c3c19d"
   dependencies:
@@ -14279,6 +14299,19 @@ __metadata:
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
   checksum: 7eaf7a0cf37cc27b42fb3ef6a9b1df6e93a1c6d98c6c6702b02fe262d5fcbd89db63320793b99b21cb5348097d0a53de81bd5f4e8b86e20cc9412e3f1cfb4e83
+  languageName: node
+  linkType: hard
+
+"sass@npm:^1.7.3":
+  version: 1.69.7
+  resolution: "sass@npm:1.69.7"
+  dependencies:
+    chokidar: "npm:>=3.0.0 <4.0.0"
+    immutable: "npm:^4.0.0"
+    source-map-js: "npm:>=0.6.2 <2.0.0"
+  bin:
+    sass: sass.js
+  checksum: 9c6d3fe468a267949e8dd766085351f59988caf5d3d5c13eb041d370366f869ad3704b5046586fd3584b2cbf59c03650d237b62a4c6ed26a0c003e27f9ef4e89
   languageName: node
   linkType: hard
 
@@ -14524,7 +14557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.2":
+"source-map-js@npm:>=0.6.2 <2.0.0, source-map-js@npm:^1.0.2":
   version: 1.0.2
   resolution: "source-map-js@npm:1.0.2"
   checksum: 38e2d2dd18d2e331522001fc51b54127ef4a5d473f53b1349c5cca2123562400e0986648b52e9407e348eaaed53bce49248b6e2641e6d793ca57cb2c360d6d51

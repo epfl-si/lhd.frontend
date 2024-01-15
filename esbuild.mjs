@@ -3,6 +3,7 @@ import * as process from 'node:process';
 import inlineImage from 'esbuild-plugin-inline-image';
 import http from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
+import {sassPlugin} from 'esbuild-sass-plugin'
 
 const cmd = process.argv[process.argv.length - 1];
 
@@ -21,7 +22,19 @@ const commonBuildConfig = {
   outfile: 'dist/lhd3-frontend.js',  // and implicitly,
                                      // dist/lhd3-frontend.css for all
                                      // the css
-  plugins: [inlineImage()],
+  plugins: [
+    inlineImage(),
+    sassPlugin(
+        // TEMPORARY: allows to build against an unreleased copy of epfl-elements-react.
+        // Should be removed (along with the reference to `file:../epfl-elements-react` in
+        // package.json) after the first release of epfl-elements-react.
+        { importMapper: (path) => {
+            const newPath = path.replace(/^\//, 'epfl-elements-react/');
+            console.log(`${path} → ${newPath}`);
+            return newPath;
+          }
+        }
+  )]
 };
 
 if (cmd === "build") {
