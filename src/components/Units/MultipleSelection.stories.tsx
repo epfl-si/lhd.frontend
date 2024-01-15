@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import { MultipleSelection } from './personSelection';
+import { MultipleSelection } from './MultipleSelection';
 import React from "react";
 
 const meta: Meta<typeof MultipleSelection> = {
