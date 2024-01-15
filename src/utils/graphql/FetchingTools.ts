@@ -1,6 +1,5 @@
-import {kindType, lhdUnitsSimpleType, lhdUnitsType, roomDetailsType, roomType} from '../ressources/types';
+import {kindType, lhdUnitsType, roomDetailsType, roomType} from '../ressources/types';
 import { formatDataToColumns } from './ParsingTools';
-import {UnitType} from "dayjs";
 
 type fetchResultsType = {
 	status?: number;

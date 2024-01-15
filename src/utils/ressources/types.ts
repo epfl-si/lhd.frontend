@@ -27,11 +27,7 @@ export type lhdUnitsType = {
 	cosecs: personType[];
 	professors: personType[];
 	institute?: instituteType;
-};
-
-export type lhdUnitsSimpleType = {
-	name: string;
-	unitId: number;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
 type instituteType = {
@@ -43,31 +39,11 @@ type schoolType = {
 	name?: string;
 }
 
-type occupanciesType = {
-	cosecs?: cosecsType[];
-	professors?: professorsType[];
-	unit?: unitType;
-};
-
-type cosecsType = {
-	name: string;
-	surname: string;
-};
-
-type professorsType = {
-	name: string;
-	surname: string;
-};
-
 export type personType = {
 	name: string;
 	surname: string;
 	sciper: number;
 	status?: 'New' | 'Deleted' | 'Default';
-};
-
-type unitType = {
-	name: string;
 };
 
 export type roomDetailsType = {
@@ -77,14 +53,6 @@ export type roomDetailsType = {
 	vent?: string;
 	lhd_units: lhdUnitsType[];
 	yearly_audits?: number;
-};
-
-export type roomDetailsForSaveType = {
-	name: string;
-	kind?: string;
-	vol?: number;
-	vent?: string;
-	lhd_units: number[];
 };
 
 export type roomType = {
