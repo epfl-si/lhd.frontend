@@ -36,4 +36,12 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Room update failed',
 	},
+	'unit-update-success': {
+		type: 'success',
+		text: 'Unit has successfully been updated',
+	},
+	'unit-update-error': {
+		type: 'error',
+		text: 'Unit update failed',
+	},
 };
