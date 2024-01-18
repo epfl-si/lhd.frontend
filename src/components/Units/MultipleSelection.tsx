@@ -1,8 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Autocomplete} from "@mui/material";
 import {TextField} from "@material-ui/core";
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
+import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import "epfl-elements-react/src/stories/molecules/button.css";
+import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
+import {fetchUnitDetails} from "../../utils/graphql/FetchingTools";
+import {env} from "../../utils/env";
 
 interface SelectionProps<Member> {
 	/**
@@ -12,15 +16,11 @@ interface SelectionProps<Member> {
 	/**
 	 * The complete list of all members that may be selected
 	 */
-	all: Member[];
+	all?: Member[];
 	/**
 	 * the list of initially selected members
 	 */
 	selected: Member[];
-	/**
-	 * How to render a member
-	 */
-	draw?: React.FC<Member>;
 	/**
 	 * Action to be done at change selection
 	 */
@@ -31,12 +31,27 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	objectName,
 	all,
 	selected,
-	draw,
 	onChangeSelection
 }: SelectionProps<Member>) => {
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
+	const [filteredSuggestions, setFilteredSuggestions] = useState<Member[]>([]);
 	const [inputValue, setInputValue] = React.useState('');
 	const [forceRender, setForceRender] = useState(false);
+	const inputRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		function handleClickOutside(event: MouseEvent) {
+			if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+				setFilteredSuggestions([]);
+				setInputValue('');
+			}
+		}
+
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [inputRef]);
 
 	useEffect(() => {
 		const arr: Member[] = []
@@ -56,12 +71,40 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 		if (newValue) {
 			(newValue as any).status = 'New';
 			setCurrentlySelected([...currentlySelected, newValue]);
-			setForceRender(true);
 			if ( onChangeSelection ) {
 				onChangeSelection([...currentlySelected, newValue]);
 			}
+			const filtered = filteredSuggestions.filter((suggestion) => {
+				if (objectName == 'Unit') {
+					return suggestion.id != newValue.id;
+				} else if (objectName == 'Person') {
+					return false; //TODO
+				}
+			});
+			setFilteredSuggestions(filtered);
 		}
 	}
+
+	// const fetchPersonsFromLDAP = async (autocompleteValue: string) => {
+	// 	const results = await fetch(`https://search-api.epfl.ch/api/ldap?q=${autocompleteValue}`, {
+	// 		headers: {
+	// 			accept: '*/*',
+	// 			'content-type': 'application/json',
+	// 			'sec-fetch-dest': 'empty',
+	// 			'sec-fetch-mode': 'cors',
+	// 			'sec-fetch-site': 'cross-site'
+	// 		},
+	// 		referrerPolicy: 'no-referrer-when-downgrade',
+	// 		method: 'GET',
+	// 		mode: 'cors',
+	// 		credentials: 'omit',
+	// 	});
+	//
+	// 	console.log(results);
+	// 	if (results.status === 200) {
+	//
+	// 	}
+	// }
 
 	function onDelete(item: Member) {
 		const itemStatus = item.status;
@@ -73,25 +116,64 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 		}
 	}
 
+	function onChangeInput(newValue: string) {
+		if (newValue) {
+			setInputValue(newValue);
+
+			let filtered: Member[] = [];
+			if (objectName == 'Unit') {
+				filtered = all?.filter((suggestion) => {
+					const alreadySelected = !!currentlySelected.find(s => s.id == suggestion.id);
+					return getUnitTitle(suggestion).toLowerCase().includes(newValue.toLowerCase()) && !alreadySelected;
+				}) || [];
+			} else if (objectName == 'Person') {
+				//TODO call LDAP
+			}
+
+			setFilteredSuggestions(filtered);
+		} else {
+			setFilteredSuggestions([]);
+		}
+	}
+
+	function getUnitTitle(unit: Member) {
+		return (unit.institute?.school?.name).concat(' ').concat(unit.institute?.name).concat(' ').concat(unit.name);
+	}
+
+	function getPersonTitle(person: Member) {
+		return person.name + ' ' + person.surname;
+	}
+
 	return (
-		<div>
-			<Autocomplete
-				onChange={(event: any, newValue: Member | null) => onChange(newValue)}
-				inputValue={inputValue}
-				onInputChange={(event, newInputValue) => {
-					setInputValue(newInputValue);
-				}}
+		<div ref={inputRef} >
+			<DebounceInput
+				input={inputValue}
 				id="member"
-				options={all}
-				getOptionLabel={(option) => {
-					if (objectName == 'Person') {
-						return option.name + ' ' + option.surname;
-					} else if (objectName == 'Unit') {
-						return option.name;
-					}
-				}}
-				renderInput={(params) => <TextField {...params} label="Chose " />}
+				onChange={onChangeInput}
+				placeholder="type somethings"
 			/>
+			<div style={{position: 'absolute', zIndex: '1', backgroundColor: 'white', boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)'}}>
+				{filteredSuggestions.length > 0 && (
+					<ul>
+						{filteredSuggestions.map((suggestion, index) => {
+							return (
+								<li
+									key={index}
+									onClick={() => onChange(suggestion)}
+									style={{ cursor: 'pointer', display: 'block',}}
+								>
+									{
+										objectName == 'Person'
+											? getPersonTitle(suggestion)
+											: (objectName == 'Unit'
+												? getUnitTitle(suggestion)
+												: '')
+									}
+								</li>
+							)})}
+					</ul>
+				)}
+			</div>
 			<div style={{marginTop: '10px'}}>
 				{currentlySelected.map(item => {
 						return (<FormCard
@@ -104,9 +186,9 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 								<small className="text-muted">
 									{
 										objectName == 'Person'
-											? item.name + ' ' + item.surname
+											? getPersonTitle(item)
 											: (objectName == 'Unit'
-											? (item.institute?.school?.name).concat(' ').concat(item.institute?.name).concat(' ').concat(item.name)
+											? getUnitTitle(item)
 											: '')
 									}
 								</small>
@@ -114,8 +196,6 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 						</FormCard>)
 					}
 				)}
-			</div>
-			<div style={{marginTop: '50px'}}>
 			</div>
 		</div>
 	);
