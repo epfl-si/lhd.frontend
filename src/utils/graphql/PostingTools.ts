@@ -1,4 +1,4 @@
-import {dispensationRequestType, roomDetailsForSaveType, roomDetailsType} from '../ressources/types';
+import {dispensationRequestType, personType, roomDetailsType} from '../ressources/types';
 
 export const createDispensation = async (
 	address: string | undefined,
@@ -172,17 +172,36 @@ export const updateDispensation = async (
 export const updateRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	room: roomDetailsForSaveType,
+	room: roomDetailsType,
 	variables: Object
 ): Promise<any> => {
-	const operationName = 'updateRoom';
-	const query = `mutation ${operationName} {
+	const query = `mutation updateRoom {
                updateRoom(
                name: "${room.name}",
-               kind: "${room.kind}",
+               kind: "${room.kind?.name}",
 							 vol: ${room.vol},
 							 vent: "${room.vent}",
-							 units: [${room.lhd_units}] ) {
+							 units: [${room.lhd_units.map(u => u.id)}] ) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+	return makeQuery(query, variables, address, authToken);
+};
+
+export const updateUnit = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	details: {unit: string, profs: personType[], cosecs: personType[]},
+	variables: Object
+): Promise<any> => {
+	const query = `mutation updateUnit {
+               updateUnit (
+               unit: "${details.unit}"
+							 profs: [${details.profs}]
+							 cosecs: [${details.cosecs}] ) {
                 errors {
                   message
                 }
@@ -190,7 +209,15 @@ export const updateRoom = async (
               }
             }`;
 
-	console.log(query);
+	return makeQuery(query, variables, address, authToken);
+};
+
+
+async function makeQuery(
+	 query: string,
+	 variables: Object,
+	 address: string | undefined,
+	 authToken: string | undefined): Promise<any> {
 	const results =
 		typeof address === 'string'
 			? await fetch(address, {
@@ -205,7 +232,7 @@ export const updateRoom = async (
 				referrerPolicy: 'no-referrer-when-downgrade',
 				body: JSON.stringify({
 					query,
-					variables,
+					variables
 				}),
 				method: 'POST',
 				mode: 'cors',
@@ -223,4 +250,4 @@ export const updateRoom = async (
 		status: results.status,
 		data: graphQLResponse.data,
 	};
-};
+}
