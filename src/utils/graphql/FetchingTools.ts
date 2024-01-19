@@ -279,3 +279,18 @@ export const fetchSingleDispensation = async (
 		data: version[version.length-1],
 	};
 };
+
+export const fetchPeopleFromFullText = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	fullText: string | null
+): Promise<any> => {
+	const query = `query FullTextTest {
+        personFullText(search:"${fullText}", lhdOnly: true) {
+          ... on DirectoryPerson { name surname email type}
+          ... on Person { name surname email type}
+        }
+      }`;
+
+	return await makeQuery(query, {}, address, authToken);
+};
