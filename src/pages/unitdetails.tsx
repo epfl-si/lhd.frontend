@@ -1,4 +1,4 @@
-import {Box, TextField, Typography} from '@material-ui/core';
+import {Box, Typography} from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { env } from '../utils/env.js';
 import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
@@ -7,17 +7,18 @@ import {
 } from '../utils/ressources/types';
 import '../../css/styles.css'
 import {notificationsVariants} from "../utils/ressources/variants";
-import {fetchUnitDetails, fetchUnits} from "../utils/graphql/FetchingTools";
-import {Tabs} from "epfl-elements-react/src/stories/molecules/Tabs.tsx";
-import {Autocomplete, FormControlLabel, Stack, Switch} from "@mui/material";
+import {fetchUnitDetails} from "../utils/graphql/FetchingTools";
+import {ResponsiveTabs} from "epfl-elements-react/src/stories/molecules/ResponsiveTabs.tsx";
 import Notifications from "../components/Table/Notifications";
-import {MultipleSelection} from "../components/Units/personSelection";
+import {MultipleSelection} from "../components/Units/MultipleSelection";
+import {updateUnit} from "../utils/graphql/PostingTools";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 
 export default function UnitDetails() {
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<lhdUnitsType[]>([]);
 
-	const [listOfPersons, setListfPerson] = useState<personType[]>([]);
 	const [savedProfs, setSavedProfs] = useState<personType[]>([]);
 	const [savedCosecs, setSavedCosecs] = useState<personType[]>([]);
 
@@ -26,6 +27,8 @@ export default function UnitDetails() {
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
+	let selectedProfs: personType[] = [];
+	let selectedCosecs: personType[] = [];
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -45,6 +48,9 @@ export default function UnitDetails() {
 						if (results.data[0]) {
 							setSavedProfs(results.data[0]?.professors);
 							setSavedCosecs(results.data[0]?.cosecs);
+							selectedCosecs = results.data[0]?.cosecs;
+							selectedProfs = results.data[0]?.professors;
+							debugger;
 						}
 					}
 				} else {
@@ -53,7 +59,7 @@ export default function UnitDetails() {
 			}
 		}
 
-		fetchData().catch(console.error);
+		fetchData();
 	}, [oidc.accessToken, window.location.search]);
 
 	function getUnitTitle(unit: lhdUnitsType) {
@@ -65,65 +71,88 @@ export default function UnitDetails() {
 	}
 
 	function saveUnitDetails() {
-		/*updateUnit(
+		debugger;
+		updateUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			formatData(),
+			{unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs},
 			{}
 		).then(res => {
-			if (res.status === 200) {
-				setNotificationType(notificationsVariants['unit-update-success']);
-			} else {
-				setNotificationType(notificationsVariants['unit-update-error']);
-			}
-			setOpenNotification(true);
-		});*/
+			setSavedCosecs(selectedCosecs);
+			setSavedProfs(selectedProfs);
+			handleOpen(res);
+		});
 	}
 
-	/*const formatData = (): unitDetailsForSaveType => {
-		let unit: unitDetailsForSaveType = {};
+	function onChangeProfs(changedPerson: personType[]) {
+		selectedProfs = (changedPerson.filter(u => u.status !== 'Deleted'));
+	}
 
-		return room;
-	};*/
+	function onChangeCosecs(changedPerson: personType[]) {
+		selectedCosecs = (changedPerson.filter(u => u.status !== 'Deleted'));
+	}
 
-	const handleClose = (event: Event, reason: string) => {
-		if (reason === 'clickaway') return;
+	const handleOpen = (res: any) => {
+		if (res.status === 200) {
+			setNotificationType(notificationsVariants['unit-update-success']);
+		} else {
+			setNotificationType(notificationsVariants['unit-update-error']);
+		}
+		setOpenNotification(true);
+	};
+
+	const handleClose = () => {
 		setOpenNotification(false);
 	};
 
 	return (
 		<Box>
 			<Typography variant="h5" gutterBottom>Details on unit {getUnitTitle(data[0])}</Typography>
-			<Tabs>
-				<Tabs.Tab id="profTab">
-					<Tabs.Tab.Title>
-						<span style={{fontWeight: 'bold'}}>Prof / Resp</span>
-					</Tabs.Tab.Title>
-					<Tabs.Tab.Content>
-						<Stack spacing={2} width="30%">
-							<MultipleSelection all={listOfPersons} selected={savedProfs} />
-						</Stack>
-					</Tabs.Tab.Content>
-				</Tabs.Tab>
-				<Tabs.Tab id="cosec">
-					<Tabs.Tab.Title>
-						<span style={{fontWeight: 'bold'}}>COSECs</span>
-					</Tabs.Tab.Title>
-					<Tabs.Tab.Content>
-						<Stack spacing={2} width="30%">
-							<MultipleSelection all={listOfPersons} selected={savedCosecs} />
-						</Stack>
-					</Tabs.Tab.Content>
-				</Tabs.Tab>
-				<Tabs.Tab id="subunits">
-					<Tabs.Tab.Title>
-						<span style={{fontWeight: 'bold'}}>Sub-Units</span>
-					</Tabs.Tab.Title>
-					<Tabs.Tab.Content>
 
-					</Tabs.Tab.Content>
-				</Tabs.Tab>
-			</Tabs>
+			<ResponsiveTabs
+				cardStyle={{
+					background: 'white',
+					fontSize: 'small'
+				}}
+			>
+				<ResponsiveTabs.Tab id="profTab">
+					<ResponsiveTabs.Tab.Title>
+						<b>Prof / Resp</b>
+					</ResponsiveTabs.Tab.Title>
+					<ResponsiveTabs.Tab.Content>
+						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
+					</ResponsiveTabs.Tab.Content>
+				</ResponsiveTabs.Tab>
+				<ResponsiveTabs.Tab id="cosec">
+					<ResponsiveTabs.Tab.Title>
+						<b>COSECs</b>
+					</ResponsiveTabs.Tab.Title>
+					<ResponsiveTabs.Tab.Content>
+						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
+					</ResponsiveTabs.Tab.Content>
+				</ResponsiveTabs.Tab>
+				<ResponsiveTabs.Tab id="subunits">
+					<ResponsiveTabs.Tab.Title>
+						<b>Sub-Units</b>
+					</ResponsiveTabs.Tab.Title>
+					<ResponsiveTabs.Tab.Content>
+
+					</ResponsiveTabs.Tab.Content>
+				</ResponsiveTabs.Tab>
+			</ResponsiveTabs>
+
+			<div style={{marginTop: '50px'}}>
+				<Button
+					onClick={() => saveUnitDetails()}
+					label="Save"
+					iconName={`${featherIcons}#save`}
+					primary/>
+			</div>
+			<Notifications
+				open={openNotification}
+				notification={notificationType}
+				close={handleClose}
+			/>
 		</Box>
 	);
 }
