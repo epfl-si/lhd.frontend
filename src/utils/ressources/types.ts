@@ -43,6 +43,8 @@ export type personType = {
 	name: string;
 	surname: string;
 	sciper: number;
+	email?: string;
+	type?: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
