@@ -201,8 +201,22 @@ export const updateUnit = async (
 	const query = `mutation updateUnit {
                updateUnit (
                unit: "${details.unit}"
-							 profs: [${details.profs}]
-							 cosecs: [${details.cosecs}] ) {
+							 profs: [${details.profs.map(prof => 
+								`{
+									name: "${prof.name}",
+									surname: "${prof.surname}",
+									sciper: ${prof.sciper},
+									email: "${prof.email}",
+									status: "${prof.status}"
+								}`)}]
+							 cosecs: [${details.cosecs.map(cosec =>
+		`{
+									name: "${cosec.name}",
+									surname: "${cosec.surname}",
+									sciper: ${cosec.sciper},
+									email: "${cosec.email}",
+									status: "${cosec.status}"
+								}`)}] ) {
                 errors {
                   message
                 }
