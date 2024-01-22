@@ -21,14 +21,14 @@ export default function UnitDetails() {
 
 	const [savedProfs, setSavedProfs] = useState<personType[]>([]);
 	const [savedCosecs, setSavedCosecs] = useState<personType[]>([]);
+	const [selectedProfs, setSelectedProfs] = useState<personType[]>([]);
+	const [selectedCosecs, setSelectedCosecs] = useState<personType[]>([]);
 
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	let selectedProfs: personType[] = [];
-	let selectedCosecs: personType[] = [];
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -48,9 +48,8 @@ export default function UnitDetails() {
 						if (results.data[0]) {
 							setSavedProfs(results.data[0]?.professors);
 							setSavedCosecs(results.data[0]?.cosecs);
-							selectedCosecs = results.data[0]?.cosecs;
-							selectedProfs = results.data[0]?.professors;
-							debugger;
+							setSelectedCosecs(results.data[0]?.cosecs);
+							setSelectedProfs(results.data[0]?.professors);
 						}
 					}
 				} else {
@@ -58,7 +57,6 @@ export default function UnitDetails() {
 				}
 			}
 		}
-
 		fetchData();
 	}, [oidc.accessToken, window.location.search]);
 
@@ -71,7 +69,6 @@ export default function UnitDetails() {
 	}
 
 	function saveUnitDetails() {
-		debugger;
 		updateUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
@@ -85,11 +82,11 @@ export default function UnitDetails() {
 	}
 
 	function onChangeProfs(changedPerson: personType[]) {
-		selectedProfs = (changedPerson.filter(u => u.status !== 'Deleted'));
+		setSelectedProfs(changedPerson.filter(u => u.status !== 'Deleted'));
 	}
 
 	function onChangeCosecs(changedPerson: personType[]) {
-		selectedCosecs = (changedPerson.filter(u => u.status !== 'Deleted'));
+		setSelectedCosecs(changedPerson.filter(u => u.status !== 'Deleted'));
 	}
 
 	const handleOpen = (res: any) => {
@@ -115,7 +112,7 @@ export default function UnitDetails() {
 					fontSize: 'small'
 				}}
 			>
-				<ResponsiveTabs.Tab id="profTab">
+				<ResponsiveTabs.Tab key="profTab" id="profTab">
 					<ResponsiveTabs.Tab.Title>
 						<b>Prof / Resp</b>
 					</ResponsiveTabs.Tab.Title>
@@ -123,7 +120,7 @@ export default function UnitDetails() {
 						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
-				<ResponsiveTabs.Tab id="cosec">
+				<ResponsiveTabs.Tab key="cosec" id="cosec">
 					<ResponsiveTabs.Tab.Title>
 						<b>COSECs</b>
 					</ResponsiveTabs.Tab.Title>
@@ -131,7 +128,7 @@ export default function UnitDetails() {
 						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
-				<ResponsiveTabs.Tab id="subunits">
+				<ResponsiveTabs.Tab key="subunits" id="subunits">
 					<ResponsiveTabs.Tab.Title>
 						<b>Sub-Units</b>
 					</ResponsiveTabs.Tab.Title>
