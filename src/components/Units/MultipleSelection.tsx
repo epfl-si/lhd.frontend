@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Autocomplete} from "@mui/material";
-import {TextField} from "@material-ui/core";
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import "epfl-elements-react/src/stories/molecules/button.css";
 import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
-import {fetchUnitDetails} from "../../utils/graphql/FetchingTools";
+import {fetchPeopleFromFullText, fetchUnitDetails, fetchUnits} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
+import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 
 interface SelectionProps<Member> {
 	/**
@@ -33,6 +32,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	selected,
 	onChangeSelection
 }: SelectionProps<Member>) => {
+	const oidc = useOpenIDConnectContext();
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
 	const [filteredSuggestions, setFilteredSuggestions] = useState<Member[]>([]);
 	const [inputValue, setInputValue] = React.useState('');
@@ -78,33 +78,12 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				if (objectName == 'Unit') {
 					return suggestion.id != newValue.id;
 				} else if (objectName == 'Person') {
-					return false; //TODO
+					return suggestion.sciper != newValue.sciper;
 				}
 			});
 			setFilteredSuggestions(filtered);
 		}
 	}
-
-	// const fetchPersonsFromLDAP = async (autocompleteValue: string) => {
-	// 	const results = await fetch(`https://search-api.epfl.ch/api/ldap?q=${autocompleteValue}`, {
-	// 		headers: {
-	// 			accept: '*/*',
-	// 			'content-type': 'application/json',
-	// 			'sec-fetch-dest': 'empty',
-	// 			'sec-fetch-mode': 'cors',
-	// 			'sec-fetch-site': 'cross-site'
-	// 		},
-	// 		referrerPolicy: 'no-referrer-when-downgrade',
-	// 		method: 'GET',
-	// 		mode: 'cors',
-	// 		credentials: 'omit',
-	// 	});
-	//
-	// 	console.log(results);
-	// 	if (results.status === 200) {
-	//
-	// 	}
-	// }
 
 	function onDelete(item: Member) {
 		const itemStatus = item.status;
@@ -120,21 +99,43 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 		if (newValue) {
 			setInputValue(newValue);
 
-			let filtered: Member[] = [];
 			if (objectName == 'Unit') {
+				let filtered: Member[] = [];
 				filtered = all?.filter((suggestion) => {
 					const alreadySelected = !!currentlySelected.find(s => s.id == suggestion.id);
 					return getUnitTitle(suggestion).toLowerCase().includes(newValue.toLowerCase()) && !alreadySelected;
 				}) || [];
+				setFilteredSuggestions(filtered);
 			} else if (objectName == 'Person') {
-				//TODO call LDAP
-			}
+				fetchPeople(newValue).then(r => {
 
-			setFilteredSuggestions(filtered);
+					let filtered: Member[] =  r?.filter((suggestion) => {
+						return !currentlySelected.find(s => s.sciper == suggestion.sciper);
+					}) || [];
+
+					setFilteredSuggestions(filtered);
+				});
+			}
 		} else {
 			setFilteredSuggestions([]);
 		}
 	}
+
+	const fetchPeople = async (newValue: string): Promise<Member[]> => {
+		const results = await fetchPeopleFromFullText(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			newValue
+		);
+		if (results.status === 200) {
+			if (results.data) {
+				return results.data;
+			} else {
+				console.error('Bad GraphQL results', results);
+			}
+		}
+		return [];
+	};
 
 	function getUnitTitle(unit: Member) {
 		return (unit.institute?.school?.name).concat(' ').concat(unit.institute?.name).concat(' ').concat(unit.name);
@@ -152,9 +153,9 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				onChange={onChangeInput}
 				placeholder="type somethings"
 			/>
-			<div style={{position: 'absolute', zIndex: '1', backgroundColor: 'white', boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)'}}>
+			<div style={{position: 'absolute', zIndex: '1', backgroundColor: 'white', boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)', maxHeight: '250px'}}>
 				{filteredSuggestions.length > 0 && (
-					<ul>
+					<ul style={{maxHeight: '250px', overflow: "hidden", overflowY: "scroll"}}>
 						{filteredSuggestions.map((suggestion, index) => {
 							return (
 								<li
@@ -163,11 +164,22 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 									style={{ cursor: 'pointer', display: 'block',}}
 								>
 									{
-										objectName == 'Person'
-											? getPersonTitle(suggestion)
-											: (objectName == 'Unit'
-												? getUnitTitle(suggestion)
-												: '')
+										objectName == 'Person' ?
+											<>
+												{suggestion.type == 'Person' ?
+													<span style={{
+														marginRight: '5px',
+														backgroundColor: 'gold',
+														padding: '2px',
+														fontWeight: 'bold',
+														boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)'}}>
+													LHD </span> : <></>}
+												<span>{getPersonTitle(suggestion)}</span>
+
+											</>
+											: objectName == 'Unit' ?
+												getUnitTitle(suggestion)
+												: ''
 									}
 								</li>
 							)})}
@@ -177,7 +189,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			<div style={{marginTop: '10px'}}>
 				{currentlySelected.map(item => {
 						return (<FormCard
-							key={item.sciper ? item.sciper : item.name}
+							key={objectName == 'Person' ? item.sciper : item.name}
 							icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
 							onClickIcon={() => onDelete(item)}
 							className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
