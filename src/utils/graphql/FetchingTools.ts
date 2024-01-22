@@ -142,11 +142,13 @@ export const fetchUnitDetails = async (
 									name
 									surname
 									sciper
+									email
 								}
 								professors {
 									name
 									surname
 									sciper
+									email
 								}
 						},
 					}`;
@@ -285,11 +287,15 @@ export const fetchPeopleFromFullText = async (
 	fullText: string | null
 ): Promise<any> => {
 	const query = `query FullTextTest {
-        personFullText(search:"${fullText}", lhdOnly: true) {
-          ... on DirectoryPerson { name surname email type}
-          ... on Person { name surname email type}
+        personFullText(search:"${fullText}") {
+          ... on DirectoryPerson { name surname email sciper type}
+          ... on Person { name surname email sciper type}
         }
       }`;
 
-	return await makeQuery(query, {}, address, authToken);
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.personFullText
+	};
 };
