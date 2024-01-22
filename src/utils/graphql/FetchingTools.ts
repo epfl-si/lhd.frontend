@@ -115,11 +115,10 @@ export const fetchRoomDetails = async (
 					}
 				}
 			}*/
-
 	const result = await makeQuery(query, variables, address, authToken);
 	return {
 		status: result.status,
-		data: result?.rooms,
+		data: result.data?.rooms,
 	};
 };
 
@@ -155,7 +154,7 @@ export const fetchUnitDetails = async (
 	const result = await makeQuery(query, variables, address, authToken);
 	return {
 		status: result.status,
-		data: result?.units,
+		data: result.data?.units,
 	};
 };
 
@@ -172,7 +171,7 @@ export const fetchRoomTypes = async (
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result?.roomKinds,
+		data: result.data?.roomKinds,
 	};
 };
 
@@ -206,7 +205,7 @@ export const fetchUnits = async (
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result?.units,
+		data: result.data?.units,
 	};
 };
 
@@ -224,7 +223,7 @@ export const fetchSlugs = async (
 	const result = await makeQuery(query, variables, address, authToken);
 	return {
 		status: result.status,
-		data: result?.dispensations,
+		data: result.data?.dispensations,
 	};
 };
 
@@ -242,8 +241,8 @@ export const fetchDispFormDetails = async (
 								sciper
 							}
 						}`;
-
-	return await makeQuery(query, variables, address, authToken);
+	const result = await makeQuery(query, variables, address, authToken);
+	return result;
 };
 
 export const fetchSingleDispensation = async (
@@ -272,7 +271,7 @@ export const fetchSingleDispensation = async (
 							}`;
 
 	const result = await makeQuery(query, variables, address, authToken);
-	const version = result?.dispensations[0]?.versions;
+	const version = result.data?.dispensations[0]?.versions;
 
 	return {
 		status: result.status,
