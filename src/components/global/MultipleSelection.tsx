@@ -3,9 +3,10 @@ import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import "epfl-elements-react/src/stories/molecules/button.css";
 import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
-import {fetchPeopleFromFullText, fetchUnitDetails, fetchUnits} from "../../utils/graphql/FetchingTools";
+import {fetchPeopleFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import "./multipleSelection.css"
 
 interface SelectionProps<Member> {
 	/**
@@ -153,27 +154,22 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				onChange={onChangeInput}
 				placeholder="type somethings"
 			/>
-			<div style={{position: 'absolute', zIndex: '1', backgroundColor: 'white', boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)', maxHeight: '250px'}}>
+			<div className="resultDiv">
 				{filteredSuggestions.length > 0 && (
-					<ul style={{maxHeight: '250px', overflow: "hidden", overflowY: "scroll"}}>
+					<ul className="ulList">
 						{filteredSuggestions.map((suggestion, index) => {
 							return (
 								<li
 									key={index}
 									onClick={() => onChange(suggestion)}
-									style={{ cursor: 'pointer', display: 'block',}}
+									className="liItem"
 								>
 									{
 										objectName == 'Person' ?
 											<>
 												{suggestion.type == 'Person' ?
-													<span style={{
-														marginRight: '5px',
-														backgroundColor: 'gold',
-														padding: '2px',
-														fontWeight: 'bold',
-														boxShadow: '0px 8px 16px 0px rgba(0,0,0,0.2)'}}>
-													LHD </span> : <></>}
+													<span className="spanLHD">
+													LHD <span style={{fontSize: 'small'}}>✔️</span> </span> : <></>}
 												<span>{getPersonTitle(suggestion)}</span>
 
 											</>

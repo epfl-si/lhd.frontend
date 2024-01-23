@@ -10,12 +10,14 @@ import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchUnitDetails} from "../utils/graphql/FetchingTools";
 import {ResponsiveTabs} from "epfl-elements-react/src/stories/molecules/ResponsiveTabs.tsx";
 import Notifications from "../components/Table/Notifications";
-import {MultipleSelection} from "../components/Units/MultipleSelection";
+import {MultipleSelection} from "../components/global/MultipleSelection";
 import {updateUnit} from "../utils/graphql/PostingTools";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {useTranslation} from "react-i18next";
 
 export default function UnitDetails() {
+	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<lhdUnitsType[]>([]);
 
@@ -104,7 +106,7 @@ export default function UnitDetails() {
 
 	return (
 		<Box>
-			<Typography variant="h5" gutterBottom>Details on unit {getUnitTitle(data[0])}</Typography>
+			<Typography variant="h5" gutterBottom>{t(`unit_details.title`)} {getUnitTitle(data[0])}</Typography>
 
 			<ResponsiveTabs
 				cardStyle={{
@@ -114,7 +116,7 @@ export default function UnitDetails() {
 			>
 				<ResponsiveTabs.Tab key="profTab" id="profTab">
 					<ResponsiveTabs.Tab.Title>
-						<b>Prof / Resp</b>
+						<b>{t(`unit_details.profTab`)}</b>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
@@ -122,7 +124,7 @@ export default function UnitDetails() {
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="cosec" id="cosec">
 					<ResponsiveTabs.Tab.Title>
-						<b>COSECs</b>
+						<b>{t(`unit_details.cosecTab`)}</b>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
@@ -130,7 +132,7 @@ export default function UnitDetails() {
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="subunits" id="subunits">
 					<ResponsiveTabs.Tab.Title>
-						<b>Sub-Units</b>
+						<b>{t(`unit_details.subunitTab`)}</b>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 
@@ -141,7 +143,7 @@ export default function UnitDetails() {
 			<div style={{marginTop: '50px'}}>
 				<Button
 					onClick={() => saveUnitDetails()}
-					label="Save"
+					label={t(`generic.saveButton`)}
 					iconName={`${featherIcons}#save`}
 					primary/>
 			</div>
