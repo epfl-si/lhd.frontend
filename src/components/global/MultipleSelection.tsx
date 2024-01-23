@@ -6,6 +6,7 @@ import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
 import {fetchPeopleFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import {useTranslation} from "react-i18next";
 import "./multipleSelection.css"
 
 interface SelectionProps<Member> {
@@ -33,6 +34,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	selected,
 	onChangeSelection
 }: SelectionProps<Member>) => {
+	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
 	const [filteredSuggestions, setFilteredSuggestions] = useState<Member[]>([]);
@@ -152,7 +154,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				input={inputValue}
 				id="member"
 				onChange={onChangeInput}
-				placeholder="type somethings"
+				placeholder={objectName == 'Person' ? t(`unit_details.personPlaceholder`) : t(`room_details.unitPlaceholder`)}
 			/>
 			<div className="resultDiv">
 				{filteredSuggestions.length > 0 && (

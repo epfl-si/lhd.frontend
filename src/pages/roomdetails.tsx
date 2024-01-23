@@ -19,7 +19,7 @@ import {updateRoom} from "../utils/graphql/PostingTools";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import {MultipleSelection} from "../components/Units/MultipleSelection";
+import {MultipleSelection} from "../components/global/MultipleSelection";
 
 export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();

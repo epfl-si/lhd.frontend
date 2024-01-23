@@ -43,6 +43,18 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				unit_details: {
+					personPlaceholder: 'Search a person',
+					profTab: 'Prof / Resp',
+					cosecTab: 'COSECs',
+					subunitTab: 'Sub-Units',
+					title: 'Details on unit'
+				},
+				unit: {
+					name: 'Name',
+					institute: 'Institute',
+					school: 'School',
+				},
 				logout: 'Logout',
 				login: {
 					button: 'Login',
@@ -67,7 +79,8 @@ i18next.use(initReactI18next).init({
 					},
 				},
 				room_details: {
-					details: 'Details'
+					details: 'Details',
+					unitPlaceholder: 'Search a unit',
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -99,6 +112,14 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				generic: {
+					saveButton: 'Save',
+				},
+				menu: {
+					rooms: 'Rooms / Hazards',
+					units: 'Units',
+					dispensations: 'Dispensations'
+				}
 			},
 		},
 		fr: {
@@ -139,6 +160,18 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				unit_details: {
+					personPlaceholder: 'Cherche une personne',
+					profTab: 'Prof / Resp',
+					cosecTab: 'COSECs',
+					subunitTab: 'Sub-Unités',
+					title: 'Détails de l\'unité'
+				},
+				unit: {
+					name: 'Nom',
+					institute: 'Institut',
+					school: 'Ecole',
+				},
 				logout: 'Déconnexion',
 				login: {
 					button: 'Connexion',
@@ -163,7 +196,8 @@ i18next.use(initReactI18next).init({
 					},
 				},
 				room_details: {
-					details: 'Détails'
+					details: 'Détails',
+					unitPlaceholder: 'Cherche une unité',
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
@@ -195,6 +229,14 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				generic: {
+					saveButton: 'Enregistrer',
+				},
+				menu: {
+					rooms: 'Rooms / Hazards',
+					units: 'Unités',
+					dispensations: 'Dispensations'
+				}
 			},
 		},
 	},

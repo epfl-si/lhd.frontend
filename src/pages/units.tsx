@@ -5,21 +5,23 @@ import {env} from "../utils/env";
 import {Box} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {columnType, lhdUnitsType, parameterType} from "../utils/ressources/types";
+import {useTranslation} from "react-i18next";
 
 export default function UnitControl() {
+	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<lhdUnitsType[]>([]);
 	const [optionsList, setOptionsList] = useState<parameterType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const columns: columnType[] = [
-		{field: "name", headerName: "Name", width: 230},
-		{field: "institute", headerName: "Institute", width: 130, valueGetter: (params) => {
+		{field: "name", headerName: t('unit.name'), width: 230},
+		{field: "institute", headerName: t('unit.institute'), width: 130, valueGetter: (params) => {
 				if (params.row.institute && params.row.institute.name) {
 						return params.row.institute.name;
 				}
 				return "";
 			}},
-		{field: "school", headerName: "School", width: 130, valueGetter: (params) => {
+		{field: "school", headerName: t('unit.school'), width: 130, valueGetter: (params) => {
 				if (params.row.institute && params.row.institute.school && params.row.institute.school.name) {
 						return params.row.institute.school.name;
 				}

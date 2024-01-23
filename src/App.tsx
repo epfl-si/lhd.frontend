@@ -50,13 +50,13 @@ function App() {
 				<Base.AsideMenu>
 					<ul>
 						<li>
-							<Link to="/">Rooms / Hazards</Link>
+							<Link to="/">{t(`menu.rooms`)}</Link>
 						</li>
 						<li>
-							<Link to="/unitcontrol">Units</Link>
+							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
 						<li>
-							<Link to="/dispcontrol">Dispensations</Link>
+							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
 						</li>
 					</ul>
 				</Base.AsideMenu>
