@@ -1,4 +1,4 @@
-import {dispensationRequestType, personType, roomDetailsType} from '../ressources/types';
+import {dispensationRequestType, lhdUnitsType, personType, roomDetailsType} from '../ressources/types';
 import {makeQuery} from "./Utils";
 
 export const createDispensation = async (
@@ -195,7 +195,7 @@ export const updateRoom = async (
 export const updateUnit = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	details: {unit: string, profs: personType[], cosecs: personType[]},
+	details: {unit: string, profs: personType[], cosecs: personType[], subUnits: lhdUnitsType[]},
 	variables: Object
 ): Promise<any> => {
 	const query = `mutation updateUnit {
@@ -210,13 +210,18 @@ export const updateUnit = async (
 									status: "${prof.status}"
 								}`)}]
 							 cosecs: [${details.cosecs.map(cosec =>
-		`{
+								`{
 									name: "${cosec.name}",
 									surname: "${cosec.surname}",
 									sciper: ${cosec.sciper},
 									email: "${cosec.email}",
 									status: "${cosec.status}"
-								}`)}] ) {
+								}`)}]
+								subUnits: [${details.subUnits.map(u =>
+								`{
+									name: "${u.name}",
+									status: "${u.status}"
+								}`)}]) {
                 errors {
                   message
                 }

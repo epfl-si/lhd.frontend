@@ -150,6 +150,9 @@ export const fetchUnitDetails = async (
 									sciper
 									email
 								}
+								subUnits {
+									name
+								}
 						},
 					}`;
 

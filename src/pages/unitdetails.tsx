@@ -11,6 +11,7 @@ import {fetchUnitDetails} from "../utils/graphql/FetchingTools";
 import {ResponsiveTabs} from "epfl-elements-react/src/stories/molecules/ResponsiveTabs.tsx";
 import Notifications from "../components/Table/Notifications";
 import {MultipleSelection} from "../components/global/MultipleSelection";
+import {SubUnits} from "../components/Units/SubUnitsList";
 import {updateUnit} from "../utils/graphql/PostingTools";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
@@ -23,8 +24,10 @@ export default function UnitDetails() {
 
 	const [savedProfs, setSavedProfs] = useState<personType[]>([]);
 	const [savedCosecs, setSavedCosecs] = useState<personType[]>([]);
+	const [savedSubUnits, setSavedSubUnits] = useState<lhdUnitsType[]>([]);
 	const [selectedProfs, setSelectedProfs] = useState<personType[]>([]);
 	const [selectedCosecs, setSelectedCosecs] = useState<personType[]>([]);
+	const [selectedSubUnits, setSelectedSubUnits] = useState<lhdUnitsType[]>([]);
 
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
@@ -50,8 +53,10 @@ export default function UnitDetails() {
 						if (results.data[0]) {
 							setSavedProfs(results.data[0]?.professors);
 							setSavedCosecs(results.data[0]?.cosecs);
+							setSavedSubUnits(results.data[0].subUnits);
 							setSelectedCosecs(results.data[0]?.cosecs);
 							setSelectedProfs(results.data[0]?.professors);
+							setSelectedSubUnits(results.data[0].subUnits);
 						}
 					}
 				} else {
@@ -74,11 +79,12 @@ export default function UnitDetails() {
 		updateUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			{unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs},
+			{unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
 			{}
 		).then(res => {
 			setSavedCosecs(selectedCosecs);
 			setSavedProfs(selectedProfs);
+			setSavedSubUnits(selectedSubUnits);
 			handleOpen(res);
 		});
 	}
@@ -89,6 +95,10 @@ export default function UnitDetails() {
 
 	function onChangeCosecs(changedPerson: personType[]) {
 		setSelectedCosecs(changedPerson.filter(u => u.status !== 'Deleted'));
+	}
+
+	function onChangeSubUnits(changedSubUnit: lhdUnitsType[]) {
+		setSelectedSubUnits(changedSubUnit.filter(u => u.status !== 'Deleted'));
 	}
 
 	const handleOpen = (res: any) => {
@@ -135,7 +145,7 @@ export default function UnitDetails() {
 						<b>{t(`unit_details.subunitTab`)}</b>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
-
+						<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 			</ResponsiveTabs>

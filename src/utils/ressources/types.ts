@@ -26,6 +26,7 @@ export type lhdUnitsType = {
 	id: number;
 	cosecs: personType[];
 	professors: personType[];
+	subUnits: lhdUnitsType[];
 	institute?: instituteType;
 	status?: 'New' | 'Deleted' | 'Default';
 };

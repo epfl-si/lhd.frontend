@@ -44,11 +44,12 @@ i18next.use(initReactI18next).init({
 					},
 				},
 				unit_details: {
-					personPlaceholder: 'Search a person',
+					personPlaceholder: 'Select a person',
 					profTab: 'Prof / Resp',
 					cosecTab: 'COSECs',
 					subunitTab: 'Sub-Units',
-					title: 'Details on unit'
+					title: 'Details on unit',
+					addNewUnit: 'Add a new sub-unit'
 				},
 				unit: {
 					name: 'Name',
@@ -161,11 +162,12 @@ i18next.use(initReactI18next).init({
 					},
 				},
 				unit_details: {
-					personPlaceholder: 'Cherche une personne',
+					personPlaceholder: 'Sélectionner une personne',
 					profTab: 'Prof / Resp',
 					cosecTab: 'COSECs',
 					subunitTab: 'Sub-Unités',
-					title: 'Détails de l\'unité'
+					title: 'Détails de l\'unité',
+					addNewUnit: 'Ajouter une nouvelle sub-unité'
 				},
 				unit: {
 					name: 'Nom',
