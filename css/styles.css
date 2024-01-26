@@ -17,3 +17,9 @@
     border-color: unset;
     border-style: unset;
 }
+
+.tab-text-title {
+    font-weight: normal;
+    font-size: small;
+    display: contents;
+}
