@@ -82,6 +82,7 @@ i18next.use(initReactI18next).init({
 				room_details: {
 					details: 'Details',
 					unitPlaceholder: 'Search a unit',
+					hazards: 'Hazards'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -115,6 +116,7 @@ i18next.use(initReactI18next).init({
 				},
 				generic: {
 					saveButton: 'Save',
+					deleteButton: 'Delete'
 				},
 				menu: {
 					rooms: 'Rooms / Hazards',
@@ -200,6 +202,7 @@ i18next.use(initReactI18next).init({
 				room_details: {
 					details: 'Détails',
 					unitPlaceholder: 'Cherche une unité',
+					hazards: 'Dangers'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
@@ -233,6 +236,7 @@ i18next.use(initReactI18next).init({
 				},
 				generic: {
 					saveButton: 'Enregistrer',
+					deleteButton: 'Soupprimer'
 				},
 				menu: {
 					rooms: 'Rooms / Hazards',
