@@ -203,19 +203,23 @@ export const updateUnit = async (
                unit: "${details.unit}"
 							 profs: [${details.profs.map(prof => 
 								`{
-									name: "${prof.name}",
-									surname: "${prof.surname}",
-									sciper: ${prof.sciper},
-									email: "${prof.email}",
-									status: "${prof.status}"
+									status: "${prof.status}",
+									person: {
+										name: "${prof.name}",
+										surname: "${prof.surname}",
+										sciper: ${prof.sciper},
+										email: "${prof.email}"
+									}
 								}`)}]
 							 cosecs: [${details.cosecs.map(cosec =>
 								`{
-									name: "${cosec.name}",
-									surname: "${cosec.surname}",
-									sciper: ${cosec.sciper},
-									email: "${cosec.email}",
-									status: "${cosec.status}"
+									status: "${cosec.status}",
+									person: {
+										name: "${cosec.name}",
+										surname: "${cosec.surname}",
+										sciper: ${cosec.sciper},
+										email: "${cosec.email}"
+									}
 								}`)}]
 								subUnits: [${details.subUnits.map(u =>
 								`{
