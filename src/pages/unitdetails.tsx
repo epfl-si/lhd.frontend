@@ -82,27 +82,37 @@ export default function UnitDetails() {
 			{unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
 			{}
 		).then(res => {
-			setSavedCosecs(selectedCosecs);
-			setSavedProfs(selectedProfs);
-			setSavedSubUnits(selectedSubUnits);
+			console.log(res.data);
+			if(res.status == 200 && !res.data?.updateUnit?.errors) {
+				setSavedCosecs(selectedCosecs.filter(u => u.status !== 'Deleted'));
+				setSavedProfs(selectedProfs.filter(u => u.status !== 'Deleted'));
+				setSavedSubUnits(selectedSubUnits.filter(u => u.status !== 'Deleted'));
+			}
 			handleOpen(res);
 		});
 	}
 
 	function onChangeProfs(changedPerson: personType[]) {
-		setSelectedProfs(changedPerson.filter(u => u.status !== 'Deleted'));
+		setSelectedProfs(changedPerson);
 	}
 
 	function onChangeCosecs(changedPerson: personType[]) {
-		setSelectedCosecs(changedPerson.filter(u => u.status !== 'Deleted'));
+		setSelectedCosecs(changedPerson);
 	}
 
 	function onChangeSubUnits(changedSubUnit: lhdUnitsType[]) {
-		setSelectedSubUnits(changedSubUnit.filter(u => u.status !== 'Deleted'));
+		setSelectedSubUnits(changedSubUnit);
 	}
 
 	const handleOpen = (res: any) => {
-		if (res.status === 200) {
+		if (res.data?.updateUnit?.errors) {
+			const n = notificationsVariants['unit-update-error'];
+			const notif: notificationType = {
+				text: n.text.concat(' \n').concat(res.data?.updateUnit?.errors[0].message),
+				type: n.type
+			};
+			setNotificationType(notif);
+		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['unit-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['unit-update-error']);
