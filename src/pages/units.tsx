@@ -6,6 +6,9 @@ import {Box} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {columnType, lhdUnitsType, parameterType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import { GridRenderCellParams } from "@mui/x-data-grid";
+
 
 export default function UnitControl() {
 	const { t } = useTranslation();
@@ -14,8 +17,18 @@ export default function UnitControl() {
 	const [optionsList, setOptionsList] = useState<parameterType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const columns: columnType[] = [
+		{
+			field: "unitId", headerName: '', width: 30,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				params.row.unitId ? <></> :
+					<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+						<use xlinkHref={`${featherIcons}#layers`}></use>
+					</svg>
+			),
+		},
 		{field: "name", headerName: t('unit.name'), width: 230},
-		{field: "institute", headerName: t('unit.institute'), width: 130, valueGetter: (params) => {
+		{
+			field: "institute", headerName: t('unit.institute'), width: 130, valueGetter: (params) => {
 				if (params.row.institute && params.row.institute.name) {
 						return params.row.institute.name;
 				}
@@ -26,7 +39,7 @@ export default function UnitControl() {
 						return params.row.institute.school.name;
 				}
 				return "";
-			}}
+			}},
 	];
 
 	useEffect(() => {

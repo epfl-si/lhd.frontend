@@ -126,7 +126,14 @@ export default function UnitDetails() {
 
 	return (
 		<Box>
-			<Typography variant="h5" gutterBottom>{t(`unit_details.title`)} {getUnitTitle(data[0])}</Typography>
+			<Typography variant="h5" gutterBottom>
+				{
+					(data[0]?.unitId ? '' :
+						<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+							<use xlinkHref={`${featherIcons}#layers`}></use>
+						</svg>)
+				} {(t(`unit_details.title`)).concat(' ').concat(getUnitTitle(data[0]))}
+			</Typography>
 
 			<ResponsiveTabs
 				cardStyle={{
