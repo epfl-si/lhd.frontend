@@ -20,8 +20,10 @@ import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {MultipleSelection} from "../components/global/MultipleSelection";
+import {useTranslation} from "react-i18next";
 
 export default function RoomDetails() {
+	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType | null>(null);
 	const [roomKind, setRoomKind] = React.useState<kindType[]>([]);
@@ -127,14 +129,19 @@ export default function RoomDetails() {
 					<Tabs>
 						<Tabs.Tab id="details">
 							<Tabs.Tab.Title>
-								<span style={{fontWeight: 'bold'}}>Details</span>
+								<div style={{display: 'flex', justifyContent: 'center'}}>
+									<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+										<use xlinkHref={`${featherIcons}#users`}></use>
+									</svg>
+									<span className="tab-text-title">{t(`room_details.details`)}</span>
+								</div>
 							</Tabs.Tab.Title>
 							<Tabs.Tab.Content>
 								<Stack spacing={2} width="30%">
 									<Autocomplete
 										value={data?.kind?.name || ''}
 										onChange={(event: any, newValue: string | null) => {
-											if (data && data.kind && newValue) {
+											if ( data && data.kind && newValue ) {
 												data.kind.name = newValue;
 												setForceRender(true);
 											}
@@ -194,7 +201,12 @@ export default function RoomDetails() {
 						</Tabs.Tab>
 						<Tabs.Tab id="2">
 							<Tabs.Tab.Title>
-								<span style={{fontWeight: 'bold'}}>Hazards</span>
+								<div style={{display: 'flex', justifyContent: 'center'}}>
+									<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+										<use xlinkHref={`${featherIcons}#users`}></use>
+									</svg>
+									<span className="tab-text-title">{t(`room_details.hazards`)}</span>
+								</div>
 							</Tabs.Tab.Title>
 							<Tabs.Tab.Content>
 

@@ -126,7 +126,12 @@ export default function UnitDetails() {
 			>
 				<ResponsiveTabs.Tab key="profTab" id="profTab">
 					<ResponsiveTabs.Tab.Title>
-						<b>{t(`unit_details.profTab`)}</b>
+						<div style={{display: 'flex', justifyContent: 'center'}}>
+							<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+								<use xlinkHref={`${featherIcons}#user`}></use>
+							</svg>
+							<span className="tab-text-title">{t(`unit_details.profTab`)}</span>
+						</div>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
@@ -134,20 +139,32 @@ export default function UnitDetails() {
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="cosec" id="cosec">
 					<ResponsiveTabs.Tab.Title>
-						<b>{t(`unit_details.cosecTab`)}</b>
+						<div style={{display: 'flex', justifyContent: 'center'}}>
+							<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+								<use xlinkHref={`${featherIcons}#shield`}></use>
+							</svg>
+							<span className="tab-text-title">{t(`unit_details.cosecTab`)}</span>
+						</div>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
-				<ResponsiveTabs.Tab key="subunits" id="subunits">
-					<ResponsiveTabs.Tab.Title>
-						<b>{t(`unit_details.subunitTab`)}</b>
-					</ResponsiveTabs.Tab.Title>
-					<ResponsiveTabs.Tab.Content>
-						<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
-					</ResponsiveTabs.Tab.Content>
-				</ResponsiveTabs.Tab>
+				{
+					data[0]?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits" >
+							<ResponsiveTabs.Tab.Title>
+								<div style={{display: 'flex', justifyContent: 'center'}}>
+									<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
+										<use xlinkHref={`${featherIcons}#layers`}></use>
+									</svg>
+									<span className="tab-text-title">{t(`unit_details.subunitTab`)}</span>
+								</div>
+							</ResponsiveTabs.Tab.Title>
+							<ResponsiveTabs.Tab.Content>
+								<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
+							</ResponsiveTabs.Tab.Content>
+						</ResponsiveTabs.Tab>) : <></>
+				}
 			</ResponsiveTabs>
 
 			<div style={{marginTop: '50px'}}>
