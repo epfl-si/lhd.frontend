@@ -233,5 +233,25 @@ export const updateUnit = async (
               }
             }`;
 
+	console.log(query);
+	return makeQuery(query, variables, address, authToken);
+};
+
+export const deleteUnit = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	unit: string,
+	variables: Object
+): Promise<any> => {
+	const query = `mutation deleteUnit {
+               deleteUnit(unit: "${unit}" )
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
 	return makeQuery(query, variables, address, authToken);
 };
