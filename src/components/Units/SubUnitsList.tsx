@@ -2,7 +2,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 import {Text} from "epfl-elements-react/src/stories/molecules/inputFields/Text.tsx";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
 import {lhdUnitsType} from "../../utils/ressources/types";
@@ -29,6 +28,7 @@ export const SubUnits = ({
 	const oidc = useOpenIDConnectContext();
 	const [currentlySelected, setCurrentlySelected] = React.useState<lhdUnitsType[]>(selected);
 	const [inputValue, setInputValue] = React.useState('');
+	const [forceRender, setForceRender] = useState(false);
 
 	useEffect(() => {
 		const arr: lhdUnitsType[] = []
@@ -39,10 +39,16 @@ export const SubUnits = ({
 		setCurrentlySelected(arr);
 	}, [selected]);
 
+	useEffect(() => {
+		if (forceRender)
+			setForceRender(false);
+	}, [forceRender]);
+
 	function onDelete(item: lhdUnitsType) {
+		debugger;
 		const itemStatus = item.status;
-		item.status = 'Default';
 		item.status = itemStatus === 'Deleted' ? (selected.includes(item) ? 'Default' : 'New') : 'Deleted';
+		setForceRender(true);
 		if ( onChangeSelection ) {
 			onChangeSelection(currentlySelected);
 		}
