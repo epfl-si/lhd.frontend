@@ -8,6 +8,7 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
 import "./multipleSelection.css"
+import "../../../css/styles.css";
 
 interface SelectionProps<Member> {
 	/**
@@ -90,7 +91,6 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 
 	function onDelete(item: Member) {
 		const itemStatus = item.status;
-		(item as any).status = 'Default';
 		(item as any).status = itemStatus === 'Deleted' ? (selected.includes(item) ? 'Default' : 'New') : 'Deleted';
 		setForceRender(true);
 		if ( onChangeSelection ) {
@@ -184,7 +184,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 					</ul>
 				)}
 			</div>
-			<div style={{marginTop: '10px'}}>
+			<div className="form-card-div">
 				{currentlySelected.map(item => {
 						return (<FormCard
 							key={objectName == 'Person' ? item.sciper : item.name}

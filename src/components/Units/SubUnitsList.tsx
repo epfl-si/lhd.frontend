@@ -6,7 +6,7 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
 import {lhdUnitsType} from "../../utils/ressources/types";
-import "./subUnitList.css"
+import "../../../css/styles.css";
 
 interface SubUnitsProps {
 	parentName: string;

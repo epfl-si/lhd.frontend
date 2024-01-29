@@ -23,3 +23,10 @@
     font-size: small;
     display: contents;
 }
+
+.form-card-div {
+    margin-top: 10px;
+    overflow: hidden;
+    overflow-y: scroll;
+    max-height: 350px;
+}
