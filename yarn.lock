@@ -9004,15 +9004,16 @@ __metadata:
 
 "epfl-elements-react@file:../epfl-elements-react::locator=lhd3-frontend%40workspace%3A.":
   version: 0.0.0
-  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=81219e&locator=lhd3-frontend%40workspace%3A."
+  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=b75dc4&locator=lhd3-frontend%40workspace%3A."
   dependencies:
     bootstrap: "npm:^4"
     csstype: "npm:^3.1.3"
     epfl-elements: "npm:^4.6.1"
-    react-bootstrap: "npm:^2.9.1"
+    p-debounce-throttle: "npm:^0.2.1"
+    react-bootstrap: "npm:^2.10.0"
   peerDependencies:
     react: ^17 || ^18
-  checksum: b0683f1ade14e92aea6d7817a64713d5938e0b2a14470557f57ca0f85411d7b0d3a0ab823efbb66ed317316f7ce218e11ee8b805c2a9541a7506357b0beae7cd
+  checksum: f667ba10ebe9ccb2787cbfe54551401fc0930206fffcf801fab7a63c2b998fcd39fa52ff97dc4a2057939a28bfff3eeffdd0f37010cfcfbafa9c76759eeed78a
   languageName: node
   linkType: hard
 
@@ -12904,6 +12905,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"p-debounce-throttle@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "p-debounce-throttle@npm:0.2.1"
+  checksum: 7cd91ff1fe8f41b150df7a79e2ccf969724ecbebf1b3b937d64da28053c3cd94d2054a175d0597208f92291c4e659f70addf1b7fd36355dd4f4fdeadcd399d7b
+  languageName: node
+  linkType: hard
+
 "p-limit@npm:^2.0.0, p-limit@npm:^2.2.0":
   version: 2.3.0
   resolution: "p-limit@npm:2.3.0"
@@ -13514,9 +13522,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-bootstrap@npm:^2.9.1":
-  version: 2.9.1
-  resolution: "react-bootstrap@npm:2.9.1"
+"react-bootstrap@npm:^2.10.0":
+  version: 2.10.0
+  resolution: "react-bootstrap@npm:2.10.0"
   dependencies:
     "@babel/runtime": "npm:^7.22.5"
     "@restart/hooks": "npm:^0.4.9"
@@ -13537,7 +13545,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/react":
       optional: true
-  checksum: 4079f767bd3bdd960354ce084cb3f0797f3b9fd656760b05732ece6327661a6fad0b19731d07a6bbf36de6e307d9a8a0472857dc322563bc2da1b88d6d3e13ca
+  checksum: 8cdcc44cb303e33898854f4ab59570c115ae48b1d500cefa3f84729aad022967e92f8077e42eea597f4e6423836c1bee5f07674243aac2cd321e36fa7b016c5a
   languageName: node
   linkType: hard
 
