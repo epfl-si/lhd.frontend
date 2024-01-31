@@ -187,11 +187,11 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			<div className="form-card-div">
 				{currentlySelected.map(item => {
 						return (<FormCard
-							key={objectName == 'Person' ? item.sciper : item.name}
+							keyValue={objectName == 'Person' ? item.sciper + "" : item.name}
 							icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
 							onClickIcon={() => onDelete(item)}
 							className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
-						>
+							key={objectName == 'Person' ? item.sciper + "" : item.name}>
 							<div>
 								<small className="text-muted">
 									{

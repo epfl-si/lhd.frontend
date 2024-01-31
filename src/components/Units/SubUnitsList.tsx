@@ -25,7 +25,6 @@ export const SubUnits = ({
 	onChangeSelection
 }: SubUnitsProps) => {
 	const { t } = useTranslation();
-	const oidc = useOpenIDConnectContext();
 	const [currentlySelected, setCurrentlySelected] = React.useState<lhdUnitsType[]>(selected);
 	const [inputValue, setInputValue] = React.useState('');
 	const [forceRender, setForceRender] = useState(false);
@@ -94,7 +93,7 @@ export const SubUnits = ({
 						<ul className="nested">
 							{currentlySelected.map(item => {
 									return (<li><FormCard
-										key={item.name}
+										keyValue={item.name}
 										icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
 										onClickIcon={() => onDelete(item)}
 										className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
