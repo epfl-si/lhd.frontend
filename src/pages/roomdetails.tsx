@@ -29,13 +29,13 @@ export default function RoomDetails() {
 	const [roomKind, setRoomKind] = React.useState<kindType[]>([]);
 	const [units, setUnits] = useState<lhdUnitsType[]>([]);
 	const [savedUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
+	const [selectedUnits, setSelectedUnits] = useState<lhdUnitsType[]>([]);
 	const [forceRender, setForceRender] = useState(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	let selectedUnits: lhdUnitsType[] = [];
 
 	useEffect(() => {
 		if (forceRender)
@@ -43,45 +43,47 @@ export default function RoomDetails() {
 	}, [forceRender, selectedUnits]);
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const loadFetch = async () => {
-			const results = await fetchRoomDetails(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				urlParams.get('room'),
-				{}
-			);
-			if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
-				setData(results.data[0]);
-				if (results.data[0].lhd_units) {
-					setSavedUnits(results.data[0].lhd_units);
-					selectedUnits = (results.data[0].lhd_units);
-				}
-				setForceRender(true);
-			} else {
-				console.error('Bad GraphQL results', results);
-			}
-
-			const resultsRoomTypes = await fetchRoomTypes(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken
-			);
-
-			if (resultsRoomTypes.status === 200 && resultsRoomTypes.data && typeof resultsRoomTypes.data !== 'string') {
-				setRoomKind(resultsRoomTypes.data);
-			}
-
-			const resultsUnits = await fetchUnits(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken
-			);
-
-			if (resultsUnits.status === 200 && resultsUnits.data && typeof resultsUnits.data !== 'string') {
-				setUnits(resultsUnits.data);
-			}
-		};
 		loadFetch();
 	}, [oidc.accessToken, window.location.search]);
+
+	const loadFetch = async () => {
+		const urlParams = new URLSearchParams(window.location.search);
+
+		const results = await fetchRoomDetails(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			urlParams.get('room'),
+			{}
+		);
+		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
+			setData(results.data[0]);
+			if (results.data[0].lhd_units) {
+				setSavedUnits(results.data[0].lhd_units);
+				setSelectedUnits(results.data[0].lhd_units);
+			}
+			setForceRender(true);
+		} else {
+			console.error('Bad GraphQL results', results);
+		}
+
+		const resultsRoomTypes = await fetchRoomTypes(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken
+		);
+
+		if (resultsRoomTypes.status === 200 && resultsRoomTypes.data && typeof resultsRoomTypes.data !== 'string') {
+			setRoomKind(resultsRoomTypes.data);
+		}
+
+		const resultsUnits = await fetchUnits(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken
+		);
+
+		if (resultsUnits.status === 200 && resultsUnits.data && typeof resultsUnits.data !== 'string') {
+			setUnits(resultsUnits.data);
+		}
+	};
 
 	function saveRoomDetails() {
 		updateRoom(
@@ -91,7 +93,7 @@ export default function RoomDetails() {
 			{}
 		).then(res => {
 			handleOpen(res);
-			setSavedUnits(selectedUnits);
+			setSavedUnits(selectedUnits.filter(u => u.status !== 'Deleted'));
 		});
 	}
 
@@ -107,7 +109,7 @@ export default function RoomDetails() {
 	};
 
 	function onChangeUnits(changedUnits: lhdUnitsType[]) {
-		selectedUnits = (changedUnits.filter(u => u.status !== 'Deleted'));
+		setSelectedUnits(changedUnits);
 	}
 
 	const handleOpen = (res: any) => {
