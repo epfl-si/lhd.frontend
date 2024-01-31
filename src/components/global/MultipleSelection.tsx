@@ -148,6 +148,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 		return person.name + ' ' + person.surname;
 	}
 
+	let lhd = true;
 	return (
 		<div ref={inputRef} >
 			<DebounceInput
@@ -159,28 +160,40 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			<div className="resultDiv">
 				{filteredSuggestions.length > 0 && (
 					<ul className="ulList">
+						{objectName == 'Person' ? <li className="divider li-multiselection-divider">LHD</li> : <></>}
 						{filteredSuggestions.map((suggestion, index) => {
-							return (
-								<li
-									key={index}
-									onClick={() => onChange(suggestion)}
-									className="liItem"
-								>
-									{
-										objectName == 'Person' ?
-											<>
-												{suggestion.type == 'Person' ?
-													<span className="spanLHD">
-													LHD <span style={{fontSize: 'small'}}>✔️</span> </span> : <></>}
-												<span>{getPersonTitle(suggestion)}</span>
-
-											</>
-											: objectName == 'Unit' ?
-												getUnitTitle(suggestion)
-												: ''
-									}
-								</li>
-							)})}
+							if (lhd && suggestion.type == 'DirectoryPerson') {
+								lhd = false;
+								return (
+									<>
+										<li className="divider li-multiselection-divider">LDAP</li>
+										<li
+											key={index}
+											onClick={() => onChange(suggestion)}
+											className="liItem"
+										>
+											getPersonTitle(suggestion)
+										</li>
+									</>
+								)
+							} else {
+								return (
+									<li
+										key={index}
+										onClick={() => onChange(suggestion)}
+										className="liItem"
+									>
+										{
+											objectName == 'Person' ?
+													getPersonTitle(suggestion)
+												: objectName == 'Unit' ?
+													getUnitTitle(suggestion)
+													: ''
+										}
+									</li>
+								)
+							}
+						})}
 					</ul>
 				)}
 			</div>

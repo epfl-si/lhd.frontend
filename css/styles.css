@@ -30,3 +30,10 @@
     overflow-y: scroll;
     max-height: 350px;
 }
+
+.li-multiselection-divider {
+    color: darkgray;
+    background-color: lavender;
+    font-weight: bold;
+    font-size: small;
+}
