@@ -182,7 +182,11 @@ export const updateRoom = async (
                kind: "${room.kind?.name}",
 							 vol: ${room.vol},
 							 vent: "${room.vent}",
-							 units: [${room.lhd_units.map(u => u.id)}] ) {
+							 units: [${room.lhd_units.map(u =>
+								`{
+									name: "${u.name}",
+									status: "${u.status}"
+								}`)}] ) {
                 errors {
                   message
                 }
