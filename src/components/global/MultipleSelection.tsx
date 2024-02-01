@@ -172,7 +172,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 											onClick={() => onChange(suggestion)}
 											className="liItem"
 										>
-											getPersonTitle(suggestion)
+											{getPersonTitle(suggestion)}
 										</li>
 									</>
 								)
