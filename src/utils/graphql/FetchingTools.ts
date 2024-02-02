@@ -180,7 +180,6 @@ export const fetchRoomTypes = async (
 	};
 };
 
-
 export const fetchUnits = async (
 	address: string | undefined,
 	authToken: string | undefined
@@ -211,6 +210,40 @@ export const fetchUnits = async (
 	return {
 		status: result.status,
 		data: result.data?.units,
+	};
+};
+
+export const fetchUnitsFromFullText = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	search: string
+): Promise<fetchUnitsType> => {
+	const query: string = `query UnitFetchFromFullText { 
+						unitsFromFullText(search: "${search}") {
+							name
+							unitId
+							id
+							institute {
+								name
+								school {
+									name
+								}
+							}
+							cosecs {
+								name
+								surname
+							}
+							professors {
+								name
+								surname
+							}
+						}
+					}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.unitsFromFullText,
 	};
 };
 

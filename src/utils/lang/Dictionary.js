@@ -58,6 +58,8 @@ i18next.use(initReactI18next).init({
 					name: 'Name',
 					institute: 'Institute',
 					school: 'School',
+					search: 'Search...',
+					unitList: 'Units'
 				},
 				logout: 'Logout',
 				login: {
@@ -182,6 +184,8 @@ i18next.use(initReactI18next).init({
 					name: 'Nom',
 					institute: 'Institut',
 					school: 'Ecole',
+					search: 'Rechercher...',
+					unitList: 'Unités'
 				},
 				logout: 'Déconnexion',
 				login: {

@@ -27,7 +27,6 @@ export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType | null>(null);
 	const [roomKind, setRoomKind] = React.useState<kindType[]>([]);
-	const [units, setUnits] = useState<lhdUnitsType[]>([]);
 	const [savedUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
 	const [selectedUnits, setSelectedUnits] = useState<lhdUnitsType[]>([]);
 	const [forceRender, setForceRender] = useState(false);
@@ -73,15 +72,6 @@ export default function RoomDetails() {
 
 		if (resultsRoomTypes.status === 200 && resultsRoomTypes.data && typeof resultsRoomTypes.data !== 'string') {
 			setRoomKind(resultsRoomTypes.data);
-		}
-
-		const resultsUnits = await fetchUnits(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken
-		);
-
-		if (resultsUnits.status === 200 && resultsUnits.data && typeof resultsUnits.data !== 'string') {
-			setUnits(resultsUnits.data);
 		}
 	};
 
@@ -183,7 +173,7 @@ export default function RoomDetails() {
 										}
 										label="Ventilation"
 									/>
-									<MultipleSelection all={units} selected={savedUnits} objectName="Unit" onChangeSelection={onChangeUnits}/>
+									<MultipleSelection selected={savedUnits} objectName="Unit" onChangeSelection={onChangeUnits}/>
 
 									<div style={{marginTop: '50px'}}>
 										<Button

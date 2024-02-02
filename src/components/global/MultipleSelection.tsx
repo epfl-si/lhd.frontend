@@ -3,7 +3,7 @@ import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import "epfl-elements-react/src/stories/molecules/button.css";
 import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
-import {fetchPeopleFromFullText} from "../../utils/graphql/FetchingTools";
+import {fetchPeopleFromFullText, fetchUnits, fetchUnitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
@@ -16,10 +16,6 @@ interface SelectionProps<Member> {
 	 */
 	objectName: string;
 	/**
-	 * The complete list of all members that may be selected
-	 */
-	all?: Member[];
-	/**
 	 * the list of initially selected members
 	 */
 	selected: Member[];
@@ -31,7 +27,6 @@ interface SelectionProps<Member> {
 
 export const MultipleSelection = <Member extends Record<string, any>>({
 	objectName,
-	all,
 	selected,
 	onChangeSelection
 }: SelectionProps<Member>) => {
@@ -64,7 +59,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			arr.push(s)
 		});
 		setCurrentlySelected(arr);
-	}, [selected, all]);
+	}, [selected]);
 
 	useEffect(() => {
 		if (forceRender)
@@ -103,12 +98,15 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			setInputValue(newValue);
 
 			if (objectName == 'Unit') {
-				let filtered: Member[] = [];
-				filtered = all?.filter((suggestion) => {
-					const alreadySelected = !!currentlySelected.find(s => s.id == suggestion.id);
-					return getUnitTitle(suggestion).toLowerCase().includes(newValue.toLowerCase()) && !alreadySelected;
-				}) || [];
-				setFilteredSuggestions(filtered);
+				fetchUnitsList(newValue).then(r => {
+
+					let filtered: Member[] =  r.filter((suggestion) => {
+						const alreadySelected = !!currentlySelected.find(s => s.id == suggestion.id);
+						return getUnitTitle(suggestion).toLowerCase().includes(newValue.toLowerCase()) && !alreadySelected;
+					}) || [];
+
+					setFilteredSuggestions(filtered);
+				});
 			} else if (objectName == 'Person') {
 				fetchPeople(newValue).then(r => {
 
@@ -124,12 +122,25 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 		}
 	}
 
+	const fetchUnitsList = async (newValue: string): Promise<Member[]> => {
+		const results = await fetchUnitsFromFullText(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			newValue
+		);
+		return analyseResult(results);
+	};
+
 	const fetchPeople = async (newValue: string): Promise<Member[]> => {
 		const results = await fetchPeopleFromFullText(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue
 		);
+		return analyseResult(results);
+	};
+
+	function analyseResult(results): Promise<Member[]> {
 		if (results.status === 200) {
 			if (results.data) {
 				return results.data;
@@ -138,7 +149,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			}
 		}
 		return [];
-	};
+	}
 
 	function getUnitTitle(unit: Member) {
 		return (unit.institute?.school?.name).concat(' ').concat(unit.institute?.name).concat(' ').concat(unit.name);

@@ -1,13 +1,14 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchUnits} from "../utils/graphql/FetchingTools";
+import {fetchUnits, fetchUnitsFromFullText} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
-import {Box} from "@material-ui/core";
+import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {columnType, lhdUnitsType, parameterType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import { GridRenderCellParams } from "@mui/x-data-grid";
+import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput";
 
 
 export default function UnitControl() {
@@ -16,6 +17,7 @@ export default function UnitControl() {
 	const [tableData, setTableData] = useState<lhdUnitsType[]>([]);
 	const [optionsList, setOptionsList] = useState<parameterType[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [search, setSearch] = React.useState('');
 	const columns: columnType[] = [
 		{
 			field: "unitId", headerName: '', width: 30,
@@ -45,9 +47,10 @@ export default function UnitControl() {
 	useEffect(() => {
 		const loadFetch = async () => {
 			setLoading(true);
-			const results = await fetchUnits(
+			const results = await fetchUnitsFromFullText(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken
+				oidc.accessToken,
+				search
 			);
 			if (results.status === 200) {
 				if (results.data) {
@@ -59,10 +62,28 @@ export default function UnitControl() {
 			setLoading(false);
 		};
 		loadFetch();
-	}, [oidc.accessToken]);
+	}, [oidc.accessToken, search]);
+
+	function onChangeInput(newValue: string) {
+		if (newValue) {
+			setSearch(newValue);
+		} else {
+			setSearch('');
+		}
+	}
 
 	return (
 		<Box>
+			<Typography variant="h5" gutterBottom>
+				{t(`unit.unitList`)}
+			</Typography>
+			<DebounceInput
+				input={search}
+				id="member"
+				onChange={onChangeInput}
+				placeholder={t(`unit.search`)}
+				className="debounce-input"
+			/>
 			<EntriesTableCategory
 				optionsList={optionsList}
 				tableData={tableData}
