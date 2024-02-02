@@ -8,7 +8,7 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
 import "./multipleSelection.css"
-import "../../../css/styles.css";
+import "../../../css/styles.scss";
 
 interface SelectionProps<Member> {
 	/**

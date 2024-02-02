@@ -5,7 +5,7 @@ import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
 import {lhdUnitsType} from "../../utils/ressources/types";
-import "../../../css/styles.css";
+import "../../../css/styles.scss";
 
 interface SubUnitsProps {
 	parentName: string;

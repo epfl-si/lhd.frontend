@@ -5,7 +5,7 @@ import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
 import {
 	notificationType, lhdUnitsType, personType
 } from '../utils/ressources/types';
-import '../../css/styles.css'
+import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchUnitDetails} from "../utils/graphql/FetchingTools";
 import {ResponsiveTabs} from "epfl-elements-react/src/stories/molecules/ResponsiveTabs.tsx";

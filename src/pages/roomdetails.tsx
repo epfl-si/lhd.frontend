@@ -13,7 +13,7 @@ import {
 import { Tabs } from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
 import { Button } from 'epfl-elements-react/src/stories/molecules/Button.tsx'
 import { Autocomplete, Switch } from '@mui/material';
-import '../../css/styles.css'
+import '../../css/styles.scss'
 import "epfl-elements-react/src/stories/molecules/formCard.css";
 import {updateRoom} from "../utils/graphql/PostingTools";
 import {notificationsVariants} from "../utils/ressources/variants";
