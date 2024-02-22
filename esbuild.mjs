@@ -18,6 +18,10 @@ const commonBuildConfig = {
   loader: {
     ".js": "jsx",
     ".css": "global-css",
+    '.eot': 'file',
+    '.woff': 'file',
+    '.woff2': 'file',
+    '.ttf': 'file',
   },
   outfile: 'dist/lhd3-frontend.js',  // and implicitly,
                                      // dist/lhd3-frontend.css for all
