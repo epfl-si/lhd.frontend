@@ -1,6 +1,6 @@
 import React from 'react';
-import { Base } from './epfl-elements/Base';
-import { Avatar } from './epfl-elements/Avatar';
+import { Base } from 'epfl-elements-react/src/Base';
+import { Avatar } from 'epfl-elements-react/src/Avatar';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import BioHazard from './pages/biohazard';
 import HomePage from './pages/homepage';
