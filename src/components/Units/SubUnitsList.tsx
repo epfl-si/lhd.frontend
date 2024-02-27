@@ -41,15 +41,22 @@ export const SubUnits = ({
 	useEffect(() => {
 		if (forceRender)
 			setForceRender(false);
-	}, [forceRender]);
+	}, [forceRender, currentlySelected]);
 
 	function onDelete(item: lhdUnitsType) {
-		debugger;
 		const itemStatus = item.status;
-		item.status = itemStatus === 'Deleted' ? (selected.includes(item) ? 'Default' : 'New') : 'Deleted';
-		setForceRender(true);
-		if ( onChangeSelection ) {
-			onChangeSelection(currentlySelected);
+		if (item.status == 'New' && onChangeSelection ) {
+			const filtered = currentlySelected.filter(s => s.name != item.name || s.status != 'New');
+			setCurrentlySelected(filtered);
+			if ( onChangeSelection ) {
+				onChangeSelection(filtered);
+			}
+		} else {
+			item.status = itemStatus === 'Deleted' ? 'Default' : 'Deleted';
+			setForceRender(true);
+			if ( onChangeSelection ) {
+				onChangeSelection(currentlySelected);
+			}
 		}
 	}
 
@@ -93,6 +100,7 @@ export const SubUnits = ({
 						<ul className="nested">
 							{currentlySelected.map(item => {
 									return (<li><FormCard
+										key={item.name}
 										keyValue={item.name}
 										icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
 										onClickIcon={() => onDelete(item)}
