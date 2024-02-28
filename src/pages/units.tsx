@@ -8,8 +8,7 @@ import {columnType, lhdUnitsType, parameterType} from "../utils/ressources/types
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import { GridRenderCellParams } from "@mui/x-data-grid";
-import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput";
-
+import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 
 export default function UnitControl() {
 	const { t } = useTranslation();
