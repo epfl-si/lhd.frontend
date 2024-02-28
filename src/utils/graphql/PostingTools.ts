@@ -237,7 +237,6 @@ export const updateUnit = async (
               }
             }`;
 
-	console.log(query);
 	return makeQuery(query, variables, address, authToken);
 };
 

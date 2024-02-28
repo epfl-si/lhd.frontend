@@ -104,17 +104,6 @@ export const fetchRoomDetails = async (
 				},
 			}`;
 
-	/*dispensations {
-				slug
-				versions {
-					subject
-					date_end
-					status
-					holders {
-						name
-					}
-				}
-			}*/
 	const result = await makeQuery(query, variables, address, authToken);
 	return {
 		status: result.status,
