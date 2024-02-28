@@ -6,20 +6,6 @@ export default function HomePage() {
 			<RoomTable
 				gQuery={`rooms { 
 					name
-					occupancies { 
-						cosecs { name }
-						professors { name }
-						unit {
-							name
-							institute {
-								name
-								school {
-									name
-								}
-							}
-							unitId
-						}
-					}
 					building
 					sector
 					floor
