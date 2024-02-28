@@ -1,6 +1,6 @@
 import React from 'react';
-import { Base } from './epfl-elements/Base';
-import { Avatar } from './epfl-elements/Avatar';
+import { Base } from 'epfl-elements-react/src/Base';
+import { Avatar } from 'epfl-elements-react/src/Avatar';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import BioHazard from './pages/biohazard';
 import HomePage from './pages/homepage';
@@ -22,6 +22,8 @@ import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
 import NewDispForm from './components/DispensationControls/NewDispForm';
+import UnitControl from "./pages/units";
+import UnitDetails from "./pages/unitdetails";
 
 function App() {
 	const { t } = useTranslation();
@@ -47,28 +49,14 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
-						<li className="active">
-							<a href="#">Hazards</a>
+						<li>
+							<Link to="/">{t(`menu.rooms`)}</Link>
 						</li>
 						<li>
-							<ul>
-								<li>
-									<Link to="/">Home</Link>
-								</li>
-								<li>
-									<Link to="/biohazard">Bio hazards</Link>
-								</li>
-							</ul>
-						</li>
-						<li className="active">
-							<a href="#">Control records</a>
+							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
 						<li>
-							<ul>
-								<li>
-									<Link to="/dispcontrol">Dispensations</Link>
-								</li>
-							</ul>
+							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
 						</li>
 					</ul>
 				</Base.AsideMenu>
@@ -93,6 +81,12 @@ function App() {
 
 				<div className="container-full" style={{ width: '100%', padding: '1em' }}>
 					<Switch>
+						<Route path="/unitcontrol">
+							<UnitControl />
+						</Route>
+						<Route path="/unitdetails">
+							<UnitDetails />
+						</Route>
 						<Route path="/dispcontrol">
 							<DispensationControls />
 						</Route>

@@ -1,5 +1,6 @@
-import { roomDetailsType, roomType } from '../ressources/types';
+import {kindType, lhdUnitsType, roomDetailsType, roomType} from '../ressources/types';
 import { formatDataToColumns } from './ParsingTools';
+import {makeQuery} from "./Utils";
 
 type fetchResultsType = {
 	status?: number;
@@ -9,6 +10,16 @@ type fetchResultsType = {
 type fetchRoomResultsType = {
 	status?: number;
 	data?: roomDetailsType[] | string;
+};
+
+type fetchKindRoomType = {
+	status?: number;
+	data?: kindType[] | string;
+};
+
+type fetchUnitsType = {
+	status?: number;
+	data?: lhdUnitsType[] | string;
 };
 
 export const fetchResults = async (
@@ -60,68 +71,168 @@ export const fetchRoomDetails = async (
 	room: string | null,
 	variables: Object
 ): Promise<fetchRoomResultsType> => {
-	const operationName = 'SingleRoomFetch';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `query ${operationName} { 
+	const query: string = `query SingleRoomFetch { 
 				rooms (where: { name: { equals: "${room}"} }) {
 					name
+					building
+					sector
+					floor
+					vol
+					vent
 					kind {
 						name
 					}
-					occupancies {
-						cosecs {
+					lhd_units {
+            id
+            unitId
+						name
+						institute {
 							name
-						}
-						professors {
-							name
-						}
-						unit {
-							name
-						}
-					}
-					yearly_audits
-					dispensations {
-						slug
-						versions {
-							subject
-							date_end
-							status
-							holders {
+							school {
 								name
 							}
 						}
+						cosecs {
+							name
+							surname
+						}
+						professors {
+							name
+							surname
+						}
 					}
 				},
-			}`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-			  })
-			: null;
+			}`;
 
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-
+	const result = await makeQuery(query, variables, address, authToken);
 	return {
-		status: results.status,
-		data: graphQLResponse.data?.rooms,
+		status: result.status,
+		data: result.data?.rooms,
+	};
+};
+
+export const fetchUnitDetails = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	unit: string | null,
+	variables: Object
+): Promise<fetchUnitsType> => {
+	const query: string = `query SingleUnitFetch { 
+						units (where: {name: { equals: "${unit}"} }) {
+							unitId
+								name
+								institute {
+									name
+									school {
+										name
+									}
+								}
+								cosecs {
+									name
+									surname
+									sciper
+									email
+								}
+								professors {
+									name
+									surname
+									sciper
+									email
+								}
+								subUnits {
+									name
+								}
+						},
+					}`;
+
+	const result = await makeQuery(query, variables, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.units,
+	};
+};
+
+export const fetchRoomTypes = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<fetchKindRoomType> => {
+	const query: string = `query KindRoomFetch { 
+						roomKinds {
+							name
+						}
+					}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.roomKinds,
+	};
+};
+
+export const fetchUnits = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<fetchUnitsType> => {
+	const query: string = `query UnitFetch { 
+						units {
+							name
+							unitId
+							id
+							institute {
+								name
+								school {
+									name
+								}
+							}
+							cosecs {
+								name
+								surname
+							}
+							professors {
+								name
+								surname
+							}
+						}
+					}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.units,
+	};
+};
+
+export const fetchUnitsFromFullText = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	search: string
+): Promise<fetchUnitsType> => {
+	const query: string = `query UnitFetchFromFullText { 
+						unitsFromFullText(search: "${search}") {
+							name
+							unitId
+							id
+							institute {
+								name
+								school {
+									name
+								}
+							}
+							cosecs {
+								name
+								surname
+							}
+							professors {
+								name
+								surname
+							}
+						}
+					}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.unitsFromFullText,
 	};
 };
 
@@ -130,44 +241,16 @@ export const fetchSlugs = async (
 	authToken: string | undefined,
 	variables: Object
 ): Promise<any> => {
-	const operationName = 'getSlugs';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-ch-ua-mobile': '?0',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `query ${operationName} {
+	const query = `query getSlugs {
 							dispensations {
 								slug
 							}
-						}
-						`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-			  })
-			: null;
+						}`;
 
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-
+	const result = await makeQuery(query, variables, address, authToken);
 	return {
-		status: results.status,
-		data: graphQLResponse.data?.dispensations,
+		status: result.status,
+		data: result.data?.dispensations,
 	};
 };
 
@@ -176,22 +259,7 @@ export const fetchDispFormDetails = async (
 	authToken: string | undefined,
 	variables: Object
 ): Promise<any> => {
-	const operationName = 'getDispensationFormDetails';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-ch-ua-mobile': '?0',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `query ${operationName} {
+	const query = `query getDispensationFormDetails {
 							rooms {
 								name
 							}
@@ -199,26 +267,9 @@ export const fetchDispFormDetails = async (
 								name
 								sciper
 							}
-						}
-						`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-			  })
-			: null;
-
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-
-	return {
-		status: results.status,
-		data: graphQLResponse.data,
-	};
+						}`;
+	const result = await makeQuery(query, variables, address, authToken);
+	return result;
 };
 
 export const fetchSingleDispensation = async (
@@ -227,21 +278,7 @@ export const fetchSingleDispensation = async (
 	slug: string | null,
 	variables: Object
 ): Promise<any> => {
-	const operationName = 'SingleDispensationFetch';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `query ${operationName} { 
+	const query = `query SingleDispensationFetch { 
 							dispensations (where: { slug: { contains: "${slug}" }}) {
 								versions {
 									subject
@@ -258,24 +295,32 @@ export const fetchSingleDispensation = async (
 									}
 								}
 								},
-							}`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-			  })
-			: null;
+							}`;
 
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-	const version = graphQLResponse.data?.dispensations[0]?.versions;
+	const result = await makeQuery(query, variables, address, authToken);
+	const version = result.data?.dispensations[0]?.versions;
 
 	return {
-		status: results.status,
+		status: result.status,
 		data: version[version.length-1],
+	};
+};
+
+export const fetchPeopleFromFullText = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	fullText: string | null
+): Promise<any> => {
+	const query = `query FullTextTest {
+        personFullText(search:"${fullText}") {
+          ... on DirectoryPerson { name surname email sciper type}
+          ... on Person { name surname email sciper type}
+        }
+      }`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.personFullText
 	};
 };

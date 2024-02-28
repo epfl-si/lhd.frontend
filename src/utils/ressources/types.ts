@@ -16,33 +16,45 @@ export type columnType = {
 	width: number;
 };
 
-type kindType = {
+export type kindType = {
 	name: string;
 };
 
-type occupanciesType = {
-	cosecs?: cosecsType[];
-	professors?: professorsType[];
-	unit?: unitType;
+export type lhdUnitsType = {
+	name: string;
+	unitId?: number;
+	id: number;
+	cosecs: personType[];
+	professors: personType[];
+	subUnits: lhdUnitsType[];
+	institute?: instituteType;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
-type cosecsType = {
-	name: string;
-};
+type instituteType = {
+	name?: string;
+	school?: schoolType;
+}
 
-type professorsType = {
-	name: string;
-};
+type schoolType = {
+	name?: string;
+}
 
-type unitType = {
+export type personType = {
 	name: string;
+	surname: string;
+	sciper: number;
+	email?: string;
+	type?: string;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
 export type roomDetailsType = {
-	id: number;
 	name: string;
 	kind?: kindType;
-	occupancies: occupanciesType[];
+	vol?: number;
+	vent?: string;
+	lhd_units: lhdUnitsType[];
 	yearly_audits?: number;
 };
 

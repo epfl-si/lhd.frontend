@@ -1,4 +1,5 @@
-import { dispensationRequestType } from '../ressources/types';
+import {dispensationRequestType, lhdUnitsType, personType, roomDetailsType} from '../ressources/types';
+import {makeQuery} from "./Utils";
 
 export const createDispensation = async (
 	address: string | undefined,
@@ -167,4 +168,93 @@ export const updateDispensation = async (
 		status: results.status,
 		data: graphQLResponse.data,
 	};
+};
+
+export const updateRoom = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	room: roomDetailsType,
+	variables: Object
+): Promise<any> => {
+	const query = `mutation updateRoom {
+               updateRoom(
+               name: "${room.name}",
+               kind: "${room.kind?.name}",
+							 vol: ${room.vol},
+							 vent: "${room.vent}",
+							 units: [${room.lhd_units.map(u =>
+								`{
+									name: "${u.name}",
+									status: "${u.status}"
+								}`)}] ) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+	return makeQuery(query, variables, address, authToken);
+};
+
+export const updateUnit = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	details: {unit: string, profs: personType[], cosecs: personType[], subUnits: lhdUnitsType[]},
+	variables: Object
+): Promise<any> => {
+	const query = `mutation updateUnit {
+               updateUnit (
+               unit: "${details.unit}"
+							 profs: [${details.profs.map(prof => 
+								`{
+									status: "${prof.status}",
+									person: {
+										name: "${prof.name}",
+										surname: "${prof.surname}",
+										sciper: ${prof.sciper},
+										email: "${prof.email}"
+									}
+								}`)}]
+							 cosecs: [${details.cosecs.map(cosec =>
+								`{
+									status: "${cosec.status}",
+									person: {
+										name: "${cosec.name}",
+										surname: "${cosec.surname}",
+										sciper: ${cosec.sciper},
+										email: "${cosec.email}"
+									}
+								}`)}]
+								subUnits: [${details.subUnits.map(u =>
+								`{
+									name: "${u.name}",
+									status: "${u.status}"
+								}`)}]) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, variables, address, authToken);
+};
+
+export const deleteUnit = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	unit: string,
+	variables: Object
+): Promise<any> => {
+	const query = `mutation deleteUnit {
+               deleteUnit(unit: "${unit}" )
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, variables, address, authToken);
 };

@@ -28,4 +28,20 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Dispensation deletion failed',
 	},
+	'room-update-success': {
+		type: 'success',
+		text: 'Room has successfully been updated',
+	},
+	'room-update-error': {
+		type: 'error',
+		text: 'Room update failed',
+	},
+	'unit-update-success': {
+		type: 'success',
+		text: 'Unit has successfully been updated',
+	},
+	'unit-update-error': {
+		type: 'error',
+		text: 'Unit update failed',
+	},
 };
