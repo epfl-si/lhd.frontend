@@ -9004,7 +9004,7 @@ __metadata:
 
 "epfl-elements-react@file:../epfl-elements-react::locator=lhd3-frontend%40workspace%3A.":
   version: 0.0.0
-  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=1d59f3&locator=lhd3-frontend%40workspace%3A."
+  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=3372c7&locator=lhd3-frontend%40workspace%3A."
   dependencies:
     bootstrap: "npm:^4"
     csstype: "npm:^3.1.3"
@@ -9013,7 +9013,7 @@ __metadata:
     react-bootstrap: "npm:^2.10.0"
   peerDependencies:
     react: ^17 || ^18
-  checksum: 85f0f5f89c82b392e0bc6149863544c59a228c1a176aaf74ea93d58686a0e7ee8e984c4dd5f70c3475de817471ba8509745f649a8b87d600f7b48bfce89b5f69
+  checksum: 32da9c74173479d4725ba05fcfc5681946cd107c967256fb2f0526cb4e1a6344acfba311e12984de8cda8725989cb88d52907f75b60a1ad6ec36df7bf51b75af
   languageName: node
   linkType: hard
 
