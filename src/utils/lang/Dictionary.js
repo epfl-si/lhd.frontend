@@ -9,24 +9,6 @@ i18next.use(initReactI18next).init({
 			translation: {
 				room: {
 					name: 'Room',
-					occupancies: {
-						cosecs: {
-							name: 'Cosec',
-						},
-						professors: {
-							name: 'Professor',
-						},
-						unit: {
-							name: 'Unit',
-							institute: {
-								name: 'Institute',
-								school: {
-									name: 'School',
-								},
-							},
-							unitId: 'Unit ID',
-						},
-					},
 					building: 'Building',
 					sector: 'Sector',
 					floor: 'Floor',
@@ -87,7 +69,9 @@ i18next.use(initReactI18next).init({
 				room_details: {
 					details: 'Details',
 					unitPlaceholder: 'Search a unit',
-					hazards: 'Hazards'
+					hazards: 'Hazards',
+					title: 'Details on room ',
+					designation: 'Designation'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -128,6 +112,20 @@ i18next.use(initReactI18next).init({
 					rooms: 'Rooms / Hazards',
 					units: 'Units',
 					dispensations: 'Dispensations'
+				},
+				hazards: {
+					Biological: 'Biological',
+					Chemical: 'Chemical',
+					CompressedGas: 'Compressed Gas',
+					Cryogenics: 'Cryogenics',
+					Electrical: 'Electrical',
+					EMRadiation: 'EM Radiation',
+					IonisingRadiation: 'Ionising Radiation',
+					Laser: 'Laser',
+					Nanoparticles: 'Nanoparticles',
+					Noise: 'Noise',
+					StaticMagneticField: 'Static Magnetic Field',
+					Temperature: 'Temperature',
 				}
 			},
 		},
@@ -135,24 +133,6 @@ i18next.use(initReactI18next).init({
 			translation: {
 				room: {
 					name: 'Salle',
-					occupancies: {
-						cosecs: {
-							name: 'Cosec',
-						},
-						professors: {
-							name: 'Professeur',
-						},
-						unit: {
-							name: 'Unité',
-							institute: {
-								name: 'Institut',
-								school: {
-									name: 'École',
-								},
-							},
-							unitId: 'ID Unité',
-						},
-					},
 					building: 'Bâtiment',
 					sector: 'Secteur',
 					floor: 'Étage',
@@ -213,7 +193,9 @@ i18next.use(initReactI18next).init({
 				room_details: {
 					details: 'Détails',
 					unitPlaceholder: 'Cherche une unité',
-					hazards: 'Dangers'
+					hazards: 'Dangers',
+					title: 'Détails de la room ',
+					designation: 'Désignation'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
@@ -254,6 +236,20 @@ i18next.use(initReactI18next).init({
 					rooms: 'Rooms / Hazards',
 					units: 'Unités',
 					dispensations: 'Dispensations'
+				},
+				hazards: {
+					Biological: 'Biologique',
+					Chemical: 'Chimique',
+					CompressedGas: 'Gaz compressé',
+					Cryogenics: 'Cryogénie',
+					Electrical: 'Électrique',
+					EMRadiation: 'Rayonnement EM',
+					IonisingRadiation: 'Rayonnement Ionisant',
+					Laser: 'Laser',
+					Nanoparticles: 'Nanoparticules',
+					Noise: 'Bruit',
+					StaticMagneticField: 'Champ Magnétique Statique',
+					Temperature: 'Température',
 				}
 			},
 		},
