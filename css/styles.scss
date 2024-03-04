@@ -33,6 +33,11 @@
     max-height: 350px;
 }
 
+.displayFlexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
 .li-multiselection-divider {
     color: darkgray;
     background-color: lavender;
