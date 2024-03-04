@@ -20,6 +20,10 @@ export type kindType = {
 	name: string;
 };
 
+export type hazardCategory = {
+	hazard_category_name: string;
+};
+
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
@@ -54,9 +58,40 @@ export type roomDetailsType = {
 	kind?: kindType;
 	vol?: number;
 	vent?: string;
+	hazards: hazardType[];
 	lhd_units: lhdUnitsType[];
+	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
 };
+
+export type hazardType = {
+	submission: string;
+	hazard_form_history: hazardFormHistoryType;
+}
+
+export type hazardFormHistoryType = {
+	form: string;
+	version: string;
+	hazard_form: hazardFormType;
+}
+
+export type hazardFormType = {
+	form: string;
+	hazard_category: hazardCategory;
+}
+
+export type submissionForm = {
+	submission: object;
+	form: object;
+}
+
+export type hazLevelsType = {
+	haz_type: hazType;
+}
+
+export type hazType = {
+	haz_en: string;
+}
 
 export type roomType = {
 	[key: string]: roomType | any;
