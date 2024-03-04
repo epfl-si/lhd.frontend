@@ -9,6 +9,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
 import "./multipleSelection.css"
 import "../../../css/styles.scss";
+import {personType} from "../../utils/ressources/types";
 
 interface SelectionProps<Member> {
 	/**
@@ -216,8 +217,8 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 							onClickIcon={() => onDelete(item)}
 							className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
 							key={objectName == 'Person' ? item.sciper + "" : item.name}>
-							<div>
-								<small className="text-muted">
+							<div className="displayFlexColumn">
+								<small className="text-muted" style={{fontWeight: "bold"}}>
 									{
 										objectName == 'Person'
 											? getPersonTitle(item)
@@ -226,6 +227,14 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 											: '')
 									}
 								</small>
+								{
+									objectName == 'Unit' ?
+										<div className="displayFlexColumn">
+											{item.cosecs && item.cosecs.length > 0 && <small>Cosec: {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</small>}
+											{item.professors && item.professors.length > 0 && <small>Prof: {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</small>}
+										</div>
+									: <></>
+								}
 							</div>
 						</FormCard>)
 					}
