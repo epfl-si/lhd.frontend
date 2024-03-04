@@ -1,4 +1,4 @@
-import {kindType, lhdUnitsType, roomDetailsType, roomType} from '../ressources/types';
+import {hazardCategory, kindType, lhdUnitsType, roomDetailsType, roomType} from '../ressources/types';
 import { formatDataToColumns } from './ParsingTools';
 import {makeQuery} from "./Utils";
 
@@ -82,6 +82,19 @@ export const fetchRoomDetails = async (
 					kind {
 						name
 					}
+          hazards {
+            submission
+            hazard_form_history {
+              form
+              hazard_form {
+                form
+              	version
+                hazard_category {
+                  hazard_category_name
+                }
+              }
+            }
+          }
 					lhd_units {
             id
             unitId
@@ -322,5 +335,26 @@ export const fetchPeopleFromFullText = async (
 	return {
 		status: result.status,
 		data: result.data?.personFullText
+	};
+};
+
+export const fetchHazardForms = async (
+	address: string | undefined,
+	authToken: string | undefined,
+): Promise<any> => {
+	const query = `query fetchHazardForms {
+        hazardForms {
+					form
+					version
+					hazard_category {
+						hazard_category_name
+					}
+				}
+      }`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.hazardForms
 	};
 };
