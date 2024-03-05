@@ -6,7 +6,9 @@ import {fetchHazardForms} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {getHazardImage} from "./HazardProperties";
-import {updateRoom} from "../../utils/graphql/PostingTools";
+import {addHazard, updateRoom} from "../../utils/graphql/PostingTools";
+import {notificationsVariants} from "../../utils/ressources/variants";
+import Notifications from "../Table/Notifications";
 
 interface HazardTabProps {
   room: roomDetailsType;
@@ -22,6 +24,11 @@ export const HazardTab = ({
   const [savedCategoriesList, setSavedCategoriesList] = useState<string[]>([]);
   const [submissionForm, setSubmissionForm] = useState<submissionForm[]>([]);
   const [lastVersionForm, setLastVersionForm] = useState<hazardFormType>();
+  const [openNotification, setOpenNotification] = useState<boolean>(false);
+  const [notificationType, setNotificationType] = useState<notificationType>({
+    type: "info",
+    text: '',
+  });
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -40,8 +47,30 @@ export const HazardTab = ({
   }, [oidc.accessToken, room]);
 
   const handleSubmit = async (event) => {
-    console.log(event.data, lastVersionForm );
+    if (lastVersionForm)  {
+      addHazard(
+        env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+        oidc.accessToken,
+        JSON.stringify({data: event.data}).replaceAll('"','\\"'),
+        lastVersionForm,
+        room.name
+      ).then(res => {
+        handleOpen(res);
+      });
+    }
+  };
 
+  const handleOpen = (res: any) => {
+    if (res.status === 200) {
+      setNotificationType(notificationsVariants['room-update-success']);
+    } else {
+      setNotificationType(notificationsVariants['room-update-error']);
+    }
+    setOpenNotification(true);
+  };
+
+  const handleClose = () => {
+    setOpenNotification(false);
   };
 
   function onOpenHazard(hazard: string) {
@@ -62,7 +91,7 @@ export const HazardTab = ({
       });
       setSubmissionForm(subForm);
     } else {
-      setSubmissionForm([{submission: {}, form: lastform ?? {}}]);
+      setSubmissionForm([{submission: {}, form: lastform?.form ? JSON.parse(lastform?.form) : {}}]);
     }
   }
 
@@ -87,5 +116,10 @@ export const HazardTab = ({
           form={sf.form}/>)}
       </div>
     </div>
+    <Notifications
+      open={openNotification}
+      notification={notificationType}
+      close={handleClose}
+    />
   </div>
 };

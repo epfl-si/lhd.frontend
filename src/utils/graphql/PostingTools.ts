@@ -1,4 +1,4 @@
-import {dispensationRequestType, lhdUnitsType, personType, roomDetailsType} from '../ressources/types';
+import {dispensationRequestType, hazardFormType, lhdUnitsType, personType, roomDetailsType} from '../ressources/types';
 import {makeQuery} from "./Utils";
 
 export const createDispensation = async (
@@ -257,4 +257,26 @@ export const deleteUnit = async (
             }`;
 
 	return makeQuery(query, variables, address, authToken);
+};
+
+export const addHazard = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	submission: string,
+	lastVersionForm: hazardFormType,
+	room: string
+): Promise<any> => {
+	const query = `mutation addHazard {
+               addHazardToRoom(room: "${room}", 
+               submission: "${submission}", 
+               category: "${lastVersionForm.hazard_category.hazard_category_name}")
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+console.log(query);
+	return makeQuery(query, {}, address, authToken);
 };
