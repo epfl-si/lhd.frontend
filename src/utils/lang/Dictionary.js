@@ -111,7 +111,8 @@ i18next.use(initReactI18next).init({
 				menu: {
 					rooms: 'Rooms / Hazards',
 					units: 'Units',
-					dispensations: 'Dispensations'
+					dispensations: 'Dispensations',
+					hazardFormControl: 'Hazard Form Control'
 				},
 				hazards: {
 					Biological: 'Biological',
@@ -126,6 +127,11 @@ i18next.use(initReactI18next).init({
 					Noise: 'Noise',
 					StaticMagneticField: 'Static Magnetic Field',
 					Temperature: 'Temperature',
+				},
+				hazardFormControl: {
+					title: 'Hazard Forms',
+					version: 'version',
+					category: 'Category'
 				}
 			},
 		},
@@ -235,7 +241,8 @@ i18next.use(initReactI18next).init({
 				menu: {
 					rooms: 'Rooms / Hazards',
 					units: 'Unités',
-					dispensations: 'Dispensations'
+					dispensations: 'Dispensations',
+					hazardFormControl: 'Contrôle des formulaires des hasards'
 				},
 				hazards: {
 					Biological: 'Biologique',
@@ -250,6 +257,11 @@ i18next.use(initReactI18next).init({
 					Noise: 'Bruit',
 					StaticMagneticField: 'Champ Magnétique Statique',
 					Temperature: 'Température',
+				},
+				hazardFormControl: {
+					title: 'Formulaires des dangers',
+					version: 'version',
+					category: 'Category'
 				}
 			},
 		},
