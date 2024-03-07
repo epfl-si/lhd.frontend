@@ -9,6 +9,9 @@ import {getHazardImage} from "./HazardProperties";
 import {addHazard, updateRoom} from "../../utils/graphql/PostingTools";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {notificationType} from '../../utils/ressources/types';
 
 interface HazardTabProps {
   room: roomDetailsType;
@@ -29,6 +32,7 @@ export const HazardTab = ({
     type: "info",
     text: '',
   });
+  const [formData, setFormData] = useState<submissionForm[]>([]);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -46,25 +50,38 @@ export const HazardTab = ({
     setSavedCategoriesList(room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name));
   }, [oidc.accessToken, room]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async () => {
     if (lastVersionForm)  {
+      const submissionsList: submissionForm[] = [];
+      formData.forEach(f => {
+        submissionsList.push({
+          id: JSON.parse(f.id),
+          submission: {data: f.submission}
+        })
+      });
       addHazard(
         env().REACT_APP_GRAPHQL_ENDPOINT_URL,
         oidc.accessToken,
-        JSON.stringify({data: event.data}).replaceAll('"','\\"'),
+        JSON.stringify(submissionsList).replaceAll('"','\\"'),
         lastVersionForm,
         room.name
-      ).then(res => {
+      ).then(res => {//TODO load from DB and recharge savedCategoriesList setSubmissionForm and setFormData if 200
         handleOpen(res);
       });
     }
   };
 
   const handleOpen = (res: any) => {
-    if (res.status === 200) {
-      setNotificationType(notificationsVariants['room-update-success']);
+    if (res.data?.addHazardToRoom?.errors) {
+      const notif: notificationType = {
+        text: res.data?.addHazardToRoom?.errors[0].message,
+        type: 'error'
+      };
+      setNotificationType(notif);
+    } else if (res.status === 200) {
+      setNotificationType(notificationsVariants['unit-update-success']);
     } else {
-      setNotificationType(notificationsVariants['room-update-error']);
+      setNotificationType(notificationsVariants['unit-update-error']);
     }
     setOpenNotification(true);
   };
@@ -79,19 +96,19 @@ export const HazardTab = ({
     const lastform: hazardFormType | undefined = hazardForms.find(f => f.hazard_category.hazard_category_name == hazard);
     setLastVersionForm(lastform);
 
-    if (savedCategoriesList.includes(hazard)) {
+    if (savedCategoriesList.includes(hazard)) {//TODO load from DB and recharge savedCategoriesList setSubmissionForm and setFormData
       const subForm: submissionForm[] = [];
       room.hazards.forEach(h => {
-        const sub = h.submission;
-        const holdForm = h.hazard_form_history.form;
         const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
         if (category == hazard) {
-          subForm.push({submission: JSON.parse(sub), form: JSON.parse(holdForm)});
+          const holdForm = h.hazard_form_history.form; //TODO insert id in submission h.id
+          subForm.push({id: h.id, submission: JSON.parse(h.submission), form: JSON.parse(holdForm)});
         }
       });
       setSubmissionForm(subForm);
+      setFormData(subForm);
     } else {
-      setSubmissionForm([{submission: {}, form: lastform?.form ? JSON.parse(lastform?.form) : {}}]);
+      setSubmissionForm([{id: 'newHazard', submission: {}, form: lastform?.form ? JSON.parse(lastform?.form) : {}}]);
     }
   }
 
@@ -111,9 +128,20 @@ export const HazardTab = ({
           <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
         </div>
         {submissionForm.map(sf => <Form
-          onCustomEvent={handleSubmit}
+          onChange={(event) => {
+            const submissions = formData.filter(f => f.id!=sf.id);
+            submissions.push({id: sf.id, submission: event.data});
+            setFormData(submissions);
+          }}
           submission={sf.submission}
           form={sf.form}/>)}
+        <div style={{marginTop: '50px'}}>
+          <Button
+            onClick={handleSubmit}
+            label="Save"
+            iconName={`${featherIcons}#save`}
+            primary/>
+        </div>
       </div>
     </div>
     <Notifications
