@@ -65,6 +65,7 @@ export type roomDetailsType = {
 };
 
 export type hazardType = {
+	id: string;
 	submission: string;
 	hazard_form_history: hazardFormHistoryType;
 }
@@ -82,8 +83,9 @@ export type hazardFormType = {
 }
 
 export type submissionForm = {
+	id: string;
 	submission: object;
-	form: object;
+	form?: object;
 }
 
 export type hazLevelsType = {

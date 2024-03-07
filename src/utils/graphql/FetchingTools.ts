@@ -22,6 +22,11 @@ type fetchUnitsType = {
 	data?: lhdUnitsType[] | string;
 };
 
+type fetchFormsType = {
+	status?: number;
+	data?: string; //TODO
+};
+
 export const fetchResults = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -83,6 +88,7 @@ export const fetchRoomDetails = async (
 						name
 					}
           hazards {
+            id
             submission
             hazard_form_history {
               form
