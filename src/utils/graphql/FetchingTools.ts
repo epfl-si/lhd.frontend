@@ -130,6 +130,38 @@ export const fetchRoomDetails = async (
 	};
 };
 
+export const fetchHazardsInRoom = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	room: string | null
+): Promise<fetchRoomResultsType> => {
+	const query: string = `query fetchHazardsInRoom { 
+				rooms (where: { name: { equals: "${room}"} }) {
+					name
+          hazards {
+            id
+            submission
+            hazard_form_history {
+              form
+              hazard_form {
+                form
+              	version
+                hazard_category {
+                  hazard_category_name
+                }
+              }
+            }
+          }
+				},
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.rooms,
+	};
+};
+
 export const fetchUnitDetails = async (
 	address: string | undefined,
 	authToken: string | undefined,
