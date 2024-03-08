@@ -1,8 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {HazardCard} from "./HazardCard";
 import {Form} from "@formio/react";
-import {hazardFormType, roomDetailsType, submissionForm} from "../../utils/ressources/types";
-import {fetchHazardForms} from "../../utils/graphql/FetchingTools";
+import {hazardFormType, hazardType, roomDetailsType, submissionForm} from "../../utils/ressources/types";
+import {
+  fetchHazardForms,
+  fetchHazardsInRoom,
+  fetchRoomDetails,
+  fetchRoomTypes
+} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {getHazardImage} from "./HazardProperties";
@@ -33,6 +38,7 @@ export const HazardTab = ({
     text: '',
   });
   const [formData, setFormData] = useState<submissionForm[]>([]);
+  const [roomHazards, setRoomHazards] = useState<hazardType[]>(room.hazards);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -46,9 +52,47 @@ export const HazardTab = ({
       }
     };
     loadFetch();
+    reloadPage(roomHazards, lastVersionForm, selectedHazardCategory, false);
+  }, [oidc.accessToken]);
 
-    setSavedCategoriesList(room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name));
-  }, [oidc.accessToken, room]);
+  useEffect(() => {
+    reloadPage(roomHazards, lastVersionForm, selectedHazardCategory, openHazard);
+  }, [roomHazards]);
+
+  const reloadPage = (roomHazards: hazardType[], lastVersionForm: hazardFormType | undefined, selectedHazardCategory: string, openHazard: boolean) => {
+    const catList = roomHazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+    setSavedCategoriesList(catList);
+    if (openHazard) {
+      if (catList.includes(selectedHazardCategory)) {
+        const subForm: submissionForm[] = [];
+        roomHazards.forEach(h => {
+          const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
+          if (category == selectedHazardCategory) {
+            const oldForm = h.hazard_form_history.form;
+            subForm.push({id: h.id, submission: JSON.parse(h.submission), form: JSON.parse(oldForm)});
+          }
+        });
+        console.log(subForm);
+        setSubmissionForm([...subForm]);
+        setFormData([...subForm]);
+      } else {
+        setSubmissionForm([{id: '{"salt":"newHazard","eph_id":"newHazard"}', submission: {}, form: lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {}}]);
+        setFormData([]);
+      }
+    }
+  };
+
+  const fetchHazards = async () => {
+    const results = await fetchHazardsInRoom(
+      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      oidc.accessToken,
+      room.name
+    );
+    if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
+      setRoomHazards([...results.data[0].hazards]);
+      reloadPage(results.data[0].hazards, lastVersionForm, selectedHazardCategory, openHazard);
+    }
+  };
 
   const handleSubmit = async () => {
     if (lastVersionForm)  {
@@ -56,7 +100,7 @@ export const HazardTab = ({
       formData.forEach(f => {
         submissionsList.push({
           id: JSON.parse(f.id),
-          submission: {data: f.submission}
+          submission: f.submission
         })
       });
       addHazard(
@@ -65,20 +109,21 @@ export const HazardTab = ({
         JSON.stringify(submissionsList).replaceAll('"','\\"'),
         lastVersionForm,
         room.name
-      ).then(res => {//TODO load from DB and recharge savedCategoriesList setSubmissionForm and setFormData if 200
+      ).then(res => {
         handleOpen(res);
       });
     }
   };
 
-  const handleOpen = (res: any) => {
-    if (res.data?.addHazardToRoom?.errors) {
+  const handleOpen = async (res: any) => {
+    if ( res.data?.addHazardToRoom?.errors ) {
       const notif: notificationType = {
         text: res.data?.addHazardToRoom?.errors[0].message,
         type: 'error'
       };
       setNotificationType(notif);
-    } else if (res.status === 200) {
+    } else if ( res.status === 200 ) {
+      await fetchHazards();
       setNotificationType(notificationsVariants['unit-update-success']);
     } else {
       setNotificationType(notificationsVariants['unit-update-error']);
@@ -95,21 +140,7 @@ export const HazardTab = ({
     setSelectedHazardCategory(hazard);
     const lastform: hazardFormType | undefined = hazardForms.find(f => f.hazard_category.hazard_category_name == hazard);
     setLastVersionForm(lastform);
-
-    if (savedCategoriesList.includes(hazard)) {//TODO load from DB and recharge savedCategoriesList setSubmissionForm and setFormData
-      const subForm: submissionForm[] = [];
-      room.hazards.forEach(h => {
-        const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
-        if (category == hazard) {
-          const holdForm = h.hazard_form_history.form; //TODO insert id in submission h.id
-          subForm.push({id: h.id, submission: JSON.parse(h.submission), form: JSON.parse(holdForm)});
-        }
-      });
-      setSubmissionForm(subForm);
-      setFormData(subForm);
-    } else {
-      setSubmissionForm([{id: 'newHazard', submission: {}, form: lastform?.form ? JSON.parse(lastform?.form) : {}}]);
-    }
+    reloadPage(roomHazards, lastform, hazard, true);
   }
 
   return <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -130,7 +161,8 @@ export const HazardTab = ({
         {submissionForm.map(sf => <Form
           onChange={(event) => {
             const submissions = formData.filter(f => f.id!=sf.id);
-            submissions.push({id: sf.id, submission: event.data});
+            submissions.push({id: sf.id, submission: {data: event.data}});
+            console.log("subsession", submissions, submissionForm);
             setFormData(submissions);
           }}
           submission={sf.submission}
