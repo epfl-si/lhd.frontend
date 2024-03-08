@@ -24,6 +24,7 @@ import DispensationControls from './pages/dispensationcontrols';
 import NewDispForm from './components/DispensationControls/NewDispForm';
 import UnitControl from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
+import HazardFormControl from "./pages/hazardFormControl";
 
 function App() {
 	const { t } = useTranslation();
@@ -58,6 +59,9 @@ function App() {
 						<li>
 							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
 						</li>
+						<li>
+							<Link to="/hazardFormControl">{t(`menu.hazardFormControl`)}</Link>
+						</li>
 					</ul>
 				</Base.AsideMenu>
 				<Base.Breadcrumbs>
@@ -89,6 +93,9 @@ function App() {
 						</Route>
 						<Route path="/dispcontrol">
 							<DispensationControls />
+						</Route>
+						<Route path="/hazardFormControl">
+							<HazardFormControl />
 						</Route>
 						<Route path="/roomdetails">
 							<RoomDetails />

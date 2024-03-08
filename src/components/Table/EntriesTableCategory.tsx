@@ -10,7 +10,7 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
-	page:  'room' | 'unit';
+	page:  'room' | 'unit' | 'hazardForms';
 };
 
 export function EntriesTableCategory({
@@ -51,6 +51,17 @@ export function EntriesTableCategory({
 								break;
 							case "unit":
 								history.push(`/unitdetails?unit=${e.row['name']}`);
+								break;
+						}
+					}}
+					getRowId={(row: any) =>  {
+						switch ( page ) {
+							case "room":
+								return row.id;
+							case "unit":
+								return row.name;
+							case "hazardForms":
+								return row.hazard_category_name + row.version
 						}
 					}}
 				/>
