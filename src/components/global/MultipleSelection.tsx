@@ -36,7 +36,6 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
 	const [filteredSuggestions, setFilteredSuggestions] = useState<Member[]>([]);
 	const [inputValue, setInputValue] = React.useState('');
-	const [forceRender, setForceRender] = useState(false);
 	const inputRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -62,11 +61,6 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 		setCurrentlySelected(arr);
 	}, [selected]);
 
-	useEffect(() => {
-		if (forceRender)
-			setForceRender(false);
-	}, [forceRender]);
-
 	function onChange(newValue: Member | null) {
 		if (newValue) {
 			(newValue as any).status = 'New';
@@ -88,7 +82,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	function onDelete(item: Member) {
 		const itemStatus = item.status;
 		(item as any).status = itemStatus === 'Deleted' ? (selected.includes(item) ? 'Default' : 'New') : 'Deleted';
-		setForceRender(true);
+		setCurrentlySelected([...currentlySelected]);
 		if ( onChangeSelection ) {
 			onChangeSelection(currentlySelected);
 		}
