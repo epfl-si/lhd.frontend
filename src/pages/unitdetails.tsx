@@ -1,10 +1,8 @@
 import {Box, Typography} from '@material-ui/core';
-import React, {SetStateAction, useEffect, useState} from 'react';
-import { env } from '../utils/env.js';
-import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import {
-	notificationType, lhdUnitsType, personType
-} from '../utils/ressources/types';
+import React, {useEffect, useState} from 'react';
+import {env} from '../utils/env.js';
+import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
+import {lhdUnitsType, notificationType, personType} from '../utils/ressources/types';
 import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchUnitDetails} from "../utils/graphql/FetchingTools";
@@ -18,6 +16,7 @@ import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {useTranslation} from "react-i18next";
 import {Redirect} from "react-router-dom";
 import {AlertDialog} from "../components/global/AlertDialog";
+import {UnitTabTitle} from "../components/Units/UnitTabTitle";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -158,12 +157,7 @@ export default function UnitDetails() {
 			>
 				<ResponsiveTabs.Tab key="profTab" id="profTab">
 					<ResponsiveTabs.Tab.Title>
-						<div style={{display: 'flex', justifyContent: 'center'}}>
-							<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-								<use xlinkHref={`${featherIcons}#user`}></use>
-							</svg>
-							<span className="tab-text-title">{t(`unit_details.profTab`)}</span>
-						</div>
+						<UnitTabTitle title={t(`unit_details.profTab`)} icon='#user' />
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
@@ -171,12 +165,7 @@ export default function UnitDetails() {
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="cosec" id="cosec">
 					<ResponsiveTabs.Tab.Title>
-						<div style={{display: 'flex', justifyContent: 'center'}}>
-							<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-								<use xlinkHref={`${featherIcons}#shield`}></use>
-							</svg>
-							<span className="tab-text-title">{t(`unit_details.cosecTab`)}</span>
-						</div>
+						<UnitTabTitle title={t(`unit_details.cosecTab`)} icon='#shield' />
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
@@ -185,12 +174,7 @@ export default function UnitDetails() {
 				{
 					data[0]?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits" >
 							<ResponsiveTabs.Tab.Title>
-								<div style={{display: 'flex', justifyContent: 'center'}}>
-									<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-										<use xlinkHref={`${featherIcons}#layers`}></use>
-									</svg>
-									<span className="tab-text-title">{t(`unit_details.subunitTab`)}</span>
-								</div>
+								<UnitTabTitle title={t(`unit_details.subunitTab`)} icon='#layers' />
 							</ResponsiveTabs.Tab.Title>
 							<ResponsiveTabs.Tab.Content>
 								<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
