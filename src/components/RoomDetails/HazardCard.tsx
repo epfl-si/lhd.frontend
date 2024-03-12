@@ -1,22 +1,31 @@
 import React from 'react';
-import { Button } from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import { FormCard } from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 import {getHazardImage} from "./HazardProperties";
-import {t} from "i18next";
 import {useTranslation} from "react-i18next";
+import {roomDetailsType} from "../../utils/ressources/types";
 
 interface HazardCardProps {
-  listSavedCategories: string[];
+  room: roomDetailsType;
   hazardName: string;
-  onClick?: (e: React.MouseEvent) => void;
+  onEditMode : boolean;
+  onOpen?: (hazardName: string) => void;
+  onEdit?: (hazardName: string) => void;
+  onAdd?: (hazardName: string) => void;
 }
 
 export const HazardCard = ({
-  listSavedCategories,
+  room,
   hazardName,
-  onClick,
+  onEditMode,
+  onOpen,
+  onEdit,
+  onAdd
   }: HazardCardProps) => {
   const { t } = useTranslation();
+  const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+
+  //dirtyState
 
   return <FormCard key={hazardName.concat("_key")} keyValue={hazardName.concat("_key")}>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -27,9 +36,26 @@ export const HazardCard = ({
           {t(`hazards.`.concat(hazardName))}
         </strong>
       </div>
-      <Button size="icon"
-              iconName={listSavedCategories.includes(hazardName) ? "#arrow-right" : "#plus-circle"}
-              onClick={onClick}/>
+      {listSavedCategories.includes(hazardName) ?
+        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Button size="icon"
+                  iconName={"#edit-3"}
+                  onClick={() => {
+                    if ( onEdit ) onEdit(hazardName);
+                  }}/>
+          <Button size="icon"
+                iconName={"#eye"}
+                  onClick={() => {
+                    if ( onOpen ) onOpen(hazardName);
+                  }}
+          style={{marginLeft: '10px'}}/>
+        </div> :
+        <Button size="icon"
+                iconName={"#plus-circle"}
+                onClick={() => {
+                  if ( onAdd ) onAdd(hazardName);
+                }}/>
+        }
     </div>
   </FormCard>
 };
