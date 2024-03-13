@@ -25,6 +25,7 @@ import NewDispForm from './components/DispensationControls/NewDispForm';
 import UnitControl from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
 import HazardFormControl from "./pages/hazardFormControl";
+import FormDialog from "./components/global/FormDialog";
 
 function App() {
 	const { t } = useTranslation();
@@ -99,6 +100,9 @@ function App() {
 						</Route>
 						<Route path="/roomdetails">
 							<RoomDetails />
+						</Route>
+						<Route path="/formdetails">
+							<FormDialog />
 						</Route>
 						<Route path="/biohazard">
 							<BioHazard />

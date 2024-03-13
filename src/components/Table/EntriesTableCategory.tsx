@@ -52,6 +52,9 @@ export function EntriesTableCategory({
 							case "unit":
 								history.push(`/unitdetails?unit=${e.row['name']}`);
 								break;
+							case "hazardForms":
+								history.push(`/formdetails?cat=${e.row['hazard_category']['hazard_category_name']}`);
+								break;
 						}
 					}}
 					getRowId={(row: any) =>  {
