@@ -43,7 +43,11 @@ export const HazardFormVBox = ({
     type: "info",
     text: '',
   });
-  const actualForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
+  const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
+  const formOptions = {
+    readOnly: action == "Read",
+    //i18n: {en: {},},
+  };
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -51,7 +55,7 @@ export const HazardFormVBox = ({
         case "Add":
           setSubmissionForm([{
             id: '{"salt":"newHazard","eph_id":"newHazard"}', submission: {},
-            form: actualForm}]);
+            form: currentForm}]);
           setFormData([]);
           break;
         case "Edit":
@@ -59,6 +63,7 @@ export const HazardFormVBox = ({
           readOrEditHazard(action);
           break;
       };
+      formOptions.readOnly = action == "Read";
     };
     loadFetch();
   }, [oidc.accessToken, roomHazards, action, selectedHazardCategory]);
@@ -69,12 +74,13 @@ export const HazardFormVBox = ({
       const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
       if (category == selectedHazardCategory) {
         const oldForm = h.hazard_form_history.form;
-        subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(oldForm) : actualForm});
+        subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(oldForm) : currentForm});
       }
     });
     setSubmissionForm(subForm);
     setFormData(action == 'Read' ? [] : subForm);
   }
+
   const handleSubmit = async () => {
     if (lastVersionForm)  {
       const submissionsList: submissionForm[] = [];
@@ -143,6 +149,7 @@ export const HazardFormVBox = ({
         console.log("submission", submissions, submissionForm);
         setFormData([...submissions]);
       }}
+      options={formOptions}
       key={sf.id}
       submission={sf.submission}
       form={sf.form}/>)}
