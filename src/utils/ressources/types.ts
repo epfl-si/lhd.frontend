@@ -77,6 +77,7 @@ export type hazardFormHistoryType = {
 }
 
 export type hazardFormType = {
+	id: string;
 	form: string;
 	version: string;
 	hazard_category: hazardCategory;

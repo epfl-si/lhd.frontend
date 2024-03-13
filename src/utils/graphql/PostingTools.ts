@@ -277,6 +277,49 @@ export const addHazard = async (
                 isSuccess
               }
             }`;
-console.log(query);
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const updateFormHazard = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	hazardForm: hazardFormType,
+): Promise<any> => {
+	const query = `mutation updateFormHazard {
+               updateForm (
+               id: ${hazardForm.id},
+               form: ${hazardForm.form},
+							 version: "${hazardForm.version}",
+							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const createNewHazardCategory = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	hazardForm: hazardFormType,
+): Promise<any> => {
+	const query = `mutation createNewHazardCategory {
+               createNewHazardCategory (
+               id: ${hazardForm.id},
+               form: ${hazardForm.form},
+							 version: "${hazardForm.version}",
+							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	console.log(query)
 	return makeQuery(query, {}, address, authToken);
 };
