@@ -382,7 +382,30 @@ export const fetchHazardForms = async (
 ): Promise<any> => {
 	const query = `query fetchHazardForms {
         hazardForms {
-					form
+        	id
+					version
+					hazard_category {
+						hazard_category_name
+					}
+				}
+      }`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.hazardForms
+	};
+};
+
+export const fetchHazardFormDetails = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	categoryName: string
+): Promise<any> => {
+	const query = `query fetchHazardFormDetails {
+        hazardForms (where: { hazard_category: {hazard_category_name:  { contains: "${categoryName}" }}}) {
+        	id
+        	form
 					version
 					hazard_category {
 						hazard_category_name
