@@ -138,7 +138,8 @@ i18next.use(initReactI18next).init({
 					newVersionCurrentIs: 'Insert the hazard form version (current version is ',
 					Create: 'Create',
 					Modify: 'Modify form of: ',
-					fillMandatoryFields: 'Some mandatory fields are empty'
+					fillMandatoryFields: 'Some mandatory fields are empty',
+					versionError: 'New version must be more than current version'
 				}
 			},
 		},
@@ -275,7 +276,8 @@ i18next.use(initReactI18next).init({
 					newVersionCurrentIs: 'Insérer la version du formulaire du danger (la version courante est ',
 					Create: 'Créer',
 					Modify: 'Modifier le formulaire de: ',
-					fillMandatoryFields: 'Certains champs obligatoires sont vides'
+					fillMandatoryFields: 'Certains champs obligatoires sont vides',
+					versionError: 'La nouvelle version doit être majeure que la version courante'
 				}
 			},
 		},

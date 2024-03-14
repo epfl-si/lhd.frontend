@@ -1,20 +1,21 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {hazardFormType, notificationType} from "../../utils/ressources/types";
+import {hazardFormType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {FormBuilder} from "@formio/react";
 import {Box, TextField, Typography} from "@material-ui/core";
-import {fetchHazardFormDetails} from "../../utils/graphql/FetchingTools";
-import {env} from "../../utils/env";
+import {fetchHazardFormDetails} from "../utils/graphql/FetchingTools";
+import {env} from "../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import {createNewHazardCategory, updateFormHazard} from "../../utils/graphql/PostingTools";
-import {notificationsVariants} from "../../utils/ressources/variants";
-import Notifications from "../Table/Notifications";
+import {createNewHazardCategory, updateFormHazard} from "../utils/graphql/PostingTools";
+import {notificationsVariants} from "../utils/ressources/variants";
+import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
+import semver from "semver/preload";
 
-export default function FormDialog() {
+export default function HazardFormDetails() {
 	const history = useHistory();
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -33,15 +34,15 @@ export default function FormDialog() {
 			setCategory(urlParams.get('cat') ?? '');
 
 			if (urlParams.get('cat') != 'NewCategory') {
-				loadFetch();
+				loadFetch(urlParams.get('cat') ?? '');
 			}
 	}, [oidc.accessToken, window.location.search]);
 
-	const loadFetch = async () => {
+	const loadFetch = async (cat: string) => {
 		const results = await fetchHazardFormDetails(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			urlParams.get('cat') ?? ''
+			cat
 		);
 		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
 			setHazardFormDetails(results.data[0]);
@@ -68,18 +69,27 @@ export default function FormDialog() {
 					handleOpen(res);
 				});
 			} else {
-				updateFormHazard (
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-					oidc.accessToken,
-					{
-						id: JSON.stringify(hazardFormDetails?.id),
-						form: JSON.stringify(newForm),
-						version: version,
-						hazard_category: {hazard_category_name: category}
-					}
-				).then(res => {
-					handleOpen(res);
-				});
+				if (semver.gt(version, hazardFormDetails?.version ?? '')) {
+					updateFormHazard (
+						env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+						oidc.accessToken,
+						{
+							id: JSON.stringify(hazardFormDetails?.id),
+							form: JSON.stringify(newForm),
+							version: version,
+							hazard_category: {hazard_category_name: category}
+						}
+					).then(res => {
+						handleOpen(res);
+					});
+				} else {
+					const notif: notificationType = {
+						text: t(`hazardFormControl.versionError`),
+						type: 'error'
+					};
+					setNotificationType(notif);
+					setOpenNotification(true);
+				}
 			}
 		} else {
 			const notif: notificationType = {
@@ -99,7 +109,11 @@ export default function FormDialog() {
 			};
 			setNotificationType(notif);
 		} else if ( res.status === 200 ) {
-			history.push(`/formdetails?cat=${category}`);
+			if (urlParams.get('cat') == 'NewCategory') {
+				history.push(`/formdetails?cat=${category}`);
+			} else {
+				loadFetch(category);
+			}
 			setNotificationType(notificationsVariants['unit-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['unit-update-error']);
