@@ -64,7 +64,7 @@ export function EntriesTableCategory({
 							case "unit":
 								return row.name;
 							case "hazardForms":
-								return row.hazard_category_name + row.version
+								return row.hazard_category.hazard_category_name
 						}
 					}}
 				/>
