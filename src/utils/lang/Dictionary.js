@@ -130,8 +130,15 @@ i18next.use(initReactI18next).init({
 				},
 				hazardFormControl: {
 					title: 'Hazard Forms',
-					version: 'version',
-					category: 'Category'
+					version: 'Version',
+					category: 'Category',
+					addNewCategory: 'Add new hazard category',
+					newHazardCategory: 'Insert the new hazard category',
+					insertNewVersion: 'Insert the hazard form version',
+					newVersionCurrentIs: 'Insert the hazard form version (current version is ',
+					Create: 'Create',
+					Modify: 'Modify form of: ',
+					fillMandatoryFields: 'Some mandatory fields are empty'
 				}
 			},
 		},
@@ -260,8 +267,15 @@ i18next.use(initReactI18next).init({
 				},
 				hazardFormControl: {
 					title: 'Formulaires des dangers',
-					version: 'version',
-					category: 'Category'
+					version: 'Version',
+					category: 'Catégory',
+					addNewCategory: 'Ajouter une nouvelle catégory de danger',
+					newHazardCategory: 'Insérer la nouvelle catégory de danger',
+					insertNewVersion: 'Insérer la version du formulaire du danger',
+					newVersionCurrentIs: 'Insérer la version du formulaire du danger (la version courante est ',
+					Create: 'Créer',
+					Modify: 'Modifier le formulaire de: ',
+					fillMandatoryFields: 'Certains champs obligatoires sont vides'
 				}
 			},
 		},

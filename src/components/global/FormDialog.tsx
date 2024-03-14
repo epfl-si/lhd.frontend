@@ -83,7 +83,7 @@ export default function FormDialog() {
 			}
 		} else {
 			const notif: notificationType = {
-				text: t(`HazardFormControl.fillMandatoryFields`),
+				text: t(`hazardFormControl.fillMandatoryFields`),
 				type: 'error'
 			};
 			setNotificationType(notif);
@@ -114,9 +114,9 @@ export default function FormDialog() {
 	return (
 		<Box>
 			<Typography variant="h5"
-									gutterBottom>{urlParams.get('cat') == 'NewCategory' ? t(`HazardFormControl.Create`) : t(`HazardFormControl.Modify`)}</Typography>
-			<Typography variant="h6" style={{visibility: urlParams.get('cat') == 'NewCategory' ? 'hidden' : 'visible'}}>
-				{hazardFormDetails?.hazard_category.hazard_category_name}
+									gutterBottom>{urlParams.get('cat') == 'NewCategory' ?
+				t(`hazardFormControl.Create`) :
+				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong>
 			</Typography>
 			{urlParams.get('cat') == 'NewCategory' && <TextField
 		  onChange={(event => {setCategory(event.target.value)})}
@@ -125,7 +125,7 @@ export default function FormDialog() {
 		  margin="dense"
 		  id="category"
 		  name="category"
-		  label={t(`HazardFormControl.newHazardCategory`)}
+		  label={t(`hazardFormControl.newHazardCategory`)}
 		  fullWidth
 		  variant="standard"
 	  />}
@@ -136,7 +136,9 @@ export default function FormDialog() {
 				margin="dense"
 				id="version"
 				name="version"
-				label={urlParams.get('cat') == 'NewCategory' ? t(`HazardFormControl.insertNewVersion`) : `${t(`HazardFormControl.newVersionCurrentIs`)} ${hazardFormDetails?.version})`}
+				label={urlParams.get('cat') == 'NewCategory' ?
+					t(`hazardFormControl.insertNewVersion`) :
+					`${t(`hazardFormControl.newVersionCurrentIs`)} ${hazardFormDetails?.version})`}
 				fullWidth
 				variant="standard"
 			/>
@@ -147,7 +149,7 @@ export default function FormDialog() {
 			<div style={{marginTop: '50px'}}>
 				<Button
 					onClick={handleSubmit}
-					label="Save"
+					label={t(`generic.saveButton`)}
 					iconName={`${featherIcons}#save`}
 					primary/>
 			</div>

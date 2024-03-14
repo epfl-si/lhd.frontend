@@ -17,8 +17,8 @@ export default function HazardFormControl() {
 	const [tableData, setTableData] = useState<hazardFormType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const columns: columnType[] = [
-		{field: "version", headerName: t(`HazardFormControl.version`), width: 200},
-		{field: "hazard_category_name", headerName: t(`HazardFormControl.category`), width: 200, valueGetter: (params) => {
+		{field: "version", headerName: t(`hazardFormControl.version`), width: 200},
+		{field: "hazard_category_name", headerName: t(`hazardFormControl.category`), width: 200, valueGetter: (params) => {
 				if (params.row.hazard_category) {
 					return params.row.hazard_category.hazard_category_name;
 				}
@@ -46,7 +46,7 @@ export default function HazardFormControl() {
 
 	return <Box>
 			<Typography variant="h5" gutterBottom>
-				{t(`HazardFormControl.title`)}
+				{t(`hazardFormControl.title`)}
 			</Typography>
 			<EntriesTableCategory
 				optionsList={[]}
@@ -60,7 +60,7 @@ export default function HazardFormControl() {
 					onClick={() => {
 						history.push(`/formdetails?cat=NewCategory`);
 					}}
-					label={t(`HazardFormControl.addNewCategory`)}
+					label={t(`hazardFormControl.addNewCategory`)}
 					iconName={`${featherIcons}#save`}
 					primary/>
 			</div>
