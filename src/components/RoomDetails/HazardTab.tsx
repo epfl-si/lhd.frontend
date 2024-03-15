@@ -8,10 +8,12 @@ import {HazardFormVBox} from "./HazardFormVBox";
 
 interface HazardTabProps {
   room: roomDetailsType;
+  onSaveRoom: () => void;
 }
 
 export const HazardTab = ({
   room,
+  onSaveRoom
   }: HazardTabProps) => {
   const oidc = useOpenIDConnectContext();
   const [availableHazardsInDB, setAvailableHazardsInDB] = useState<hazardFormType[]>([]);
@@ -28,7 +30,7 @@ export const HazardTab = ({
       );
 
       if (resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string') {
-        setAvailableHazardsInDB(resultsHazardCategory.data);
+        setAvailableHazardsInDB([...resultsHazardCategory.data]);
       }
     };
     loadFetch();
@@ -41,6 +43,7 @@ export const HazardTab = ({
 
   function onEditHazard(hazard: string) {
     setSelectedHazardCategory(hazard);
+    onSaveRoom();
     setAction('Edit');
   }
 
