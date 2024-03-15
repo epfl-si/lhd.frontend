@@ -82,8 +82,7 @@ export default function UnitDetails() {
 		updateUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			{unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
-			{}
+			{id: JSON.stringify(data[0]?.id), unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
 		).then(res => {
 			if(res.status == 200 && !res.data?.updateUnit?.errors) {
 				fetchData();
@@ -96,8 +95,7 @@ export default function UnitDetails() {
 		deleteUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			data[0]?.name,
-			{}
+			JSON.stringify(data[0]?.id),
 		).then(res => {
 			if(res.status == 200 && !res.data?.deleteUnit?.errors) {
 				setDeleted(true);
@@ -119,10 +117,12 @@ export default function UnitDetails() {
 	}
 
 	const handleOpen = (res: any) => {
-		if (res.data?.updateUnit?.errors) {
+		if (res.data?.updateUnit?.errors || res.data?.deleteUnit?.errors) {
 			const n = notificationsVariants['unit-update-error'];
 			const notif: notificationType = {
-				text: n.text.concat(' \n').concat(res.data?.updateUnit?.errors[0].message),
+				text: n.text.concat(' \n').concat(res.data?.updateUnit?.errors ?
+					res.data?.updateUnit?.errors[0].message :
+					res.data?.deleteUnit?.errors[0].message),
 				type: n.type
 			};
 			setNotificationType(notif);

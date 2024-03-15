@@ -170,6 +170,7 @@ export const fetchUnitDetails = async (
 ): Promise<fetchUnitsType> => {
 	const query: string = `query SingleUnitFetch { 
 						units (where: {name: { equals: "${unit}"} }) {
+							id
 							unitId
 								name
 								institute {

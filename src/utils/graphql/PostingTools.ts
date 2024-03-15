@@ -199,11 +199,11 @@ export const updateRoom = async (
 export const updateUnit = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	details: {unit: string, profs: personType[], cosecs: personType[], subUnits: lhdUnitsType[]},
-	variables: Object
+	details: {id: string, unit: string, profs: personType[], cosecs: personType[], subUnits: lhdUnitsType[]},
 ): Promise<any> => {
 	const query = `mutation updateUnit {
                updateUnit (
+               id: ${details.id}
                unit: "${details.unit}"
 							 profs: [${details.profs.map(prof => 
 								`{
@@ -237,17 +237,16 @@ export const updateUnit = async (
               }
             }`;
 
-	return makeQuery(query, variables, address, authToken);
+	return makeQuery(query, {}, address, authToken);
 };
 
 export const deleteUnit = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	unit: string,
-	variables: Object
+	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteUnit {
-               deleteUnit(unit: "${unit}" )
+               deleteUnit(id: ${id} )
                {
                 errors {
                   message
@@ -256,7 +255,7 @@ export const deleteUnit = async (
               }
             }`;
 
-	return makeQuery(query, variables, address, authToken);
+	return makeQuery(query, {}, address, authToken);
 };
 
 export const addHazard = async (

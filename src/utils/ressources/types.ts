@@ -27,7 +27,7 @@ export type hazardCategory = {
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
-	id: number;
+	id: string;
 	cosecs: personType[];
 	professors: personType[];
 	subUnits: lhdUnitsType[];
