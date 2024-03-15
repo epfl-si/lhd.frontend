@@ -44,31 +44,26 @@ export const HazardFormVBox = ({
     text: '',
   });
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
-  const formOptions = {
-    readOnly: action == "Read",
-    //i18n: {en: {},},
-  };
 
   useEffect(() => {
     const loadFetch = async () => {
+      const subform = readOrEditHazard(action);
       switch (action) {
         case "Add":
-          setSubmissionForm([{
+          setSubmissionForm([...subform , {
             id: '{"salt":"newHazard","eph_id":"newHazard"}', submission: {},
             form: currentForm}]);
-          setFormData([]);
           break;
-        case "Edit":
         case "Read":
-          readOrEditHazard(action);
+        case "Edit":
+          setSubmissionForm([...subform]);
           break;
       };
-      formOptions.readOnly = action == "Read";
     };
     loadFetch();
   }, [oidc.accessToken, roomHazards, action, selectedHazardCategory]);
 
-  const readOrEditHazard = (action: string) => {
+  const readOrEditHazard = (action: string): submissionForm[] => {
     const subForm: submissionForm[] = [];
     roomHazards.forEach(h => {
       const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
@@ -77,8 +72,8 @@ export const HazardFormVBox = ({
         subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(oldForm) : currentForm});
       }
     });
-    setSubmissionForm(subForm);
-    setFormData(action == 'Read' ? [] : subForm);
+    setFormData(action == 'Read' ? [] : [...subForm]);
+    return subForm;
   }
 
   const handleSubmit = async () => {
@@ -142,17 +137,22 @@ export const HazardFormVBox = ({
            src={getHazardImage(selectedHazardCategory)}/>
       <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
     </div>
-    {submissionForm.map(sf => <Form
-      onChange={(event) => {
-        const submissions = formData.filter(f => f.id != sf.id);
-        submissions.push({id: sf.id, submission: {data: event.data}});
-        console.log("submission", submissions, submissionForm);
-        setFormData([...submissions]);
-      }}
-      options={formOptions}
-      key={sf.id}
-      submission={sf.submission}
-      form={sf.form}/>)}
+    {submissionForm.map(sf => <div>
+        <Form
+          onChange={(event) => {
+            const submissions = formData.filter(f => f.id != sf.id);
+            submissions.push({id: sf.id, submission: {data: event.data}});
+            setFormData([...submissions]);
+          }}
+          options={{
+            readOnly: action == "Read",//i18n: {en: {},},
+          }}
+          key={sf.id}
+          submission={sf.submission}
+          form={sf.form}/>
+        <hr/>
+      </div>
+    )}
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
       <Button
         onClick={handleSubmit}

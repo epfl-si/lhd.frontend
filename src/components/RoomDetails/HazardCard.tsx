@@ -39,6 +39,11 @@ export const HazardCard = ({
       {listSavedCategories.includes(hazardName) ?
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
           <Button size="icon"
+                  iconName={"#plus-circle"}
+                  onClick={() => {
+                    if ( onAdd ) onAdd(hazardName);
+                  }}/>
+          <Button size="icon"
                   iconName={"#edit-3"}
                   onClick={() => {
                     if ( onEdit ) onEdit(hazardName);
