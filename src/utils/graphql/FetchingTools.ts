@@ -384,6 +384,7 @@ export const fetchHazardForms = async (
 	const query = `query fetchHazardForms {
         hazardForms {
         	id
+        	form
 					version
 					hazard_category {
 						hazard_category_name
