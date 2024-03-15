@@ -71,7 +71,10 @@ i18next.use(initReactI18next).init({
 					unitPlaceholder: 'Search a unit',
 					hazards: 'Hazards',
 					title: 'Details on room ',
-					designation: 'Designation'
+					designation: 'Designation',
+					building: 'Building',
+					sector: 'Sector',
+					floor: 'Floor'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -209,7 +212,10 @@ i18next.use(initReactI18next).init({
 					unitPlaceholder: 'Cherche une unité',
 					hazards: 'Dangers',
 					title: 'Détails de la room ',
-					designation: 'Désignation'
+					designation: 'Désignation',
+					building: 'Bâtiment',
+					sector: 'Secteur',
+					floor: 'Étage'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',

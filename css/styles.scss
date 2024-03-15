@@ -38,6 +38,12 @@
     flex-direction: column;
 }
 
+.displayFlexRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .li-multiselection-divider {
     color: darkgray;
     background-color: lavender;

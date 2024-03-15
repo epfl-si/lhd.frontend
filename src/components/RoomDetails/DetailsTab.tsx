@@ -12,6 +12,7 @@ import Notifications from "../Table/Notifications";
 import {updateRoom} from "../../utils/graphql/PostingTools";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import {useTranslation} from "react-i18next";
+import '../../../css/styles.scss'
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -98,17 +99,23 @@ export const DetailsTab = ({
   };
 
   return <Stack spacing={2} width="30%">
+    <div className="displayFlexRow">
+      <label style={{fontSize: 'medium'}}>{t(`room_details.building`)}: <strong>{room.building}</strong></label>
+      <label style={{fontSize: 'medium'}}>{t(`room_details.sector`)}: <strong>{room.sector}</strong></label>
+      <label style={{fontSize: 'medium'}}>{t(`room_details.floor`)}: <strong>{room.floor}</strong></label>
+    </div>
+    <hr/>
     <Autocomplete
       value={room.kind?.name || ''}
       onChange={(event: any, newValue: string | null) => {
-        if (room.kind && newValue ) {
+        if ( room.kind && newValue ) {
           room.kind.name = newValue;
           setRoom({...room});
         }
       }}
       id="designation"
       options={roomKind.flatMap(k => k.name)}
-      renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)} />}
+      renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)}/>}
     />
     <TextField
       id="volume"
@@ -144,7 +151,7 @@ export const DetailsTab = ({
         onClick={() => saveRoomDetails()}
         label="Save"
         iconName={`${featherIcons}#save`}
-        primary />
+        primary/>
     </div>
     <Notifications
       open={openNotification}

@@ -56,6 +56,9 @@ export type personType = {
 export type roomDetailsType = {
 	id: string,
 	name: string;
+	building?: string;
+	sector?: string;
+	floor?: string;
 	kind?: kindType;
 	vol?: number;
 	vent?: string;
