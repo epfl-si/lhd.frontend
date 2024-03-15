@@ -19,7 +19,6 @@ export default function RoomDetails() {
 	const [data, setData] = useState<roomDetailsType | null>(null);
 
 	useEffect(() => {
-		
 		loadFetch();
 	}, [oidc.accessToken, window.location.search]);
 
@@ -57,7 +56,7 @@ export default function RoomDetails() {
 						</div>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <DetailsTab roomData={data} />}
+						{data && <DetailsTab roomData={data}  onSaveRoom={onSaveRoom}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 				<Tabs.Tab id="hazards">

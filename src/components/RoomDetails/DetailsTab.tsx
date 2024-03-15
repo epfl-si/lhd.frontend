@@ -15,10 +15,12 @@ import {useTranslation} from "react-i18next";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
+  onSaveRoom: () => void;
 }
 
 export const DetailsTab = ({
-                             roomData
+  roomData,
+  onSaveRoom
   }: DetailsTabProps) => {
   const { t } = useTranslation();
   const oidc = useOpenIDConnectContext();
@@ -47,6 +49,7 @@ export const DetailsTab = ({
   }, [oidc.accessToken]);
 
   useEffect(() => {
+    setRoom(roomData);
     setSavedUnits(room.lhd_units);
     setSelectedUnits(room.lhd_units);
   }, [roomData]);
@@ -56,6 +59,7 @@ export const DetailsTab = ({
       env().REACT_APP_GRAPHQL_ENDPOINT_URL,
       oidc.accessToken,
       {
+        id: JSON.stringify(room.id),
         haz_levels: [], hazards: [],
         name: room.name || '',
         kind: room.kind,//designation
@@ -63,7 +67,6 @@ export const DetailsTab = ({
         vent: room.vent,//ventilation
         lhd_units: selectedUnits
       },
-      {}
     ).then(res => {
       handleOpen(res);
     });
@@ -74,8 +77,15 @@ export const DetailsTab = ({
   }
 
   const handleOpen = (res: any) => {
-    if (res.status === 200) {
-      setSavedUnits(selectedUnits.filter(u => u.status !== 'Deleted'));
+    if ( res.data?.updateRoom?.errors ) {
+      const notif: notificationType = {
+        text: res.data?.updateRoom?.errors[0].message,
+        type: 'error'
+      };
+      setNotificationType(notif);
+    } else if (res.status === 200) {
+      onSaveRoom();
+      //setSavedUnits(selectedUnits.filter(u => u.status !== 'Deleted'));
       setNotificationType(notificationsVariants['room-update-success']);
     } else {
       setNotificationType(notificationsVariants['room-update-error']);

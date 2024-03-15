@@ -173,11 +173,11 @@ export const updateDispensation = async (
 export const updateRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	room: roomDetailsType,
-	variables: Object
+	room: roomDetailsType
 ): Promise<any> => {
 	const query = `mutation updateRoom {
                updateRoom(
+               id: ${room.id},
                name: "${room.name}",
                kind: "${room.kind?.name}",
 							 vol: ${room.vol},
@@ -193,7 +193,8 @@ export const updateRoom = async (
                 isSuccess
               }
             }`;
-	return makeQuery(query, variables, address, authToken);
+
+	return makeQuery(query, {}, address, authToken);
 };
 
 export const updateUnit = async (

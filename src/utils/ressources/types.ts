@@ -54,6 +54,7 @@ export type personType = {
 };
 
 export type roomDetailsType = {
+	id: string,
 	name: string;
 	kind?: kindType;
 	vol?: number;

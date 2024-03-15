@@ -78,6 +78,7 @@ export const fetchRoomDetails = async (
 ): Promise<fetchRoomResultsType> => {
 	const query: string = `query SingleRoomFetch { 
 				rooms (where: { name: { equals: "${room}"} }) {
+				id
 					name
 					building
 					sector
