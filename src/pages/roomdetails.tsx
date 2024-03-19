@@ -14,12 +14,14 @@ import {HazardTab} from "../components/RoomDetails/HazardTab";
 import {DetailsTab} from "../components/RoomDetails/DetailsTab";
 import {BackButton} from "../components/global/BackButton";
 import {useHistory} from "react-router-dom";
+import {getHazardImage} from "../components/RoomDetails/HazardProperties";
 
 export default function RoomDetails() {
 	const { t } = useTranslation();
 	const history = useHistory();
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType | null>(null);
+	const [listSavedCategories, setListSavedCategories] = useState<string[]>([]);
 
 	useEffect(() => {
 		loadFetch();
@@ -36,6 +38,9 @@ export default function RoomDetails() {
 		);
 		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
 			setData(results.data[0]);
+			const listCat = results.data[0].hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+			const listCatFiltered = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
+			setListSavedCategories(listCatFiltered)
 		} else {
 			console.error('Bad GraphQL results', results);
 		}
@@ -52,12 +57,7 @@ export default function RoomDetails() {
 			<Tabs>
 				<Tabs.Tab id="details">
 					<Tabs.Tab.Title>
-						<div style={{display: 'flex', justifyContent: 'center'}}>
-							<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-								<use xlinkHref={`${featherIcons}#users`}></use>
-							</svg>
-							<span className="tab-text-title">{t(`room_details.details`)}</span>
-						</div>
+						<span className="tab-text-title">{t(`room_details.details`)}</span>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
 						{data && <DetailsTab roomData={data} onSaveRoom={onSaveRoom}/>}
@@ -65,16 +65,12 @@ export default function RoomDetails() {
 				</Tabs.Tab>
 				<Tabs.Tab id="hazards">
 					<Tabs.Tab.Title>
-						<div style={{display: 'flex', justifyContent: 'center', flexDirection: "column"}}>
-							<div>
-								<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-									<use xlinkHref={`${featherIcons}#users`}></use>
-								</svg>
-								<span className="tab-text-title">{t(`room_details.hazards`)}</span>
-							</div>
-							<div style={{display: "flex", justifyContent: "center"}}>
-								<img style={{margin: '5px', width: '30px', height: '30px'}}
-										 src="../../public/pictogrammes/02_radiation_ionisante.svg"/>
+						<div className="displayFlexColumn" style={{justifyContent: 'center'}}>
+							<span className="tab-text-title">{t(`room_details.hazards`)}</span>
+							<div className="displayFlexRow" >
+								{listSavedCategories.map(c =>
+									<img style={{width: '20px', height: '20px'}} key={`${c}_iconeKey`}
+											 src={getHazardImage(c)}/>)}
 							</div>
 						</div>
 					</Tabs.Tab.Title>
