@@ -67,9 +67,9 @@ export default function RoomDetails() {
 					<Tabs.Tab.Title>
 						<div className="displayFlexColumn" style={{justifyContent: 'center'}}>
 							<span className="tab-text-title">{t(`room_details.hazards`)}</span>
-							<div className="displayFlexRow" >
+							<div className="displayFlexRow" style={{justifyContent: 'center'}}>
 								{listSavedCategories.map(c =>
-									<img style={{width: '20px', height: '20px'}} key={`${c}_iconeKey`}
+									<img style={{width: '20px', height: '20px', margin: '10px'}} key={`${c}_iconeKey`}
 											 src={getHazardImage(c)}/>)}
 							</div>
 						</div>
