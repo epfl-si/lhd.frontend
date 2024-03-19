@@ -99,7 +99,7 @@ export const DetailsTab = ({
   };
 
   return <Stack spacing={2} className="roomDetailsDiv">
-    <div className="displayFlexRow">
+    <div className="displayFlexColumn">
       <label style={{fontSize: 'medium'}}>{t(`room_details.building`)}: <strong>{room.building}</strong></label>
       <label style={{fontSize: 'medium'}}>{t(`room_details.sector`)}: <strong>{room.sector}</strong></label>
       <label style={{fontSize: 'medium'}}>{t(`room_details.floor`)}: <strong>{room.floor}</strong></label>

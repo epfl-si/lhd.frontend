@@ -36,31 +36,34 @@ export const HazardCard = ({
           {t(`hazards.`.concat(hazardName))}
         </strong>
       </div>
-      {listSavedCategories.includes(hazardName) ?
-        <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Button size="icon"
+        <div className="displayFlexRow" style={{alignItems: 'center'}}>
+          {listSavedCategories.includes(hazardName) ?
+          <>
+            <Button size="icon"
                   iconName={"#plus-circle"}
                   onClick={() => {
                     if ( onAdd ) onAdd(hazardName);
                   }}/>
-          <Button size="icon"
+            <Button size="icon"
                   iconName={"#edit-3"}
                   onClick={() => {
                     if ( onEdit ) onEdit(hazardName);
                   }}/>
-          <Button size="icon"
+            <Button size="icon"
                 iconName={"#eye"}
                   onClick={() => {
                     if ( onOpen ) onOpen(hazardName);
                   }}
-          style={{marginLeft: '10px'}}/>
-        </div> :
-        <Button size="icon"
+                style={{marginLeft: '10px'}}/>
+          </>:
+            <Button size="icon"
                 iconName={"#plus-circle"}
                 onClick={() => {
                   if ( onAdd ) onAdd(hazardName);
-                }}/>
-        }
+                }}
+                style={{marginLeft: '10px'}}/>
+          }
+        </div>
     </div>
   </FormCard>
 };
