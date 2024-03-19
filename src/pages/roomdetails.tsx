@@ -12,9 +12,12 @@ import {useTranslation} from "react-i18next";
 import "formiojs/dist/formio.full.min.css";
 import {HazardTab} from "../components/RoomDetails/HazardTab";
 import {DetailsTab} from "../components/RoomDetails/DetailsTab";
+import {BackButton} from "../components/global/BackButton";
+import {useHistory} from "react-router-dom";
 
 export default function RoomDetails() {
 	const { t } = useTranslation();
+	const history = useHistory();
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType | null>(null);
 
@@ -44,7 +47,8 @@ export default function RoomDetails() {
 	
 	return (
 		<Box>
-			<Typography variant="h5" gutterBottom>{t(`room_details.title`).concat(data?.name)}</Typography>
+			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/")}}/>
+			<Typography gutterBottom>{t(`room_details.title`).concat(data?.name)}</Typography>
 			<Tabs>
 				<Tabs.Tab id="details">
 					<Tabs.Tab.Title>
@@ -56,7 +60,7 @@ export default function RoomDetails() {
 						</div>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <DetailsTab roomData={data}  onSaveRoom={onSaveRoom}/>}
+						{data && <DetailsTab roomData={data} onSaveRoom={onSaveRoom}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 				<Tabs.Tab id="hazards">
@@ -75,7 +79,7 @@ export default function RoomDetails() {
 						</div>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <HazardTab room={data}  onSaveRoom={onSaveRoom}/>}
+						{data && <HazardTab room={data} onSaveRoom={onSaveRoom}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 			</Tabs>

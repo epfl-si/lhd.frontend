@@ -73,7 +73,7 @@ export default function UnitControl() {
 
 	return (
 		<Box>
-			<Typography variant="h5" gutterBottom>
+			<Typography gutterBottom>
 				{t(`unit.unitList`)}
 			</Typography>
 			<DebounceInput

@@ -14,12 +14,14 @@ import {deleteUnit, updateUnit} from "../utils/graphql/PostingTools";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {useTranslation} from "react-i18next";
-import {Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import {AlertDialog} from "../components/global/AlertDialog";
 import {UnitTabTitle} from "../components/Units/UnitTabTitle";
+import {BackButton} from "../components/global/BackButton";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
+	const history = useHistory();
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<lhdUnitsType[]>([]);
 
@@ -139,8 +141,9 @@ export default function UnitDetails() {
 	};
 
 	return (
-		<Box>
-			<Typography variant="h5" gutterBottom>
+		<div>
+			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}}/>
+			<Typography gutterBottom>
 				{
 					(data[0]?.unitId ? '' :
 						<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
@@ -157,7 +160,7 @@ export default function UnitDetails() {
 			>
 				<ResponsiveTabs.Tab key="profTab" id="profTab">
 					<ResponsiveTabs.Tab.Title>
-						<UnitTabTitle title={t(`unit_details.profTab`)} icon='#user' />
+						<UnitTabTitle title={t(`unit_details.profTab`)} icon='#user'/>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
@@ -165,43 +168,43 @@ export default function UnitDetails() {
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="cosec" id="cosec">
 					<ResponsiveTabs.Tab.Title>
-						<UnitTabTitle title={t(`unit_details.cosecTab`)} icon='#shield' />
+						<UnitTabTitle title={t(`unit_details.cosecTab`)} icon='#shield'/>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
 						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 				{
-					data[0]?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits" >
-							<ResponsiveTabs.Tab.Title>
-								<UnitTabTitle title={t(`unit_details.subunitTab`)} icon='#layers' />
-							</ResponsiveTabs.Tab.Title>
-							<ResponsiveTabs.Tab.Content>
-								<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
-							</ResponsiveTabs.Tab.Content>
-						</ResponsiveTabs.Tab>) : <></>
+					data[0]?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits">
+						<ResponsiveTabs.Tab.Title>
+							<UnitTabTitle title={t(`unit_details.subunitTab`)} icon='#layers'/>
+						</ResponsiveTabs.Tab.Title>
+						<ResponsiveTabs.Tab.Content>
+							<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
+						</ResponsiveTabs.Tab.Content>
+					</ResponsiveTabs.Tab>) : <></>
 				}
 			</ResponsiveTabs>
 
 			<div style={{marginTop: '50px'}}>
-					<Button
-						onClick={() => setOpenDialog(true)}
-						label={t(`generic.deleteButton`)}
-						iconName={`${featherIcons}#trash`}
-						primary/>
-					<Button
-						onClick={() => saveUnitDetails()}
-						label={t(`generic.saveButton`)}
-						iconName={`${featherIcons}#save`}
-						style={{marginLeft: '10px'}}
-						primary/>
-				</div>
+				<Button
+					onClick={() => setOpenDialog(true)}
+					label={t(`generic.deleteButton`)}
+					iconName={`${featherIcons}#trash`}
+					primary/>
+				<Button
+					onClick={() => saveUnitDetails()}
+					label={t(`generic.saveButton`)}
+					iconName={`${featherIcons}#save`}
+					style={{marginLeft: '10px'}}
+					primary/>
+			</div>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
 			/>
-			{deleted ? <Redirect to="/unitcontrol" /> : <></>}
+			{deleted ? <Redirect to="/unitcontrol"/> : <></>}
 			<AlertDialog openDialog={openDialog}
 									 onOkClick={deleteUnitDetails}
 									 onCancelClick={() => setOpenDialog(false)}
@@ -209,6 +212,6 @@ export default function UnitDetails() {
 									 okLabel={t('generic.deleteButton')}
 									 title={t('unit_details.deleteUnitConfirmationMessageTitle')}
 									 body={t('unit_details.deleteUnitConfirmationMessageDescription')}/>
-		</Box>
+		</div>
 	);
 }

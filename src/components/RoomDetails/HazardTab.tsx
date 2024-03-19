@@ -5,6 +5,7 @@ import {fetchHazardForms} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardFormVBox} from "./HazardFormVBox";
+import {BackButton} from "../global/BackButton";
 
 interface HazardTabProps {
   room: roomDetailsType;
@@ -20,6 +21,7 @@ export const HazardTab = ({
   // Remembers the left-hand side hazard category (e.g. lasers) that the user has selected.
   // The initial value means none of them.
   const [selectedHazardCategory, setSelectedHazardCategory] = useState<string>('');
+  const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
 
   useEffect(() => {
@@ -32,9 +34,20 @@ export const HazardTab = ({
       if (resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string') {
         setAvailableHazardsInDB([...resultsHazardCategory.data]);
       }
+
+      toggleDivVisibility();
+      window.addEventListener("resize", toggleDivVisibility);
     };
     loadFetch();
   }, [oidc.accessToken]);
+
+  function toggleDivVisibility() {
+    if (window.innerWidth <= 1024) {
+      setIsLittleScreen(true);
+    } else {
+      setIsLittleScreen(false);
+    }
+  }
 
   function onReadHazard(hazard: string) {
     setSelectedHazardCategory(hazard);
@@ -53,7 +66,7 @@ export const HazardTab = ({
   }
 
   return <div style={{display: 'flex', flexDirection: 'row'}}>
-    <div style={{width: '30%'}}>
+    <div className="roomHazardCardsDiv" style={{display: (isLittleScreen && selectedHazardCategory != '') ? 'none' : 'flex'}}>
       {availableHazardsInDB.map(h =>
         <HazardCard hazardName={h.hazard_category.hazard_category_name}
                     key={h.hazard_category.hazard_category_name}
@@ -64,7 +77,8 @@ export const HazardTab = ({
                     onEditMode={false}/>
       )}
     </div>
-    <div style={{width: '70%', padding: '50px', visibility: selectedHazardCategory != '' ? 'visible' : 'hidden'}}>
+    <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
+      <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>
       <HazardFormVBox room={room}
                       action={action}
                       onChangeAction={onEditHazard}

@@ -63,7 +63,7 @@ export default function DispensationControls() {
 			width="100%"
 			gridGap={8}
 		>
-			<Typography variant="h5">
+			<Typography>
 				What would you want to do with dispensations ?
 			</Typography>
 			<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

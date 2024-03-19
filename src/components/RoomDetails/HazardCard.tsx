@@ -32,7 +32,7 @@ export const HazardCard = ({
       <div>
         <img style={{margin: '5px', width: '30px', height: '30px'}}
              src={getHazardImage(hazardName)}/>
-        <strong style={{marginLeft: "10px", color: listSavedCategories.includes(hazardName) ? "black" : "gray"}}>
+        <strong className="textCard" style={{color: listSavedCategories.includes(hazardName) ? "black" : "gray"}}>
           {t(`hazards.`.concat(hazardName))}
         </strong>
       </div>

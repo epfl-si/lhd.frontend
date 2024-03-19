@@ -51,17 +51,49 @@
     font-size: small;
 }
 
-@include media-breakpoint-up(md) {
+// Medium devices (tablets, less than 992px)
+@media (max-width: 1024px) {
+    .debounce-input {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .roomDetailsDiv {
+        width: 100%;
+    }
+    .roomHazardCardsDiv {
+        width: 100%;
+        flex-direction: column;
+    }
+    .roomHazarFormDiv {
+        width: 100%;
+        flex-direction: column;
+    }
+    .textCard {
+        margin-left: 10px;
+        font-size: small;
+    }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 1025px) {
     .debounce-input {
         margin-bottom: 10px;
         width: 40%;
     }
-}
-
-
-@include media-breakpoint-down(md) {
-    .debounce-input {
-        margin-bottom: 10px;
-        width: 100%;
+    .roomDetailsDiv {
+        width: 30%;
+    }
+    .roomHazardCardsDiv {
+        width: 30%;
+        flex-direction: column;
+    }
+    .roomHazarFormDiv {
+        width: 70%;
+        padding: 20px;
+        flex-direction: column;
+    }
+    .textCard {
+        margin-left: 10px;
+        font-size: small;
     }
 }

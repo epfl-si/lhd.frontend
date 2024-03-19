@@ -86,7 +86,7 @@ export const DetailsTab = ({
       setNotificationType(notif);
     } else if (res.status === 200) {
       onSaveRoom();
-      //setSavedUnits(selectedUnits.filter(u => u.status !== 'Deleted'));
+      setSavedUnits(selectedUnits.filter(u => u.status !== 'Deleted'));
       setNotificationType(notificationsVariants['room-update-success']);
     } else {
       setNotificationType(notificationsVariants['room-update-error']);
@@ -98,7 +98,7 @@ export const DetailsTab = ({
     setOpenNotification(false);
   };
 
-  return <Stack spacing={2} width="30%">
+  return <Stack spacing={2} className="roomDetailsDiv">
     <div className="displayFlexRow">
       <label style={{fontSize: 'medium'}}>{t(`room_details.building`)}: <strong>{room.building}</strong></label>
       <label style={{fontSize: 'medium'}}>{t(`room_details.sector`)}: <strong>{room.sector}</strong></label>

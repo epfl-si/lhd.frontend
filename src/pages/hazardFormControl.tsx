@@ -45,7 +45,7 @@ export default function HazardFormControl() {
 	};
 
 	return <Box>
-			<Typography variant="h5" gutterBottom>
+			<Typography gutterBottom>
 				{t(`hazardFormControl.title`)}
 			</Typography>
 			<EntriesTableCategory

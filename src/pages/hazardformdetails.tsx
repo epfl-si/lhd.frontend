@@ -127,7 +127,7 @@ export default function HazardFormDetails() {
 
 	return (
 		<Box>
-			<Typography variant="h5"
+			<Typography
 									gutterBottom>{urlParams.get('cat') == 'NewCategory' ?
 				t(`hazardFormControl.Create`) :
 				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong>
