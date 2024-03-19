@@ -6,6 +6,7 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardFormVBox} from "./HazardFormVBox";
 import {BackButton} from "../global/BackButton";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 
 interface HazardTabProps {
   room: roomDetailsType;
@@ -23,6 +24,7 @@ export const HazardTab = ({
   const [selectedHazardCategory, setSelectedHazardCategory] = useState<string>('');
   const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
+  const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -78,7 +80,18 @@ export const HazardTab = ({
       )}
     </div>
     <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
-      <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>
+      {isLittleScreen && listSavedCategories.includes(selectedHazardCategory) ?
+        <div style={{display: 'flex', flexDirection: 'row'}}>
+          <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>
+          <Button size="icon"
+                  iconName={"#plus-circle"}
+                  style={{marginLeft: '10px'}}
+                  onClick={() => onAddHazard(selectedHazardCategory)}/>
+          <Button size="icon"
+                  iconName={"#edit-3"}
+                  onClick={() => onEditHazard(selectedHazardCategory)}
+                  style={{marginLeft: '10px', display: action != "Edit" ? 'flex' : 'none'}}/>
+        </div> : <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>}
       <HazardFormVBox room={room}
                       action={action}
                       onChangeAction={onEditHazard}
