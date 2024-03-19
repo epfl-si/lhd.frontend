@@ -9,13 +9,13 @@ import {
   submissionForm
 } from "../../utils/ressources/types";
 import {getHazardImage} from "./HazardProperties";
-import {Form} from "@formio/react";
 import {addHazard} from "../../utils/graphql/PostingTools";
 import {env} from "../../utils/env";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {fetchHazardsInRoom} from "../../utils/graphql/FetchingTools";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import {HazardForm} from "./HazardForm";
 
 interface HazardFormVBoxProps {
   onDirtyState?: (e: React.MouseEvent) => void;
@@ -131,6 +131,10 @@ export const HazardFormVBox = ({
     setOpenNotification(false);
   };
 
+  const onChangeSubmission = (submissionForms: submissionForm[]) => {
+    setFormData([...submissionForms]);
+  }
+
   return <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
       <img style={{margin: '5px', width: '30px', height: '30px'}}
@@ -138,18 +142,7 @@ export const HazardFormVBox = ({
       <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
     </div>
     {submissionForm.map(sf => <div>
-        <Form
-          onChange={(event) => {
-            const submissions = formData.filter(f => f.id != sf.id);
-            submissions.push({id: sf.id, submission: {data: event.data}});
-            setFormData([...submissions]);
-          }}
-          options={{
-            readOnly: action == "Read",//i18n: {en: {},},
-          }}
-          key={sf.id}
-          submission={sf.submission}
-          form={sf.form}/>
+      <HazardForm submission={sf} formData={formData} action={action} onChangeSubmission={onChangeSubmission} />
         <hr/>
       </div>
     )}
