@@ -120,9 +120,9 @@ export const HazardFormVBox = ({
       setNotificationType(notif);
     } else if ( res.status === 200 ) {
       await fetchHazards();
-      setNotificationType(notificationsVariants['unit-update-success']);
+      setNotificationType(notificationsVariants['room-update-success']);
     } else {
-      setNotificationType(notificationsVariants['unit-update-error']);
+      setNotificationType(notificationsVariants['room-update-error']);
     }
     setOpenNotification(true);
   };

@@ -44,4 +44,12 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Unit update failed',
 	},
+	'hazardForm-update-error': {
+		type: 'error',
+		text: 'Hazard form update failed',
+	},
+	'hazardForm-update-success': {
+		type: 'success',
+		text: 'Hazard form has successfully been updated',
+	},
 };

@@ -253,7 +253,7 @@ i18next.use(initReactI18next).init({
 					cancelButton: 'Annuler'
 				},
 				menu: {
-					rooms: 'Rooms / Hazards',
+					rooms: 'Rooms / Dangers',
 					units: 'Unités',
 					dispensations: 'Dispensations',
 					hazardFormControl: 'Contrôle des formulaires des hasards'

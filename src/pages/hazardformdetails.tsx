@@ -114,9 +114,9 @@ export default function HazardFormDetails() {
 			} else {
 				loadFetch(category);
 			}
-			setNotificationType(notificationsVariants['unit-update-success']);
+			setNotificationType(notificationsVariants['hazardForm-update-success']);
 		} else {
-			setNotificationType(notificationsVariants['unit-update-error']);
+			setNotificationType(notificationsVariants['hazardForm-update-error']);
 		}
 		setOpenNotification(true);
 	};
