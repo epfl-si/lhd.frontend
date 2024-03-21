@@ -8,6 +8,7 @@ import {roomDetailsType} from "../../utils/ressources/types";
 interface HazardCardProps {
   room: roomDetailsType;
   hazardName: string;
+  backgroundColor: string;
   onEditMode : boolean;
   onOpen?: (hazardName: string) => void;
   onEdit?: (hazardName: string) => void;
@@ -17,6 +18,7 @@ interface HazardCardProps {
 export const HazardCard = ({
   room,
   hazardName,
+  backgroundColor,
   onEditMode,
   onOpen,
   onEdit,
@@ -28,7 +30,8 @@ export const HazardCard = ({
   //dirtyState
 
   return <FormCard key={hazardName.concat("_key")} keyValue={hazardName.concat("_key")}>
-    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between',
+      backgroundColor: `${backgroundColor}`}}>
       <div>
         <img style={{margin: '5px', width: '30px', height: '30px'}}
              src={getHazardImage(hazardName)}/>

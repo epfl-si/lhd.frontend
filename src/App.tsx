@@ -1,27 +1,16 @@
-import React from 'react';
-import { Base } from 'epfl-elements-react/src/Base';
-import { Avatar } from 'epfl-elements-react/src/Avatar';
-import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Base} from 'epfl-elements-react/src/Base';
+import {Avatar} from 'epfl-elements-react/src/Avatar';
+import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
 import BioHazard from './pages/biohazard';
-import HomePage from './pages/homepage';
-import {
-	LoginButton,
-	StateEnum,
-	useOpenIDConnectContext,
-} from '@epfl-si/react-appauth';
-import {
-	Box,
-	Dialog,
-	DialogActions,
-	DialogContent,
-	DialogTitle,
-} from '@material-ui/core';
-import { Alert } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import {HomePage} from './pages/homepage';
+import {LoginButton, StateEnum, useOpenIDConnectContext,} from '@epfl-si/react-appauth';
+import {Box, Dialog, DialogActions, DialogContent, DialogTitle,} from '@material-ui/core';
+import {Alert} from '@mui/material';
+import {useTranslation} from 'react-i18next';
 import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
-import NewDispForm from './components/DispensationControls/NewDispForm';
 import UnitControl from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
 import HazardFormControl from "./pages/hazardFormControl";
@@ -31,6 +20,12 @@ function App() {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
+	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
+
+	const handlerMenuColor = (page: string) => {
+		setSelectedMenu(page);
+	}
+
 	if (!isLoggedIn) {
 		return (
 			<Dialog open={true}>
@@ -51,16 +46,16 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
-						<li>
+						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? 'FFCECE' : ''}`}}>
 							<Link to="/">{t(`menu.rooms`)}</Link>
 						</li>
-						<li>
+						<li style={{backgroundColor: `${selectedMenu == 'units' ? 'FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
-						<li>
+						<li style={{backgroundColor: `${selectedMenu == 'dispensations' ? 'FFCECE' : ''}`}}>
 							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
 						</li>
-						<li>
+						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? 'FFCECE' : ''}`}}>
 							<Link to="/hazardFormControl">{t(`menu.hazardFormControl`)}</Link>
 						</li>
 					</ul>
@@ -70,7 +65,7 @@ function App() {
 				</Base.Breadcrumbs>
 				<Base.User>
 					<Avatar>
-						<Avatar.Image peopleSciper={'169419'} />
+						<Avatar.Image peopleSciper={'169419'}/>
 						<Box
 							display="flex"
 							flexDirection="row"
@@ -78,15 +73,15 @@ function App() {
 							justifyContent="center"
 							gridGap={4}
 						>
-							<LoginButton />
-							<LanguageSwitcher />
+							<LoginButton/>
+							<LanguageSwitcher/>
 						</Box>
 					</Avatar>
 				</Base.User>
 
-				<div className="container-full" style={{ width: '100%', padding: '1em' }}>
+				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
-						<Route path="/unitcontrol">
+					<Route path="/unitcontrol">
 							<UnitControl />
 						</Route>
 						<Route path="/unitdetails">
@@ -108,7 +103,7 @@ function App() {
 							<BioHazard />
 						</Route>
 						<Route path="/">
-							<HomePage />
+							<HomePage handleCurrentPage={handlerMenuColor}/>
 						</Route>
 					</Switch>
 				</div>
