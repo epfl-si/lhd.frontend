@@ -47,7 +47,7 @@ export function EntriesTableCategory({
 					onRowClick={e => {
 						switch ( page ) {
 							case "room":
-								history.push(`/roomdetails?room=${e.row['room.name']}`);
+								history.push(`/roomdetails?room=${e.row['name']}`);
 								break;
 							case "unit":
 								history.push(`/unitdetails?unit=${e.row['name']}`);
@@ -60,7 +60,7 @@ export function EntriesTableCategory({
 					getRowId={(row: any) =>  {
 						switch ( page ) {
 							case "room":
-								return row.id;
+								return row.id
 							case "unit":
 								return row.name;
 							case "hazardForms":

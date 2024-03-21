@@ -66,6 +66,7 @@ export type roomDetailsType = {
 	lhd_units: lhdUnitsType[];
 	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
+	hazardsListName?: string[];
 };
 
 export type hazardType = {

@@ -15,6 +15,7 @@ import UnitControl from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
 import HazardFormControl from "./pages/hazardFormControl";
 import HazardFormDetails from "./pages/hazardformdetails";
+import RoomControl from "./pages/rooms";
 
 function App() {
 	const { t } = useTranslation();
@@ -23,6 +24,7 @@ function App() {
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
 
 	const handlerMenuColor = (page: string) => {
+		//<!--  <HomePage handleCurrentPage={handlerMenuColor}/> -->
 		setSelectedMenu(page);
 	}
 
@@ -103,7 +105,7 @@ function App() {
 							<BioHazard />
 						</Route>
 						<Route path="/">
-							<HomePage handleCurrentPage={handlerMenuColor}/>
+							<RoomControl />
 						</Route>
 					</Switch>
 				</div>

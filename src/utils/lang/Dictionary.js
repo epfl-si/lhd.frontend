@@ -8,6 +8,7 @@ i18next.use(initReactI18next).init({
 		en: {
 			translation: {
 				room: {
+					roomList: 'Rooms',
 					name: 'Room',
 					building: 'Building',
 					sector: 'Sector',
@@ -149,6 +150,7 @@ i18next.use(initReactI18next).init({
 		fr: {
 			translation: {
 				room: {
+					roomList: 'Salles',
 					name: 'Salle',
 					building: 'Bâtiment',
 					sector: 'Secteur',

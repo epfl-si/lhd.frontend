@@ -255,6 +255,41 @@ export const fetchUnits = async (
 	};
 };
 
+export const fetchRooms = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<fetchRoomResultsType> => {
+	const query: string = `query RoomFetch { 
+				rooms (first: 10) {
+				id
+					name
+					building
+					sector
+					floor
+					vol
+					vent
+					kind {
+						name
+					}
+          hazards {
+            hazard_form_history {
+              hazard_form {
+                hazard_category {
+                  hazard_category_name
+                }
+              }
+            }
+          }
+				},
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.rooms,
+	};
+};
+
 export const fetchUnitsFromFullText = async (
 	address: string | undefined,
 	authToken: string | undefined,
