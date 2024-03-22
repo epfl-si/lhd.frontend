@@ -11,12 +11,14 @@ import { GridRenderCellParams } from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 
 export default function UnitControl() {
+	const PAGE_SIZE = 100;
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<lhdUnitsType[]>([]);
-	const [optionsList, setOptionsList] = useState<parameterType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [search, setSearch] = React.useState('');
+	const [page, setPage] = useState<number>(0);
+	const [totalCount, setTotalCount] = useState<number>(0);
 	const columns: columnType[] = [
 		{
 			field: "unitId", headerName: '', width: 30,
@@ -44,24 +46,27 @@ export default function UnitControl() {
 	];
 
 	useEffect(() => {
-		const loadFetch = async () => {
-			setLoading(true);
-			const results = await fetchUnitsFromFullText(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				search
-			);
-			if (results.status === 200) {
-				if (results.data) {
-					setTableData(results.data);
-				} else {
-					console.error('Bad GraphQL results', results);
-				}
-			}
-			setLoading(false);
-		};
-		loadFetch();
+		loadFetch(0);
 	}, [oidc.accessToken, search]);
+
+	const loadFetch = async (newPage: number) => {
+		setPage(newPage);
+		setLoading(true);
+		const results = await fetchUnitsFromFullText(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			PAGE_SIZE,
+			PAGE_SIZE * newPage,
+			search
+		);
+		if (results.status === 200 && results.data) {
+			setTableData(results.data.units);
+			setTotalCount(results.data.totalCount);
+		} else {
+			console.error('Bad GraphQL results', results);
+		}
+		setLoading(false);
+	};
 
 	function onChangeInput(newValue: string) {
 		if (newValue) {
@@ -84,11 +89,14 @@ export default function UnitControl() {
 				className="debounce-input"
 			/>
 			<EntriesTableCategory
-				optionsList={optionsList}
 				tableData={tableData}
 				columns={columns}
 				loading={loading}
-				page={"unit"}
+				pageToOpen={"unit"}
+				loadServerRows={loadFetch}
+				page={page}
+				totalCount={totalCount}
+				pageSize={PAGE_SIZE}
 			/>
 		</Box>
 	);

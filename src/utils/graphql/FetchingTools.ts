@@ -12,6 +12,16 @@ type fetchRoomResultsType = {
 	data?: roomDetailsType[] | string;
 };
 
+type fetchRoomResultsTypeWithPagination = {
+	status?: number;
+	data?: roomsWithPaginationType;
+};
+
+type roomsWithPaginationType = {
+	rooms: roomDetailsType[];
+	totalCount: number;
+};
+
 type fetchKindRoomType = {
 	status?: number;
 	data?: kindType[] | string;
@@ -20,6 +30,16 @@ type fetchKindRoomType = {
 type fetchUnitsType = {
 	status?: number;
 	data?: lhdUnitsType[] | string;
+};
+
+type fetchUnitsTypeWithPagination = {
+	status?: number;
+	data?: unitsWithPaginationType;
+};
+
+type unitsWithPaginationType = {
+	units: lhdUnitsType[];
+	totalCount: number;
 };
 
 type fetchFormsType = {
@@ -257,63 +277,75 @@ export const fetchUnits = async (
 
 export const fetchRooms = async (
 	address: string | undefined,
-	authToken: string | undefined
-): Promise<fetchRoomResultsType> => {
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string
+): Promise<fetchRoomResultsTypeWithPagination> => {
 	const query: string = `query RoomFetch { 
-				rooms (first: 10) {
-				id
-					name
-					building
-					sector
-					floor
-					vol
-					vent
-					kind {
+				roomsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
+					rooms {
+						id
 						name
-					}
-          hazards {
-            hazard_form_history {
-              hazard_form {
-                hazard_category {
-                  hazard_category_name
-                }
-              }
-            }
-          }
+						building
+						sector
+						floor
+						vol
+						vent
+						kind {
+							name
+						}
+						hazards {
+							hazard_form_history {
+								hazard_form {
+									hazard_category {
+										hazard_category_name
+									}
+								}
+							}
+						}
+    			}
+    			totalCount
 				},
 			}`;
 
+	console.log(query)
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.rooms,
+		data: result.data?.roomsWithPagination,
 	};
 };
 
 export const fetchUnitsFromFullText = async (
 	address: string | undefined,
 	authToken: string | undefined,
+	take: number,
+	skip: number,
 	search: string
-): Promise<fetchUnitsType> => {
+): Promise<fetchUnitsTypeWithPagination> => {
 	const query: string = `query UnitFetchFromFullText { 
-						unitsFromFullText(search: "${search}") {
-							name
-							unitId
-							id
-							institute {
+						unitsFromFullText(take: ${take}, skip: ${skip}, search: "${search}") {
+							units {
 								name
-								school {
+								unitId
+								id
+								institute {
 									name
+									school {
+										name
+									}
+								}
+								cosecs {
+									name
+									surname
+								}
+								professors {
+									name
+									surname
 								}
 							}
-							cosecs {
-								name
-								surname
-							}
-							professors {
-								name
-								surname
-							}
+							totalCount
 						}
 					}`;
 

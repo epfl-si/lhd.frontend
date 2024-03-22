@@ -49,11 +49,10 @@ export default function HazardFormControl() {
 				{t(`hazardFormControl.title`)}
 			</Typography>
 			<EntriesTableCategory
-				optionsList={[]}
 				tableData={tableData}
 				columns={columns}
 				loading={loading}
-				page={"hazardForms"}
+				pageToOpen={"hazardForms"}
 			/>
 			<div style={{marginTop: '50px'}}>
 				<Button

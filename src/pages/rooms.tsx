@@ -8,13 +8,17 @@ import {columnType, parameterType, roomDetailsType} from "../utils/ressources/ty
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getHazardImage} from "../components/RoomDetails/HazardProperties";
+import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 
 export default function RoomControl() {
+	const PAGE_SIZE = 100;
 	const {t} = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<roomDetailsType[]>([]);
-	const [optionsList, setOptionsList] = useState<parameterType[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [search, setSearch] = React.useState('');
+	const [page, setPage] = useState<number>(0);
+	const [totalCount, setTotalCount] = useState<number>(0);
 	const columns: columnType[] = [
 			{field: "name", headerName: t('room.name'), width: 230},
 			{field: "building", headerName: t('room.building'), width: 230},
@@ -32,7 +36,7 @@ export default function RoomControl() {
 					<div className="displayFlexRow" style={{justifyContent: 'center'}}>
 						{
 							params.row.hazardsListName.map(c =>
-								<img style={{width: '20px', height: '20px', margin: '10px'}} key={`${c}_iconeKey`}
+								<img style={{width: '30px', height: '30px', margin: '5px'}} key={`${c}_iconeKey`}
 										 src={getHazardImage(c)}/>)
 						}
 					</div>
@@ -41,40 +45,62 @@ export default function RoomControl() {
 	];
 
 	useEffect(() => {
-		const loadFetch = async () => {
-			setLoading(true);
-			const results = await fetchRooms(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken
-			);
-			if ( results.status === 200 ) {
-				if ( results.data && !(results.data instanceof String)) {
-					const roomsList: roomDetailsType[] = results.data;
-					roomsList.forEach(r => {
-						const listCat = r.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
-						r.hazardsListName = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
-					});
-					setTableData(roomsList);
-				} else {
-					console.error('Bad GraphQL results', results);
-				}
-			}
-			setLoading(false);
-		};
-		loadFetch();
-	}, [oidc.accessToken]);
+		loadFetch(0);
+	}, [oidc.accessToken, search]);
+
+	const loadFetch = async (newPage: number) => {
+		setPage(newPage);
+		setLoading(true);
+		const results = await fetchRooms(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			PAGE_SIZE,
+			PAGE_SIZE * newPage,
+			search
+		);
+		if ( results.status === 200 && results.data) {
+			const roomsList: roomDetailsType[] = results.data.rooms;
+			roomsList.forEach(r => {
+				const listCat = r.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+				r.hazardsListName = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
+			});
+			setTableData(roomsList);
+			setTotalCount(results.data.totalCount);
+		} else {
+			console.error('Bad GraphQL results', results);
+		}
+		setLoading(false);
+	};
+
+	function onChangeInput(newValue: string) {
+		if (newValue) {
+			setSearch(newValue);
+		} else {
+			setSearch('');
+		}
+	}
 
 	return (
 		<Box>
 			<Typography gutterBottom>
 				{t(`room.roomList`)}
 			</Typography>
+			<DebounceInput
+				input={search}
+				id="member"
+				onChange={onChangeInput}
+				placeholder={t(`unit.search`)}
+				className="debounce-input"
+			/>
 			<EntriesTableCategory
-				optionsList={optionsList}
 				tableData={tableData}
 				columns={columns}
 				loading={loading}
-				page={"room"}
+				pageToOpen={"room"}
+				loadServerRows={loadFetch}
+				page={page}
+				totalCount={totalCount}
+				pageSize={PAGE_SIZE}
 			/>
 		</Box>
 	);

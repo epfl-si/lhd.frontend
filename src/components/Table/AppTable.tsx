@@ -151,7 +151,7 @@ export function AppTable({ graphqlBody, variables, page }: AppTableProps) {
 						tableData={tableData}
 						columns={columns}
 						loading={loading}
-						page={page}
+						pageToOpen={page}
 					/>
 					<Box width="100%" paddingY="16px">
 						<Button onClick={onShare} variant="outlined">
