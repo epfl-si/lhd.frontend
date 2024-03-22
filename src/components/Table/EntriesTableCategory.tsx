@@ -62,10 +62,10 @@ export function EntriesTableCategory({
 						onRowClick={e => {
 							switch ( pageToOpen ) {
 								case "unit":
-									history.push(`/unitdetails?unit=${e.row['name']}`);
+									history.push(`/unitdetails?unit=${encodeURIComponent(e.row['name'])}`);
 									break;
 								case "room":
-									history.push(`/roomdetails?room=${e.row['name']}`);
+									history.push(`/roomdetails?room=${encodeURIComponent(e.row['name'])}`);
 									break;
 							}
 						}}

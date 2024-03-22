@@ -49,7 +49,7 @@ export default function UnitDetails() {
 		const results = await fetchUnitDetails(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			urlParams.get('unit'),
+			decodeURIComponent(urlParams.get('unit') as string),
 			{}
 		);
 

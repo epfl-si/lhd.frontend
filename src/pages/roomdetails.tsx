@@ -33,7 +33,7 @@ export default function RoomDetails() {
 		const results = await fetchRoomDetails(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			urlParams.get('room'),
+			decodeURIComponent(urlParams.get('room') as string),
 			{}
 		);
 		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
