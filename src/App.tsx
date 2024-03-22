@@ -16,12 +16,32 @@ import UnitDetails from "./pages/unitdetails";
 import HazardFormControl from "./pages/hazardFormControl";
 import HazardFormDetails from "./pages/hazardformdetails";
 import RoomControl from "./pages/rooms";
+import {fetchConnectedUser} from "./utils/graphql/FetchingTools";
+import {env} from "./utils/env";
 
 function App() {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
+	const [userGroups, setUserGroups] = useState<string[]>([]);
+
+	useEffect(() => {
+		if (isLoggedIn) {
+			loadFetch();
+		}
+	}, [oidc.accessToken, isLoggedIn]);
+
+	const loadFetch = async () => {
+		const results = await fetchConnectedUser(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken
+		);
+		if (results.status === 200 && results.data) {
+			console.log(results.data.groups);
+			setUserGroups(results.data.groups);
+		}
+	};
 
 	const handlerMenuColor = (page: string) => {
 		//<!--  <HomePage handleCurrentPage={handlerMenuColor}/> -->

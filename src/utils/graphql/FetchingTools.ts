@@ -489,3 +489,20 @@ export const fetchHazardFormDetails = async (
 		data: result.data?.hazardForms
 	};
 };
+
+export const fetchConnectedUser = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query = `query connection {
+            connectedUserInfo {
+              groups
+            }
+          }`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.connectedUserInfo
+	};
+};
