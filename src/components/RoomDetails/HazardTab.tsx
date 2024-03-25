@@ -52,31 +52,35 @@ export const HazardTab = ({
   }
 
   function onReadHazard(hazard: string) {
-    onChangeHazard(hazard, availableHazardsInDB);
+    onChangeHazard(hazard);
     setAction('Read');
   }
 
   function onEditHazard(hazard: string) {
-    onChangeHazard(hazard, availableHazardsInDB);
+    onChangeHazard(hazard);
     onSaveRoom();
     setAction('Edit');
   }
 
   function onAddHazard(hazard: string) {
-    onChangeHazard(hazard, availableHazardsInDB);
+    onChangeHazard(hazard);
     setAction('Add');
   }
 
-  function onChangeHazard(hazard: string, hazardsArray: hazardFormType[]) {
+  function onChangeHazard(hazard: string) {
     setSelectedHazardCategory(hazard);
-    setAvailableHazardsInDB([...hazardsArray]);
+    const newHazardArray = availableHazardsInDB.map(h => {
+      h.isSelected = h.hazard_category.hazard_category_name == hazard
+      return h;
+    })
+    setAvailableHazardsInDB([...newHazardArray]);
   }
 
   return <div style={{display: 'flex', flexDirection: 'row'}}>
     <div className="roomHazardCardsDiv" style={{display: (isLittleScreen && selectedHazardCategory != '') ? 'none' : 'flex'}}>
       {availableHazardsInDB.map(h =>
         <HazardCard hazardName={h.hazard_category.hazard_category_name}
-                    backgroundColor={`${selectedHazardCategory == h.hazard_category.hazard_category_name ? 'FFCECE' : ''}`}
+                    backgroundColor={`${h.isSelected ? 'FFCECE' : ''}`}
                     key={h.hazard_category.hazard_category_name}
                     room={room}
                     onOpen={onReadHazard}
