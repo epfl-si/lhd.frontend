@@ -309,7 +309,6 @@ export const fetchRooms = async (
 				},
 			}`;
 
-	console.log(query)
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,

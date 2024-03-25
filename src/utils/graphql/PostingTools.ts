@@ -320,6 +320,5 @@ export const createNewHazardCategory = async (
               }
             }`;
 
-	console.log(query)
 	return makeQuery(query, {}, address, authToken);
 };
