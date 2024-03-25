@@ -11,11 +11,11 @@ import {useTranslation} from 'react-i18next';
 import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
-import UnitControl from "./pages/units";
+import {UnitControl} from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
 import HazardFormControl from "./pages/hazardFormControl";
 import HazardFormDetails from "./pages/hazardformdetails";
-import RoomControl from "./pages/rooms";
+import {RoomControl} from "./pages/rooms";
 import {fetchConnectedUser} from "./utils/graphql/FetchingTools";
 import {env} from "./utils/env";
 
@@ -25,6 +25,8 @@ function App() {
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
 	const [userGroups, setUserGroups] = useState<string[]>([]);
+	const defaultStyle = {}
+	const selectedStyle = {backgroundColor: 'FFCECE'}
 
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -38,13 +40,13 @@ function App() {
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data) {
-			console.log(results.data.groups);
+			console.log(results.data);
 			setUserGroups(results.data.groups);
 		}
 	};
 
 	const handlerMenuColor = (page: string) => {
-		//<!--  <HomePage handleCurrentPage={handlerMenuColor}/> -->
+		console.log(page)
 		setSelectedMenu(page);
 	}
 
@@ -68,10 +70,10 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
-						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? 'FFCECE' : ''}`}}>
+						<li style={selectedMenu == 'rooms' ? selectedStyle : defaultStyle}>
 							<Link to="/">{t(`menu.rooms`)}</Link>
 						</li>
-						<li style={{backgroundColor: `${selectedMenu == 'units' ? 'FFCECE' : ''}`}}>
+						<li style={selectedMenu == 'units' ? selectedStyle : defaultStyle}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
 						<li style={{backgroundColor: `${selectedMenu == 'dispensations' ? 'FFCECE' : ''}`}}>
@@ -104,7 +106,7 @@ function App() {
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
 					<Route path="/unitcontrol">
-							<UnitControl />
+							<UnitControl handleCurrentPage={handlerMenuColor}/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails />
@@ -125,7 +127,7 @@ function App() {
 							<BioHazard />
 						</Route>
 						<Route path="/">
-							<RoomControl />
+							<RoomControl handleCurrentPage={handlerMenuColor}/>
 						</Route>
 					</Switch>
 				</div>

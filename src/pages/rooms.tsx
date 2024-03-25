@@ -10,7 +10,13 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getHazardImage} from "../components/RoomDetails/HazardProperties";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 
-export default function RoomControl() {
+interface RoomControlProps {
+	handleCurrentPage: (page: string) => void;
+}
+
+export const RoomControl = ({
+	handleCurrentPage
+}: RoomControlProps) => {
 	const PAGE_SIZE = 100;
 	const {t} = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -104,6 +110,7 @@ export default function RoomControl() {
 
 	useEffect(() => {
 		loadFetch(0);
+		handleCurrentPage("rooms");
 	}, [oidc.accessToken, search]);
 
 	const loadFetch = async (newPage: number) => {

@@ -10,7 +10,13 @@ import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 
-export default function UnitControl() {
+interface UnitControlProps {
+	handleCurrentPage: (page: string) => void;
+}
+
+export const UnitControl = ({
+	handleCurrentPage
+}: UnitControlProps) => {
 	const PAGE_SIZE = 100;
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -47,6 +53,7 @@ export default function UnitControl() {
 
 	useEffect(() => {
 		loadFetch(0);
+		handleCurrentPage("units");
 	}, [oidc.accessToken, search]);
 
 	const loadFetch = async (newPage: number) => {
