@@ -24,9 +24,7 @@ function App() {
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
-	const [userGroups, setUserGroups] = useState<string[]>([]);
-	const defaultStyle = {}
-	const selectedStyle = {backgroundColor: 'FFCECE'}
+	const [connectedUser, setConnectedUser] = useState<object>({sciper: 169419, groups: []});
 
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -41,7 +39,7 @@ function App() {
 		);
 		if (results.status === 200 && results.data) {
 			console.log(results.data);
-			setUserGroups(results.data.groups);
+			setConnectedUser({sciper: 169419, groups: results.data.groups});
 		}
 	};
 
@@ -88,7 +86,7 @@ function App() {
 				</Base.Breadcrumbs>
 				<Base.User>
 					<Avatar>
-						<Avatar.Image peopleSciper={'169419'}/>
+						<Avatar.Image peopleSciper={connectedUser.sciper}/>
 						<Box
 							display="flex"
 							flexDirection="row"

@@ -505,3 +505,22 @@ export const fetchConnectedUser = async (
 		data: result.data?.connectedUserInfo
 	};
 };
+
+export const fetchSearchHistory = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	sciper: number,
+	page: string
+): Promise<any> => {
+	const query = `query getSearchForUser {
+		searchHistories (where: {sciper: {equals: ${sciper}}, page: {equals: "${page}"}}) {
+			search
+		}
+	}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.searchHistories
+	};
+};

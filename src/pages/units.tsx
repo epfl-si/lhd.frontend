@@ -1,6 +1,6 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchUnits, fetchUnitsFromFullText} from "../utils/graphql/FetchingTools";
+import {fetchSearchHistory, fetchUnits, fetchUnitsFromFullText} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
@@ -9,13 +9,16 @@ import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
+import {createNewSearchForUser} from "../utils/graphql/PostingTools";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
+	user: number;
 }
 
 export const UnitControl = ({
-	handleCurrentPage
+	handleCurrentPage,
+	user
 }: UnitControlProps) => {
 	const PAGE_SIZE = 100;
 	const { t } = useTranslation();
@@ -53,8 +56,26 @@ export const UnitControl = ({
 
 	useEffect(() => {
 		loadFetch(0);
+	}, [search]);
+
+	useEffect(() => {
+		loadSearchHistory();
 		handleCurrentPage("units");
-	}, [oidc.accessToken, search]);
+	}, [oidc.accessToken]);
+
+	const loadSearchHistory = async () => {
+		const results = await fetchSearchHistory(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			user,
+			'units'
+		);
+		if ( results.status === 200 && results.data && results.data[0] ) {
+			setSearch(results.data[0].search);
+		} else {
+			console.error('Bad GraphQL results', results);
+		}
+	};
 
 	const loadFetch = async (newPage: number) => {
 		setPage(newPage);
@@ -76,11 +97,19 @@ export const UnitControl = ({
 	};
 
 	function onChangeInput(newValue: string) {
-		if (newValue) {
-			setSearch(newValue);
-		} else {
-			setSearch('');
-		}
+		const val = newValue ?? '';
+		saveNewSearch(val);
+		setSearch(val);
+	}
+
+	async function saveNewSearch(val: string) {
+		await createNewSearchForUser(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			user,
+			'units',
+			val
+		)
 	}
 
 	return (

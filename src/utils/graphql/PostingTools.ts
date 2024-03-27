@@ -322,3 +322,26 @@ export const createNewHazardCategory = async (
 
 	return makeQuery(query, {}, address, authToken);
 };
+
+export const createNewSearchForUser = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	sciper: number,
+	page: string,
+	search: string
+): Promise<any> => {
+	const query = `mutation createNewSearchForUser {
+  createNewSearchForUser (
+    sciper: ${sciper},
+		page: "${page}",
+    search: "${search}"
+  ) {
+    errors {
+      message
+    }
+    isSuccess
+  }}`;
+
+	console.log(query)
+	return makeQuery(query, {}, address, authToken);
+};
