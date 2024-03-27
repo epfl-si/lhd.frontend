@@ -10,7 +10,16 @@ import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {useHistory} from "react-router-dom";
 
-export default function HazardFormControl() {
+
+interface HazardFormControlProps {
+	handleCurrentPage: (page: string) => void;
+	user: number;
+}
+
+export const HazardFormControl = ({
+	handleCurrentPage,
+	user
+}: HazardFormControlProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const history = useHistory();
@@ -28,6 +37,7 @@ export default function HazardFormControl() {
 
 	useEffect(() => {
 		loadFetch();
+		handleCurrentPage("hazardForms");
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {

@@ -13,7 +13,7 @@ import RoomDetails from './pages/roomdetails';
 import DispensationControls from './pages/dispensationcontrols';
 import {UnitControl} from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
-import HazardFormControl from "./pages/hazardFormControl";
+import {HazardFormControl} from "./pages/hazardFormControl";
 import HazardFormDetails from "./pages/hazardformdetails";
 import {RoomControl} from "./pages/rooms";
 import {fetchConnectedUser} from "./utils/graphql/FetchingTools";
@@ -32,7 +32,7 @@ function App() {
 		if (isLoggedIn) {
 			loadFetch();
 		}
-	}, [oidc.accessToken, isLoggedIn]);
+	}, [oidc.accessToken, isLoggedIn, selectedMenu]);
 
 	const loadFetch = async () => {
 		const results = await fetchConnectedUser(
@@ -45,8 +45,7 @@ function App() {
 		}
 	};
 
-	const handlerMenuColor = (page: string) => {
-		console.log(page)
+	const handleCurrentPage = (page: string) => {
 		setSelectedMenu(page);
 	}
 
@@ -70,16 +69,16 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
-						<li style={selectedMenu == 'rooms' ? selectedStyle : defaultStyle}>
+						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? '#FFCECE' : ''}`}}>
 							<Link to="/">{t(`menu.rooms`)}</Link>
 						</li>
-						<li style={selectedMenu == 'units' ? selectedStyle : defaultStyle}>
+						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
-						<li style={{backgroundColor: `${selectedMenu == 'dispensations' ? 'FFCECE' : ''}`}}>
+						{/*<li style={{backgroundColor: `${selectedMenu == 'dispensations' ? '#FFCECE' : ''}`}}>
 							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
-						</li>
-						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? 'FFCECE' : ''}`}}>
+						</li>*/}
+						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardFormControl">{t(`menu.hazardFormControl`)}</Link>
 						</li>
 					</ul>
@@ -106,7 +105,9 @@ function App() {
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
 					<Route path="/unitcontrol">
-							<UnitControl handleCurrentPage={handlerMenuColor}/>
+							<UnitControl handleCurrentPage={handleCurrentPage}
+													 user={connectedUser.sciper}
+							/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails />
@@ -115,7 +116,7 @@ function App() {
 							<DispensationControls />
 						</Route>
 						<Route path="/hazardFormControl">
-							<HazardFormControl />
+							<HazardFormControl handleCurrentPage={handleCurrentPage}/>
 						</Route>
 						<Route path="/roomdetails">
 							<RoomDetails />
@@ -127,7 +128,9 @@ function App() {
 							<BioHazard />
 						</Route>
 						<Route path="/">
-							<RoomControl handleCurrentPage={handlerMenuColor}/>
+							<RoomControl handleCurrentPage={handleCurrentPage}
+													 user={connectedUser.sciper}
+							/>
 						</Route>
 					</Switch>
 				</div>
