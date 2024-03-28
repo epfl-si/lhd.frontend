@@ -1,15 +1,15 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchSearchHistory, fetchUnits, fetchUnitsFromFullText} from "../utils/graphql/FetchingTools";
+import {fetchUnitsFromFullText} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType, parameterType} from "../utils/ressources/types";
+import {columnType, lhdUnitsType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import { GridRenderCellParams } from "@mui/x-data-grid";
+import {GridRenderCellParams} from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {createNewSearchForUser} from "../utils/graphql/PostingTools";
+import {useHistory} from "react-router-dom";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -21,6 +21,7 @@ export const UnitControl = ({
 	user
 }: UnitControlProps) => {
 	const PAGE_SIZE = 100;
+	const history = useHistory();
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<lhdUnitsType[]>([]);
@@ -59,23 +60,12 @@ export const UnitControl = ({
 	}, [search]);
 
 	useEffect(() => {
-		loadSearchHistory();
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.has('search')) {
+			setSearch(decodeURIComponent(urlParams.get('search') as string));
+		}
 		handleCurrentPage("units");
 	}, [oidc.accessToken]);
-
-	const loadSearchHistory = async () => {
-		const results = await fetchSearchHistory(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			user,
-			'units'
-		);
-		if ( results.status === 200 && results.data && results.data[0] ) {
-			setSearch(results.data[0].search);
-		} else {
-			console.error('Bad GraphQL results', results);
-		}
-	};
 
 	const loadFetch = async (newPage: number) => {
 		setPage(newPage);
@@ -98,18 +88,8 @@ export const UnitControl = ({
 
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
-		saveNewSearch(val);
 		setSearch(val);
-	}
-
-	async function saveNewSearch(val: string) {
-		await createNewSearchForUser(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			user,
-			'units',
-			val
-		)
+		history.push(`/unitcontrol?search=${encodeURIComponent(val)}`);
 	}
 
 	return (

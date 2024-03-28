@@ -1,15 +1,15 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchRooms, fetchSearchHistory} from "../utils/graphql/FetchingTools";
+import {fetchRooms} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, parameterType, roomDetailsType} from "../utils/ressources/types";
+import {columnType, roomDetailsType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getHazardImage} from "../components/RoomDetails/HazardProperties";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {createNewSearchForUser, updateRoom} from "../utils/graphql/PostingTools";
+import {useHistory} from "react-router-dom";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -21,6 +21,7 @@ export const RoomControl = ({
 	user
 }: RoomControlProps) => {
 	const PAGE_SIZE = 100;
+	const history = useHistory();
 	const {t} = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<roomDetailsType[]>([]);
@@ -29,7 +30,6 @@ export const RoomControl = ({
 	const [page, setPage] = useState<number>(0);
 	const [totalCount, setTotalCount] = useState<number>(0);
 
-	const isSmallDevice = useMediaQuery("only screen and (max-width : 768px)");
 	const isMediumDevice = useMediaQuery("only screen and (min-width : 769px) and (max-width : 992px)");
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
 	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
@@ -116,23 +116,12 @@ export const RoomControl = ({
 	}, [search]);
 
 	useEffect(() => {
-		loadSearchHistory();
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.has('search')) {
+			setSearch(decodeURIComponent(urlParams.get('search') as string));
+		}
 		handleCurrentPage("rooms");
 	}, [oidc.accessToken]);
-
-	const loadSearchHistory = async () => {
-		const results = await fetchSearchHistory(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			user,
-			'rooms'
-		);
-		if ( results.status === 200 && results.data && results.data[0] ) {
-			setSearch(results.data[0].search);
-		} else {
-			console.error('Bad GraphQL results', results);
-		}
-	};
 
 	const loadFetch = async (newPage: number) => {
 		setPage(newPage);
@@ -160,18 +149,8 @@ export const RoomControl = ({
 
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
-		saveNewSearch(val);
 		setSearch(val);
-	}
-
-	async function saveNewSearch(val: string) {
-		await createNewSearchForUser(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			user,
-			'rooms',
-			val
-		)
+		history.push(`/?search=${encodeURIComponent(val)}`);
 	}
 
 	return (
@@ -183,7 +162,7 @@ export const RoomControl = ({
 				input={search}
 				id="member"
 				onChange={onChangeInput}
-				placeholder={t(`unit.search`)}
+				placeholder={t(`room.search`)}
 				className="debounce-input"
 			/>
 			<EntriesTableCategory
