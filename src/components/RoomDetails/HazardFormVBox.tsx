@@ -152,8 +152,8 @@ export const HazardFormVBox = ({
       <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
     </div>
     {submissionForm.map(sf => <div>
-      <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission}
-        key={sf.id}/>
+      <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
+        key={sf.id + action}/>
         <hr/>
       </div>
     )}
