@@ -13,12 +13,10 @@ import {useHistory} from "react-router-dom";
 
 interface HazardFormControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: number;
 }
 
 export const HazardFormControl = ({
 	handleCurrentPage,
-	user
 }: HazardFormControlProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
