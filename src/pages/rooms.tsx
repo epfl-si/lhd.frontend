@@ -159,6 +159,7 @@ export const RoomControl = ({
 				{t(`room.roomList`)}
 			</Typography>
 			<DebounceInput
+				key={search}
 				input={search}
 				id="member"
 				onChange={onChangeInput}
