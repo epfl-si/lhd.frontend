@@ -32,11 +32,8 @@ export const HazardCard = ({
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [actionButton, setActionButton] = useState<string>('Read');
 
-  useEffect(() => {
-    //console.log('in card', isDirtyState);
-  }, [isDirtyState]);
-
   function openAlertDialog (action: string, openDialog: boolean) {
+    console.log('action', action, 'dirty', openDialog)
     setActionButton(action);
     if (openDialog) {
       setOpenDialog(true);
@@ -89,7 +86,7 @@ export const HazardCard = ({
                 style={{marginLeft: '10px'}}/>
           }
         </div>
-      <AlertDialog openDialog={openDialog}
+        <AlertDialog openDialog={openDialog}
                    onOkClick={() => openAlertDialog(actionButton, false)}
                    onCancelClick={() => setOpenDialog(false)}
                    cancelLabel={t('generic.cancelButton')}

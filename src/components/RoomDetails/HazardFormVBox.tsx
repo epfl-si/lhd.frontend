@@ -16,7 +16,6 @@ import Notifications from "../Table/Notifications";
 import {fetchHazardsInRoom} from "../../utils/graphql/FetchingTools";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardForm} from "./HazardForm";
-import {checkForHazardSubmissions} from "../../utils/ressources/objectComparing";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -133,16 +132,12 @@ export const HazardFormVBox = ({
     setOpenNotification(false);
   };
 
-  const onChangeSubmission = (submissionFormChanged: object, submissionFormOriginal: submissionForm) => {
-    if(action!='Read' && submissionFormChanged && submissionFormOriginal) {
-      const submissionsAreEquals = checkForHazardSubmissions(submissionFormChanged, submissionFormOriginal.submission.data);
-      console.log('submissionsAreEquals', submissionsAreEquals);
-      setDirtyState(!submissionsAreEquals);
+  const onChangeSubmission = (id: string) => {
+    return (newSubmission: object, isUnchanged: boolean) => {
+      setDirtyState(!isUnchanged);
+      const changedSubmission = {id, submission: {data: newSubmission}};
+      setFormData(formData.map(s => s.id == id ? changedSubmission : s));
     }
-
-    const submissions = formData.filter(f => f.id != submissionFormOriginal.id);
-    submissions.push({id: submissionFormOriginal.id, submission: {data: submissionFormChanged}});
-    setFormData([...submissions]);
   }
 
   return <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -151,10 +146,10 @@ export const HazardFormVBox = ({
            src={getHazardImage(selectedHazardCategory)}/>
       <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
     </div>
-    {submissionForm.map(sf => <div>
+    {submissionForm.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
         key={sf.id + action}/>
-        <hr/>
+        <hr key={sf.id + action + 'hr'}/>
       </div>
     )}
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
