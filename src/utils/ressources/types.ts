@@ -86,6 +86,7 @@ export type hazardFormType = {
 	form: string;
 	version: string;
 	hazard_category: hazardCategory;
+	isSelected?: boolean;
 }
 
 export type submissionForm = {

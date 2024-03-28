@@ -4,14 +4,12 @@ import {Form} from "@formio/react";
 
 interface HazardFormProps {
 	submission: submissionForm;
-	formData:submissionForm[];
 	action: 'Add' | 'Edit' | 'Read';
-	onChangeSubmission: (submissionForms: submissionForm[]) => void;
+	onChangeSubmission: (submissionFormChanged: object, submissionFormOriginal: submissionForm) => void;
 }
 
 export const HazardForm = ({
 	submission,
-	formData,
 	action,
 	onChangeSubmission
 }: HazardFormProps) => {
@@ -23,12 +21,12 @@ export const HazardForm = ({
 
 	return <Form
 		onChange={(event) => {
-			const submissions = formData.filter(f => f.id != submission.id);
-			submissions.push({id: submission.id, submission: {data: event.data}});
-			onChangeSubmission([...submissions])
-			}}
-			options={optionsForm}
-			key={submission.id}
-			submission={submission.submission}
-			form={submission.form}/>
+			if(event.changed) {
+				onChangeSubmission(event.data, submission);
+			}
+		}}
+		options={optionsForm}
+		key={submission.id}
+		submission={submission.submission}
+		form={submission.form}/>
 };

@@ -16,23 +16,24 @@ import Notifications from "../Table/Notifications";
 import {fetchHazardsInRoom} from "../../utils/graphql/FetchingTools";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardForm} from "./HazardForm";
+import {checkForHazardSubmissions} from "../../utils/ressources/objectComparing";
 
 interface HazardFormVBoxProps {
-  onDirtyState?: (e: React.MouseEvent) => void;
   room: roomDetailsType;
   selectedHazardCategory: string;
   lastVersionForm: hazardFormType | undefined;
   action: 'Add' | 'Edit' | 'Read';
   onChangeAction?: (hazardName: string) => void;
+  setDirtyState: (modified: boolean) => void;
 }
 
 export const HazardFormVBox = ({
-  onDirtyState,
   room,
   selectedHazardCategory,
   lastVersionForm,
   action,
-  onChangeAction
+  onChangeAction,
+  setDirtyState
 }: HazardFormVBoxProps) => {
   const oidc = useOpenIDConnectContext();
   const [roomHazards, setRoomHazards] = useState<hazardType[]>(room.hazards);
@@ -120,6 +121,7 @@ export const HazardFormVBox = ({
       setNotificationType(notif);
     } else if ( res.status === 200 ) {
       await fetchHazards();
+      setDirtyState(false);
       setNotificationType(notificationsVariants['room-update-success']);
     } else {
       setNotificationType(notificationsVariants['room-update-error']);
@@ -131,8 +133,16 @@ export const HazardFormVBox = ({
     setOpenNotification(false);
   };
 
-  const onChangeSubmission = (submissionForms: submissionForm[]) => {
-    setFormData([...submissionForms]);
+  const onChangeSubmission = (submissionFormChanged: object, submissionFormOriginal: submissionForm) => {
+    if(action!='Read' && submissionFormChanged && submissionFormOriginal) {
+      const submissionsAreEquals = checkForHazardSubmissions(submissionFormChanged, submissionFormOriginal.submission.data);
+      console.log('submissionsAreEquals', submissionsAreEquals);
+      setDirtyState(!submissionsAreEquals);
+    }
+
+    const submissions = formData.filter(f => f.id != submissionFormOriginal.id);
+    submissions.push({id: submissionFormOriginal.id, submission: {data: submissionFormChanged}});
+    setFormData([...submissions]);
   }
 
   return <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -142,7 +152,8 @@ export const HazardFormVBox = ({
       <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
     </div>
     {submissionForm.map(sf => <div>
-      <HazardForm submission={sf} formData={formData} action={action} onChangeSubmission={onChangeSubmission} />
+      <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission}
+        key={sf.id}/>
         <hr/>
       </div>
     )}

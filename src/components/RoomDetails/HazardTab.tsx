@@ -25,6 +25,7 @@ export const HazardTab = ({
   const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
   const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+  const [isDirtyState, setIsDirtyState] = useState<boolean>(false);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -76,17 +77,22 @@ export const HazardTab = ({
     setAvailableHazardsInDB([...newHazardArray]);
   }
 
+  function setDirtyState(modified: boolean) {
+    setIsDirtyState(modified)
+  }
+
   return <div style={{display: 'flex', flexDirection: 'row'}}>
     <div className="roomHazardCardsDiv" style={{display: (isLittleScreen && selectedHazardCategory != '') ? 'none' : 'flex'}}>
       {availableHazardsInDB.map(h =>
         <HazardCard hazardName={h.hazard_category.hazard_category_name}
-                    backgroundColor={`${h.isSelected ? 'FFCECE' : ''}`}
+                    backgroundColor={`${h.isSelected ? '#FFCECE' : ''}`}
                     key={h.hazard_category.hazard_category_name}
                     room={room}
                     onOpen={onReadHazard}
                     onEdit={onEditHazard}
                     onAdd={onAddHazard}
-                    onEditMode={false}/>
+                    isDirtyState={isDirtyState}
+                    setDirtyState={setDirtyState}/>
       )}
     </div>
     <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
@@ -106,7 +112,8 @@ export const HazardTab = ({
                       action={action}
                       onChangeAction={onEditHazard}
                       selectedHazardCategory={selectedHazardCategory}
-                      lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}/>
+                      lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
+                      setDirtyState={setDirtyState}/>
     </div>
   </div>
 };
