@@ -8,6 +8,7 @@ i18next.use(initReactI18next).init({
 		en: {
 			translation: {
 				room: {
+					search: 'Search...',
 					roomList: 'Rooms',
 					name: 'Room',
 					building: 'Building',
@@ -110,7 +111,9 @@ i18next.use(initReactI18next).init({
 				generic: {
 					saveButton: 'Save',
 					deleteButton: 'Delete',
-					cancelButton: 'Cancel'
+					cancelButton: 'Cancel',
+					continueButton: 'Continue',
+
 				},
 				menu: {
 					rooms: 'Rooms / Hazards',
@@ -144,12 +147,17 @@ i18next.use(initReactI18next).init({
 					Modify: 'Modify form of: ',
 					fillMandatoryFields: 'Some mandatory fields are empty',
 					versionError: 'New version must be more than current version'
+				},
+				hazard_details: {
+					unsavedChangesMessageTitle: 'Unsaved changes',
+					unsavedChangesMessageDescription: 'You have unsaved changes. Are you sure you want to continue? All unsaved changes will be lost.'
 				}
 			},
 		},
 		fr: {
 			translation: {
 				room: {
+					search: 'Rechercher...',
 					roomList: 'Salles',
 					name: 'Salle',
 					building: 'Bâtiment',
@@ -252,7 +260,8 @@ i18next.use(initReactI18next).init({
 				generic: {
 					saveButton: 'Enregistrer',
 					deleteButton: 'Soupprimer',
-					cancelButton: 'Annuler'
+					cancelButton: 'Annuler',
+					continueButton: 'Continuer',
 				},
 				menu: {
 					rooms: 'Rooms / Dangers',
@@ -286,6 +295,10 @@ i18next.use(initReactI18next).init({
 					Modify: 'Modifier le formulaire de: ',
 					fillMandatoryFields: 'Certains champs obligatoires sont vides',
 					versionError: 'La nouvelle version doit être majeure que la version courante'
+				},
+				hazard_details: {
+					unsavedChangesMessageTitle: 'Changements non enregistrés',
+					unsavedChangesMessageDescription: 'Vous avez des changements non encore enregistrés. Vous êtes sûr de vouloir continuer? Tous les changements non sauvegardés seront perdus.'
 				}
 			},
 		},
