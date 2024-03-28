@@ -3,7 +3,6 @@ import {Base} from 'epfl-elements-react/src/Base';
 import {Avatar} from 'epfl-elements-react/src/Avatar';
 import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
 import BioHazard from './pages/biohazard';
-import {HomePage} from './pages/homepage';
 import {LoginButton, StateEnum, useOpenIDConnectContext,} from '@epfl-si/react-appauth';
 import {Box, Dialog, DialogActions, DialogContent, DialogTitle,} from '@material-ui/core';
 import {Alert} from '@mui/material';
@@ -103,9 +102,7 @@ function App() {
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
 					<Route path="/unitcontrol">
-							<UnitControl handleCurrentPage={handleCurrentPage}
-													 user={connectedUser.sciper}
-							/>
+							<UnitControl handleCurrentPage={handleCurrentPage} user={connectedUser.sciper}/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails />
@@ -126,9 +123,7 @@ function App() {
 							<BioHazard />
 						</Route>
 						<Route path="/">
-							<RoomControl handleCurrentPage={handleCurrentPage}
-													 user={connectedUser.sciper}
-							/>
+							<RoomControl handleCurrentPage={handleCurrentPage} user={connectedUser.sciper}/>
 						</Route>
 					</Switch>
 				</div>
