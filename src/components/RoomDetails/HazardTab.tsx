@@ -77,10 +77,6 @@ export const HazardTab = ({
     setAvailableHazardsInDB([...newHazardArray]);
   }
 
-  function setDirtyState(modified: boolean) {
-    setIsDirtyState(modified)
-  }
-
   return <div style={{display: 'flex', flexDirection: 'row'}}>
     <div className="roomHazardCardsDiv" style={{display: (isLittleScreen && selectedHazardCategory != '') ? 'none' : 'flex'}}>
       {availableHazardsInDB.map(h =>
@@ -92,7 +88,7 @@ export const HazardTab = ({
                     onEdit={onEditHazard}
                     onAdd={onAddHazard}
                     isDirtyState={isDirtyState}
-                    setDirtyState={setDirtyState}/>
+                    setDirtyState={setIsDirtyState}/>
       )}
     </div>
     <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
@@ -113,7 +109,7 @@ export const HazardTab = ({
                       onChangeAction={onEditHazard}
                       selectedHazardCategory={selectedHazardCategory}
                       lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
-                      setDirtyState={setDirtyState}/>
+                      setDirtyState={setIsDirtyState}/>
     </div>
   </div>
 };

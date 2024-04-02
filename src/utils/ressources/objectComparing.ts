@@ -1,4 +1,4 @@
-export function checkForHazardSubmissions(obj1: object, obj2: object): boolean {
+/*export function checkForHazardSubmissions(obj1: object, obj2: object): boolean {
 	if (!obj2){
 		console.log("New object has been created");
 		return false;
@@ -21,4 +21,4 @@ export function checkForHazardSubmissions(obj1: object, obj2: object): boolean {
 
 	console.log("Objects are equals");
 	return true;
-}
+}*/

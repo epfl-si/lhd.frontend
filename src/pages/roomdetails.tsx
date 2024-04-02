@@ -38,16 +38,13 @@ export default function RoomDetails() {
 		);
 		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
 			setData(results.data[0]);
+			console.log('load in room details', results.data[0].hazards)
 			const listCat = results.data[0].hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
 			const listCatFiltered = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
 			setListSavedCategories(listCatFiltered)
 		} else {
 			console.error('Bad GraphQL results', results);
 		}
-	}
-	
-	const onSaveRoom = () => {
-		loadFetch();
 	}
 	
 	return (
@@ -60,7 +57,7 @@ export default function RoomDetails() {
 						<span className="tab-text-title">{t(`room_details.details`)}</span>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <DetailsTab roomData={data} onSaveRoom={onSaveRoom}/>}
+						{data && <DetailsTab roomData={data} onSaveRoom={loadFetch}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 				<Tabs.Tab id="hazards">
@@ -75,7 +72,7 @@ export default function RoomDetails() {
 						</div>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <HazardTab room={data} onSaveRoom={onSaveRoom}/>}
+						{data && <HazardTab room={data} onSaveRoom={loadFetch}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 			</Tabs>
