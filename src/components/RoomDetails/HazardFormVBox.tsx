@@ -1,21 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import {
-  hazardFormType,
-  hazardType,
-  notificationType,
-  roomDetailsType,
-  submissionForm
-} from "../../utils/ressources/types";
+import {hazardFormType, notificationType, roomDetailsType, submissionForm} from "../../utils/ressources/types";
 import {getHazardImage} from "./HazardProperties";
 import {addHazard} from "../../utils/graphql/PostingTools";
 import {env} from "../../utils/env";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {fetchHazardsInRoom} from "../../utils/graphql/FetchingTools";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardForm} from "./HazardForm";
+import {createKey} from "../../utils/ressources/keyGeneration";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -35,9 +29,7 @@ export const HazardFormVBox = ({
   setDirtyState
 }: HazardFormVBoxProps) => {
   const oidc = useOpenIDConnectContext();
-  const [roomHazards, setRoomHazards] = useState<hazardType[]>(room.hazards);
-  const [submissionForm, setSubmissionForm] = useState<submissionForm[]>([]);
-  const [formData, setFormData] = useState<submissionForm[]>([]);
+  const [submissionsList, setSubmissionsList] = useState<submissionForm[]>([]);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const [notificationType, setNotificationType] = useState<notificationType>({
     type: "info",
@@ -47,40 +39,40 @@ export const HazardFormVBox = ({
 
   useEffect(() => {
     const loadFetch = async () => {
-      const subform = readOrEditHazard(action);
+      const subform = readOrEditHazard();
       switch (action) {
         case "Add":
-          setSubmissionForm([...subform , {
-            id: '{"salt":"newHazard","eph_id":"newHazard"}', submission: {},
+          const newKey = createKey(10);
+          setSubmissionsList([...subform , {
+            id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
             form: currentForm}]);
           break;
         case "Read":
         case "Edit":
-          setSubmissionForm([...subform]);
+          setSubmissionsList([...subform]);
           break;
       };
     };
     loadFetch();
-  }, [oidc.accessToken, roomHazards, action, selectedHazardCategory]);
+  }, [oidc.accessToken, action, selectedHazardCategory, room]);
 
-  const readOrEditHazard = (action: string): submissionForm[] => {
+  const readOrEditHazard = (): submissionForm[] => {
     const subForm: submissionForm[] = [];
-    roomHazards.forEach(h => {
+    room.hazards.forEach(h => {
       const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
       if (category == selectedHazardCategory) {
         const oldForm = h.hazard_form_history.form;
         subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(oldForm) : currentForm});
       }
     });
-    setFormData(action == 'Read' ? [] : [...subForm]);
     return subForm;
   }
 
   const handleSubmit = async () => {
     if (lastVersionForm)  {
-      const submissionsList: submissionForm[] = [];
-      formData.forEach(f => {
-        submissionsList.push({
+      const submissionsToSave: submissionForm[] = [];
+      submissionsList.forEach(f => {
+        submissionsToSave.push({
           id: JSON.parse(f.id),
           submission: f.submission
         })
@@ -88,26 +80,12 @@ export const HazardFormVBox = ({
       addHazard(
         env().REACT_APP_GRAPHQL_ENDPOINT_URL,
         oidc.accessToken,
-        JSON.stringify(submissionsList).replaceAll('"','\\"'),
+        JSON.stringify(submissionsToSave).replaceAll('"','\\"'),
         lastVersionForm,
         room.name
       ).then(res => {
         handleOpen(res);
       });
-    }
-  };
-
-  const fetchHazards = async () => {
-    const results = await fetchHazardsInRoom(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-      oidc.accessToken,
-      room.name
-    );
-    if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
-      setRoomHazards(results.data[0].hazards);
-      if ( onChangeAction ) {
-        onChangeAction(selectedHazardCategory);
-      }
     }
   };
 
@@ -119,8 +97,9 @@ export const HazardFormVBox = ({
       };
       setNotificationType(notif);
     } else if ( res.status === 200 ) {
-      await fetchHazards();
-      setDirtyState(false);
+      if ( onChangeAction ) {
+        onChangeAction(selectedHazardCategory);
+      }
       setNotificationType(notificationsVariants['room-update-success']);
     } else {
       setNotificationType(notificationsVariants['room-update-error']);
@@ -135,21 +114,38 @@ export const HazardFormVBox = ({
   const onChangeSubmission = (id: string) => {
     return (newSubmission: object, isUnchanged: boolean) => {
       setDirtyState(!isUnchanged);
-      const changedSubmission = {id, submission: {data: newSubmission}};
-      setFormData(formData.map(s => s.id == id ? changedSubmission : s));
+      const arr = submissionsList.find(s => s.id == id);
+      if(arr && Object.keys(arr.submission.data).length == 0) {
+        const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm};
+        setSubmissionsList(submissionsList.map(s => s.id == id ? changedSubmission : s));
+      }
     }
   }
 
+  function onAddHazard() {
+    const newKey = createKey(10);
+    const newSubmissionArray = [...submissionsList, {
+      id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
+      form: currentForm}];
+    setSubmissionsList(newSubmissionArray)
+  }
+
   return <div style={{display: 'flex', flexDirection: 'column'}}>
-    <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
-      <img style={{margin: '5px', width: '30px', height: '30px'}}
-           src={getHazardImage(selectedHazardCategory)}/>
-      <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
+    <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
+      <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
+        <img style={{margin: '5px', width: '30px', height: '30px'}}
+             src={getHazardImage(selectedHazardCategory)}/>
+        <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
+      </div>
+      <Button size="icon"
+              iconName={"#plus-circle"}
+              onClick={onAddHazard}
+      style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
     </div>
-    {submissionForm.map(sf => <div key={sf.id + action + 'div'}>
+    {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
         key={sf.id + action}/>
-        <hr key={sf.id + action + 'hr'}/>
+        <hr />
       </div>
     )}
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>

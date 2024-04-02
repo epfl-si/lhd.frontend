@@ -60,6 +60,7 @@ export const HazardTab = ({
   function onEditHazard(hazard: string) {
     onChangeHazard(hazard);
     onSaveRoom();
+    setIsDirtyState(false);
     setAction('Edit');
   }
 
@@ -95,10 +96,6 @@ export const HazardTab = ({
       {isLittleScreen && listSavedCategories.includes(selectedHazardCategory) ?
         <div style={{display: 'flex', flexDirection: 'row'}}>
           <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>
-          <Button size="icon"
-                  iconName={"#plus-circle"}
-                  style={{marginLeft: '10px'}}
-                  onClick={() => onAddHazard(selectedHazardCategory)}/>
           <Button size="icon"
                   iconName={"#edit-3"}
                   onClick={() => onEditHazard(selectedHazardCategory)}

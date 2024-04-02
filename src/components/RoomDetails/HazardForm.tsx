@@ -27,7 +27,7 @@ export const HazardForm = ({
 			}
 		}}
 		options={optionsForm}
-		key={submission.id}
+		key={submission.id + action}
 		submission={submission.submission}
 		form={submission.form}/>
 };

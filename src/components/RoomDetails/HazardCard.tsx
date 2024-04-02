@@ -33,7 +33,6 @@ export const HazardCard = ({
   const [actionButton, setActionButton] = useState<string>('Read');
 
   function openAlertDialog (action: string, openDialog: boolean) {
-    console.log('action', action, 'dirty', openDialog)
     setActionButton(action);
     if (openDialog) {
       setOpenDialog(true);
@@ -68,22 +67,17 @@ export const HazardCard = ({
           {listSavedCategories.includes(hazardName) ?
           <>
             <Button size="icon"
-                  iconName={"#plus-circle"}
-                  onClick={() => {openAlertDialog('Add', isDirtyState);}}/>
+                    iconName={"#edit-3"}
+                    onClick={() => {openAlertDialog('Edit', isDirtyState);}}/>
             <Button size="icon"
-                  iconName={"#edit-3"}
-                  onClick={() => {openAlertDialog('Edit', isDirtyState);}}/>
+                    iconName={"#eye"}
+                    onClick={() => {openAlertDialog('Read', isDirtyState);}}
+                    style={{marginLeft: '10px'}}/>
+          </> :
             <Button size="icon"
-                iconName={"#eye"}
-                  onClick={() => {openAlertDialog('Read', isDirtyState);}}
-                style={{marginLeft: '10px'}}/>
-          </>:
-            <Button size="icon"
-                iconName={"#plus-circle"}
-                onClick={() => {
-                  if ( onAdd ) onAdd(hazardName);
-                }}
-                style={{marginLeft: '10px'}}/>
+                    iconName={"#plus-circle"}
+                    onClick={() => {openAlertDialog('Add', isDirtyState);}}
+                    style={{marginLeft: '10px'}}/>
           }
         </div>
         <AlertDialog openDialog={openDialog}
