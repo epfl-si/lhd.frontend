@@ -113,6 +113,7 @@ i18next.use(initReactI18next).init({
 					deleteButton: 'Delete',
 					cancelButton: 'Cancel',
 					continueButton: 'Continue',
+					addNew: 'Add new'
 
 				},
 				menu: {
@@ -262,6 +263,7 @@ i18next.use(initReactI18next).init({
 					deleteButton: 'Soupprimer',
 					cancelButton: 'Annuler',
 					continueButton: 'Continuer',
+					addNew: 'Ajouter'
 				},
 				menu: {
 					rooms: 'Rooms / Dangers',

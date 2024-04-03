@@ -9,8 +9,8 @@ import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardForm} from "./HazardForm";
-import {createKey} from "../../utils/ressources/keyGeneration";
 import {createKey} from "../../utils/ressources/keyGenerator";
+import {useTranslation} from "react-i18next";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -29,6 +29,7 @@ export const HazardFormVBox = ({
   onChangeAction,
   setDirtyState
 }: HazardFormVBoxProps) => {
+  const { t } = useTranslation();
   const oidc = useOpenIDConnectContext();
   const [submissionsList, setSubmissionsList] = useState<submissionForm[]>([]);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
@@ -152,7 +153,7 @@ export const HazardFormVBox = ({
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
       <Button
         onClick={handleSubmit}
-        label="Save"
+        label={t(`generic.saveButton`)}
         iconName={`${featherIcons}#save`}
         primary/>
     </div>
