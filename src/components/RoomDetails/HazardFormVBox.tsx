@@ -10,6 +10,7 @@ import Notifications from "../Table/Notifications";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardForm} from "./HazardForm";
 import {createKey} from "../../utils/ressources/keyGeneration";
+import {createKey} from "../../utils/ressources/keyGenerator";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
