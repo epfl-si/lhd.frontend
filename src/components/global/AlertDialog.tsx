@@ -11,7 +11,7 @@ interface AlertDialogProps {
 	onOkClick?: () => void;
 	onCancelClick?: () => void;
 	title: string;
-	body?: string;
+	children?: React.ReactNode;
 	okLabel: string;
 	cancelLabel: string;
 	openDialog: boolean;
@@ -21,7 +21,7 @@ export const AlertDialog = ({
 	onOkClick,
 	onCancelClick,
 	title,
-	body,
+	children,
 	okLabel,
 	cancelLabel,
 	openDialog
@@ -43,7 +43,7 @@ export const AlertDialog = ({
 				</DialogTitle>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-description">
-						{body}
+						{children}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>

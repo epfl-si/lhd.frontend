@@ -210,8 +210,9 @@ export default function UnitDetails() {
 									 onCancelClick={() => setOpenDialog(false)}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.deleteButton')}
-									 title={t('unit_details.deleteUnitConfirmationMessageTitle')}
-									 body={t('unit_details.deleteUnitConfirmationMessageDescription')}/>
+									 title={t('unit_details.deleteUnitConfirmationMessageTitle')}>
+				{t('unit_details.deleteUnitConfirmationMessageDescription')}
+			</AlertDialog>
 		</div>
 	);
 }

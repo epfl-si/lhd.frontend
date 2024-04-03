@@ -85,8 +85,9 @@ export const HazardCard = ({
                    onCancelClick={() => setOpenDialog(false)}
                    cancelLabel={t('generic.cancelButton')}
                    okLabel={t('generic.continueButton')}
-                   title={t('hazard_details.unsavedChangesMessageTitle')}
-                   body={t('hazard_details.unsavedChangesMessageDescription')}/>
+                   title={t('hazard_details.unsavedChangesMessageTitle')}>
+          {t('hazard_details.unsavedChangesMessageDescription')}
+        </AlertDialog>
     </div>
   </FormCard>
 };
