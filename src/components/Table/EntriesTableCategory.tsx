@@ -29,17 +29,6 @@ export function EntriesTableCategory({
 	loadServerRows
 }: EntriesTableCategoryProps) {
 	const history = useHistory();
-	/*const shownData = useMemo(
-		() =>
-			optionsList?.length === 0
-				? tableData
-				: tableData.filter(e =>
-						optionsList.every((p: parameterType) =>
-							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
-						)
-				  ),
-		[optionsList, tableData]
-	);*/
 
 	const handlePageChange = (newPage: number) => {
 		if ( loadServerRows ) {

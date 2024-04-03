@@ -38,7 +38,6 @@ export default function RoomDetails() {
 		);
 		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
 			setData(results.data[0]);
-			console.log('load in room details', results.data[0].hazards)
 			const listCat = results.data[0].hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
 			const listCatFiltered = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
 			setListSavedCategories(listCatFiltered)
