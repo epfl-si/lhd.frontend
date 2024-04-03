@@ -505,3 +505,23 @@ export const fetchConnectedUser = async (
 		data: result.data?.connectedUserInfo
 	};
 };
+
+export const fetchUnitsFromAPI = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	name: string
+): Promise<any> => {
+	const query = `query unitAPI {
+	 unitsFromAPI {
+			name
+			path
+			sciper
+		}
+	}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.unitsFromAPI
+	};
+};

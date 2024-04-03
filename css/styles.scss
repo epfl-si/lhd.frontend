@@ -72,6 +72,11 @@
         margin-left: 10px;
         font-size: small;
     }
+    .utilsBar {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
 }
 
 // Large devices (desktops, 992px and up)
@@ -95,5 +100,11 @@
     .textCard {
         margin-left: 10px;
         font-size: small;
+    }
+    .utilsBar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10px;
     }
 }

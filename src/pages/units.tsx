@@ -10,6 +10,9 @@ import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import {useHistory} from "react-router-dom";
+import "../../css/styles.scss";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -24,6 +27,7 @@ export const UnitControl = ({
 	const history = useHistory();
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [tableData, setTableData] = useState<lhdUnitsType[]>([]);
 	const [loading, setLoading] = useState(false);
 	const [search, setSearch] = React.useState('');
@@ -97,13 +101,20 @@ export const UnitControl = ({
 			<Typography gutterBottom>
 				{t(`unit.unitList`)}
 			</Typography>
-			<DebounceInput
-				input={search}
-				id="member"
-				onChange={onChangeInput}
-				placeholder={t(`unit.search`)}
-				className="debounce-input"
-			/>
+			<div className="utilsBar">
+				<DebounceInput
+					input={search}
+					id="member"
+					onChange={onChangeInput}
+					placeholder={t(`unit.search`)}
+					className="debounce-input"
+				/>
+				<Button
+					onClick={() => setOpenDialog(true)}
+					label={t(`generic.addNew`)}
+					iconName={`${featherIcons}#plus-circle`}
+					primary/>
+			</div>
 			<EntriesTableCategory
 				tableData={tableData}
 				columns={columns}
@@ -114,6 +125,7 @@ export const UnitControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
+			<AddNewUnitDialog openDialog={openDialog}  close={() => setOpenDialog(false)}/>
 		</Box>
 	);
 }
