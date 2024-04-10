@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useTranslation} from "react-i18next";
 import {AlertDialog} from "../global/AlertDialog";
-import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput";
+import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {fetchUnitsFromAPI} from "../../utils/graphql/FetchingTools";
