@@ -3,7 +3,9 @@ import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import "epfl-elements-react/src/stories/molecules/button.css";
 import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
-import {fetchPeopleFromFullText, fetchUnits, fetchUnitsFromFullText} from "../../utils/graphql/FetchingTools";
+import {
+	fetchPeopleFromFullText, fetchunitsFromFullText
+} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {useTranslation} from "react-i18next";
@@ -118,7 +120,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	}
 
 	const fetchUnitsList = async (newValue: string): Promise<Member[]> => {
-		const results = await fetchUnitsFromFullText(
+		const results = await fetchunitsFromFullText(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue

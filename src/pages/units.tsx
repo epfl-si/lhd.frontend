@@ -1,6 +1,6 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchUnitsFromFullText} from "../utils/graphql/FetchingTools";
+import {fetchunitsFromFullTextAndPagination} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
@@ -74,7 +74,7 @@ export const UnitControl = ({
 	const loadFetch = async (newPage: number) => {
 		setPage(newPage);
 		setLoading(true);
-		const results = await fetchUnitsFromFullText(
+		const results = await fetchunitsFromFullTextAndPagination(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,

@@ -316,7 +316,7 @@ export const fetchRooms = async (
 	};
 };
 
-export const fetchUnitsFromFullText = async (
+export const fetchunitsFromFullTextAndPagination = async (
 	address: string | undefined,
 	authToken: string | undefined,
 	take: number,
@@ -324,7 +324,7 @@ export const fetchUnitsFromFullText = async (
 	search: string
 ): Promise<fetchUnitsTypeWithPagination> => {
 	const query: string = `query UnitFetchFromFullText { 
-						unitsFromFullText(take: ${take}, skip: ${skip}, search: "${search}") {
+						unitsFromFullTextAndPagination(take: ${take}, skip: ${skip}, search: "${search}") {
 							units {
 								name
 								unitId
@@ -345,6 +345,40 @@ export const fetchUnitsFromFullText = async (
 								}
 							}
 							totalCount
+						}
+					}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.unitsFromFullTextAndPagination,
+	};
+};
+
+export const fetchunitsFromFullText = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	search: string
+): Promise<fetchUnitsTypeWithPagination> => {
+	const query: string = `query UnitFetchFromFullText { 
+						unitsFromFullText(search: "${search}") {
+								name
+								unitId
+								id
+								institute {
+									name
+									school {
+										name
+									}
+								}
+								cosecs {
+									name
+									surname
+								}
+								professors {
+									name
+									surname
+								}
 						}
 					}`;
 
