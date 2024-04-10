@@ -51,8 +51,8 @@ export const DetailsTab = ({
 
   useEffect(() => {
     setRoom(roomData);
-    setSavedUnits(room.lhd_units);
-    setSelectedUnits(room.lhd_units);
+    setSavedUnits(roomData.lhd_units);
+    setSelectedUnits(roomData.lhd_units);
   }, [roomData]);
 
   function saveRoomDetails() {
