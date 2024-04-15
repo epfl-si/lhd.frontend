@@ -43,7 +43,8 @@ i18next.use(initReactI18next).init({
 					institute: 'Institute',
 					school: 'School',
 					search: 'Search...',
-					unitList: 'Units'
+					unitList: 'Units',
+					addNewUnit: 'Add new unit'
 				},
 				logout: 'Logout',
 				login: {
@@ -193,7 +194,8 @@ i18next.use(initReactI18next).init({
 					institute: 'Institut',
 					school: 'Ecole',
 					search: 'Rechercher...',
-					unitList: 'Unités'
+					unitList: 'Unités',
+					addNewUnit: 'Ajouter une nouvelle unité'
 				},
 				logout: 'Déconnexion',
 				login: {

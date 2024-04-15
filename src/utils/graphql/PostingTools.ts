@@ -1,4 +1,11 @@
-import {dispensationRequestType, hazardFormType, lhdUnitsType, personType, roomDetailsType} from '../ressources/types';
+import {
+	dispensationRequestType,
+	hazardFormType,
+	lhdUnitsFromAPIType,
+	lhdUnitsType,
+	personType,
+	roomDetailsType
+} from '../ressources/types';
 import {makeQuery} from "./Utils";
 
 export const createDispensation = async (
@@ -313,6 +320,30 @@ export const createNewHazardCategory = async (
                form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const saveNewUnitsFromAPI = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	selectedUnits: lhdUnitsFromAPIType[],
+): Promise<any> => {
+	const query = `mutation saveNewUnitsFromAPI {
+               createUnit (
+               units: [${selectedUnits.map(u =>
+								`{
+									name: "${u.name}",
+									status: "${u.status}",
+									unitId: ${u.unitId},
+									path: "${u.path}"
+								}`)}]) {
                 errors {
                   message
                 }

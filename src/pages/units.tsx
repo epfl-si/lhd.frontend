@@ -126,7 +126,11 @@ export const UnitControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
-			<AddNewUnitDialog openDialog={openDialog}  close={() => setOpenDialog(false)}/>
+			<AddNewUnitDialog openDialog={openDialog} close={() => setOpenDialog(false)}
+												save={(searchVal: string) => {
+													setOpenDialog(false);
+													onChangeInput(searchVal);
+												}}/>
 		</Box>
 	);
 }

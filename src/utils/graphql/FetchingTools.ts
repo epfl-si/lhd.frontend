@@ -546,10 +546,10 @@ export const fetchUnitsFromAPI = async (
 	name: string
 ): Promise<any> => {
 	const query = `query unitAPI {
-	 unitsFromAPI {
+	 unitsFromAPI (search: "${name}") {
 			name
 			path
-			sciper
+			unitId
 		}
 	}`;
 

@@ -24,6 +24,13 @@ export type hazardCategory = {
 	hazard_category_name: string;
 };
 
+export type lhdUnitsFromAPIType = {
+	name: string;
+	path: string;
+	unitId: string;
+	status?: 'New' | 'Deleted' | 'Default';
+};
+
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
