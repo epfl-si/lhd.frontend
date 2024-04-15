@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {kindType, lhdUnitsType, notificationType, roomDetailsType} from "../../utils/ressources/types";
-import {fetchRoomTypes} from "../../utils/graphql/FetchingTools";
+import {fetchRoomTypes, fetchunitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {Autocomplete, FormControlLabel, Stack, Switch} from "@mui/material";
@@ -98,6 +98,26 @@ export const DetailsTab = ({
     setOpenNotification(false);
   };
 
+  function getUnitTitle(unit: lhdUnitsType) {
+    return (unit.institute?.school?.name ?? '').concat(' ').concat(unit.institute?.name ?? '').concat(' ').concat(unit.name);
+  }
+
+  const fetchUnitsList = async (newValue: string): Promise<lhdUnitsType[]> => {
+    const results = await fetchunitsFromFullText(
+      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      oidc.accessToken,
+      newValue
+    );
+    if (results.status === 200) {
+      if (results.data) {
+        return results.data;
+      } else {
+        console.error('Bad GraphQL results', results);
+      }
+    }
+    return [];
+  };
+
   return <Stack spacing={2} className="roomDetailsDiv">
     <div className="displayFlexColumn">
       <label style={{fontSize: 'medium'}}>{t(`room_details.building`)}: <strong>{room.building}</strong></label>
@@ -144,7 +164,10 @@ export const DetailsTab = ({
       }
       label="Ventilation"
     />
-    <MultipleSelection selected={savedUnits} objectName="Unit" onChangeSelection={onChangeUnits}/>
+    <MultipleSelection selected={savedUnits} objectName="Unit"
+                       onChangeSelection={onChangeUnits}
+                       getCardTitle={getUnitTitle}
+                       fetchData={fetchUnitsList}/>
 
     <div style={{marginTop: '50px'}}>
       <Button

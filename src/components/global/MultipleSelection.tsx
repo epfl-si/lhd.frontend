@@ -26,15 +26,24 @@ interface SelectionProps<Member> {
 	 * Action to be done at change selection
 	 */
 	onChangeSelection?: (currentlySelected: Member[]) => void;
+	/**
+	 * Method to get the title for card
+	 */
+	getCardTitle: (currentlySelected: Member) => string;
+	/**
+	 * Method to fetch data
+	 */
+	fetchData: (search: string) => Promise<Member[]>;
 }
 
 export const MultipleSelection = <Member extends Record<string, any>>({
 	objectName,
 	selected,
-	onChangeSelection
+	onChangeSelection,
+	getCardTitle,
+	fetchData
 }: SelectionProps<Member>) => {
 	const { t } = useTranslation();
-	const oidc = useOpenIDConnectContext();
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
 	const [filteredSuggestions, setFilteredSuggestions] = useState<Member[]>([]);
 	const [inputValue, setInputValue] = React.useState('');
@@ -75,6 +84,8 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 					return suggestion.id != newValue.id;
 				} else if (objectName == 'Person') {
 					return suggestion.sciper != newValue.sciper;
+				} else if (objectName == 'NewUnit') {
+					return suggestion.unitId != newValue.unitId;
 				}
 			});
 			setFilteredSuggestions(filtered);
@@ -93,67 +104,21 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	function onChangeInput(newValue: string) {
 		if (newValue) {
 			setInputValue(newValue);
-
-			if (objectName == 'Unit') {
-				fetchUnitsList(newValue).then(r => {
-
-					let filtered: Member[] =  r.filter((suggestion) => {
-						const alreadySelected = !!currentlySelected.find(s => s.id == suggestion.id);
-						return getUnitTitle(suggestion).toLowerCase().includes(newValue.toLowerCase()) && !alreadySelected;
-					}) || [];
-
-					setFilteredSuggestions(filtered);
-				});
-			} else if (objectName == 'Person') {
-				fetchPeople(newValue).then(r => {
-
-					let filtered: Member[] =  r?.filter((suggestion) => {
+			fetchData(newValue).then(r => {
+				let filtered: Member[] =  r.filter((suggestion) => {
+					if (objectName == 'Unit') {
+						return !currentlySelected.find(s => s.id == suggestion.id);
+					} else if (objectName == 'Person') {
 						return !currentlySelected.find(s => s.sciper == suggestion.sciper);
-					}) || [];
-
-					setFilteredSuggestions(filtered);
-				});
-			}
+					} else if (objectName == 'NewUnit') {
+						return !currentlySelected.find(s => s.unitId == suggestion.unitId);
+					}
+				}) || [];
+				setFilteredSuggestions(filtered);
+			});
 		} else {
 			setFilteredSuggestions([]);
 		}
-	}
-
-	const fetchUnitsList = async (newValue: string): Promise<Member[]> => {
-		const results = await fetchunitsFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			newValue
-		);
-		return analyseResult(results);
-	};
-
-	const fetchPeople = async (newValue: string): Promise<Member[]> => {
-		const results = await fetchPeopleFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			newValue
-		);
-		return analyseResult(results);
-	};
-
-	function analyseResult(results): Promise<Member[]> {
-		if (results.status === 200) {
-			if (results.data) {
-				return results.data;
-			} else {
-				console.error('Bad GraphQL results', results);
-			}
-		}
-		return [];
-	}
-
-	function getUnitTitle(unit: Member) {
-		return (unit.institute?.school?.name).concat(' ').concat(unit.institute?.name).concat(' ').concat(unit.name);
-	}
-
-	function getPersonTitle(person: Member) {
-		return person.name + ' ' + person.surname;
 	}
 
 	let lhd = true;
@@ -180,7 +145,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 											onClick={() => onChange(suggestion)}
 											className="liItem"
 										>
-											{getPersonTitle(suggestion)}
+											{getCardTitle(suggestion)}
 										</li>
 									</>
 								)
@@ -191,13 +156,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 										onClick={() => onChange(suggestion)}
 										className="liItem"
 									>
-										{
-											objectName == 'Person' ?
-													getPersonTitle(suggestion)
-												: objectName == 'Unit' ?
-													getUnitTitle(suggestion)
-													: ''
-										}
+										{getCardTitle(suggestion)}
 									</li>
 								)
 							}
@@ -206,7 +165,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				)}
 			</div>
 			<div className="form-card-div">
-				{currentlySelected.map(item => {
+				{currentlySelected && currentlySelected.map(item => {
 						return (<FormCard
 							keyValue={objectName == 'Person' ? item.sciper + "" : item.name}
 							icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
@@ -215,13 +174,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 							key={objectName == 'Person' ? item.sciper + "" : item.name}>
 							<div className="displayFlexColumn">
 								<small className="text-muted" style={{fontWeight: "bold"}}>
-									{
-										objectName == 'Person'
-											? getPersonTitle(item)
-											: (objectName == 'Unit'
-											? getUnitTitle(item)
-											: '')
-									}
+									{getCardTitle(item)}
 								</small>
 								{
 									objectName == 'Unit' ?

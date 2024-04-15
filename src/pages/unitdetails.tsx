@@ -5,7 +5,7 @@ import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
 import {lhdUnitsType, notificationType, personType} from '../utils/ressources/types';
 import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
-import {fetchUnitDetails} from "../utils/graphql/FetchingTools";
+import {fetchPeopleFromFullText, fetchUnitDetails} from "../utils/graphql/FetchingTools";
 import {ResponsiveTabs} from "epfl-elements-react/src/stories/molecules/ResponsiveTabs.tsx";
 import Notifications from "../components/Table/Notifications";
 import {MultipleSelection} from "../components/global/MultipleSelection";
@@ -140,6 +140,26 @@ export default function UnitDetails() {
 		setOpenNotification(false);
 	};
 
+	function getPersonTitle(person: personType) {
+		return person.name + ' ' + person.surname;
+	}
+
+	const fetchPeople = async (newValue: string): Promise<personType[]> => {
+		const results = await fetchPeopleFromFullText(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			newValue
+		);
+		if (results.status === 200) {
+			if (results.data) {
+				return results.data;
+			} else {
+				console.error('Bad GraphQL results', results);
+			}
+		}
+		return [];
+	};
+
 	return (
 		<div>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}}/>
@@ -163,7 +183,11 @@ export default function UnitDetails() {
 						<UnitTabTitle title={t(`unit_details.profTab`)} icon='#user'/>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
-						<MultipleSelection selected={savedProfs} onChangeSelection={onChangeProfs} objectName="Person"/>
+						<MultipleSelection selected={savedProfs}
+															 onChangeSelection={onChangeProfs}
+															 objectName="Person"
+															 getCardTitle={getPersonTitle}
+															 fetchData={fetchPeople}/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="cosec" id="cosec">
@@ -171,7 +195,11 @@ export default function UnitDetails() {
 						<UnitTabTitle title={t(`unit_details.cosecTab`)} icon='#shield'/>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
-						<MultipleSelection selected={savedCosecs} onChangeSelection={onChangeCosecs} objectName="Person"/>
+						<MultipleSelection selected={savedCosecs}
+															 onChangeSelection={onChangeCosecs}
+															 objectName="Person"
+															 getCardTitle={getPersonTitle}
+															 fetchData={fetchPeople}/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 				{

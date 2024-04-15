@@ -42,9 +42,7 @@ export const AlertDialog = ({
 					{title}
 				</DialogTitle>
 				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-						{children}
-					</DialogContentText>
+					{children}
 				</DialogContent>
 				<DialogActions>
 				<Button onClick={onCancelClick}>{cancelLabel}</Button>

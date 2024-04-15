@@ -104,7 +104,8 @@ export const UnitControl = ({
 			<div className="utilsBar">
 				<DebounceInput
 					input={search}
-					id="member"
+					id={search + "'_id"}
+					key={search + "'_id"}
 					onChange={onChangeInput}
 					placeholder={t(`unit.search`)}
 					className="debounce-input"
