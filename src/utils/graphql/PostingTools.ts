@@ -353,3 +353,29 @@ export const saveNewUnitsFromAPI = async (
 
 	return makeQuery(query, {}, address, authToken);
 };
+
+export const saveNewRoomsFromAPI = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	selectedRooms: roomDetailsType[],
+): Promise<any> => {
+	const query = `mutation saveNewRoomsFromAPI {
+               createRoom (
+               rooms: [${selectedRooms.map(u =>
+		`{
+									name: "${u.name}",
+									status: "${u.status}",
+									floor: "${u.floor}",
+									id: ${u.id},
+									building: "${u.building}",
+									sector: "${u.sector}"
+								}`)}]) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};

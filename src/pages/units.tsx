@@ -60,8 +60,8 @@ export const UnitControl = ({
 	];
 
 	useEffect(() => {
-		loadFetch(0);
-	}, [search]);
+		loadFetch();
+	}, [search, page]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -71,14 +71,13 @@ export const UnitControl = ({
 		handleCurrentPage("units");
 	}, [oidc.accessToken]);
 
-	const loadFetch = async (newPage: number) => {
-		setPage(newPage);
+	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchunitsFromFullTextAndPagination(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
-			PAGE_SIZE * newPage,
+			PAGE_SIZE * page,
 			search
 		);
 		if (results.status === 200 && results.data) {
@@ -121,7 +120,7 @@ export const UnitControl = ({
 				columns={columns}
 				loading={loading}
 				pageToOpen={"unit"}
-				loadServerRows={loadFetch}
+				loadServerRows={setPage}
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}

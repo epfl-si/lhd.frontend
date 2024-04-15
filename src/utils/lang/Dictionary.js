@@ -14,6 +14,7 @@ i18next.use(initReactI18next).init({
 					building: 'Building',
 					sector: 'Sector',
 					floor: 'Floor',
+					addNewRoom: 'Add new room',
 					kind: {
 						name: 'Designation',
 					},
@@ -114,8 +115,8 @@ i18next.use(initReactI18next).init({
 					deleteButton: 'Delete',
 					cancelButton: 'Cancel',
 					continueButton: 'Continue',
-					addNew: 'Add new'
-
+					addNew: 'Add new',
+					search: 'Search'
 				},
 				menu: {
 					rooms: 'Rooms / Hazards',
@@ -165,6 +166,7 @@ i18next.use(initReactI18next).init({
 					building: 'Bâtiment',
 					sector: 'Secteur',
 					floor: 'Étage',
+					addNewRoom: 'Ajouter une salle',
 					kind: {
 						name: 'Désignation',
 					},
@@ -265,7 +267,8 @@ i18next.use(initReactI18next).init({
 					deleteButton: 'Soupprimer',
 					cancelButton: 'Annuler',
 					continueButton: 'Continuer',
-					addNew: 'Ajouter'
+					addNew: 'Ajouter',
+					search: 'Rechercher'
 				},
 				menu: {
 					rooms: 'Rooms / Dangers',

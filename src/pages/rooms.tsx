@@ -10,6 +10,9 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getHazardImage} from "../components/RoomDetails/HazardProperties";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
 import {useHistory} from "react-router-dom";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -29,6 +32,7 @@ export const RoomControl = ({
 	const [search, setSearch] = React.useState('');
 	const [page, setPage] = useState<number>(0);
 	const [totalCount, setTotalCount] = useState<number>(0);
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
 
 	const isMediumDevice = useMediaQuery("only screen and (min-width : 769px) and (max-width : 992px)");
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
@@ -112,8 +116,8 @@ export const RoomControl = ({
 	];
 
 	useEffect(() => {
-		loadFetch(0);
-	}, [search]);
+		loadFetch();
+	}, [search, page]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -123,14 +127,13 @@ export const RoomControl = ({
 		handleCurrentPage("rooms");
 	}, [oidc.accessToken]);
 
-	const loadFetch = async (newPage: number) => {
-		setPage(newPage);
+	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchRooms(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
-			PAGE_SIZE * newPage,
+			PAGE_SIZE * page,
 			search
 		);
 		if ( results.status === 200 && results.data ) {
@@ -158,24 +161,36 @@ export const RoomControl = ({
 			<Typography gutterBottom>
 				{t(`room.roomList`)}
 			</Typography>
-			<DebounceInput
-				key={search}
-				input={search}
-				id="member"
-				onChange={onChangeInput}
-				placeholder={t(`room.search`)}
-				className="debounce-input"
-			/>
+			<div className="utilsBar">
+				<DebounceInput
+					key={search}
+					input={search}
+					id={search + "'_id"}
+					onChange={onChangeInput}
+					placeholder={t(`room.search`)}
+					className="debounce-input"
+				/>
+				<Button
+					onClick={() => setOpenDialog(true)}
+					label={t(`generic.addNew`)}
+					iconName={`${featherIcons}#plus-circle`}
+					primary/>
+			</div>
 			<EntriesTableCategory
 				tableData={tableData}
 				columns={(isExtraLargeDevice || isLargeDevice) ? columnsLarge : (isMediumDevice ? columnsMedium : columnsSmall)}
 				loading={loading}
 				pageToOpen={"room"}
-				loadServerRows={loadFetch}
+				loadServerRows={setPage}
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
+			<AddNewRoomDialog openDialog={openDialog} close={() => setOpenDialog(false)}
+												save={(searchVal: string) => {
+													setOpenDialog(false);
+													onChangeInput(searchVal);
+												}}/>
 		</Box>
 	);
 }

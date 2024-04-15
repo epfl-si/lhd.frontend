@@ -74,6 +74,7 @@ export type roomDetailsType = {
 	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
 	hazardsListName?: string[];
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
 export type hazardType = {

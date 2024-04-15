@@ -559,3 +559,25 @@ export const fetchUnitsFromAPI = async (
 		data: result.data?.unitsFromAPI
 	};
 };
+
+export const fetchRoomsFromAPI = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	name: string
+): Promise<any> => {
+	const query = `query roomAPI {
+	 roomsFromAPI (search: "${name}") {
+			name
+			id
+			building
+			floor
+			sector
+		}
+	}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.roomsFromAPI
+	};
+};

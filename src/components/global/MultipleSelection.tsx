@@ -86,6 +86,8 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 					return suggestion.sciper != newValue.sciper;
 				} else if (objectName == 'NewUnit') {
 					return suggestion.unitId != newValue.unitId;
+				} else if (objectName == 'NewRoom') {
+					return suggestion.id != newValue.id;
 				}
 			});
 			setFilteredSuggestions(filtered);
@@ -112,6 +114,8 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 						return !currentlySelected.find(s => s.sciper == suggestion.sciper);
 					} else if (objectName == 'NewUnit') {
 						return !currentlySelected.find(s => s.unitId == suggestion.unitId);
+					} else if (objectName == 'NewRoom') {
+						return !currentlySelected.find(s => s.id == suggestion.id);
 					}
 				}) || [];
 				setFilteredSuggestions(filtered);
@@ -128,7 +132,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				input={inputValue}
 				id="member"
 				onChange={onChangeInput}
-				placeholder={objectName == 'Person' ? t(`unit_details.personPlaceholder`) : t(`room_details.unitPlaceholder`)}
+				placeholder={t(`generic.search`)}
 			/>
 			<div className="resultDiv">
 				{filteredSuggestions.length > 0 && (
