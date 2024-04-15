@@ -126,14 +126,15 @@ export const DetailsTab = ({
     </div>
     <hr/>
     <Autocomplete
-      value={room.kind?.name || ''}
+      value={room.kind?.name}
       onChange={(event: any, newValue: string | null) => {
-        if ( room.kind && newValue ) {
-          room.kind.name = newValue;
+        if (newValue) {
+          room.kind = {name: newValue};
           setRoom({...room});
         }
       }}
       id="designation"
+      key={room.kind?.name}
       options={roomKind.flatMap(k => k.name)}
       renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)}/>}
     />
