@@ -29,8 +29,8 @@ export const RoomControl = ({
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<roomDetailsType[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
-	const [page, setPage] = useState<number>(0);
+	const [search, setSearch] = React.useState<string>();
+	const [page, setPage] = useState<number>();
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 
@@ -123,36 +123,42 @@ export const RoomControl = ({
 		const urlParams = new URLSearchParams(window.location.search);
 		if (urlParams.has('search')) {
 			setSearch(decodeURIComponent(urlParams.get('search') as string));
+		} else {
+			setSearch("");
 		}
+		setPage(0);
 		handleCurrentPage("rooms");
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
-		setLoading(true);
-		const results = await fetchRooms(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			PAGE_SIZE,
-			PAGE_SIZE * page,
-			search
-		);
-		if ( results.status === 200 && results.data ) {
-			const roomsList: roomDetailsType[] = results.data.rooms;
-			roomsList.forEach(r => {
-				const listCat = r.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
-				r.hazardsListName = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
-			});
-			setTableData(roomsList);
-			setTotalCount(results.data.totalCount);
-		} else {
-			console.error('Bad GraphQL results', results);
+		if (page != undefined) {
+			setLoading(true);
+			const results = await fetchRooms(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				PAGE_SIZE,
+				PAGE_SIZE * page,
+				search ?? ''
+			);
+			if ( results.status === 200 && results.data ) {
+				const roomsList: roomDetailsType[] = results.data.rooms;
+				roomsList.forEach(r => {
+					const listCat = r.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+					r.hazardsListName = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
+				});
+				setTableData(roomsList);
+				setTotalCount(results.data.totalCount);
+			} else {
+				console.error('Bad GraphQL results', results);
+			}
+			setLoading(false);
 		}
-		setLoading(false);
 	};
 
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
 		setSearch(val);
+		setPage(0);
 		history.push(`/?search=${encodeURIComponent(val)}`);
 	}
 
