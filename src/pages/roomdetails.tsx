@@ -48,7 +48,7 @@ export default function RoomDetails() {
 	
 	return (
 		<Box>
-			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/")}}/>
+			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/roomcontrol")}}/>
 			<Typography gutterBottom>{t(`room_details.title`).concat(data?.name)}</Typography>
 			<Tabs>
 				<Tabs.Tab id="details">

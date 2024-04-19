@@ -67,7 +67,7 @@ function App() {
 				<Base.AsideMenu>
 					<ul>
 						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? '#FFCECE' : ''}`}}>
-							<Link to="/">{t(`menu.rooms`)}</Link>
+							<Link to="/roomcontrol">{t(`menu.rooms`)}</Link>
 						</li>
 						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
@@ -76,7 +76,7 @@ function App() {
 							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
 						</li>*/}
 						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
-							<Link to="/hazardFormControl">{t(`menu.hazardFormControl`)}</Link>
+							<Link to="/hazardformcontrol">{t(`menu.hazardFormControl`)}</Link>
 						</li>
 					</ul>
 				</Base.AsideMenu>
@@ -107,10 +107,10 @@ function App() {
 						<Route path="/unitdetails">
 							<UnitDetails />
 						</Route>
-						<Route path="/dispcontrol">
+						{/*<Route path="/dispcontrol">
 							<DispensationControls />
-						</Route>
-						<Route path="/hazardFormControl">
+						</Route>*/}
+						<Route path="/hazardformcontrol">
 							<HazardFormControl handleCurrentPage={handleCurrentPage}/>
 						</Route>
 						<Route path="/roomdetails">
@@ -119,10 +119,10 @@ function App() {
 						<Route path="/formdetails">
 							<HazardFormDetails />
 						</Route>
-						<Route path="/biohazard">
+						{/*<Route path="/biohazard">
 							<BioHazard />
-						</Route>
-						<Route path="/">
+						</Route>*/}
+						<Route path="/roomcontrol">
 							<RoomControl handleCurrentPage={handleCurrentPage} user={connectedUser.sciper}/>
 						</Route>
 					</Switch>

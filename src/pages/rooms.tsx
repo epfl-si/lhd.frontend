@@ -159,7 +159,7 @@ export const RoomControl = ({
 		const val = newValue ?? '';
 		setSearch(val);
 		setPage(0);
-		history.push(`/?search=${encodeURIComponent(val)}`);
+		history.push(`/roomcontrol?search=${encodeURIComponent(val)}`);
 	}
 
 	return (
