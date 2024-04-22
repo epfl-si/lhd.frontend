@@ -51,6 +51,11 @@
     font-size: small;
 }
 
+.deletedBackground {
+    background: #FFCECE;
+    text-decoration: line-through;
+}
+
 // Medium devices (tablets, less than 992px)
 @media (max-width: 1024px) {
     .debounce-input {
