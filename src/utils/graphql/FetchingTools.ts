@@ -581,3 +581,21 @@ export const fetchRoomsFromAPI = async (
 		data: result.data?.roomsFromAPI
 	};
 };
+
+export const fetchOrganism = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query = `query org {
+  bioOrgs {
+    organism
+    risk_group
+  }
+}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.bioOrgs
+	};
+};
