@@ -14,6 +14,7 @@ import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
 import semver from "semver/preload";
+import {getOrganism} from "../components/formio/OrganismDropDown";
 
 export default function HazardFormDetails() {
 	const history = useHistory();
@@ -28,15 +29,47 @@ export default function HazardFormDetails() {
 		type: "info",
 		text: '',
 	});
-
-	const urlParams = new URLSearchParams(window.location.search);
-	useEffect(() => {
-			setCategory(urlParams.get('cat') ?? '');
-
-			if (urlParams.get('cat') != 'NewCategory') {
-				loadFetch(urlParams.get('cat') ?? '');
+	const [componentNameList, setComponentNameList] = useState<string>('');
+	const [componentOptionList, setComponentOptionList] = useState<object[]>([]);
+	const [formBuilderOptions,setFormBuilderOption] = useState<{component: string, options: any}>({
+		component: componentNameList,
+		options: {
+			builder: {
+				custom: {
+					title: 'LHD Fields',
+					components: {
+						componentOptionList
+					}
+				}
 			}
+		}
+	});
+	const urlParams = new URLSearchParams(window.location.search);
+
+	useEffect(() => {
+		setCategory(urlParams.get('cat') ?? '');
+		if (urlParams.get('cat') != 'NewCategory') {
+			loadFetch(urlParams.get('cat') ?? '');
+		}
+		loadOrganism();
 	}, [oidc.accessToken, window.location.search]);
+
+	const loadOrganism = async () => {
+		const organism = await getOrganism(oidc.accessToken);
+		setComponentNameList(componentNameList + organism.component);
+		setComponentOptionList([...componentOptionList, organism.options]);
+		setFormBuilderOption({
+			component: componentNameList + organism.component,
+			options: {
+				builder: {
+					custom: {
+						title: 'LHD Fields',
+						components: {...componentOptionList, organism: organism.options}
+					}
+				}
+			}
+		})
+	}
 
 	const loadFetch = async (cat: string) => {
 		const results = await fetchHazardFormDetails(
@@ -156,10 +189,12 @@ export default function HazardFormDetails() {
 				fullWidth
 				variant="standard"
 			/>
-			<FormBuilder
+			{formBuilderOptions.component && <FormBuilder
+				key={formBuilderOptions.component}
+				options={formBuilderOptions?.options}
 				form={(newForm || hazardFormDetails?.form) ? JSON.parse(newForm ?? hazardFormDetails!.form) : {}}
 				onChange={(schema) => {setNewForm(JSON.stringify(schema))}}
-			/>
+			/>}
 			<div style={{marginTop: '50px'}}>
 				<Button
 					onClick={handleSubmit}
