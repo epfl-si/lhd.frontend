@@ -108,7 +108,7 @@ export type hazardFormType = {
 	version: string;
 	hazard_category: hazardCategory;
 	isSelected?: boolean;
-	children: hazardFormChildType[];
+	children?: hazardFormChildType[];
 }
 
 export type hazardFormChildType = {
