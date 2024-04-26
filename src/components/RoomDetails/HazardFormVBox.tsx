@@ -161,6 +161,7 @@ export const HazardFormVBox = ({
   }
 
   function onAddHazard() {
+    setDirtyState(true);
     const newKey = createKey(10);
     const newSubmissionArray = [...submissionsList, {
       id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
@@ -168,6 +169,18 @@ export const HazardFormVBox = ({
         id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
         form: currentFormChild}]}];
     setSubmissionsList(newSubmissionArray)
+  }
+
+  function onAddHazardChild(parentId: string) {
+    setDirtyState(true);
+    const newKey = createKey(10);
+    const parent = submissionsList.find(s => s.id == parentId);
+    if(parent) {
+      parent.children?.push({
+        id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+        form: currentFormChild});
+      setSubmissionsList(submissionsList.map(s => s.id == parentId ? parent : s));
+    }
   }
 
   return <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -185,6 +198,10 @@ export const HazardFormVBox = ({
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
         key={sf.id + action}/>
+      <Button size="icon"
+              iconName={"#plus-circle"}
+              onClick={() => onAddHazardChild(sf.id)}
+              style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
           <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
                       key={child.id + action}/>
