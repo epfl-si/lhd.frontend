@@ -1,5 +1,5 @@
 import {
-	dispensationRequestType,
+	dispensationRequestType, hazardFormChildType,
 	hazardFormType,
 	lhdUnitsFromAPIType,
 	lhdUnitsType,
@@ -370,6 +370,49 @@ export const saveNewRoomsFromAPI = async (
 									building: "${u.building}",
 									sector: "${u.sector}"
 								}`)}]) {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const createNewHazardFormChild = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	hazardForm: hazardFormChildType,
+): Promise<any> => {
+	const query = `mutation createNewHazardFormChild {
+               createNewHazardFormChild (
+               id: ${hazardForm.id},
+               form: ${hazardForm.form},
+							 version: "${hazardForm.version}",
+							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}",
+							 category: "${hazardForm.category}") {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const updateHazardFormChild = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	hazardForm: hazardFormChildType,
+): Promise<any> => {
+	const query = `mutation updateHazardFormChild {
+               updateHazardFormChild (
+               id: ${hazardForm.id},
+               form: ${hazardForm.form},
+							 version: "${hazardForm.version}",
+							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}") {
                 errors {
                   message
                 }

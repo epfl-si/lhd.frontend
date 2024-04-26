@@ -17,6 +17,7 @@ import HazardFormDetails from "./pages/hazardformdetails";
 import {RoomControl} from "./pages/rooms";
 import {fetchConnectedUser} from "./utils/graphql/FetchingTools";
 import {env} from "./utils/env";
+import HazardFormChildDetails from "./pages/hazardformchilddetails";
 
 function App() {
 	const { t } = useTranslation();
@@ -118,6 +119,9 @@ function App() {
 						</Route>
 						<Route path="/formdetails">
 							<HazardFormDetails />
+						</Route>
+						<Route path="/hazardFormChildDetails">
+							<HazardFormChildDetails />
 						</Route>
 						{/*<Route path="/biohazard">
 							<BioHazard />

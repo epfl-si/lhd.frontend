@@ -81,6 +81,19 @@ export type hazardType = {
 	id: string;
 	submission: string;
 	hazard_form_history: hazardFormHistoryType;
+	children: hazardChildType[]
+}
+
+export type hazardChildType = {
+	submission: string;
+	id: string;
+	hazard_form_child_history: hazardFormChildHistoryType;
+}
+
+export type hazardFormChildHistoryType = {
+	form: string;
+	version: string;
+	hazard_form_child: hazardFormChildType;
 }
 
 export type hazardFormHistoryType = {
@@ -95,12 +108,23 @@ export type hazardFormType = {
 	version: string;
 	hazard_category: hazardCategory;
 	isSelected?: boolean;
+	children: hazardFormChildType[];
+}
+
+export type hazardFormChildType = {
+	id: string;
+	form: string;
+	version: string;
+	hazard_form_child_name: string;
+	category?: string;
 }
 
 export type submissionForm = {
 	id: string;
 	submission: object;
 	form?: object;
+	children?: submissionForm[];
+	formName?: string;
 }
 
 export type hazLevelsType = {

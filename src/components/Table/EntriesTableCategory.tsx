@@ -10,7 +10,7 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
-	pageToOpen:  'room' | 'unit' | 'hazardForms';
+	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild';
 	page?: number;
 	pageSize?: number;
 	totalCount?: number;
@@ -87,12 +87,17 @@ export function EntriesTableCategory({
 							case "hazardForms":
 								history.push(`/formdetails?cat=${e.row['hazard_category']['hazard_category_name']}`);
 								break;
+							case "hazardFormsChild":
+								history.push(`/hazardFormChildDetails?name=${e.row['hazard_form_child_name']}`);
+								break;
 						}
 					}}
 					getRowId={(row: any) =>  {
 						switch ( pageToOpen ) {
 							case "hazardForms":
 								return row.hazard_category.hazard_category_name;
+							case "hazardFormsChild":
+								return row.hazard_form_child_name;
 						}
 					}}
 				/>

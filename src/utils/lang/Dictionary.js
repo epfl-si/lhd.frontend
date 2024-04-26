@@ -149,7 +149,9 @@ i18next.use(initReactI18next).init({
 					Create: 'Create',
 					Modify: 'Modify form of: ',
 					fillMandatoryFields: 'Some mandatory fields are empty',
-					versionError: 'New version must be more than current version'
+					versionError: 'New version must be more than current version',
+					childListTitle: 'Children form list',
+					hazard_form_child_name: 'Name'
 				},
 				hazard_details: {
 					unsavedChangesMessageTitle: 'Unsaved changes',
@@ -301,7 +303,9 @@ i18next.use(initReactI18next).init({
 					Create: 'Créer',
 					Modify: 'Modifier le formulaire de: ',
 					fillMandatoryFields: 'Certains champs obligatoires sont vides',
-					versionError: 'La nouvelle version doit être majeure que la version courante'
+					versionError: 'La nouvelle version doit être majeure que la version courante',
+					childListTitle: 'Liste des formulaires enfants',
+					hazard_form_child_name: 'Nom'
 				},
 				hazard_details: {
 					unsavedChangesMessageTitle: 'Changements non enregistrés',

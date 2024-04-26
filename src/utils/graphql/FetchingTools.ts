@@ -490,6 +490,12 @@ export const fetchHazardForms = async (
 					hazard_category {
 						hazard_category_name
 					}
+					children {
+						id
+						form
+						version
+						hazard_form_child_name
+					}
 				}
       }`;
 
@@ -513,6 +519,10 @@ export const fetchHazardFormDetails = async (
 					hazard_category {
 						hazard_category_name
 					}
+					children {
+            version
+            hazard_form_child_name
+          }
 				}
       }`;
 
@@ -597,5 +607,26 @@ export const fetchOrganism = async (
 	return {
 		status: result.status,
 		data: result.data?.bioOrgs
+	};
+};
+
+export const fetchHazardFormChild = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	name: string
+): Promise<any> => {
+	const query = `query fetchHazardFormChild {
+        hazardFormChildren (where: { hazard_form_child_name: {equals: "${name}"}}) {
+        	id
+        	form
+					version
+					hazard_form_child_name
+				}
+      }`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.hazardFormChildren
 	};
 };
