@@ -38,6 +38,7 @@ export const HazardFormVBox = ({
     text: '',
   });
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
+  const currentFormChild = lastVersionForm?.children[0].form ? JSON.parse(lastVersionForm?.children[0].form) : {};
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -47,7 +48,9 @@ export const HazardFormVBox = ({
           const newKey = createKey(10);
           setSubmissionsList([...subform , {
             id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
-            form: currentForm}]);
+            form: currentForm, children: [{
+              id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+              form: currentFormChild}]}]); //TODO make it generic if there are more tan one child, If I have more than one add one form for each child
           break;
         case "Read":
         case "Edit":
@@ -64,7 +67,13 @@ export const HazardFormVBox = ({
       const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
       if (category == selectedHazardCategory) {
         const oldForm = h.hazard_form_history.form;
-        subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(oldForm) : currentForm});
+        const childrenList: submissionForm[] = [];
+        h.children.forEach(child => {
+          childrenList.push({id: child.id, submission: JSON.parse(child.submission),
+            form: action == 'Read' ? JSON.parse(child.hazard_form_child_history.form) : JSON.parse(child.hazard_form_child_history.hazard_form_child.form)});
+        })
+        subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(oldForm) : currentForm,
+          children: childrenList});
       }
     });
     return subForm;
@@ -76,7 +85,11 @@ export const HazardFormVBox = ({
       submissionsList.forEach(f => {
         submissionsToSave.push({
           id: JSON.parse(f.id),
-          submission: f.submission
+          submission: f.submission,
+          children: f.children?.map(c => {
+            const childForSave: submissionForm = {id: JSON.parse(c.id), submission: c.submission, formName: lastVersionForm?.children[0].hazard_form_child_name};
+            return childForSave;
+          })
         })
       });
       addHazard(
@@ -116,10 +129,33 @@ export const HazardFormVBox = ({
   const onChangeSubmission = (id: string) => {
     return (newSubmission: object, isUnchanged: boolean) => {
       setDirtyState(!isUnchanged);
-      const arr = submissionsList.find(s => s.id == id);
-      if(arr && Object.keys(arr.submission.data).length == 0) {
-        const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm};
+      const oldSubmission = submissionsList.find(s => s.id == id);
+      if(oldSubmission && Object.keys(oldSubmission.submission.data).length == 0) {
+        const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm,
+          children: oldSubmission.children};
         setSubmissionsList(submissionsList.map(s => s.id == id ? changedSubmission : s));
+      }
+    }
+  }
+
+  const onChangeChildSubmission = (id: string) => {
+    return (newSubmission: object, isUnchanged: boolean) => {
+      setDirtyState(!isUnchanged);
+
+      let oldParentSubmission: submissionForm | undefined;
+      let oldChildSubmission: submissionForm | undefined;
+      submissionsList.forEach(s => {
+        const child = s.children?.find(c => c.id == id);
+        if (child) {
+          oldParentSubmission = s;
+          oldChildSubmission = child;
+        }
+      });
+      if(oldParentSubmission && oldChildSubmission) {
+        const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
+        const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
+        const changedParentSubmission: submissionForm = {...oldParentSubmission, children: updatedParentSubmissionChildren};
+        setSubmissionsList(submissionsList.map(s => s.id == oldParentSubmission?.id ? changedParentSubmission : s));
       }
     }
   }
@@ -128,7 +164,9 @@ export const HazardFormVBox = ({
     const newKey = createKey(10);
     const newSubmissionArray = [...submissionsList, {
       id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
-      form: currentForm}];
+      form: currentForm, children: [{
+        id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+        form: currentFormChild}]}];
     setSubmissionsList(newSubmissionArray)
   }
 
@@ -147,6 +185,11 @@ export const HazardFormVBox = ({
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
         key={sf.id + action}/>
+      {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
+          <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
+                      key={child.id + action}/>
+        </div>
+      )}
         <hr />
       </div>
     )}

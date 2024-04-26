@@ -111,6 +111,20 @@ export const fetchRoomDetails = async (
           hazards {
             id
             submission
+            children {
+              submission
+              hazard_form_child_history {
+                form
+                version
+                hazard_form_child {
+                	id
+                  form
+                  version
+                  hazard_form_child_name
+                }
+              }
+              id
+            }
             hazard_form_history {
               form
               hazard_form {
