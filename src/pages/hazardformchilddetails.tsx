@@ -192,7 +192,7 @@ export default function HazardFormChildDetails() {
 				fullWidth
 				variant="standard"
 			/>
-			{formBuilderOptions.component && <FormBuilder
+			{(newForm || hazardFormChildDetails?.form) && <FormBuilder
 		  key={formBuilderOptions.component}
 		  options={formBuilderOptions?.options}
 		  form={(newForm || hazardFormChildDetails?.form) ? JSON.parse(newForm ?? hazardFormChildDetails!.form) : {}}
