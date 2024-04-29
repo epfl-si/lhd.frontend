@@ -162,7 +162,7 @@ export default function UnitDetails() {
 
 	return (
 		<div>
-			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}}/>
+			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}} alwaysPresent={false}/>
 			<Typography gutterBottom>
 				{
 					(data[0]?.unitId ? '' :

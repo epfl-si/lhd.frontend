@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {hazardFormChildType, hazardFormType, notificationType} from "../utils/ressources/types";
+import {hazardFormChildType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {FormBuilder} from "@formio/react";
 import {Box, TextField, Typography} from "@material-ui/core";
@@ -14,11 +14,11 @@ import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
 import {getOrganism} from "../components/formio/OrganismDropDown";
 import {
-	createNewHazardCategory,
 	createNewHazardFormChild,
 	updateHazardFormChild
 } from "../utils/graphql/PostingTools";
 import semver from "semver/preload";
+import {BackButton} from "../components/global/BackButton";
 
 export default function HazardFormChildDetails() {
 	const history = useHistory();
@@ -27,6 +27,7 @@ export default function HazardFormChildDetails() {
 	const [hazardFormChildDetails, setHazardFormChildDetails] = useState<hazardFormChildType>();
 	const [newForm, setNewForm] = useState<string>();
 	const [name, setName] = useState<string>('');
+	const [category, setCategory] = useState<string>('');
 	const [version, setVersion] = useState<string>('');
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [componentNameList, setComponentNameList] = useState<string>('');
@@ -52,6 +53,7 @@ export default function HazardFormChildDetails() {
 
 	useEffect(() => {
 		setName(urlParams.get('name') ?? '');
+		setCategory(urlParams.get('category') ?? '');
 		if ( urlParams.get('name') != 'NewHazardFormChild' ) {
 			loadFetch(urlParams.get('name') ?? '');
 		}
@@ -85,6 +87,7 @@ export default function HazardFormChildDetails() {
 			setHazardFormChildDetails(results.data[0]);
 			setNewForm(JSON.stringify(results.data[0].form));
 			setName(results.data[0].hazard_form_child_name);
+			setCategory(results.data[0].parentForm.hazard_category.hazard_category_name);
 		} else {
 			console.error('Bad GraphQL results', results);
 		}
@@ -101,7 +104,7 @@ export default function HazardFormChildDetails() {
 						form: JSON.stringify(newForm),
 						version: version,
 						hazard_form_child_name: name,
-						category: urlParams.get('category') ?? ''
+						category: category
 					}
 				).then(res => {
 					handleOpen(res);
@@ -147,11 +150,11 @@ export default function HazardFormChildDetails() {
 			};
 			setNotificationType(notif);
 		} else if ( res.status === 200 ) {
-			/*if ( urlParams.get('cat') == 'NewCategory' ) {
-				history.push(`/formdetails?name=${name}`);
+			if ( urlParams.get('cat') == 'NewHazardFormChild' ) {
+				history.push(`/hazardFormChildDetails?name=${name}`);
 			} else {
 				loadFetch(name);
-			}*/
+			}
 			setNotificationType(notificationsVariants['hazardForm-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['hazardForm-update-error']);
@@ -165,6 +168,7 @@ export default function HazardFormChildDetails() {
 
 	return (
 		<Box>
+			<BackButton icon="#arrow-left" onClickButton={() => {history.push(`/formdetails?cat=${category}`)}} alwaysPresent={true}/>
 			<Typography
 				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong>
 			</Typography>

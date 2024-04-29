@@ -635,6 +635,11 @@ export const fetchHazardFormChild = async (
         	form
 					version
 					hazard_form_child_name
+					parentForm {
+						hazard_category {
+							hazard_category_name
+						}
+					}
 				}
       }`;
 

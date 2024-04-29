@@ -95,12 +95,12 @@ export const HazardTab = ({
     <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
       {isLittleScreen && listSavedCategories.includes(selectedHazardCategory) ?
         <div style={{display: 'flex', flexDirection: 'row'}}>
-          <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>
+          <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>
           <Button size="icon"
                   iconName={"#edit-3"}
                   onClick={() => onEditHazard(selectedHazardCategory)}
                   style={{marginLeft: '10px', display: action != "Edit" ? 'flex' : 'none'}}/>
-        </div> : <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')}/>}
+        </div> : <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>}
       <HazardFormVBox room={room}
                       action={action}
                       onChangeAction={onEditHazard}

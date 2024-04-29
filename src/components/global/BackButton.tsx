@@ -5,11 +5,13 @@ import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 interface BackButtonProps {
 	onClickButton: () => void;
 	icon: string;
+	alwaysPresent: boolean;
 }
 
 export const BackButton = ({
 	onClickButton,
-	icon
+	icon,
+	alwaysPresent
 }: BackButtonProps) => {
 	const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
 
@@ -19,7 +21,7 @@ export const BackButton = ({
 	}, [window]);
 
 	function toggleDivVisibility() {
-		if (window.innerWidth <= 1024) {
+		if (window.innerWidth <= 1024 || alwaysPresent) {
 			setIsLittleScreen(true);
 		} else {
 			setIsLittleScreen(false);
