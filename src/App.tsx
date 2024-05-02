@@ -86,7 +86,6 @@ function App() {
 				</Base.Breadcrumbs>
 				<Base.User>
 					<Avatar>
-						<Avatar.Image peopleSciper={connectedUser.sciper}/>
 						<Box
 							display="flex"
 							flexDirection="row"
