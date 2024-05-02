@@ -77,7 +77,7 @@ function App() {
 							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
 						</li>*/}
 						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
-							<Link to="/hazardformcontrol">{t(`menu.hazardFormControl`)}</Link>
+							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
 						</li>
 					</ul>
 				</Base.AsideMenu>
