@@ -38,19 +38,15 @@ export const HazardFormVBox = ({
     text: '',
   });
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
-  const currentFormChild = lastVersionForm?.children[0].form ? JSON.parse(lastVersionForm?.children[0].form) : {};
+  const currentFormChild = (lastVersionForm?.children && lastVersionForm?.children.length > 0) ?
+    (lastVersionForm.children[0].form ? JSON.parse(lastVersionForm.children[0].form) : undefined) : undefined;
 
   useEffect(() => {
     const loadFetch = async () => {
       const subform = readOrEditHazard();
       switch (action) {
         case "Add":
-          const newKey = createKey(10);
-          setSubmissionsList([...subform , {
-            id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
-            form: currentForm, children: [{
-              id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
-              form: currentFormChild}]}]); //TODO make it generic if there are more tan one child, If I have more than one add one form for each child
+          onAddHazard(false, subform);
           break;
         case "Read":
         case "Edit":
@@ -87,7 +83,8 @@ export const HazardFormVBox = ({
           id: JSON.parse(f.id),
           submission: f.submission,
           children: f.children?.map(c => {
-            const childForSave: submissionForm = {id: JSON.parse(c.id), submission: c.submission, formName: lastVersionForm?.children[0].hazard_form_child_name};
+            const childForSave: submissionForm = {id: JSON.parse(c.id), submission: c.submission,
+              formName: currentFormChild ? lastVersionForm!.children![0].hazard_form_child_name : ''};
             return childForSave;
           })
         })
@@ -160,15 +157,20 @@ export const HazardFormVBox = ({
     }
   }
 
-  function onAddHazard() {
-    setDirtyState(true);
+  function onAddHazard(dirtyState: boolean, submissions: submissionForm[]) {
+    setDirtyState(dirtyState);
     const newKey = createKey(10);
-    const newSubmissionArray = [...submissionsList, {
-      id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
-      form: currentForm, children: [{
-        id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
-        form: currentFormChild}]}];
-    setSubmissionsList(newSubmissionArray)
+    if (currentFormChild) {
+      setSubmissionsList([...submissions , {
+        id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
+        form: currentForm, children: [{
+          id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+          form: currentFormChild}]}]); //TODO make it generic if there are more tan one child, If I have more than one add one form for each child
+    } else {
+      setSubmissionsList([...submissions , {
+        id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
+        form: currentForm, children: []}]);
+    }
   }
 
   function onAddHazardChild(parentId: string) {
@@ -192,16 +194,17 @@ export const HazardFormVBox = ({
       </div>
       <Button size="icon"
               iconName={"#plus-circle"}
-              onClick={onAddHazard}
+              onClick={() => onAddHazard(true, submissionsList)}
       style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
     </div>
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
         key={sf.id + action}/>
-      <Button size="icon"
-              iconName={"#plus-circle"}
-              onClick={() => onAddHazardChild(sf.id)}
-              style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
+      {sf.children && sf.children.length > 0 &&
+        <Button size="icon"
+                iconName={"#plus-circle"}
+                onClick={() => onAddHazardChild(sf.id)}
+                style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>}
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
           <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
                       key={child.id + action}/>
