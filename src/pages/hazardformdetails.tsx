@@ -192,7 +192,7 @@ export default function HazardFormDetails() {
 						fullWidth
 						variant="standard"
 					/>
-					{(newForm || hazardFormDetails?.form) && <FormBuilder
+					{(newForm || hazardFormDetails?.form || urlParams.get('cat') == 'NewCategory') && <FormBuilder
 			  key={formBuilderOptions.component}
 			  options={formBuilderOptions?.options}
 			  form={(newForm || hazardFormDetails?.form) ? JSON.parse(newForm ?? hazardFormDetails!.form) : {}}
