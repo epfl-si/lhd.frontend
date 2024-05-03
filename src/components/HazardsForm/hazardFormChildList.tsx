@@ -40,7 +40,7 @@ export const HazardFormChildList = ({
 			<div style={{marginTop: '50px'}}>
 				<Button
 					onClick={() => history.push(`/hazardFormChildDetails?name=NewHazardFormChild&category=${category}`)}
-					label={t(`generic.addButton`)}
+					label={t(`generic.addNew`)}
 					iconName={`${featherIcons}#plus-circle`}
 					primary/>
 			</div>
