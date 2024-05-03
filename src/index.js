@@ -16,7 +16,7 @@ ReactDOM.render(
 	<OIDCContext
 		authServerUrl={env().REACT_APP_AUTH_SERVER_URL}
 		client={{
-			clientId: 'LHDv3',
+			clientId: env().REACT_CLIENT_ID,
 			scope: env().REACT_APP_OPENID_SCOPE,
 		}}
 	>

@@ -12,14 +12,16 @@ const _env_development = {
   REACT_APP_AUTH_SERVER_URL: "http://localhost:8080/realms/LHD",
   REACT_APP_HOMEPAGE_URL: "http://localhost:3000/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "//localhost:3001",
-  REACT_APP_OPENID_SCOPE: "openid"
+  REACT_APP_OPENID_SCOPE: "openid",
+  REACT_CLIENT_ID: "LHDv3"
 };
 
 const _env_production = {
   REACT_APP_AUTH_SERVER_URL: "https://tkgi-satosa.epfl.ch",
   REACT_APP_HOMEPAGE_URL: "https://lhdv3.epfl.ch/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "https://lhdv3.epfl.ch/graphql",
-  REACT_APP_OPENID_SCOPE: "openid profile tequila"
+  REACT_APP_OPENID_SCOPE: "openid profile tequila",
+  REACT_CLIENT_ID: "LHDv3_PROD"
 };
 
 export function env() {
