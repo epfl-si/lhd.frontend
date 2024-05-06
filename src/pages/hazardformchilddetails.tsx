@@ -19,6 +19,7 @@ import {
 } from "../utils/graphql/PostingTools";
 import semver from "semver/preload";
 import {BackButton} from "../components/global/BackButton";
+import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
 
 export default function HazardFormChildDetails() {
 	const history = useHistory();
@@ -28,7 +29,6 @@ export default function HazardFormChildDetails() {
 	const [newForm, setNewForm] = useState<string>();
 	const [name, setName] = useState<string>('');
 	const [category, setCategory] = useState<string>('');
-	const [version, setVersion] = useState<string>('');
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [componentNameList, setComponentNameList] = useState<string>('');
 	const [componentOptionList, setComponentOptionList] = useState<object[]>([]);
@@ -50,6 +50,7 @@ export default function HazardFormChildDetails() {
 		text: '',
 	});
 	const urlParams = new URLSearchParams(window.location.search);
+	const [originalForm, setOriginalForm] = useState<string>();
 
 	useEffect(() => {
 		setName(urlParams.get('name') ?? '');
@@ -88,13 +89,14 @@ export default function HazardFormChildDetails() {
 			setNewForm(JSON.stringify(results.data[0].form));
 			setName(results.data[0].hazard_form_child_name);
 			setCategory(results.data[0].parentForm.hazard_category.hazard_category_name);
+			setOriginalForm(results.data[0].form);
 		} else {
 			console.error('Bad GraphQL results', results);
 		}
 	}
 
 	const handleSubmit = () => {
-		if (version != '' && name != '' && newForm && newForm != '') {
+		if (name != '' && newForm && newForm != '') {
 			if (urlParams.get('name') == 'NewHazardFormChild') {
 				createNewHazardFormChild (
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -102,7 +104,7 @@ export default function HazardFormChildDetails() {
 					{
 						id: JSON.stringify('{"salt":"NewHazardFormChild","eph_id":"NewHazardFormChild"}'),
 						form: JSON.stringify(newForm),
-						version: version,
+						version: '1.0.0',
 						hazard_form_child_name: name,
 						category: category
 					}
@@ -110,27 +112,21 @@ export default function HazardFormChildDetails() {
 					handleOpen(res);
 				});
 			} else {
-				if (semver.gt(version, hazardFormChildDetails?.version ?? '')) {
-					updateHazardFormChild (
-						env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-						oidc.accessToken,
-						{
-							id: JSON.stringify(hazardFormChildDetails?.id),
-							form: JSON.stringify(newForm),
-							version: version,
-							hazard_form_child_name: name
-						}
-					).then(res => {
-						handleOpen(res);
-					});
-				} else {
-					const notif: notificationType = {
-						text: t(`hazardFormControl.versionError`),
-						type: 'error'
-					};
-					setNotificationType(notif);
-					setOpenNotification(true);
-				}
+				const originalFormKeys = findAllKeysForSubmission(JSON.parse(originalForm ?? ''));
+				const newFormKeys = findAllKeysForSubmission(JSON.parse(newForm));
+				const newVersion = compareVersions(originalFormKeys, newFormKeys, hazardFormChildDetails?.version);
+				updateHazardFormChild (
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					{
+						id: JSON.stringify(hazardFormChildDetails?.id),
+						form: JSON.stringify(newForm),
+						version: newVersion,
+						hazard_form_child_name: name
+					}
+				).then(res => {
+					handleOpen(res);
+				});
 			}
 		} else {
 			const notif: notificationType = {
@@ -170,7 +166,7 @@ export default function HazardFormChildDetails() {
 		<Box>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push(`/formdetails?cat=${category}`)}} alwaysPresent={true}/>
 			<Typography
-				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong>
+				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormChildDetails?.version}</strong>)
 			</Typography>
 			{urlParams.get('name') == 'NewHazardFormChild' && <TextField
 		  onChange={(event => {setName(event.target.value)})}
@@ -183,19 +179,6 @@ export default function HazardFormChildDetails() {
 		  fullWidth
 		  variant="standard"
 	  />}
-			<TextField
-				onChange={(event => {setVersion(event.target.value)})}
-				autoFocus
-				required
-				margin="dense"
-				id="version"
-				name="version"
-				label={urlParams.get('name') == 'NewHazardFormChild' ?
-					t(`hazardFormControl.insertNewVersion`) :
-					`${t(`hazardFormControl.newVersionCurrentIs`)} ${hazardFormChildDetails?.version})`}
-				fullWidth
-				variant="standard"
-			/>
 			{(newForm || hazardFormChildDetails?.form) && <FormBuilder
 		  key={formBuilderOptions.component}
 		  options={formBuilderOptions?.options}

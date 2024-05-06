@@ -16,6 +16,7 @@ import {useHistory} from "react-router-dom";
 import semver from "semver/preload";
 import {getOrganism} from "../components/formio/OrganismDropDown";
 import {HazardFormChildList} from "../components/HazardsForm/hazardFormChildList";
+import {compareVersions, findAllKeysForSubmission, findElementsWithKey} from "../utils/ressources/jsonUtils";
 
 export default function HazardFormDetails() {
 	const history = useHistory();
@@ -24,7 +25,6 @@ export default function HazardFormDetails() {
 	const [hazardFormDetails, setHazardFormDetails] = useState<hazardFormType>();
 	const [newForm, setNewForm] = useState<string>();
 	const [category, setCategory] = useState<string>('');
-	const [version, setVersion] = useState<string>('');
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
@@ -46,6 +46,7 @@ export default function HazardFormDetails() {
 		}
 	});
 	const urlParams = new URLSearchParams(window.location.search);
+	const [originalForm, setOriginalForm] = useState<string>();
 
 	useEffect(() => {
 		setCategory(urlParams.get('cat') ?? '');
@@ -81,6 +82,7 @@ export default function HazardFormDetails() {
 		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
 			setHazardFormDetails(results.data[0]);
 			setNewForm(JSON.stringify(results.data[0].form));
+			setOriginalForm(results.data[0].form);
 			setCategory(results.data[0].hazard_category.hazard_category_name);
 		} else {
 			console.error('Bad GraphQL results', results);
@@ -88,7 +90,7 @@ export default function HazardFormDetails() {
 	}
 
 	const handleSubmit = () => {
-		if (version != '' && category != '' && newForm && newForm != '') {
+		if (category != '' && newForm && newForm != '') {
 			if (urlParams.get('cat') == 'NewCategory') {
 				createNewHazardCategory (
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -96,34 +98,28 @@ export default function HazardFormDetails() {
 					{
 						id: JSON.stringify('{"salt":"newHazard","eph_id":"newHazard"}'),
 						form: JSON.stringify(newForm),
-						version: version,
+						version: '1.0.0',
 						hazard_category: {hazard_category_name: category}
 					}
 				).then(res => {
 					handleOpen(res);
 				});
 			} else {
-				if (semver.gt(version, hazardFormDetails?.version ?? '')) {
-					updateFormHazard (
-						env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-						oidc.accessToken,
-						{
-							id: JSON.stringify(hazardFormDetails?.id),
-							form: JSON.stringify(newForm),
-							version: version,
-							hazard_category: {hazard_category_name: category}
-						}
-					).then(res => {
-						handleOpen(res);
-					});
-				} else {
-					const notif: notificationType = {
-						text: t(`hazardFormControl.versionError`),
-						type: 'error'
-					};
-					setNotificationType(notif);
-					setOpenNotification(true);
-				}
+				const originalFormKeys = findAllKeysForSubmission(JSON.parse(originalForm ?? ''));
+				const newFormKeys = findAllKeysForSubmission(JSON.parse(newForm));
+				const newVersion = compareVersions(originalFormKeys, newFormKeys, hazardFormDetails?.version);
+				updateFormHazard (
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					{
+						id: JSON.stringify(hazardFormDetails?.id),
+						form: JSON.stringify(newForm),
+						version: newVersion,
+						hazard_category: {hazard_category_name: category}
+					}
+				).then(res => {
+					handleOpen(res);
+				});
 			}
 		} else {
 			const notif: notificationType = {
@@ -164,7 +160,7 @@ export default function HazardFormDetails() {
 			<Typography
 									gutterBottom>{urlParams.get('cat') == 'NewCategory' ?
 				t(`hazardFormControl.Create`) :
-				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong>
+				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormDetails?.version}</strong>)
 			</Typography>
 			<div style={{display: "flex", flexDirection: 'row'}}>
 				<div className="col-9">
@@ -179,19 +175,9 @@ export default function HazardFormDetails() {
 			  fullWidth
 			  variant="standard"
 		  />}
-					<TextField
-						onChange={(event => {setVersion(event.target.value)})}
-						autoFocus
-						required
-						margin="dense"
-						id="version"
-						name="version"
-						label={urlParams.get('cat') == 'NewCategory' ?
-							t(`hazardFormControl.insertNewVersion`) :
-							`${t(`hazardFormControl.newVersionCurrentIs`)} ${hazardFormDetails?.version})`}
-						fullWidth
-						variant="standard"
-					/>
+
+					{urlParams.get('cat') != 'NewCategory'  && <div style={{marginBottom: '5px'}}></div>}
+
 					{(newForm || hazardFormDetails?.form || urlParams.get('cat') == 'NewCategory') && <FormBuilder
 			  key={formBuilderOptions.component}
 			  options={formBuilderOptions?.options}
