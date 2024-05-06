@@ -37,7 +37,7 @@ i18next.use(initReactI18next).init({
 					addNewUnit: 'Add a new sub-unit',
 					noSubUnits: 'No sub-unit present',
 					deleteUnitConfirmationMessageTitle: 'Are you sur to delete this unit?',
-					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles and COSECs will be deleted. \nAll sub-units will be deleted too.'
+					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles, COSECs, rooms and storages will be deleted. \nAll sub-units will be deleted too.'
 				},
 				unit: {
 					name: 'Name',
@@ -191,7 +191,7 @@ i18next.use(initReactI18next).init({
 					addNewUnit: 'Ajouter une nouvelle sub-unité',
 					noSubUnits: 'Aucune sub-unité présente',
 					deleteUnitConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette unité?',
-					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables et les COSECs seront aussi supprimées, ainsi que toutes les sub-unités.'
+					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les rooms et les storages seront aussi supprimées, ainsi que toutes les sub-unités.'
 				},
 				unit: {
 					name: 'Nom',
