@@ -165,9 +165,9 @@ export default function HazardFormChildDetails() {
 	return (
 		<Box>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push(`/formdetails?cat=${category}`)}} alwaysPresent={true}/>
-			<Typography
+			{hazardFormChildDetails && <Typography
 				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormChildDetails?.version}</strong>)
-			</Typography>
+			</Typography>}
 			{urlParams.get('name') == 'NewHazardFormChild' && <TextField
 		  onChange={(event => {setName(event.target.value)})}
 		  autoFocus
@@ -179,7 +179,7 @@ export default function HazardFormChildDetails() {
 		  fullWidth
 		  variant="standard"
 	  />}
-			{(newForm || hazardFormChildDetails?.form) && <FormBuilder
+			{(newForm || hazardFormChildDetails?.form || urlParams.get('name') == 'NewHazardFormChild') && <FormBuilder
 		  key={formBuilderOptions.component}
 		  options={formBuilderOptions?.options}
 		  form={(newForm || hazardFormChildDetails?.form) ? JSON.parse(newForm ?? hazardFormChildDetails!.form) : {}}
