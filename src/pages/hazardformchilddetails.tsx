@@ -175,7 +175,7 @@ export default function HazardFormChildDetails() {
 		  margin="dense"
 		  id="name"
 		  name="name"
-		  label={t(`hazardFormControl.NewHazardFormChild`)}
+		  label={t(`hazardFormControl.newHazardFormChild`)}
 		  fullWidth
 		  variant="standard"
 	  />}
