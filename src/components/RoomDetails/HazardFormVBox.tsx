@@ -165,7 +165,7 @@ export const HazardFormVBox = ({
         id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
         form: currentForm, children: [{
           id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
-          form: currentFormChild}]}]); //TODO make it generic if there are more tan one child, If I have more than one add one form for each child
+          form: currentFormChild}]}]); //TODO make it generic if there are more than one child, If I have more than one add one form for each child
     } else {
       setSubmissionsList([...submissions , {
         id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
