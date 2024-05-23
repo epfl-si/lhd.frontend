@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {TextArea} from "epfl-elements-react/src/stories/molecules/inputFields/TextArea.tsx";
 import {hazardFormType, notificationType, roomDetailsType, submissionForm} from "../../utils/ressources/types";
 import {getHazardImage} from "./HazardProperties";
 import {addHazard} from "../../utils/graphql/PostingTools";
@@ -40,6 +41,7 @@ export const HazardFormVBox = ({
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
   const currentFormChild = (lastVersionForm?.children && lastVersionForm?.children.length > 0) ?
     (lastVersionForm.children[0].form ? JSON.parse(lastVersionForm.children[0].form) : undefined) : undefined;
+  const [comment, setComment] = useState<string | undefined>();
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -55,6 +57,8 @@ export const HazardFormVBox = ({
       };
     };
     loadFetch();
+    const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
+    setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
   }, [oidc.accessToken, action, selectedHazardCategory, room]);
 
   const readOrEditHazard = (): submissionForm[] => {
@@ -94,7 +98,10 @@ export const HazardFormVBox = ({
         oidc.accessToken,
         JSON.stringify(submissionsToSave).replaceAll('"','\\"'),
         lastVersionForm,
-        room.name
+        room.name,
+        {
+          comment: encodeURIComponent(comment ?? '')
+        }
       ).then(res => {
         handleOpen(res);
       });
@@ -185,17 +192,33 @@ export const HazardFormVBox = ({
     }
   }
 
+  function onChangeAdditionalInfo(newValue: string) {
+    setDirtyState(comment !== newValue);
+    setComment(newValue);
+  }
   return <div style={{display: 'flex', flexDirection: 'column'}}>
-    <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
-      <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
-        <img style={{margin: '5px', width: '30px', height: '30px'}}
-             src={getHazardImage(selectedHazardCategory)}/>
-        <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
+    <div style={{display: 'flex', flexDirection: 'column'}}>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
+        <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
+          <img style={{margin: '5px', width: '30px', height: '30px'}}
+               src={getHazardImage(selectedHazardCategory)}/>
+          <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
+        </div>
+        <Button size="icon"
+                iconName={"#plus-circle"}
+                onClick={() => onAddHazard(true, submissionsList)}
+                style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
       </div>
-      <Button size="icon"
-              iconName={"#plus-circle"}
-              onClick={() => onAddHazard(true, submissionsList)}
-      style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
+      <TextArea
+        id={"comment"}
+        name="comment"
+        label="Comment"
+        key={selectedHazardCategory+"_key"}
+        onChange={onChangeAdditionalInfo}
+        value={comment}
+        isReadonly={action == 'Read'}
+      />
+      <hr/>
     </div>
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}

@@ -70,12 +70,18 @@ export type roomDetailsType = {
 	vol?: number;
 	vent?: string;
 	hazards: hazardType[];
+	hazardAdditionalInfo: hazardAdditionalInfoType[];
 	lhd_units: lhdUnitsType[];
 	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
 	hazardsListName?: string[];
 	status?: 'New' | 'Deleted' | 'Default';
 };
+
+export type hazardAdditionalInfoType = {
+	comment?: string;
+	hazard_category?: hazardCategory;
+}
 
 export type hazardType = {
 	id: string;

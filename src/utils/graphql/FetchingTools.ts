@@ -136,6 +136,12 @@ export const fetchRoomDetails = async (
               }
             }
           }
+          hazardAdditionalInfo {
+            comment
+            hazard_category {
+              hazard_category_name
+            }
+          }
 					lhd_units {
             id
             unitId

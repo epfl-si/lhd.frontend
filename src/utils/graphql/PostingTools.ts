@@ -1,5 +1,5 @@
 import {
-	dispensationRequestType, hazardFormChildType,
+	dispensationRequestType, hazardAdditionalInfoType, hazardFormChildType,
 	hazardFormType,
 	lhdUnitsFromAPIType,
 	lhdUnitsType,
@@ -271,11 +271,15 @@ export const addHazard = async (
 	authToken: string | undefined,
 	submission: string,
 	lastVersionForm: hazardFormType,
-	room: string
+	room: string,
+	additionalInfo: hazardAdditionalInfoType
 ): Promise<any> => {
 	const query = `mutation addHazard {
                addHazardToRoom(room: "${room}", 
                submission: "${submission}", 
+               additionalInfo: {
+               	comment: "${additionalInfo.comment}"
+               }
                category: "${lastVersionForm.hazard_category.hazard_category_name}")
                {
                 errors {
