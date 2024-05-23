@@ -42,6 +42,8 @@ export const HazardFormVBox = ({
   const currentFormChild = (lastVersionForm?.children && lastVersionForm?.children.length > 0) ?
     (lastVersionForm.children[0].form ? JSON.parse(lastVersionForm.children[0].form) : undefined) : undefined;
   const [comment, setComment] = useState<string | undefined>();
+  const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(false);
+  const [formsMapValidation, setFormsMapValidation] = useState<{[key: string]: boolean}>({});
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -52,7 +54,7 @@ export const HazardFormVBox = ({
           break;
         case "Read":
         case "Edit":
-          setSubmissionsList([...subform]);
+          setSubmissionListAndValidationMap([...subform], '', true);
           break;
       };
     };
@@ -60,6 +62,29 @@ export const HazardFormVBox = ({
     const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
     setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
   }, [oidc.accessToken, action, selectedHazardCategory, room]);
+
+  const setSubmissionListAndValidationMap = (submissions: submissionForm[], id: string, isValid: boolean) => {
+    setSubmissionsList(submissions);
+    const map: {[key: string]: boolean} = {};
+    submissions.forEach(s => {
+      map[s.id] = getValidationFromMapItem(s.id, id, isValid);
+      s.children?.forEach(child => {
+        map[child.id] = getValidationFromMapItem(child.id, id, isValid);
+      })
+    });
+    setFormsMapValidation(map);
+    setIsSaveDisabled(Object.values(map).some(value => value === false));
+  }
+
+  const getValidationFromMapItem = (itemId: string, checkedId: string, isValid: boolean): boolean => {
+    if (itemId == checkedId) {
+      return isValid;
+    } else if (itemId in formsMapValidation) {
+      return formsMapValidation[itemId];
+    } else {
+      return true;
+    }
+  }
 
   const readOrEditHazard = (): submissionForm[] => {
     const subForm: submissionForm[] = [];
@@ -131,19 +156,19 @@ export const HazardFormVBox = ({
   };
 
   const onChangeSubmission = (id: string) => {
-    return (newSubmission: object, isUnchanged: boolean) => {
+    return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
       setDirtyState(!isUnchanged);
       const oldSubmission = submissionsList.find(s => s.id == id);
-      if(oldSubmission && Object.keys(oldSubmission.submission.data).length == 0) {
+      if(oldSubmission) {
         const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm,
           children: oldSubmission.children};
-        setSubmissionsList(submissionsList.map(s => s.id == id ? changedSubmission : s));
+        setSubmissionListAndValidationMap(submissionsList.map(s => s.id == id ? changedSubmission : s), id, isValid);
       }
     }
   }
 
   const onChangeChildSubmission = (id: string) => {
-    return (newSubmission: object, isUnchanged: boolean) => {
+    return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
       setDirtyState(!isUnchanged);
 
       let oldParentSubmission: submissionForm | undefined;
@@ -159,7 +184,7 @@ export const HazardFormVBox = ({
         const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
         const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
         const changedParentSubmission: submissionForm = {...oldParentSubmission, children: updatedParentSubmissionChildren};
-        setSubmissionsList(submissionsList.map(s => s.id == oldParentSubmission?.id ? changedParentSubmission : s));
+        setSubmissionListAndValidationMap(submissionsList.map(s => s.id == oldParentSubmission?.id ? changedParentSubmission : s), id, isValid);
       }
     }
   }
@@ -167,17 +192,18 @@ export const HazardFormVBox = ({
   function onAddHazard(dirtyState: boolean, submissions: submissionForm[]) {
     setDirtyState(dirtyState);
     const newKey = createKey(10);
+    const id = `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`;
+    let children: { id: string; submission: { data: {}; }; form: any; }[] = [];
     if (currentFormChild) {
-      setSubmissionsList([...submissions , {
-        id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
-        form: currentForm, children: [{
-          id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
-          form: currentFormChild}]}]); //TODO make it generic if there are more than one child, If I have more than one add one form for each child
-    } else {
-      setSubmissionsList([...submissions , {
-        id: `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`, submission: {data: {}},
-        form: currentForm, children: []}]);
+      children = [{
+        id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+        form: currentFormChild
+      }];//TODO make it generic if there are more than one child, in this case add one form for each child
     }
+    setSubmissionListAndValidationMap([...submissions, {
+      id: id, submission: {data: {}},
+      form: currentForm, children: children
+    }], id, false);
   }
 
   function onAddHazardChild(parentId: string) {
@@ -185,10 +211,11 @@ export const HazardFormVBox = ({
     const newKey = createKey(10);
     const parent = submissionsList.find(s => s.id == parentId);
     if(parent) {
+      const id = `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`;
       parent.children?.push({
-        id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+        id: id, submission: {data: {}},
         form: currentFormChild});
-      setSubmissionsList(submissionsList.map(s => s.id == parentId ? parent : s));
+      setSubmissionListAndValidationMap(submissionsList.map(s => s.id == parentId ? parent : s), id, false);
     }
   }
 
@@ -196,13 +223,14 @@ export const HazardFormVBox = ({
     setDirtyState(comment !== newValue);
     setComment(newValue);
   }
+
   return <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'column'}}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
         <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
           <img style={{margin: '5px', width: '30px', height: '30px'}}
                src={getHazardImage(selectedHazardCategory)}/>
-          <strong style={{marginLeft: '10px'}}>{selectedHazardCategory}</strong>
+          <strong style={{marginLeft: '10px'}}>{t(`hazards.`.concat(selectedHazardCategory))}</strong>
         </div>
         <Button size="icon"
                 iconName={"#plus-circle"}
@@ -230,7 +258,7 @@ export const HazardFormVBox = ({
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>}
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
           <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
-                      key={child.id + action}/>
+                      key={child.id + action} />
         </div>
       )}
         <hr />
@@ -239,6 +267,7 @@ export const HazardFormVBox = ({
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
       <Button
         onClick={handleSubmit}
+        isDisabled={isSaveDisabled}
         label={t(`generic.saveButton`)}
         iconName={`${featherIcons}#save`}
         primary/>

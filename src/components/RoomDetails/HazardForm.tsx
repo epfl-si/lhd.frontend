@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {submissionForm} from "../../utils/ressources/types";
 import {Form} from "@formio/react";
 
 interface HazardFormProps {
 	submission: submissionForm;
 	action: 'Add' | 'Edit' | 'Read';
-	onChangeSubmission: (newSubmission: object, isUnchanged: boolean) => void;
+	onChangeSubmission: (newSubmission: object, isUnchanged: boolean, isValid: boolean) => void;
 }
 
 export const HazardForm = ({
@@ -23,7 +23,7 @@ export const HazardForm = ({
 	return <Form
 		onChange={(event) => {
 			if(event.changed) {
-				onChangeSubmission(event.data, isDataTheSame(event.data));
+				onChangeSubmission(event.data, isDataTheSame(event.data), event.isValid);
 			}
 		}}
 		options={optionsForm}
