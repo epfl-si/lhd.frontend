@@ -13,10 +13,9 @@ import {createNewHazardCategory, updateFormHazard} from "../utils/graphql/Postin
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
-import semver from "semver/preload";
 import {getOrganism} from "../components/formio/OrganismDropDown";
 import {HazardFormChildList} from "../components/HazardsForm/hazardFormChildList";
-import {compareVersions, findAllKeysForSubmission, findElementsWithKey} from "../utils/ressources/jsonUtils";
+import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
 
 export default function HazardFormDetails() {
 	const history = useHistory();
@@ -53,20 +52,20 @@ export default function HazardFormDetails() {
 		if (urlParams.get('cat') != 'NewCategory') {
 			loadFetch(urlParams.get('cat') ?? '');
 		}
-		loadOrganism();
+		loadCustomComponents();
 	}, [oidc.accessToken, window.location.search]);
 
-	const loadOrganism = async () => {
-		const organism = await getOrganism(oidc.accessToken);
-		setComponentNameList(componentNameList + organism.component);
-		setComponentOptionList([...componentOptionList, organism.options]);
+	const loadCustomComponents = async () => { //  TODO add query for each new custom component
+		const organismDropDownList = await getOrganism(oidc.accessToken);
+		setComponentNameList(componentNameList + organismDropDownList.component);//  TODO add the new component in the concatenation
+		setComponentOptionList([...componentOptionList, organismDropDownList.options]);//  TODO add the new options in the array
 		setFormBuilderOption({
-			component: componentNameList + organism.component,
+			component: componentNameList + organismDropDownList.component,//  TODO add the new component in the concatenation
 			options: {
 				builder: {
 					custom: {
 						title: 'LHD Fields',
-						components: {...componentOptionList, organism: organism.options}
+						components: {...componentOptionList, organism: organismDropDownList.options}//  TODO add the new options in the array
 					}
 				}
 			}
