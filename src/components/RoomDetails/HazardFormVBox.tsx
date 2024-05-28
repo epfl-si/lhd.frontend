@@ -12,6 +12,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardForm} from "./HazardForm";
 import {createKey} from "../../utils/ressources/keyGenerator";
 import {useTranslation} from "react-i18next";
+import {sprintf} from "sprintf-js";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -44,6 +45,7 @@ export const HazardFormVBox = ({
   const [comment, setComment] = useState<string | undefined>();
   const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(false);
   const [formsMapValidation, setFormsMapValidation] = useState<{[key: string]: boolean}>({});
+  const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -59,7 +61,6 @@ export const HazardFormVBox = ({
       };
     };
     loadFetch();
-    const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
     setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
   }, [oidc.accessToken, action, selectedHazardCategory, room]);
 
@@ -246,11 +247,23 @@ export const HazardFormVBox = ({
         value={comment}
         isReadonly={action == 'Read'}
       />
+      {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label style={{
+        fontStyle: "italic",
+        fontSize: "small"
+      }}>{sprintf(t(`hazards.modification_info`), hazardAdditionalInfo.modified_by,
+          (new Date(hazardAdditionalInfo.modified_on)).toLocaleString('fr-CH', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+          }))}</label>}
       <hr/>
     </div>
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
-        key={sf.id + action}/>
+                  key={sf.id + action}/>
       {sf.children && sf.children.length > 0 &&
         <Button size="icon"
                 iconName={"#plus-circle"}

@@ -80,6 +80,8 @@ export type roomDetailsType = {
 
 export type hazardAdditionalInfoType = {
 	comment?: string;
+	modified_by?: string;
+	modified_on?: string;
 	hazard_category?: hazardCategory;
 }
 
