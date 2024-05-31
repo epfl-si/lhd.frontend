@@ -264,7 +264,7 @@ export const HazardFormVBox = ({
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
                   key={sf.id + action}/>
-      {sf.children && sf.children.length > 0 &&
+      {currentFormChild &&
         <Button size="icon"
                 iconName={"#plus-circle"}
                 onClick={() => onAddHazardChild(sf.id)}
