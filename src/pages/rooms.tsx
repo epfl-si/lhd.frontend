@@ -49,7 +49,7 @@ export const RoomControl = ({
 				}
 				return "";
 			}},
-			{
+			/*{
 				field: "hazardsListName", headerName: t('room_details.hazards'), minWidth: 300,
 				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 					<div className="displayFlexRow" style={{justifyContent: 'center'}}>
@@ -60,7 +60,7 @@ export const RoomControl = ({
 						}
 					</div>
 				),
-			}
+			}*/
 	];
 
 	const columnsMedium: columnType[] = [

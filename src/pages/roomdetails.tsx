@@ -45,7 +45,7 @@ export default function RoomDetails() {
 			console.error('Bad GraphQL results', results);
 		}
 	}
-	
+
 	return (
 		<Box>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/roomcontrol")}} alwaysPresent={false}/>
@@ -63,11 +63,11 @@ export default function RoomDetails() {
 					<Tabs.Tab.Title>
 						<div className="displayFlexColumn" style={{justifyContent: 'center'}}>
 							<span className="tab-text-title">{t(`room_details.hazards`)}</span>
-							<div className="displayFlexRow" style={{justifyContent: 'center'}}>
+							{/*<div className="displayFlexRow" style={{justifyContent: 'center'}}>
 								{listSavedCategories.map(c =>
 									<img style={{width: '20px', height: '20px', margin: '10px'}} key={`${c}_iconeKey`}
 											 src={getHazardImage(c)}/>)}
-							</div>
+							</div>*/}
 						</div>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
