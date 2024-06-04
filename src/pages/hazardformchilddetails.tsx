@@ -16,6 +16,7 @@ import {getOrganism} from "../components/formio/OrganismDropDown";
 import {createNewHazardFormChild, updateHazardFormChild} from "../utils/graphql/PostingTools";
 import {BackButton} from "../components/global/BackButton";
 import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
+import {getRoom} from "../components/formio/RoomDropDown";
 
 export default function HazardFormChildDetails() {
 	const history = useHistory();
@@ -59,15 +60,16 @@ export default function HazardFormChildDetails() {
 
 	const loadCustomComponents = async () => { //  TODO add query for each new custom component
 		const organismDropDownList = await getOrganism(oidc.accessToken);
-		setComponentNameList(componentNameList + organismDropDownList.component);//  TODO add the new component in the concatenation
-		setComponentOptionList([...componentOptionList, organismDropDownList.options]);//  TODO add the new options in the array
+		const roomDropDownList = await getRoom(oidc.accessToken);
+		setComponentNameList(componentNameList + organismDropDownList.component + roomDropDownList.component);//  TODO add the new component in the concatenation
+		setComponentOptionList([...componentOptionList, organismDropDownList.options, roomDropDownList.options]);//  TODO add the new options in the array
 		setFormBuilderOption({
-			component: componentNameList + organismDropDownList.component,//  TODO add the new component in the concatenation
+			component: componentNameList + organismDropDownList.component + roomDropDownList.component,//  TODO add the new component in the concatenation
 			options: {
 				builder: {
 					custom: {
 						title: 'LHD Fields',
-						components: {...componentOptionList, organism: organismDropDownList.options}//  TODO add the new options in the array
+						components: {...componentOptionList, organism: organismDropDownList.options, room: roomDropDownList.options}//  TODO add the new options in the array
 					}
 				}
 			}
