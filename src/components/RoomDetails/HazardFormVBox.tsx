@@ -13,7 +13,8 @@ import {HazardForm} from "./HazardForm";
 import {createKey} from "../../utils/ressources/keyGenerator";
 import {useTranslation} from "react-i18next";
 import {sprintf} from "sprintf-js";
-import {fetchOtherRoomsForStaticMagneticField, fetchRoomDetails} from "../../utils/graphql/FetchingTools";
+import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
+import {useHistory} from "react-router-dom";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -34,6 +35,7 @@ export const HazardFormVBox = ({
 }: HazardFormVBoxProps) => {
   const { t } = useTranslation();
   const oidc = useOpenIDConnectContext();
+  const history = useHistory();
   const [submissionsList, setSubmissionsList] = useState<submissionForm[]>([]);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const [notificationType, setNotificationType] = useState<notificationType>({
@@ -259,15 +261,20 @@ export const HazardFormVBox = ({
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
       </div>
       {otherRoom && otherRoom.hazardReferences.map(ref => {
-        const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
+        if (ref.hazards.room?.name) {
+          const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
+          const url = `/roomdetails?room=${encodeURIComponent(ref.hazards.room?.name)}`;
           return <div>
-            <label style={{fontSize: "small"}}>
-              {sprintf(t(`hazards.otherRooms`), ref.hazards.room?.name,
-                submission != null ? (', ' + submission.data.line + ' ' + submission.data.position) : '')}
-            </label>
-          </div>
+              <label style={{fontSize: "small"}}>
+                {t(`hazards.otherRooms`)}
+                <a href={url}>{ref.hazards.room?.name}</a>
+                {submission != null ? (', ' + submission.data.line + ' ' + submission.data.position) : ''}
+              </label>
+            </div>
+        } else {
+          return <></>
         }
-      )}
+      })}
       <TextArea
         id={"comment"}
         name="comment"
