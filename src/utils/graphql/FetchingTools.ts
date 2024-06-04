@@ -338,6 +338,56 @@ export const fetchRooms = async (
 	};
 };
 
+export const fetchRoomsForDropDownComponent = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<fetchRoomResultsType> => {
+	const query: string = `query RoomFetch { 
+				rooms {
+					name
+				}
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.rooms,
+	};
+};
+
+export const fetchOtherRoomsForStaticMagneticField = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	roomName: string
+): Promise<fetchRoomResultsType> => {
+	const query: string = `query OtherRoomsFetch { 
+			rooms (where: {name: {equals: "${roomName}"}}) {
+					name
+          hazardReferences {
+          submission
+            hazards {
+              room {
+                name
+              }
+              hazard_form_history {
+                hazard_form {
+                  hazard_category {
+                    hazard_category_name
+                  }
+                }
+              }
+            }
+          }
+				}
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.rooms,
+	};
+};
+
 export const fetchunitsFromFullTextAndPagination = async (
 	address: string | undefined,
 	authToken: string | undefined,

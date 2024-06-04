@@ -13,6 +13,7 @@ import {HazardForm} from "./HazardForm";
 import {createKey} from "../../utils/ressources/keyGenerator";
 import {useTranslation} from "react-i18next";
 import {sprintf} from "sprintf-js";
+import {fetchOtherRoomsForStaticMagneticField, fetchRoomDetails} from "../../utils/graphql/FetchingTools";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -45,6 +46,7 @@ export const HazardFormVBox = ({
   const [comment, setComment] = useState<string | undefined>();
   const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(false);
   const [formsMapValidation, setFormsMapValidation] = useState<{[key: string]: boolean}>({});
+  const [otherRoom, setOtherRoom] = useState<roomDetailsType | null>(null);
   const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
 
   useEffect(() => {
@@ -62,7 +64,24 @@ export const HazardFormVBox = ({
     };
     loadFetch();
     setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
+    if(selectedHazardCategory == 'StaticMagneticField') {
+      loadOtherRoomsForStaticMagneticField();
+    }
   }, [oidc.accessToken, action, selectedHazardCategory, room]);
+
+  const loadOtherRoomsForStaticMagneticField = async () => {
+    const results = await fetchOtherRoomsForStaticMagneticField(
+      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      oidc.accessToken,
+      room.name
+    );
+    if (results.status === 200 && results.data && typeof results.data !== 'string') {
+      setOtherRoom(results.data[0])
+      console.log(results.data[0])
+    } else {
+      console.error('Bad GraphQL results', results);
+    }
+  }
 
   const setSubmissionListAndValidationMap = (submissions: submissionForm[], id: string, isValid: boolean) => {
     setSubmissionsList(submissions);
@@ -74,6 +93,7 @@ export const HazardFormVBox = ({
       })
     });
     setFormsMapValidation(map);
+    //console.log('setSubmissionListAndValidationMap', map);
     setIsSaveDisabled(Object.values(map).some(value => value === false));
   }
 
@@ -83,7 +103,7 @@ export const HazardFormVBox = ({
     } else if (itemId in formsMapValidation) {
       return formsMapValidation[itemId];
     } else {
-      return true;
+      return false;
     }
   }
 
@@ -238,11 +258,21 @@ export const HazardFormVBox = ({
                 onClick={() => onAddHazard(true, submissionsList)}
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
       </div>
+      {otherRoom && otherRoom.hazardReferences.map(ref => {
+        const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
+          return <div>
+            <label style={{fontSize: "small"}}>
+              {sprintf(t(`hazards.otherRooms`), ref.hazards.room?.name,
+                submission != null ? (',' + submission.data.line + ' ' + submission.data.position) : '')}
+            </label>
+          </div>
+        }
+      )}
       <TextArea
         id={"comment"}
         name="comment"
         label="Comment"
-        key={selectedHazardCategory+"_key"}
+        key={selectedHazardCategory + "_key"}
         onChange={onChangeAdditionalInfo}
         value={comment}
         isReadonly={action == 'Read'}
@@ -280,7 +310,7 @@ export const HazardFormVBox = ({
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
       <Button
         onClick={handleSubmit}
-        isDisabled={isSaveDisabled}
+        //isDisabled={isSaveDisabled}
         label={t(`generic.saveButton`)}
         iconName={`${featherIcons}#save`}
         primary/>

@@ -71,12 +71,18 @@ export type roomDetailsType = {
 	vent?: string;
 	hazards: hazardType[];
 	hazardAdditionalInfo: hazardAdditionalInfoType[];
+	hazardReferences: hazardReferencesType[]
 	lhd_units: lhdUnitsType[];
 	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
 	hazardsListName?: string[];
 	status?: 'New' | 'Deleted' | 'Default';
 };
+
+export type hazardReferencesType = {
+	submission: string;
+	hazards: hazardType;
+}
 
 export type hazardAdditionalInfoType = {
 	comment?: string;
@@ -89,7 +95,8 @@ export type hazardType = {
 	id: string;
 	submission: string;
 	hazard_form_history: hazardFormHistoryType;
-	children: hazardChildType[]
+	children: hazardChildType[];
+	room?: roomDetailsType;
 }
 
 export type hazardChildType = {

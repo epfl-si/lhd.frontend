@@ -137,7 +137,8 @@ i18next.use(initReactI18next).init({
 					Noise: 'Noise',
 					StaticMagneticField: 'Static Magnetic Field',
 					Temperature: 'Temperature',
-					modification_info: 'Modified by %s on %s'
+					modification_info: 'Modified by %s on %s',
+					otherRooms: 'Magnet located in room %s %s'
 				},
 				hazardFormControl: {
 					title: 'Hazard Forms',
@@ -293,7 +294,8 @@ i18next.use(initReactI18next).init({
 					Noise: 'Bruit',
 					StaticMagneticField: 'Champ Magnétique Statique',
 					Temperature: 'Température',
-					modification_info: 'Modifié par %s le %s'
+					modification_info: 'Modifié par %s le %s',
+					otherRooms: 'Aimant situé dans la salle %s %s'
 				},
 				hazardFormControl: {
 					title: 'Formulaires des dangers',
