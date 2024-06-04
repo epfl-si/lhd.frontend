@@ -263,7 +263,7 @@ export const HazardFormVBox = ({
           return <div>
             <label style={{fontSize: "small"}}>
               {sprintf(t(`hazards.otherRooms`), ref.hazards.room?.name,
-                submission != null ? (',' + submission.data.line + ' ' + submission.data.position) : '')}
+                submission != null ? (', ' + submission.data.line + ' ' + submission.data.position) : '')}
             </label>
           </div>
         }
