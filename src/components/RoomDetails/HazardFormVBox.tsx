@@ -266,9 +266,9 @@ export const HazardFormVBox = ({
           const url = `/roomdetails?room=${encodeURIComponent(ref.hazards.room?.name)}`;
           return <div>
               <label style={{fontSize: "small"}}>
+                {submission != null ? (submission.data.line + 'mT ' + submission.data.position) : ''}
                 {t(`hazards.otherRooms`)}
                 <a href={url}>{ref.hazards.room?.name}</a>
-                {submission != null ? (', ' + submission.data.line + ' ' + submission.data.position) : ''}
               </label>
             </div>
         } else {
