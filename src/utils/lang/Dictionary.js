@@ -130,7 +130,8 @@ i18next.use(initReactI18next).init({
 					CompressedGas: 'Compressed Gas',
 					Cryogenics: 'Cryogenics',
 					Electrical: 'Electrical',
-					EMRadiation: 'EM Radiation',
+					TimeVaryingEMF: 'Time Varying EMF',
+					IncoherentLightSource: 'Incoherent Light Source',
 					IonisingRadiation: 'Ionising Radiation',
 					Laser: 'Laser',
 					Nanoparticles: 'Nanoparticles',
@@ -138,7 +139,7 @@ i18next.use(initReactI18next).init({
 					StaticMagneticField: 'Static Magnetic Field',
 					Temperature: 'Temperature',
 					modification_info: 'Modified by %s on %s',
-					otherRooms: 'Magnet located in room '
+					otherRooms: ' due to magnet located in room '
 				},
 				hazardFormControl: {
 					title: 'Hazard Forms',
@@ -287,7 +288,8 @@ i18next.use(initReactI18next).init({
 					CompressedGas: 'Gaz compressé',
 					Cryogenics: 'Cryogénie',
 					Electrical: 'Électrique',
-					EMRadiation: 'Rayonnement EM',
+					TimeVaryingEMF: 'TimeVaryingEMF',
+					IncoherentLightSource: 'Incoherent Light Source',
 					IonisingRadiation: 'Rayonnement Ionisant',
 					Laser: 'Laser',
 					Nanoparticles: 'Nanoparticules',
@@ -295,7 +297,7 @@ i18next.use(initReactI18next).init({
 					StaticMagneticField: 'Champ Magnétique Statique',
 					Temperature: 'Température',
 					modification_info: 'Modifié par %s le %s',
-					otherRooms: 'Aimant situé dans la salle '
+					otherRooms: ' dû à l\'aimant situé dans la salle '
 				},
 				hazardFormControl: {
 					title: 'Formulaires des dangers',
