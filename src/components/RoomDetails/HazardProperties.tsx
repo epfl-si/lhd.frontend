@@ -29,7 +29,7 @@ export function getHazardImage(hazardName: string) {
     case "Electrical":
       image = electrical;
       break;
-    case "EMRadiation":
+    case "TimeVaryingEMF":
       image = eMRadiation;
       break;
     case "IonisingRadiation":
