@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {submissionForm} from "../../utils/ressources/types";
 import {Form} from "@formio/react";
 
@@ -20,12 +20,12 @@ export const HazardForm = ({
 	const [initialSubmission] = useState(JSON.stringify(submission.submission.data));
 	const isDataTheSame = (sub : any) => JSON.stringify(sub) === initialSubmission;
 
+	const onChange = useCallback((event) => {
+		onChangeSubmission(event.data, isDataTheSame(event.data), event.isValid);
+	}, [onChangeSubmission]);
+
 	return <Form
-		onChange={(event) => {
-			if(event.changed) {
-				onChangeSubmission(event.data, isDataTheSame(event.data), event.isValid);
-			}
-		}}
+		onChange={onChange}
 		options={optionsForm}
 		key={submission.id + action}
 		submission={submission.submission}

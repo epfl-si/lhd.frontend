@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {TextArea} from "epfl-elements-react/src/stories/molecules/inputFields/TextArea.tsx";
@@ -299,7 +299,7 @@ export const HazardFormVBox = ({
           const url = `/roomdetails?room=${encodeURIComponent(ref.hazards.room?.name)}`;
           return <div>
               <label style={{fontSize: "small"}}>
-                {submission != null ? (submission.data.line + 'mT ' + submission.data.position) : ''}
+                {submission != null ? (', ' + submission.data.line + ' ' + submission.data.position) : ''}
                 {t(`hazards.otherRooms`)}
                 <a href={url}>{ref.hazards.room?.name}</a>
               </label>
