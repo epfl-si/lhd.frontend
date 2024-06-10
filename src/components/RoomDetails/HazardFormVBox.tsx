@@ -15,6 +15,8 @@ import {useTranslation} from "react-i18next";
 import {sprintf} from "sprintf-js";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
 import {useHistory} from "react-router-dom";
+import {Simulate} from "react-dom/test-utils";
+import change = Simulate.change;
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -178,39 +180,70 @@ export const HazardFormVBox = ({
     setOpenNotification(false);
   };
 
-  const onChangeSubmission = (id: string) => {
-    return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
-      setDirtyState(!isUnchanged);
-      const oldSubmission = submissionsList.find(s => s.id == id);
-      if(oldSubmission) {
-        const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm,
-          children: oldSubmission.children};
-        setSubmissionListAndValidationMap(submissionsList.map(s => s.id == id ? changedSubmission : s), id, isValid);
-      }
-    }
-  }
-
-  const onChangeChildSubmission = (id: string) => {
-    return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
-      setDirtyState(!isUnchanged);
-
-      let oldParentSubmission: submissionForm | undefined;
-      let oldChildSubmission: submissionForm | undefined;
-      submissionsList.forEach(s => {
-        const child = s.children?.find(c => c.id == id);
-        if (child) {
-          oldParentSubmission = s;
-          oldChildSubmission = child;
+  type SubmissionHandlerMap = { [id : string] : (newSubmission: object, isUnchanged: boolean, isValid: boolean) => void };
+  const changeSubmissionHandlers : SubmissionHandlerMap =
+      useMemo(() => {
+        const handlers : SubmissionHandlerMap = {};
+        for (let s of submissionsList) {
+          const id = s.id;
+          handlers[id] = (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
+            setDirtyState(!isUnchanged);
+            setSubmissionsList((oldSubmissions) => {
+              const oldSubmission = oldSubmissions.find(s => s.id == id);
+              if ( ! oldSubmission ) {
+                console.error(`changeSubmissionHandlers: Unknown id ${id}!`);
+                return oldSubmissions
+              }
+              const changedSubmission = {
+                id, submission: {data: newSubmission}, form: currentForm,
+                children: oldSubmission.children
+              };
+              return oldSubmissions.map(s => s.id == id ? changedSubmission : s);
+            })
+          }
         }
-      });
-      if(oldParentSubmission && oldChildSubmission) {
-        const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
-        const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
-        const changedParentSubmission: submissionForm = {...oldParentSubmission, children: updatedParentSubmissionChildren};
-        setSubmissionListAndValidationMap(submissionsList.map(s => s.id == oldParentSubmission?.id ? changedParentSubmission : s), id, isValid);
+        return handlers;
+      },[submissionsList.map((s) => s.id)]);
+
+  const changeChildSubmissionHandlers : SubmissionHandlerMap =
+    useMemo(() => {
+      const handlers : SubmissionHandlerMap = {};
+      for (let s of submissionsList) {
+        for (let c of s.children || []) {
+          const id = c.id;
+          handlers[c.id] = (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
+            setDirtyState(!isUnchanged);
+            setSubmissionsList((oldSubmissions) => {
+              let oldParentSubmission: submissionForm | undefined;
+              let oldChildSubmission: submissionForm | undefined;
+
+              oldSubmissions.forEach(s => {
+                const child = s.children?.find(c => c.id == id);
+                if ( child ) {
+                  oldParentSubmission = s;
+                  oldChildSubmission = child;
+                }
+              });
+
+              if ( !(oldParentSubmission && oldChildSubmission) ) {
+                console.error(`changChildSubmissionHandlers: unknown id ${id}`);
+                return oldSubmissions;
+              }
+
+              const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
+              const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
+              const changedParentSubmission: submissionForm = {
+                ...oldParentSubmission,
+                children: updatedParentSubmissionChildren
+              };
+
+              return oldSubmissions.map(s => (s.id == oldParentSubmission?.id ? changedParentSubmission : s));
+            });
+          }
+        }
       }
-    }
-  }
+      return handlers;
+    }, [submissionsList.map((s) => s.children?.map((c) => c.id))]);
 
   function onAddHazard(dirtyState: boolean, submissions: submissionForm[]) {
     setDirtyState(dirtyState);
@@ -299,7 +332,8 @@ export const HazardFormVBox = ({
       <hr/>
     </div>
     {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
-      <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
+      <HazardForm submission={sf} action={action}
+                  onChangeSubmission={changeSubmissionHandlers[sf.id]}
                   key={sf.id + action}/>
       {currentFormChild &&
         <Button size="icon"
@@ -307,7 +341,8 @@ export const HazardFormVBox = ({
                 onClick={() => onAddHazardChild(sf.id)}
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>}
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
-          <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
+          <HazardForm submission={child} action={action}
+                      onChangeSubmission={changeChildSubmissionHandlers[child.id]}
                       key={child.id + action} />
         </div>
       )}
