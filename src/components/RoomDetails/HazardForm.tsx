@@ -20,14 +20,17 @@ export const HazardForm = ({
 	const [initialSubmission] = useState(JSON.stringify(submission.submission.data));
 	const isDataTheSame = (sub : any) => JSON.stringify(sub) === initialSubmission;
 
-	const onChange = useCallback((event) => {
-		onChangeSubmission(event.data, isDataTheSame(event.data), event.isValid);
-	}, [onChangeSubmission]);
+	const handleChange = useCallback((event: any) => {
+		if (event.changed) {
+			onChangeSubmission(event.data, isDataTheSame(event.data), event.isValid);
+		}
+	}, []);
 
 	return <Form
-		onChange={onChange}
+		onChange={handleChange}
 		options={optionsForm}
 		key={submission.id + action}
 		submission={submission.submission}
 		form={submission.form}/>
+
 };

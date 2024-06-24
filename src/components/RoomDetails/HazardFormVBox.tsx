@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {TextArea} from "epfl-elements-react/src/stories/molecules/inputFields/TextArea.tsx";
@@ -15,8 +15,6 @@ import {useTranslation} from "react-i18next";
 import {sprintf} from "sprintf-js";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
 import {useHistory} from "react-router-dom";
-import {Simulate} from "react-dom/test-utils";
-import change = Simulate.change;
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -37,8 +35,7 @@ export const HazardFormVBox = ({
 }: HazardFormVBoxProps) => {
   const { t } = useTranslation();
   const oidc = useOpenIDConnectContext();
-  const history = useHistory();
-  const [submissionsList, setSubmissionsList] = useState<submissionForm[]>([]);
+  const submissionsList = useRef<submissionForm[]>([]);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const [notificationType, setNotificationType] = useState<notificationType>({
     type: "info",
@@ -49,7 +46,7 @@ export const HazardFormVBox = ({
     (lastVersionForm.children[0].form ? JSON.parse(lastVersionForm.children[0].form) : undefined) : undefined;
   const [comment, setComment] = useState<string | undefined>();
   const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(false);
-  const [formsMapValidation, setFormsMapValidation] = useState<{[key: string]: boolean}>({});
+  const formsMapValidation = useRef<{[key: string]: boolean}>({});
   const [otherRoom, setOtherRoom] = useState<roomDetailsType | null>(null);
   const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
 
@@ -88,7 +85,7 @@ export const HazardFormVBox = ({
   }
 
   const setSubmissionListAndValidationMap = (submissions: submissionForm[], id: string, isValid: boolean) => {
-    setSubmissionsList(submissions);
+    submissionsList.current = submissions;
     const map: {[key: string]: boolean} = {};
     submissions.forEach(s => {
       map[s.id] = getValidationFromMapItem(s.id, id, isValid);
@@ -96,16 +93,15 @@ export const HazardFormVBox = ({
         map[child.id] = getValidationFromMapItem(child.id, id, isValid);
       })
     });
-    setFormsMapValidation(map);
-    //console.log('setSubmissionListAndValidationMap', map);
+    formsMapValidation.current = map;
     setIsSaveDisabled(Object.values(map).some(value => value === false));
   }
 
   const getValidationFromMapItem = (itemId: string, checkedId: string, isValid: boolean): boolean => {
     if (itemId == checkedId) {
       return isValid;
-    } else if (itemId in formsMapValidation) {
-      return formsMapValidation[itemId];
+    } else if (itemId in formsMapValidation.current) {
+      return formsMapValidation.current[itemId];
     } else {
       return false;
     }
@@ -132,7 +128,7 @@ export const HazardFormVBox = ({
   const handleSubmit = async () => {
     if (lastVersionForm)  {
       const submissionsToSave: submissionForm[] = [];
-      submissionsList.forEach(f => {
+      submissionsList.current.forEach(f => {
         submissionsToSave.push({
           id: JSON.parse(f.id),
           submission: f.submission,
@@ -180,70 +176,39 @@ export const HazardFormVBox = ({
     setOpenNotification(false);
   };
 
-  type SubmissionHandlerMap = { [id : string] : (newSubmission: object, isUnchanged: boolean, isValid: boolean) => void };
-  const changeSubmissionHandlers : SubmissionHandlerMap =
-      useMemo(() => {
-        const handlers : SubmissionHandlerMap = {};
-        for (let s of submissionsList) {
-          const id = s.id;
-          handlers[id] = (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
-            setDirtyState(!isUnchanged);
-            setSubmissionsList((oldSubmissions) => {
-              const oldSubmission = oldSubmissions.find(s => s.id == id);
-              if ( ! oldSubmission ) {
-                console.error(`changeSubmissionHandlers: Unknown id ${id}!`);
-                return oldSubmissions
-              }
-              const changedSubmission = {
-                id, submission: {data: newSubmission}, form: currentForm,
-                children: oldSubmission.children
-              };
-              return oldSubmissions.map(s => s.id == id ? changedSubmission : s);
-            })
-          }
-        }
-        return handlers;
-      },[submissionsList.map((s) => s.id)]);
-
-  const changeChildSubmissionHandlers : SubmissionHandlerMap =
-    useMemo(() => {
-      const handlers : SubmissionHandlerMap = {};
-      for (let s of submissionsList) {
-        for (let c of s.children || []) {
-          const id = c.id;
-          handlers[c.id] = (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
-            setDirtyState(!isUnchanged);
-            setSubmissionsList((oldSubmissions) => {
-              let oldParentSubmission: submissionForm | undefined;
-              let oldChildSubmission: submissionForm | undefined;
-
-              oldSubmissions.forEach(s => {
-                const child = s.children?.find(c => c.id == id);
-                if ( child ) {
-                  oldParentSubmission = s;
-                  oldChildSubmission = child;
-                }
-              });
-
-              if ( !(oldParentSubmission && oldChildSubmission) ) {
-                console.error(`changChildSubmissionHandlers: unknown id ${id}`);
-                return oldSubmissions;
-              }
-
-              const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
-              const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
-              const changedParentSubmission: submissionForm = {
-                ...oldParentSubmission,
-                children: updatedParentSubmissionChildren
-              };
-
-              return oldSubmissions.map(s => (s.id == oldParentSubmission?.id ? changedParentSubmission : s));
-            });
-          }
-        }
+  const onChangeSubmission = (id: string) => {
+    return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
+      setDirtyState(!isUnchanged);
+      const oldSubmission = submissionsList.current.find(s => s.id == id);
+      if(oldSubmission) {
+        const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm,
+          children: oldSubmission.children};
+        setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == id ? changedSubmission : s), id, isValid);
       }
-      return handlers;
-    }, [submissionsList.map((s) => s.children?.map((c) => c.id))]);
+    }
+  }
+
+  const onChangeChildSubmission = (id: string) => {
+    return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
+      setDirtyState(!isUnchanged);
+
+      let oldParentSubmission: submissionForm | undefined;
+      let oldChildSubmission: submissionForm | undefined;
+      submissionsList.current.forEach(s => {
+        const child = s.children?.find(c => c.id == id);
+        if (child) {
+          oldParentSubmission = s;
+          oldChildSubmission = child;
+        }
+      });
+      if(oldParentSubmission && oldChildSubmission) {
+        const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
+        const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
+        const changedParentSubmission: submissionForm = {...oldParentSubmission, children: updatedParentSubmissionChildren};
+        setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == oldParentSubmission?.id ? changedParentSubmission : s), id, isValid);
+      }
+    }
+  }
 
   function onAddHazard(dirtyState: boolean, submissions: submissionForm[]) {
     setDirtyState(dirtyState);
@@ -265,13 +230,13 @@ export const HazardFormVBox = ({
   function onAddHazardChild(parentId: string) {
     setDirtyState(true);
     const newKey = createKey(10);
-    const parent = submissionsList.find(s => s.id == parentId);
+    const parent = submissionsList.current.find(s => s.id == parentId);
     if(parent) {
       const id = `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`;
       parent.children?.push({
         id: id, submission: {data: {}},
         form: currentFormChild});
-      setSubmissionListAndValidationMap(submissionsList.map(s => s.id == parentId ? parent : s), id, false);
+      setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == parentId ? parent : s), id, false);
     }
   }
 
@@ -290,7 +255,7 @@ export const HazardFormVBox = ({
         </div>
         <Button size="icon"
                 iconName={"#plus-circle"}
-                onClick={() => onAddHazard(true, submissionsList)}
+                onClick={() => onAddHazard(true, submissionsList.current)}
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
       </div>
       {otherRoom && otherRoom.hazardReferences.map(ref => {
@@ -299,7 +264,7 @@ export const HazardFormVBox = ({
           const url = `/roomdetails?room=${encodeURIComponent(ref.hazards.room?.name)}`;
           return <div>
               <label style={{fontSize: "small"}}>
-                {submission != null ? (', ' + submission.data.line + ' ' + submission.data.position) : ''}
+                {submission != null ? (submission.data.line + 'mT ' + submission.data.position) : ''}
                 {t(`hazards.otherRooms`)}
                 <a href={url}>{ref.hazards.room?.name}</a>
               </label>
@@ -331,9 +296,8 @@ export const HazardFormVBox = ({
           }))}</label>}
       <hr/>
     </div>
-    {submissionsList.map(sf => <div key={sf.id + action + 'div'}>
-      <HazardForm submission={sf} action={action}
-                  onChangeSubmission={changeSubmissionHandlers[sf.id]}
+    {submissionsList.current.map(sf => <div key={sf.id + action + 'div'}>
+      <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
                   key={sf.id + action}/>
       {currentFormChild &&
         <Button size="icon"
@@ -341,8 +305,7 @@ export const HazardFormVBox = ({
                 onClick={() => onAddHazardChild(sf.id)}
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>}
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
-          <HazardForm submission={child} action={action}
-                      onChangeSubmission={changeChildSubmissionHandlers[child.id]}
+          <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
                       key={child.id + action} />
         </div>
       )}
