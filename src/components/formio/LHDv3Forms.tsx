@@ -8,11 +8,15 @@ export type LHDv3FormBuilderProps = {
   onChange: (newForm: LHDv3FormType) => void,
   organisms: string[],
   rooms: string[],
+  form ?: any
 }
 
-export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({ onChange, organisms, rooms }) => {
+export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({ onChange, organisms, rooms, form }) => {
+  if (! form) {
+    form = {}
+  }
   return <FormBuilder
-           form={ {} }
+           form={ form }
            options={
 	     {
                builder: {
