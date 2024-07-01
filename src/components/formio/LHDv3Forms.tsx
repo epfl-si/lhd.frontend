@@ -5,10 +5,12 @@ import "formiojs/dist/formio.full.min.css";
 import "epfl-elements/dist/css/elements.css";
 
 export type LHDv3FormBuilderProps = {
-  onChange: (newForm: LHDv3FormType) => void
+  onChange: (newForm: LHDv3FormType) => void,
+  organisms: string[],
+  rooms: string[],
 }
 
-export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({ onChange }) => {
+export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({ onChange, organisms, rooms }) => {
   return <FormBuilder
            form={ {} }
            options={
@@ -17,8 +19,8 @@ export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({ onChange }) => {
 	         custom: {
 		   title: 'LHD Fields',
 		   components: {
-                     organism: OrganismDropDownList.options,
-                     room: RoomDropDownList.options
+                     organism: dropdownListOptions('Organism', 'organism', 'terminal', organisms),
+                     room: dropdownListOptions('Rooms', 'rooms', 'terminal', rooms),
                    }
 	         }
 	       }
@@ -34,54 +36,22 @@ export type LHDv3FormType = any;
 export type OrganismDropDownListProps = {
 }
 
-export type FormBuilderOptions = any;
 
-export const OrganismDropDownList = Object.assign(
-  (({}) => {
-  }) as FC<OrganismDropDownListProps>,
-  {
-    options: {
-      title: 'Organism',
-      key: 'organism',
-      icon: 'terminal',
+function dropdownListOptions (title: string, key: string, icon: string,
+  values : string[]) {
+    return {
+      title,
+      key,
+      icon,
       schema: {
-	label: 'Organism',
+	label: title,
 	type: 'select',
-	key: 'organism',
+	key,
 	input: true,
 	dataSrc: 'json',
-	template: "<span>{{ item.organism }}</span>",
 	data: {
-	  json: ['Or', 'Ga', 'Nism']
+	  json: values
 	}
       }
-    } as FormBuilderOptions
-  }
-);
-
-export type RoomDropDownListProps = {
+    };
 }
-
-export const RoomDropDownList = Object.assign(
-  (({}) => {
-  }) as FC<RoomDropDownListProps>,
-  {
-    options: {
-      title: 'Rooms',
-      key: 'rooms',
-      icon: 'terminal',
-      schema: {
-	label: 'Other impacted rooms',
-	type: 'select',
-	multiple: true,
-	key: 'otherImpactedRooms',
-	input: true,
-	dataSrc: 'json',
-	template: "<span>{{ item.name }}</span>",
-	data: {
-	  json: ['Room 1', 'Room 2']
-	}
-      },
-    } as FormBuilderOptions
-  }
-);

@@ -15,5 +15,9 @@ const meta : Meta<typeof LHDv3FormBuilder> = {
 export default meta;
 
 type Story = StoryObj<typeof LHDv3FormBuilder>;
-export const Primary: Story = {
+export const Simple: Story = {
+  args: {
+    organisms: ['Or', 'Ga', 'Nism'],
+    rooms: ['Room 1', 'Room 2']
+  }
 };
