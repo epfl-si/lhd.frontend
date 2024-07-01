@@ -89,6 +89,9 @@ export type hazardAdditionalInfoType = {
 	modified_by?: string;
 	modified_on?: string;
 	hazard_category?: hazardCategory;
+	file?: string;
+	fileName?: string;
+	filePath?: string;
 }
 
 export type hazardType = {

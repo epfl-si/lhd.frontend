@@ -138,6 +138,7 @@ export const fetchRoomDetails = async (
           }
           hazardAdditionalInfo {
             comment
+            filePath
             modified_by
             modified_on
             hazard_category {

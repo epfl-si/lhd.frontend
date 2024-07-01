@@ -14,7 +14,7 @@ import {createKey} from "../../utils/ressources/keyGenerator";
 import {useTranslation} from "react-i18next";
 import {sprintf} from "sprintf-js";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
-import {useHistory} from "react-router-dom";
+import {readFileAsBase64} from "../../utils/ressources/file";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -49,6 +49,7 @@ export const HazardFormVBox = ({
   const formsMapValidation = useRef<{[key: string]: boolean}>({});
   const [otherRoom, setOtherRoom] = useState<roomDetailsType | null>(null);
   const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
+  const [file, setFile] = useState<File | undefined>();
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -65,6 +66,7 @@ export const HazardFormVBox = ({
     };
     loadFetch();
     setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
+    setFile(undefined);
     if(selectedHazardCategory == 'StaticMagneticField') {
       loadOtherRoomsForStaticMagneticField();
     }
@@ -139,6 +141,7 @@ export const HazardFormVBox = ({
           })
         })
       });
+      let fileBase64 = await readFileAsBase64(file);
       addHazard(
         env().REACT_APP_GRAPHQL_ENDPOINT_URL,
         oidc.accessToken,
@@ -146,7 +149,9 @@ export const HazardFormVBox = ({
         lastVersionForm,
         room.name,
         {
-          comment: encodeURIComponent(comment ?? '')
+          comment: encodeURIComponent(comment ?? ''),
+          file: fileBase64,
+          fileName: file?.name
         }
       ).then(res => {
         handleOpen(res);
@@ -245,6 +250,12 @@ export const HazardFormVBox = ({
     setComment(newValue);
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
+
   return <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'column'}}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
@@ -282,6 +293,13 @@ export const HazardFormVBox = ({
         value={comment}
         isReadonly={action == 'Read'}
       />
+      <div>
+        <input id="file" type="file" onChange={handleFileChange} accept='.pdf' key={file?.name ?? 'newFile' + selectedHazardCategory}/>
+      </div>
+      {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
+        <a href={`${env().REACT_APP_GRAPHQL_ENDPOINT_URL}/hazardFile/?filePath=${encodeURIComponent(hazardAdditionalInfo.filePath)}`}>
+          {hazardAdditionalInfo.filePath.split('/').pop()}
+        </a>}
       {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label style={{
         fontStyle: "italic",
         fontSize: "small"

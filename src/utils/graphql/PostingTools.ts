@@ -278,7 +278,9 @@ export const addHazard = async (
                addHazardToRoom(room: "${room}", 
                submission: "${submission}", 
                additionalInfo: {
-               	comment: "${additionalInfo.comment}"
+               	comment: "${additionalInfo.comment}",
+               	file: "${additionalInfo.file ?? ''}",
+               	fileName: "${additionalInfo.fileName ?? ''}"
                }
                category: "${lastVersionForm.hazard_category.hazard_category_name}")
                {
