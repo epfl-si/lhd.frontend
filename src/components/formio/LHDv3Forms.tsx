@@ -1,61 +1,31 @@
 import * as React from "react";
-import { FormBuilder } from "@formio/react";
-import { FC } from "react";
+import {FC} from "react";
+import {FormBuilder, Formio} from "@formio/react";
 import "formiojs/dist/formio.full.min.css";
 import "epfl-elements/dist/css/elements.css";
+import {LHDSelectComponent} from "./LHDSelect";
+import {LHDMultiSelectComponent} from "./LHDMultiSelect";
 
 export type LHDv3FormBuilderProps = {
-  onChange: (newForm: LHDv3FormType) => void,
-  organisms: string[],
-  rooms: string[],
-  form ?: any
+	onChange: (newForm: LHDv3FormType) => void,
+	form ?: any
 }
 
-export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({ onChange, organisms, rooms, form }) => {
-  if (! form) {
-    form = {}
-  }
-  return <FormBuilder
-           form={ form }
-           options={
-	     {
-               builder: {
-	         custom: {
-		   title: 'LHD Fields',
-		   components: {
-                     organism: dropdownListOptions('Organism', 'organism', 'terminal', organisms),
-                     room: dropdownListOptions('Rooms', 'rooms', 'terminal', rooms),
-                   }
-	         }
-	       }
-             }
-           }
-           onChange={ onChange }
-         />
-
+export const LHDv3FormBuilder : FC<LHDv3FormBuilderProps> = ({onChange, form}) => {
+	if (! form) {
+		form = {}
+	}
+	return <FormBuilder
+		form={ form }
+		onChange={onChange}
+	/>
 }
 
 export type LHDv3FormType = any;
 
-export type OrganismDropDownListProps = {
-}
-
-
-function dropdownListOptions (title: string, key: string, icon: string,
-  values : string[]) {
-    return {
-      title,
-      key,
-      icon,
-      schema: {
-	label: title,
-	type: 'select',
-	key,
-	input: true,
-	dataSrc: 'json',
-	data: {
-	  json: values
+Formio.use({
+	components: {
+		lhdselect: LHDSelectComponent,
+		lhdmultiselect: LHDMultiSelectComponent
 	}
-      }
-    };
-}
+});
