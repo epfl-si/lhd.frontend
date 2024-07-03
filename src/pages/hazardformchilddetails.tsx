@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {hazardFormChildType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
-import {FormBuilder} from "@formio/react";
 import {Box, TextField, Typography} from "@material-ui/core";
 import {fetchHazardFormChild} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
@@ -12,11 +11,10 @@ import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
-import {getOrganism} from "../components/formio/OrganismDropDown";
 import {createNewHazardFormChild, updateHazardFormChild} from "../utils/graphql/PostingTools";
 import {BackButton} from "../components/global/BackButton";
 import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
-import {getRoom} from "../components/formio/RoomDropDown";
+import {LHDv3FormBuilder} from "../components/formio/LHDv3Forms";
 
 export default function HazardFormChildDetails() {
 	const history = useHistory();
@@ -27,21 +25,6 @@ export default function HazardFormChildDetails() {
 	const [name, setName] = useState<string>('');
 	const [category, setCategory] = useState<string>('');
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [componentNameList, setComponentNameList] = useState<string>('');
-	const [componentOptionList, setComponentOptionList] = useState<object[]>([]);
-	const [formBuilderOptions,setFormBuilderOption] = useState<{component: string, options: any}>({
-		component: componentNameList,
-		options: {
-			builder: {
-				custom: {
-					title: 'LHD Fields',
-					components: {
-						componentOptionList
-					}
-				}
-			}
-		}
-	});
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -55,26 +38,7 @@ export default function HazardFormChildDetails() {
 		if ( urlParams.get('name') != 'NewHazardFormChild' ) {
 			loadFetch(urlParams.get('name') ?? '');
 		}
-		loadCustomComponents();
 	}, [oidc.accessToken, window.location.search]);
-
-	const loadCustomComponents = async () => { //  TODO add query for each new custom component
-		const organismDropDownList = await getOrganism(oidc.accessToken);
-		const roomDropDownList = await getRoom(oidc.accessToken);
-		setComponentNameList(componentNameList + organismDropDownList.component + roomDropDownList.component);//  TODO add the new component in the concatenation
-		setComponentOptionList([...componentOptionList, organismDropDownList.options, roomDropDownList.options]);//  TODO add the new options in the array
-		setFormBuilderOption({
-			component: componentNameList + organismDropDownList.component + roomDropDownList.component,//  TODO add the new component in the concatenation
-			options: {
-				builder: {
-					custom: {
-						title: 'LHD Fields',
-						components: {...componentOptionList, organism: organismDropDownList.options, room: roomDropDownList.options}//  TODO add the new options in the array
-					}
-				}
-			}
-		})
-	}
 
 	const loadFetch = async (name: string) => {
 		const results = await fetchHazardFormChild(
@@ -177,14 +141,11 @@ export default function HazardFormChildDetails() {
 		  fullWidth
 		  variant="standard"
 	  />}
-			{(newForm || hazardFormChildDetails?.form || urlParams.get('name') == 'NewHazardFormChild') && <FormBuilder
-		  key={formBuilderOptions.component}
-		  options={formBuilderOptions?.options}
-		  form={(newForm || hazardFormChildDetails?.form) ? JSON.parse(newForm ?? hazardFormChildDetails!.form) : {}}
-		  onChange={(schema) => {
-						setNewForm(JSON.stringify(schema))
-					}}
-	  />}
+			{(newForm || hazardFormChildDetails?.form || urlParams.get('name') == 'NewHazardFormChild') &&
+					<LHDv3FormBuilder
+						form={(newForm || hazardFormChildDetails?.form) ? JSON.parse(newForm ?? hazardFormChildDetails!.form) : {}}
+						onChange={(schema) => {setNewForm(JSON.stringify(schema))}}
+					/>}
 			<div style={{marginTop: '50px'}}>
 				<Button
 					onClick={handleSubmit}

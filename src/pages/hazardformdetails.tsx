@@ -13,10 +13,9 @@ import {createNewHazardCategory, updateFormHazard} from "../utils/graphql/Postin
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
-import {getOrganism} from "../components/formio/OrganismDropDown";
 import {HazardFormChildList} from "../components/HazardsForm/hazardFormChildList";
 import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
-import {getRoom} from "../components/formio/RoomDropDown";
+import {LHDv3FormBuilder} from "../components/formio/LHDv3Forms";
 
 export default function HazardFormDetails() {
 	const history = useHistory();
@@ -30,21 +29,6 @@ export default function HazardFormDetails() {
 		type: "info",
 		text: '',
 	});
-	const [componentNameList, setComponentNameList] = useState<string>('');
-	const [componentOptionList, setComponentOptionList] = useState<object[]>([]);
-	const [formBuilderOptions,setFormBuilderOption] = useState<{component: string, options: any}>({
-		component: componentNameList,
-		options: {
-			builder: {
-				custom: {
-					title: 'LHD Fields',
-					components: {
-						componentOptionList
-					}
-				}
-			}
-		}
-	});
 	const urlParams = new URLSearchParams(window.location.search);
 	const [originalForm, setOriginalForm] = useState<string>();
 
@@ -53,26 +37,7 @@ export default function HazardFormDetails() {
 		if (urlParams.get('cat') != 'NewCategory') {
 			loadFetch(urlParams.get('cat') ?? '');
 		}
-		loadCustomComponents();
 	}, [oidc.accessToken, window.location.search]);
-
-	const loadCustomComponents = async () => { //  TODO add query for each new custom component
-		const organismDropDownList = await getOrganism(oidc.accessToken);
-		const roomDropDownList = await getRoom(oidc.accessToken);
-		setComponentNameList(componentNameList + organismDropDownList.component + roomDropDownList.component);//  TODO add the new component in the concatenation
-		setComponentOptionList([...componentOptionList, organismDropDownList.options, roomDropDownList.options]);//  TODO add the new options in the array
-		setFormBuilderOption({
-			component: componentNameList + organismDropDownList.component + roomDropDownList.component,//  TODO add the new component in the concatenation
-			options: {
-				builder: {
-					custom: {
-						title: 'LHD Fields',
-						components: {...componentOptionList, organism: organismDropDownList.options, room: roomDropDownList.options}//  TODO add the new options in the array
-					}
-				}
-			}
-		})
-	}
 
 	const loadFetch = async (cat: string) => {
 		const results = await fetchHazardFormDetails(
@@ -179,12 +144,11 @@ export default function HazardFormDetails() {
 
 					{urlParams.get('cat') != 'NewCategory'  && <div style={{marginBottom: '5px'}}></div>}
 
-					{(newForm || hazardFormDetails?.form || urlParams.get('cat') == 'NewCategory') && <FormBuilder
-			  key={formBuilderOptions.component}
-			  options={formBuilderOptions?.options}
-			  form={(newForm || hazardFormDetails?.form) ? JSON.parse(newForm ?? hazardFormDetails!.form) : {}}
-			  onChange={(schema) => {setNewForm(JSON.stringify(schema))}}
-		  />}
+					{(newForm || hazardFormDetails?.form || urlParams.get('cat') == 'NewCategory') &&
+							<LHDv3FormBuilder
+								form={(newForm || hazardFormDetails?.form) ? JSON.parse(newForm ?? hazardFormDetails!.form) : {}}
+								onChange={(schema) => {setNewForm(JSON.stringify(schema))}}
+							/>}
 					<div style={{marginTop: '50px'}}>
 						<Button
 							onClick={handleSubmit}
