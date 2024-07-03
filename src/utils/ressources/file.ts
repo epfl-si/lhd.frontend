@@ -6,15 +6,15 @@ export async function readFileAsBase64(file: File | undefined): Promise<string> 
 				if (e.target) {
 					resolve(e.target.result as string); // Resolve the promise with the base64 string
 				} else {
-					reject('');
+					resolve('');
 				}
 			};
 			reader.onerror = function() {
-				reject('');
+				resolve('');
 			};
 			reader.readAsDataURL(file);
 		} else {
-			reject('');
+			resolve('');
 		}
 	});
 }
