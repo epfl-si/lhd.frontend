@@ -23,6 +23,8 @@ interface HazardFormVBoxProps {
   action: 'Add' | 'Edit' | 'Read';
   onChangeAction?: (hazardName: string) => void;
   setDirtyState: (modified: boolean) => void;
+  roomList: string[];
+  organismList: object[];
 }
 
 export const HazardFormVBox = ({
@@ -31,7 +33,9 @@ export const HazardFormVBox = ({
   lastVersionForm,
   action,
   onChangeAction,
-  setDirtyState
+  setDirtyState,
+  roomList,
+  organismList
 }: HazardFormVBoxProps) => {
   const { t } = useTranslation();
   const oidc = useOpenIDConnectContext();
@@ -316,7 +320,7 @@ export const HazardFormVBox = ({
     </div>
     {submissionsList.current.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
-                  key={sf.id + action}/>
+                  key={sf.id + action} roomList={roomList} organismList={organismList}/>
       {currentFormChild &&
         <Button size="icon"
                 iconName={"#plus-circle"}
@@ -324,7 +328,7 @@ export const HazardFormVBox = ({
                 style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>}
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
           <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
-                      key={child.id + action} />
+                      key={child.id + action} roomList={roomList} organismList={organismList}/>
         </div>
       )}
         <hr />
@@ -333,7 +337,7 @@ export const HazardFormVBox = ({
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
       <Button
         onClick={handleSubmit}
-        //isDisabled={isSaveDisabled}
+        isDisabled={isSaveDisabled}
         label={t(`generic.saveButton`)}
         iconName={`${featherIcons}#save`}
         primary/>
