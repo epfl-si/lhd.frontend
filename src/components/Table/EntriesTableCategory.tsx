@@ -1,9 +1,9 @@
-import { Box } from '@material-ui/core';
-import { DataGrid } from '@mui/x-data-grid';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import { TableToolbar } from './TableToolbar';
-import { useHistory } from 'react-router-dom';
-import { columnType, parameterType } from '../../utils/ressources/types';
+import {Box} from '@material-ui/core';
+import {DataGrid} from '@mui/x-data-grid';
+import React from 'react';
+import {TableToolbar} from './TableToolbar';
+import {useHistory} from 'react-router-dom';
+import {columnType, parameterType} from '../../utils/ressources/types';
 
 type EntriesTableCategoryProps = {
 	optionsList?: parameterType[];

@@ -2,14 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Base} from 'epfl-elements-react/src/Base';
 import {Avatar} from 'epfl-elements-react/src/Avatar';
 import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
-import BioHazard from './pages/biohazard';
 import {LoginButton, StateEnum, useOpenIDConnectContext,} from '@epfl-si/react-appauth';
 import {Box, Dialog, DialogActions, DialogContent, DialogTitle,} from '@material-ui/core';
 import {Alert} from '@mui/material';
 import {useTranslation} from 'react-i18next';
 import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
-import DispensationControls from './pages/dispensationcontrols';
 import {UnitControl} from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
 import {HazardFormControl} from "./pages/hazardFormControl";
@@ -73,9 +71,6 @@ function App() {
 						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
-						{/*<li style={{backgroundColor: `${selectedMenu == 'dispensations' ? '#FFCECE' : ''}`}}>
-							<Link to="/dispcontrol">{t(`menu.dispensations`)}</Link>
-						</li>*/}
 						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
 						</li>
@@ -107,9 +102,6 @@ function App() {
 						<Route path="/unitdetails">
 							<UnitDetails />
 						</Route>
-						{/*<Route path="/dispcontrol">
-							<DispensationControls />
-						</Route>*/}
 						<Route path="/hazardformcontrol">
 							<HazardFormControl handleCurrentPage={handleCurrentPage}/>
 						</Route>
@@ -122,9 +114,6 @@ function App() {
 						<Route path="/hazardFormChildDetails">
 							<HazardFormChildDetails />
 						</Route>
-						{/*<Route path="/biohazard">
-							<BioHazard />
-						</Route>*/}
 						<Route path="/roomcontrol">
 							<RoomControl handleCurrentPage={handleCurrentPage} user={connectedUser.sciper}/>
 						</Route>

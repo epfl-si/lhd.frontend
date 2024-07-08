@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {useTranslation} from "react-i18next";
 import {AlertDialog} from "../global/AlertDialog";
 import {env} from "../../utils/env";
@@ -6,10 +7,9 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {fetchRoomsFromAPI} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {notificationType, roomDetailsType} from "../../utils/ressources/types";
-import {useState} from "react";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {saveNewRoomsFromAPI, saveNewUnitsFromAPI} from "../../utils/graphql/PostingTools";
+import {saveNewRoomsFromAPI} from "../../utils/graphql/PostingTools";
 
 interface AddNewRoomDialogProps {
 	openDialog: boolean;

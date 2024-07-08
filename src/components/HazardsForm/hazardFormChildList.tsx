@@ -1,10 +1,8 @@
 import {useTranslation} from "react-i18next";
-import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useState} from "react";
-import {columnType, hazardFormType} from "../../utils/ressources/types";
+import {columnType, hazardFormChildType} from "../../utils/ressources/types";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../../components/Table/EntriesTableCategory";
-import {hazardFormChildType} from "../../utils/ressources/types";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {useHistory} from "react-router-dom";
