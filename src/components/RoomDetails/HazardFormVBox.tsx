@@ -298,7 +298,7 @@ export const HazardFormVBox = ({
         isReadonly={action == 'Read'}
       />
       <div>
-        <input id="file" type="file" onChange={handleFileChange} accept='.pdf' key={file?.name ?? 'newFile' + selectedHazardCategory}/>
+        <input id="file" type="file" onChange={handleFileChange} accept='.pdf' key={'newFile' + selectedHazardCategory}/>
       </div>
       {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
         <a href={`${env().REACT_APP_GRAPHQL_ENDPOINT_URL}/hazardFile/?filePath=${encodeURIComponent(hazardAdditionalInfo.filePath)}`}>
