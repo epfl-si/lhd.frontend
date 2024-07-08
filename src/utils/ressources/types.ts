@@ -70,8 +70,8 @@ export type roomDetailsType = {
 	vol?: number;
 	vent?: string;
 	hazards: hazardType[];
-	hazardAdditionalInfo: hazardAdditionalInfoType[];
-	hazardReferences: hazardReferencesType[]
+	hazardAdditionalInfo?: hazardAdditionalInfoType[];
+	hazardReferences?: hazardReferencesType[]
 	lhd_units: lhdUnitsType[];
 	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
