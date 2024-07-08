@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {HazardCard} from "./HazardCard";
 import {hazardFormType, roomDetailsType} from "../../utils/ressources/types";
-import {fetchHazardForms} from "../../utils/graphql/FetchingTools";
+import {fetchHazardForms, fetchOrganism, fetchRoomsForDropDownComponent} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardFormVBox} from "./HazardFormVBox";
@@ -26,6 +26,8 @@ export const HazardTab = ({
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
   const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
   const [isDirtyState, setIsDirtyState] = useState<boolean>(false);
+  const roomList = useRef<string[]>([]);
+  const organismList = useRef<object[]>([]);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -42,7 +44,35 @@ export const HazardTab = ({
       window.addEventListener("resize", toggleDivVisibility);
     };
     loadFetch();
+    fetchRoomList();
+    fetchOrganismList();
   }, [oidc.accessToken]);
+
+  const fetchRoomList = async () => {
+    const results = await fetchRoomsForDropDownComponent(
+      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      oidc.accessToken
+    );
+    if (results.status === 200 && results.data && typeof results.data !== 'string') {
+      roomList.current = results.data.map(r => r.name).sort((a,b) => a ? a.localeCompare(b) : 0);
+    } else {
+      console.error('Bad GraphQL results', results);
+    }
+    return [];
+  }
+
+  const fetchOrganismList = async () => {
+    const results = await fetchOrganism(
+      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      oidc.accessToken
+    );
+    if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
+      organismList.current = results.data;
+    } else {
+      console.error('Bad GraphQL results', results);
+    }
+    return [];
+  }
 
   function toggleDivVisibility() {
     if (window.innerWidth <= 1024) {
@@ -106,7 +136,9 @@ export const HazardTab = ({
                       onChangeAction={onEditHazard}
                       selectedHazardCategory={selectedHazardCategory}
                       lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
-                      setDirtyState={setIsDirtyState}/>
+                      setDirtyState={setIsDirtyState}
+                      organismList={organismList.current}
+                      roomList={roomList.current}/>
     </div>
   </div>
 };
