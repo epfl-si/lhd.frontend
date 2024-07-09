@@ -22,7 +22,7 @@ function App() {
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
-	const [connectedUser, setConnectedUser] = useState<object>({sciper: 169419, groups: []});
+	const [connectedUser, setConnectedUser] = useState<object>({userName: '', groups: []});
 
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -36,8 +36,8 @@ function App() {
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data) {
-			console.log(results.data);
-			setConnectedUser({sciper: 169419, groups: results.data.groups});
+			console.log('ConnectedUser',results.data);
+			setConnectedUser({userName: results.data.preferred_username, groups: results.data.groups});
 		}
 	};
 
@@ -71,9 +71,11 @@ function App() {
 						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
-						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
-							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
-						</li>
+						{connectedUser.groups.includes('LHD_acces_admin') &&
+								<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
+									<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
+								</li>
+						}
 					</ul>
 				</Base.AsideMenu>
 				<Base.Breadcrumbs>
@@ -103,7 +105,7 @@ function App() {
 							<UnitDetails />
 						</Route>
 						<Route path="/hazardformcontrol">
-							<HazardFormControl handleCurrentPage={handleCurrentPage}/>
+							<HazardFormControl handleCurrentPage={handleCurrentPage} isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin')}/>
 						</Route>
 						<Route path="/roomdetails">
 							<RoomDetails />

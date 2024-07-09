@@ -613,6 +613,9 @@ export const fetchConnectedUser = async (
 	const query = `query connection {
             connectedUserInfo {
               groups
+             	preferred_username
+             	given_name
+             	family_name
             }
           }`;
 
