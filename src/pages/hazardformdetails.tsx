@@ -4,7 +4,7 @@ import {hazardFormType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {FormBuilder} from "@formio/react";
 import {Box, TextField, Typography} from "@material-ui/core";
-import {fetchHazardFormDetails} from "../utils/graphql/FetchingTools";
+import {fetchConnectedUser, fetchHazardFormDetails} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
@@ -31,13 +31,27 @@ export default function HazardFormDetails() {
 	});
 	const urlParams = new URLSearchParams(window.location.search);
 	const [originalForm, setOriginalForm] = useState<string>();
+	const [isUserAuthorized, setIsUserAuthorized] = useState<boolean>(false);
 
 	useEffect(() => {
-		setCategory(urlParams.get('cat') ?? '');
-		if (urlParams.get('cat') != 'NewCategory') {
-			loadFetch(urlParams.get('cat') ?? '');
-		}
+		loadFetchUser();
 	}, [oidc.accessToken, window.location.search]);
+
+	const loadFetchUser = async () => {
+		const results = await fetchConnectedUser(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken
+		);
+		if (results.status === 200 && results.data) {
+			setIsUserAuthorized(results.data.groups.includes('LHD_acces_admin'));
+			if (results.data.groups.includes('LHD_acces_admin')) {
+				setCategory(urlParams.get('cat') ?? '');
+				if (urlParams.get('cat') != 'NewCategory') {
+					loadFetch(urlParams.get('cat') ?? '');
+				}
+			}
+		}
+	};
 
 	const loadFetch = async (cat: string) => {
 		const results = await fetchHazardFormDetails(
@@ -121,9 +135,8 @@ export default function HazardFormDetails() {
 		setOpenNotification(false);
 	};
 
-	return (
-		<Box>
-			<Typography
+	return <Box>
+			{isUserAuthorized ? <><Typography
 									gutterBottom>{urlParams.get('cat') == 'NewCategory' ?
 				t(`hazardFormControl.Create`) :
 				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormDetails?.version}</strong>)
@@ -167,7 +180,6 @@ export default function HazardFormDetails() {
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
-			/>
+			/></> : <b>You are not authorized for this page</b>}
 		</Box>
-	);
 }

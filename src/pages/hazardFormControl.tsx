@@ -13,10 +13,12 @@ import {useHistory} from "react-router-dom";
 
 interface HazardFormControlProps {
 	handleCurrentPage: (page: string) => void;
+	isUserAuthorized: boolean;
 }
 
 export const HazardFormControl = ({
 	handleCurrentPage,
+	isUserAuthorized
 }: HazardFormControlProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -34,7 +36,9 @@ export const HazardFormControl = ({
 	];
 
 	useEffect(() => {
-		loadFetch();
+		if (isUserAuthorized) {
+			loadFetch();
+		}
 		handleCurrentPage("hazardForms");
 	}, [oidc.accessToken]);
 
@@ -53,7 +57,7 @@ export const HazardFormControl = ({
 	};
 
 	return <Box>
-			<Typography gutterBottom>
+		{isUserAuthorized ? <><Typography gutterBottom>
 				{t(`hazardFormControl.title`)}
 			</Typography>
 			<EntriesTableCategory
@@ -63,13 +67,14 @@ export const HazardFormControl = ({
 				pageToOpen={"hazardForms"}
 			/>
 			<div style={{marginTop: '50px'}}>
-				<Button
-					onClick={() => {
-						history.push(`/formdetails?cat=NewCategory`);
-					}}
-					label={t(`hazardFormControl.addNewCategory`)}
-					iconName={`${featherIcons}#save`}
-					primary/>
-			</div>
-		</Box>;
+		<Button
+			onClick={() => {
+				history.push(`/formdetails?cat=NewCategory`);
+			}}
+			label={t(`hazardFormControl.addNewCategory`)}
+			iconName={`${featherIcons}#save`}
+			primary/>
+	</div></> : <b>You are not authorized for this page</b>}
+	</Box>
+	;
 }

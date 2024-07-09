@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {hazardFormChildType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {Box, TextField, Typography} from "@material-ui/core";
-import {fetchHazardFormChild} from "../utils/graphql/FetchingTools";
+import {fetchConnectedUser, fetchHazardFormChild} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
@@ -31,14 +31,28 @@ export default function HazardFormChildDetails() {
 	});
 	const urlParams = new URLSearchParams(window.location.search);
 	const [originalForm, setOriginalForm] = useState<string>();
+	const [isUserAuthorized, setIsUserAuthorized] = useState<boolean>(false);
 
 	useEffect(() => {
-		setName(urlParams.get('name') ?? '');
-		setCategory(urlParams.get('category') ?? '');
-		if ( urlParams.get('name') != 'NewHazardFormChild' ) {
-			loadFetch(urlParams.get('name') ?? '');
-		}
+		loadFetchUser();
 	}, [oidc.accessToken, window.location.search]);
+
+	const loadFetchUser = async () => {
+		const results = await fetchConnectedUser(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken
+		);
+		if (results.status === 200 && results.data) {
+			setIsUserAuthorized(results.data.groups.includes('LHD_acces_admin'));
+			if (results.data.groups.includes('LHD_acces_admin')) {
+				setName(urlParams.get('name') ?? '');
+				setCategory(urlParams.get('category') ?? '');
+				if ( urlParams.get('name') != 'NewHazardFormChild' ) {
+					loadFetch(urlParams.get('name') ?? '');
+				}
+			}
+		}
+	};
 
 	const loadFetch = async (name: string) => {
 		const results = await fetchHazardFormChild(
@@ -124,9 +138,8 @@ export default function HazardFormChildDetails() {
 		setOpenNotification(false);
 	};
 
-	return (
-		<Box>
-			<BackButton icon="#arrow-left" onClickButton={() => {history.push(`/formdetails?cat=${category}`)}} alwaysPresent={true}/>
+	return <Box>
+			{isUserAuthorized ? <><BackButton icon="#arrow-left" onClickButton={() => {history.push(`/formdetails?cat=${category}`)}} alwaysPresent={true}/>
 			{hazardFormChildDetails && <Typography
 				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormChildDetails?.version}</strong>)
 			</Typography>}
@@ -157,7 +170,6 @@ export default function HazardFormChildDetails() {
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
-			/>
+			/></> : <b>You are not authorized for this page</b>}
 		</Box>
-	);
 }
