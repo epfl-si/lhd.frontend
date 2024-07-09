@@ -16,12 +16,10 @@ import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: number;
 }
 
 export const UnitControl = ({
 	handleCurrentPage,
-	user
 }: UnitControlProps) => {
 	const PAGE_SIZE = 100;
 	const history = useHistory();

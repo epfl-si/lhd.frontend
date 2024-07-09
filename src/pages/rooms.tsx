@@ -16,12 +16,10 @@ import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: number;
 }
 
 export const RoomControl = ({
 	handleCurrentPage,
-	user
 }: RoomControlProps) => {
 	const PAGE_SIZE = 100;
 	const history = useHistory();

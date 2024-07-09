@@ -97,7 +97,7 @@ function App() {
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
 					<Route path="/unitcontrol">
-							<UnitControl handleCurrentPage={handleCurrentPage} user={connectedUser.sciper}/>
+							<UnitControl handleCurrentPage={handleCurrentPage}/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails />
@@ -115,7 +115,7 @@ function App() {
 							<HazardFormChildDetails />
 						</Route>
 						<Route path="/roomcontrol">
-							<RoomControl handleCurrentPage={handleCurrentPage} user={connectedUser.sciper}/>
+							<RoomControl handleCurrentPage={handleCurrentPage}/>
 						</Route>
 					</Switch>
 				</div>
