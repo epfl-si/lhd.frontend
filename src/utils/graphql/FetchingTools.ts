@@ -676,7 +676,7 @@ export const fetchOrganism = async (
   bioOrgs {
     organism
     risk_group
-    fileLink
+    filePath
   }
 }`;
 
