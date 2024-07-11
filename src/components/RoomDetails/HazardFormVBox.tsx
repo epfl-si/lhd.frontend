@@ -14,7 +14,7 @@ import {createKey} from "../../utils/ressources/keyGenerator";
 import {useTranslation} from "react-i18next";
 import {sprintf} from "sprintf-js";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
-import {readFileAsBase64} from "../../utils/ressources/file";
+import {fetchFile, readFileAsBase64} from "../../utils/ressources/file";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -260,6 +260,16 @@ export const HazardFormVBox = ({
     }
   };
 
+  const handleClickFileLink = async (event: any) => {
+    if (!event.defaultPrevented) {
+      event.preventDefault();
+      await fetchFile(
+        oidc.accessToken,
+        hazardAdditionalInfo!.filePath!
+      );
+    }
+  };
+
   return <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'column'}}>
       <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
@@ -301,7 +311,7 @@ export const HazardFormVBox = ({
         <input id="file" type="file" onChange={handleFileChange} accept='.pdf' key={'newFile' + selectedHazardCategory}/>
       </div>
       {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
-        <a href={`${env().REACT_APP_GRAPHQL_ENDPOINT_URL}/hazardFile/?filePath=${encodeURIComponent(hazardAdditionalInfo.filePath)}`}>
+        <a onClick={handleClickFileLink} href={hazardAdditionalInfo.filePath}>
           {hazardAdditionalInfo.filePath.split('/').pop()}
         </a>}
       {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label style={{
