@@ -1,5 +1,7 @@
 # pull official base image
 FROM node:18
+
+RUN yarn config set network-timeout 600000
 # Install serve
 RUN yarn global add serve
 
