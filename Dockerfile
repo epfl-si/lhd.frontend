@@ -25,4 +25,4 @@ RUN yarn && yarn build
 
 EXPOSE 3000
 # start app
-# CMD ["./docker-entrypoint.sh"]
+CMD ["./docker-entrypoint.sh"]

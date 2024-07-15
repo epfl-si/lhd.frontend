@@ -1,20 +1,20 @@
 #!/bin/bash
 
 INJECT_JSON_FILE=/12factor.json
-HTML_FILE=build/index.html
+HTML_FILE=public/index.html
 
 set -e -x
 
 main() {
-    source_dir=build
+    source_dir=public
     serve_dir=/tmp/serve
     cp -a "$source_dir" "$serve_dir"
-
+    cp  dist/* $serve_dir/
     if [ -f "$INJECT_JSON_FILE" ]; then
-        inject_json_file "$INJECT_JSON_FILE" "$HTML_FILE" < build/index.html > /tmp/serve/index.html
+        inject_json_file "$INJECT_JSON_FILE" "$HTML_FILE" < public/index.html > $serve_dir/index.html
     fi
 
-    exec serve -s "$serve_dir"
+    exec serve -s $serve_dir
 }
 
 inject_json_file () {
