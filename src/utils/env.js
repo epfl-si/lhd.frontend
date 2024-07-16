@@ -18,11 +18,11 @@ const _env_development = {
 };
 
 const _env_production = {
-  REACT_APP_AUTH_SERVER_URL: "https://tkgi-satosa.epfl.ch",
+  REACT_APP_AUTH_SERVER_URL: "https://satosaaas.epfl.ch",
   REACT_APP_HOMEPAGE_URL: "https://lhd.epfl.ch/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "https://lhd.epfl.ch/graphql",
   REACT_APP_OPENID_SCOPE: "openid profile tequila",
-  REACT_CLIENT_ID: "LHDv3_PROD",
+  REACT_CLIENT_ID: "LHDv3_prod",
   LHDv2_BASE_URL:"/"
 };
 
