@@ -14,7 +14,7 @@ main() {
         inject_json_file "$INJECT_JSON_FILE" "$HTML_FILE" < public/index.html > $serve_dir/index.html
     fi
 
-    exec serve -s $serve_dir
+    exec serve -s $serve_dir -l 3000
 }
 
 inject_json_file () {
