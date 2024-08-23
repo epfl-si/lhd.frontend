@@ -52,4 +52,8 @@ export const notificationsVariants = {
 		type: 'success',
 		text: 'Hazard form has successfully been updated',
 	},
+	'bad_graphql_query': {
+		type: 'error',
+		text: 'Bad GraphQL query',
+	},
 };

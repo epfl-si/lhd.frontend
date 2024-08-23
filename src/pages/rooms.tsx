@@ -4,7 +4,7 @@ import {fetchRooms} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, roomDetailsType} from "../utils/ressources/types";
+import {columnType, roomDetailsType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getHazardImage} from "../components/RoomDetails/HazardProperties";
@@ -13,6 +13,8 @@ import {useHistory} from "react-router-dom";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
+import {notificationsVariants} from "../utils/ressources/variants";
+import Notifications from "../components/Table/Notifications";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -31,6 +33,11 @@ export const RoomControl = ({
 	const [page, setPage] = useState<number>();
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	const isMediumDevice = useMediaQuery("only screen and (min-width : 769px) and (max-width : 992px)");
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
@@ -148,6 +155,9 @@ export const RoomControl = ({
 				setTotalCount(results.data.totalCount);
 			} else {
 				console.error('Bad GraphQL results', results);
+
+				setNotificationType(notificationsVariants['bad_graphql_query']);
+				setOpenNotification(true);
 			}
 			setLoading(false);
 		}
@@ -159,6 +169,10 @@ export const RoomControl = ({
 		setPage(0);
 		history.push(`/roomcontrol?search=${encodeURIComponent(val)}`);
 	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
 
 	return (
 		<Box>
@@ -195,6 +209,11 @@ export const RoomControl = ({
 													setOpenDialog(false);
 													onChangeInput(searchVal);
 												}}/>
+			<Notifications
+				open={openNotification}
+				notification={notificationType}
+				close={handleClose}
+			/>
 		</Box>
 	);
 }

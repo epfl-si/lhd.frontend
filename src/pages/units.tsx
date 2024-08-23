@@ -4,7 +4,7 @@ import {fetchunitsFromFullTextAndPagination} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType} from "../utils/ressources/types";
+import {columnType, lhdUnitsType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
@@ -13,6 +13,8 @@ import {useHistory} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
+import {notificationsVariants} from "../utils/ressources/variants";
+import Notifications from "../components/Table/Notifications";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -31,6 +33,11 @@ export const UnitControl = ({
 	const [search, setSearch] = React.useState('');
 	const [page, setPage] = useState<number>(0);
 	const [totalCount, setTotalCount] = useState<number>(0);
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const columns: columnType[] = [
 		{
 			field: "unitId", headerName: '', width: 30,
@@ -83,6 +90,9 @@ export const UnitControl = ({
 			setTotalCount(results.data.totalCount);
 		} else {
 			console.error('Bad GraphQL results', results);
+
+			setNotificationType(notificationsVariants['bad_graphql_query']);
+			setOpenNotification(true);
 		}
 		setLoading(false);
 	};
@@ -92,6 +102,10 @@ export const UnitControl = ({
 		setSearch(val);
 		history.push(`/unitcontrol?search=${encodeURIComponent(val)}`);
 	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
 
 	return (
 		<Box>
@@ -128,6 +142,11 @@ export const UnitControl = ({
 													setOpenDialog(false);
 													onChangeInput(searchVal);
 												}}/>
+			<Notifications
+				open={openNotification}
+				notification={notificationType}
+				close={handleClose}
+			/>
 		</Box>
 	);
 }
