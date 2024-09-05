@@ -167,12 +167,12 @@ i18next.use(initReactI18next).init({
 			translation: {
 				room: {
 					search: 'Rechercher...',
-					roomList: 'Salles',
-					name: 'Salle',
+					roomList: 'Locaux',
+					name: 'Local',
 					building: 'Bâtiment',
 					sector: 'Secteur',
 					floor: 'Étage',
-					addNewRoom: 'Ajouter une salle',
+					addNewRoom: 'Ajouter un local',
 					kind: {
 						name: 'Désignation',
 					},
@@ -190,12 +190,12 @@ i18next.use(initReactI18next).init({
 					personPlaceholder: 'Sélectionner une personne',
 					profTab: 'Prof / Resp',
 					cosecTab: 'COSECs',
-					subunitTab: 'Sub-Unités',
+					subunitTab: 'Sous-Unités',
 					title: 'Détails de l\'unité',
-					addNewUnit: 'Ajouter une nouvelle sub-unité',
-					noSubUnits: 'Aucune sub-unité présente',
+					addNewUnit: 'Ajouter une nouvelle sous-unité',
+					noSubUnits: 'Aucune sous-unité présente',
 					deleteUnitConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette unité?',
-					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les rooms et les storages seront aussi supprimées, ainsi que toutes les sub-unités.'
+					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les locaux et les stockages seront aussi supprimées, ainsi que toutes les sous-unités.'
 				},
 				unit: {
 					name: 'Nom',
@@ -211,7 +211,7 @@ i18next.use(initReactI18next).init({
 					warning: "Attention - Vous n'êtes pas connecté !",
 					title: 'Connectez-vous pour accéder à LHD',
 					content:
-						"Vous essayez d'accéder à des données sensibles, veuillez fournir des identifiants pour confirmer votre identité.",
+						"Vous essayez d'accéder à des données sensibles, veuillez fournir vos identifiants pour confirmer votre identité.",
 				},
 				copy: {
 					params: 'Copier le lien avec les paramètres',
@@ -230,9 +230,9 @@ i18next.use(initReactI18next).init({
 				},
 				room_details: {
 					details: 'Détails',
-					unitPlaceholder: 'Cherche une unité',
+					unitPlaceholder: 'Chercher une unité',
 					hazards: 'Dangers',
-					title: 'Détails de la room ',
+					title: 'Détails du local ',
 					designation: 'Désignation',
 					building: 'Bâtiment',
 					sector: 'Secteur',
@@ -270,17 +270,17 @@ i18next.use(initReactI18next).init({
 				},
 				generic: {
 					saveButton: 'Enregistrer',
-					deleteButton: 'Soupprimer',
+					deleteButton: 'Supprimer',
 					cancelButton: 'Annuler',
 					continueButton: 'Continuer',
 					addNew: 'Ajouter',
 					search: 'Rechercher'
 				},
 				menu: {
-					rooms: 'Rooms / Dangers',
+					rooms: 'Locaux / Dangers',
 					units: 'Unités',
 					dispensations: 'Dispensations',
-					hazardFormControl: 'Contrôle des formulaires des hasards'
+					hazardFormControl: 'Contrôle des formulaires de dangers'
 				},
 				hazards: {
 					Biological: 'Biologique',
@@ -288,8 +288,8 @@ i18next.use(initReactI18next).init({
 					CompressedGas: 'Gaz compressé',
 					Cryogenics: 'Cryogénie',
 					Electrical: 'Électrique',
-					TimeVaryingEMF: 'TimeVaryingEMF',
-					IncoherentLightSource: 'Incoherent Light Source',
+					TimeVaryingEMF: 'Time Varying EMF',
+					IncoherentLightSource: 'Source Lumineuse incohérente',
 					IonisingRadiation: 'Rayonnement Ionisant',
 					Laser: 'Laser',
 					Nanoparticles: 'Nanoparticules',
@@ -302,22 +302,22 @@ i18next.use(initReactI18next).init({
 				hazardFormControl: {
 					title: 'Formulaires des dangers',
 					version: 'Version',
-					category: 'Catégory',
-					addNewCategory: 'Ajouter une nouvelle catégory de danger',
-					newHazardCategory: 'Insérer la nouvelle catégory de danger',
-					newHazardFormChild: 'Insérer le nom du sous-formulaire',
+					category: 'Catégorie',
+					addNewCategory: 'Ajouter une nouvelle catégorie de danger',
+					newHazardCategory: 'Insérer la nouvelle catégorie de danger',
+					newHazardFormChild: 'Insérer le nom du formulaire enfant',
 					insertNewVersion: 'Insérer la version du formulaire du danger',
 					newVersionCurrentIs: 'Version courante: ',
 					Create: 'Créer',
 					Modify: 'Modifier le formulaire de: ',
 					fillMandatoryFields: 'Certains champs obligatoires sont vides',
-					versionError: 'La nouvelle version doit être majeure que la version courante',
+					versionError: 'La nouvelle version doit être plus récente que la version courante',
 					childListTitle: 'Liste des formulaires enfants',
 					hazard_form_child_name: 'Nom'
 				},
 				hazard_details: {
 					unsavedChangesMessageTitle: 'Changements non enregistrés',
-					unsavedChangesMessageDescription: 'Vous avez des changements non encore enregistrés. Vous êtes sûr de vouloir continuer? Tous les changements non sauvegardés seront perdus.'
+					unsavedChangesMessageDescription: 'Vous avez des changements qui ne sont pas enregistrés. Êtes-vous sûr de vouloir continuer? Tous les changements non sauvegardés seront perdus.'
 				}
 			},
 		},
