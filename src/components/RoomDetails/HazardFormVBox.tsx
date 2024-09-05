@@ -308,10 +308,10 @@ export const HazardFormVBox = ({
         isReadonly={action == 'Read'}
       />
       <div>
-        <input id="file" type="file" onChange={handleFileChange} accept='.pdf' key={'newFile' + selectedHazardCategory}/>
+        <input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf' key={'newFile' + selectedHazardCategory}/>
       </div>
       {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
-        <a onClick={handleClickFileLink} href={hazardAdditionalInfo.filePath}>
+        <a  style={{fontSize: 'small'}} onClick={handleClickFileLink} href={hazardAdditionalInfo.filePath}>
           {hazardAdditionalInfo.filePath.split('/').pop()}
         </a>}
       {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label style={{

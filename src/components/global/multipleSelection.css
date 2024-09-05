@@ -1,10 +1,23 @@
-.resultDiv {
-    position: absolute; 
-    z-index: 1;
-    background-color: white;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    max-height: 250px;
-    width: 88%
+@media (min-width: 1025px) {
+    .resultDiv {
+        position: absolute;
+        z-index: 1;
+        background-color: white;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        max-height: 250px;
+        width: 29%
+    }
+}
+
+@media (max-width: 1024px) {
+    .resultDiv {
+        position: absolute;
+        z-index: 1;
+        background-color: white;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        max-height: 250px;
+        width: 73%
+    }
 }
 
 .ulList {
@@ -14,7 +27,7 @@
 }
 
 .liItem {
-    cursor: pointer; 
+    cursor: pointer;
     display: block
 }
 

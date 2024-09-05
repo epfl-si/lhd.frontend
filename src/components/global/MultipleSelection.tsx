@@ -128,10 +128,11 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				id="member"
 				onChange={onChangeInput}
 				placeholder={t(`generic.search`)}
+				style={{fontSize: 'small'}}
 			/>
 			<div className="resultDiv">
 				{filteredSuggestions.length > 0 && (
-					<ul className="ulList">
+					<ul className="ulList" style={{fontSize: 'small'}}>
 						{objectName == 'Person' ? <li className="divider li-multiselection-divider">LHD</li> : <></>}
 						{filteredSuggestions.map((suggestion, index) => {
 							if (lhd && suggestion.type == 'DirectoryPerson') {

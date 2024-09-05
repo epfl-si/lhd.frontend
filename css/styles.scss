@@ -118,9 +118,35 @@
 @media (min-width: 640px) {
     .choices__list--dropdown .choices__item--selectable, .choices__list[aria-expanded] .choices__item--selectable {
         padding-right: 5px !important;
+        font-size: small !important;
     }
 }
 
 .MuiDataGrid-row {
     cursor: pointer !important;
+}
+
+.form-control, .selectize-control .selectize-input {
+    font-size: small !important;
+}
+
+.form-group label {
+    font-size: small !important;
+    font-weight: bolder !important;
+}
+
+.formio-component-htmlelement {
+    font-size: small !important;
+}
+
+.css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
+    font-size: small !important;
+}
+
+.css-1qqsdnr-MuiAutocomplete-root .MuiInput-root .MuiInput-input {
+    font-size: small !important;
+}
+
+.MuiInputBase-input {
+    font-size: small !important;
 }
