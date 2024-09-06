@@ -65,6 +65,8 @@ export const HazardCard = ({
         {categoriesWithAdditionalInfo.includes(hazardName) ?
           <Button size="icon"
                   iconName={"#twitch"}
+                  title={room.hazardAdditionalInfo?.filter(h => h.hazard_category?.hazard_category_name == hazardName)
+                    .map(h => h.comment?.concat(h.filePath && h.filePath != '' ? (" - " + h.filePath.split('/').pop()) : ''))[0]}
                   onClick={() => {openAlertDialog('Edit', isDirtyState);}}/> : <></>
         }
       </div>
