@@ -20,6 +20,15 @@
     }
 }
 
+.resultDivModal {
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    max-height: 250px;
+    width: 80%
+}
+
 .ulList {
     max-height: 250px;
     overflow: hidden;

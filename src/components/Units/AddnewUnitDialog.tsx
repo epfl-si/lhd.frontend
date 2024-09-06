@@ -97,7 +97,8 @@ export const AddNewUnitDialog = ({
 			<MultipleSelection selected={[]} objectName="NewUnit"
 												 onChangeSelection={onSelectUnit}
 												 getCardTitle={getNewUnitTitle}
-												 fetchData={loadFetch}/>
+												 fetchData={loadFetch}
+			intoModal={true}/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

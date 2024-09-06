@@ -40,7 +40,8 @@ export const AlertDialog = ({
 				<DialogTitle id="alert-dialog-title">
 					{title}
 				</DialogTitle>
-				<DialogContent>
+				<DialogContent
+				style={{minWidth:'300px', minHeight: '400px'}}>
 					{children}
 				</DialogContent>
 				<DialogActions>

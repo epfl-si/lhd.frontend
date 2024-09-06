@@ -29,6 +29,8 @@ interface SelectionProps<Member> {
 	 * Method to fetch data
 	 */
 	fetchData: (search: string) => Promise<Member[]>;
+
+	intoModal?: boolean;
 }
 
 export const MultipleSelection = <Member extends Record<string, any>>({
@@ -36,7 +38,8 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	selected,
 	onChangeSelection,
 	getCardTitle,
-	fetchData
+	fetchData,
+	intoModal
 }: SelectionProps<Member>) => {
 	const { t } = useTranslation();
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
@@ -127,10 +130,10 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				input={inputValue}
 				id="member"
 				onChange={onChangeInput}
-				placeholder={t(`generic.search`)}
+				placeholder={objectName == 'Unit' ? t(`room_details.attachUnit`) : t(`generic.search`)}
 				style={{fontSize: 'small'}}
 			/>
-			<div className="resultDiv">
+			<div className={intoModal ? 'resultDivModal' : 'resultDiv'}>
 				{filteredSuggestions.length > 0 && (
 					<ul className="ulList" style={{fontSize: 'small'}}>
 						{objectName == 'Person' ? <li className="divider li-multiselection-divider">LHD</li> : <></>}
