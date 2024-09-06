@@ -120,15 +120,20 @@ export const DetailsTab = ({
 
   return <Stack spacing={2} className="roomDetailsDiv">
     <div className="displayFlexColumn">
-      <label style={{fontSize: 'small'}}>{t(`room_details.building`)}: <strong>{room.building}</strong></label>
-      <label style={{fontSize: 'small'}}>{t(`room_details.sector`)}: <strong>{room.sector}</strong></label>
-      <label style={{fontSize: 'small'}}>{t(`room_details.floor`)}: <strong>{room.floor}</strong></label>
+      <div><label className='labelDetails'>{t(`room_details.building`)}: </label><label
+        className='valueDetails'>{room.building}</label>
+      </div>
+      <div><label className='labelDetails'>{t(`room_details.sector`)}: </label><label
+        className='valueDetails'>{room.sector}</label>
+      </div>
+      <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
+        className='valueDetails'>{room.floor}</label>
+      </div>
     </div>
-    <hr/>
     <Autocomplete
       value={room.kind?.name}
       onChange={(event: any, newValue: string | null) => {
-        if (newValue) {
+        if ( newValue ) {
           room.kind = {name: newValue};
           setRoom({...room});
         }
