@@ -54,6 +54,7 @@ export const HazardFormVBox = ({
   const [otherRoom, setOtherRoom] = useState<roomDetailsType | null>(null);
   const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
   const [file, setFile] = useState<File | undefined>();
+  const [_, setRender] = useState(0);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -101,6 +102,7 @@ export const HazardFormVBox = ({
     });
     formsMapValidation.current = map;
     setIsSaveDisabled(Object.values(map).some(value => value === false));
+    setRender(prev => prev + 1);
   }
 
   const getValidationFromMapItem = (itemId: string, checkedId: string, isValid: boolean, formJson: string): boolean => {
