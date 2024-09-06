@@ -94,22 +94,24 @@ export const HazardFormVBox = ({
     submissionsList.current = submissions;
     const map: {[key: string]: boolean} = {};
     submissions.forEach(s => {
-      map[s.id] = getValidationFromMapItem(s.id, id, isValid);
+      map[s.id] = getValidationFromMapItem(s.id, id, isValid, JSON.stringify(s));
       s.children?.forEach(child => {
-        map[child.id] = getValidationFromMapItem(child.id, id, isValid);
+        map[child.id] = getValidationFromMapItem(child.id, id, isValid, JSON.stringify(child));
       })
     });
     formsMapValidation.current = map;
     setIsSaveDisabled(Object.values(map).some(value => value === false));
   }
 
-  const getValidationFromMapItem = (itemId: string, checkedId: string, isValid: boolean): boolean => {
+  const getValidationFromMapItem = (itemId: string, checkedId: string, isValid: boolean, formJson: string): boolean => {
     if (itemId == checkedId) {
       return isValid;
     } else if (itemId in formsMapValidation.current) {
       return formsMapValidation.current[itemId];
-    } else {
+    } else if (formJson.indexOf('"required":true') > -1) {
       return false;
+    } else {
+      return true;
     }
   }
 
@@ -233,7 +235,8 @@ export const HazardFormVBox = ({
     setSubmissionListAndValidationMap([...submissions, {
       id: id, submission: {data: {}},
       form: currentForm, children: children
-    }], id, false);
+    }], id, JSON.stringify(currentForm).indexOf('"required":true') == -1 &&
+      (currentFormChild ? JSON.stringify(currentFormChild).indexOf('"required":true') == -1 : true));
   }
 
   function onAddHazardChild(parentId: string) {
@@ -245,7 +248,8 @@ export const HazardFormVBox = ({
       parent.children?.push({
         id: id, submission: {data: {}},
         form: currentFormChild});
-      setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == parentId ? parent : s), id, false);
+      setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == parentId ? parent : s),
+        id, JSON.stringify(currentFormChild).indexOf('"required":true') == -1);
     }
   }
 
