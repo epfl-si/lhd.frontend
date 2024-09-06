@@ -58,13 +58,18 @@ export const AddNewUnitDialog = ({
 	}
 
 	function onAddUnit() {
-		saveNewUnitsFromAPI(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			selectedUnits,
-		).then(res => {
-			handleOpen(res);
-		});
+		if (selectedUnits.length > 0) {
+			saveNewUnitsFromAPI(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				selectedUnits,
+			).then(res => {
+				handleOpen(res);
+			});
+		} else {
+			setNotificationType(notificationsVariants['no-unit-chosen']);
+			setOpenNotification(true);
+		}
 	}
 
 	const handleOpen = (res: any) => {
@@ -75,10 +80,10 @@ export const AddNewUnitDialog = ({
 			};
 			setNotificationType(notif);
 		} else if (res.status === 200) {
-			setNotificationType(notificationsVariants['room-update-success']);
+			setNotificationType(notificationsVariants['save-new-unit-error']);
 			save(searchValForNewUnit);
 		} else {
-			setNotificationType(notificationsVariants['room-update-error']);
+			setNotificationType(notificationsVariants['save-new-unit-error']);
 		}
 		setOpenNotification(true);
 	};

@@ -36,6 +36,14 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Room update failed',
 	},
+	'save-new-unit-error': {
+		type: 'error',
+		text: 'New unit has not been saved',
+	},
+	'no-unit-chosen': {
+		type: 'error',
+		text: 'No unit has been chosen',
+	},
 	'unit-update-success': {
 		type: 'success',
 		text: 'Unit has successfully been updated',

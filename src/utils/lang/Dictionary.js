@@ -78,7 +78,8 @@ i18next.use(initReactI18next).init({
 					designation: 'Designation',
 					building: 'Building',
 					sector: 'Sector',
-					floor: 'Floor'
+					floor: 'Floor',
+					attachUnit: 'Attach a unit'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -236,7 +237,8 @@ i18next.use(initReactI18next).init({
 					designation: 'Désignation',
 					building: 'Bâtiment',
 					sector: 'Secteur',
-					floor: 'Étage'
+					floor: 'Étage',
+					attachUnit: 'Rattacher une unité'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
