@@ -165,6 +165,7 @@ export const DetailsTab = ({
       }
       label="Ventilation"
     />
+    <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
     <MultipleSelection selected={savedUnits} objectName="Unit"
                        onChangeSelection={onChangeUnits}
                        getCardTitle={getUnitTitle}

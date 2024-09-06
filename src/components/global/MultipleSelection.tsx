@@ -172,6 +172,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 						return (<FormCard
 							keyValue={objectName == 'Person' ? item.sciper + "" : item.name}
 							icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
+							tooltip={item.status === 'Deleted' ? t(`room_details.undoDeletionUnit`) : t(`room_details.deleteUnit`)}
 							onClickIcon={() => onDelete(item)}
 							className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
 							key={objectName == 'Person' ? item.sciper + "" : item.name}>
