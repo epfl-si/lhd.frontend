@@ -29,7 +29,7 @@
 .form-card-div {
     margin-top: 10px;
     overflow: hidden;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 350px;
 }
 
@@ -153,4 +153,19 @@
 
 .debounceInput {
     font-size: small !important;
+}
+
+.MuiInputLabel-formControl {
+    font-weight: bolder !important;
+}
+
+.labelDetails {
+    font-size: small;
+    font-weight: bolder;
+    color: gray;
+}
+
+.valueDetails {
+    font-size: small;
+    margin-left: 5px;
 }
