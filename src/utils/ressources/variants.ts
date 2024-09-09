@@ -44,6 +44,10 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'No unit has been chosen',
 	},
+	'no-room-chosen': {
+		type: 'error',
+		text: 'No room has been chosen',
+	},
 	'unit-update-success': {
 		type: 'success',
 		text: 'Unit has successfully been updated',

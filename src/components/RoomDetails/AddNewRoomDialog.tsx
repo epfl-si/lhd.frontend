@@ -9,7 +9,7 @@ import {MultipleSelection} from "../global/MultipleSelection";
 import {notificationType, roomDetailsType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {saveNewRoomsFromAPI} from "../../utils/graphql/PostingTools";
+import {saveNewRoomsFromAPI, saveNewUnitsFromAPI} from "../../utils/graphql/PostingTools";
 
 interface AddNewRoomDialogProps {
 	openDialog: boolean;
@@ -58,14 +58,18 @@ export const AddNewRoomDialog = ({
 	}
 
 	function onAddRoom() {
-		console.log(selectedRooms);
-		saveNewRoomsFromAPI(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			selectedRooms,
-		).then(res => {
-			handleOpen(res);
-		});
+		if (selectedRooms.length > 0) {
+			saveNewRoomsFromAPI(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				selectedRooms,
+			).then(res => {
+				handleOpen(res);
+			});
+		} else {
+			setNotificationType(notificationsVariants['no-room-chosen']);
+			setOpenNotification(true);
+		}
 	}
 
 	const handleOpen = (res: any) => {
