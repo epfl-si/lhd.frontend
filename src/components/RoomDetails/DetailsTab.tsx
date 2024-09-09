@@ -148,7 +148,7 @@ export const DetailsTab = ({
     />
     <TextField
       id="volume"
-      label="Volume"
+      label="Volume (m³)"
       type="number"
       InputLabelProps={{
         shrink: true,
