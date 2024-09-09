@@ -3,6 +3,8 @@ import {submissionForm} from "../../utils/ressources/types";
 import {Form} from "@formio/react";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import { fetchFile } from '../../utils/ressources/file';
+import { useTranslation } from 'react-i18next';
+import formTraslation from '../../utils/lang/formTranslation.json';
 
 interface HazardFormProps {
 	submission: submissionForm;
@@ -19,7 +21,10 @@ export const HazardForm = ({
 	roomList,
 	organismList
 }: HazardFormProps) => {
-	const [optionsForm] = useState<{readOnly: boolean}>({readOnly: action == "Read"});//i18n: {en: {},},
+	const { i18n } = useTranslation();
+	const [optionsForm] = useState<{readOnly: boolean, language: string, i18n: any}>(
+		{readOnly: action == "Read", language: i18n.language,
+		i18n: formTraslation});
 	const oidc = useOpenIDConnectContext();
 
 	// Unfortunately, <Form> will mutate the `submission` as the user updates the form. In order to know the dirty

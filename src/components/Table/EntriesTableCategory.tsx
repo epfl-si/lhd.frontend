@@ -4,6 +4,7 @@ import React from 'react';
 import {TableToolbar} from './TableToolbar';
 import {useHistory} from 'react-router-dom';
 import {columnType, parameterType} from '../../utils/ressources/types';
+import {useTranslation} from "react-i18next";
 
 type EntriesTableCategoryProps = {
 	optionsList?: parameterType[];
@@ -29,6 +30,7 @@ export function EntriesTableCategory({
 	loadServerRows
 }: EntriesTableCategoryProps) {
 	const history = useHistory();
+	const { t } = useTranslation();
 
 	const handlePageChange = (newPage: number) => {
 		if ( loadServerRows ) {
@@ -45,6 +47,14 @@ export function EntriesTableCategory({
 						disableSelectionOnClick={true}
 						rows={tableData}
 						columns={columns}
+						localeText={{
+							toolbarColumns: t('datagrid.columns'),
+							toolbarFilters: t('datagrid.filters'),
+							toolbarDensity: t('datagrid.density'),
+							toolbarExport: t('datagrid.export'),
+							toolbarExportCSV: t('datagrid.exportCSV'),
+							toolbarExportPrint: t('datagrid.print')
+						}}
 						components={{
 							Toolbar: TableToolbar,
 						}}

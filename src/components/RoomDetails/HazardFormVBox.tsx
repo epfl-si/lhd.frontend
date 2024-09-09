@@ -307,7 +307,7 @@ export const HazardFormVBox = ({
       <TextArea
         id={"comment"}
         name="comment"
-        label="Comment"
+        label={t('generic.comment')}
         key={selectedHazardCategory + "_key"}
         onChange={onChangeAdditionalInfo}
         value={comment}

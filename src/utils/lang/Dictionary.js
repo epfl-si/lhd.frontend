@@ -121,7 +121,16 @@ i18next.use(initReactI18next).init({
 					cancelButton: 'Cancel',
 					continueButton: 'Continue',
 					addNew: 'Add new',
-					search: 'Search'
+					search: 'Search',
+					comment: 'Comment'
+				},
+				datagrid: {
+					columns: 'Columns',
+					filters: 'Filters',
+					density: 'Density',
+					export: 'Export',
+					exportCSV: 'Download as CSV',
+					print: 'Print'
 				},
 				menu: {
 					rooms: 'Rooms / Hazards',
@@ -284,7 +293,16 @@ i18next.use(initReactI18next).init({
 					cancelButton: 'Annuler',
 					continueButton: 'Continuer',
 					addNew: 'Ajouter',
-					search: 'Rechercher'
+					search: 'Rechercher',
+					comment: 'Commentaire'
+				},
+				datagrid: {
+					columns: 'Colonnes',
+					filters: 'Filtres',
+					density: 'Densité',
+					export: 'Exporter',
+					exportCSV: 'Télécharger comme CSV',
+					print: 'Imprimer'
 				},
 				menu: {
 					rooms: 'Locaux / Dangers',
