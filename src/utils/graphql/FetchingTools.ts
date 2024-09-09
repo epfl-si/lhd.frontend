@@ -105,6 +105,7 @@ export const fetchRoomDetails = async (
 					floor
 					vol
 					vent
+					adminuse
 					kind {
 						name
 					}
@@ -658,6 +659,7 @@ export const fetchRoomsFromAPI = async (
 			building
 			floor
 			sector
+			adminuse
 		}
 	}`;
 

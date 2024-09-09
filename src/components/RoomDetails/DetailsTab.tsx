@@ -129,6 +129,9 @@ export const DetailsTab = ({
       <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
         className='valueDetails'>{room.floor}</label>
       </div>
+      <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
+        className='valueDetails'>{room.adminuse}</label>
+      </div>
     </div>
     <Autocomplete
       value={room.kind?.name}

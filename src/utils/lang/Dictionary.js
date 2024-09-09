@@ -82,7 +82,8 @@ i18next.use(initReactI18next).init({
 					attachUnit: 'Attach a unit',
 					attachUnitTitle: 'Room attached to the following units:',
 					undoDeletionUnit: 'Undo the deletion of the unit from this room',
-					deleteUnit: 'Delete this unit from the room'
+					deleteUnit: 'Delete this unit from the room',
+					adminuse: 'Type DIN'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -244,7 +245,8 @@ i18next.use(initReactI18next).init({
 					attachUnit: 'Rattacher une unité',
 					attachUnitTitle: 'Local rattaché aux unités suivantes:',
 					undoDeletionUnit: 'Annuler la suppression de l\'unité de ce local',
-					deleteUnit: 'Supprimer cette unité de ce local'
+					deleteUnit: 'Supprimer cette unité de ce local',
+					adminuse: 'Type DIN'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
