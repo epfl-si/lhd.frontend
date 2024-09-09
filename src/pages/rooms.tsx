@@ -81,7 +81,7 @@ export const RoomControl = ({
 				</span>
 			),
 		},
-		{
+		/*{
 			field: "hazardsListName", headerName: t('room_details.hazards'), minWidth: 300,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				<div className="displayFlexRow" style={{justifyContent: 'center'}}>
@@ -92,7 +92,7 @@ export const RoomControl = ({
 					}
 				</div>
 			),
-		}
+		}*/
 	];
 
 	const columnsSmall: columnType[] = [
@@ -107,13 +107,13 @@ export const RoomControl = ({
 						{`${(params.row.building ? params.row.building : '') +
 						(params.row.sector ? (',' + params.row.sector) : '') +
 						(params.row.floor ? (',' + params.row.floor) : '')}`}
-						<div className="displayFlexRow" style={{justifyContent: 'center', marginLeft: '10px'}}>
+						{/*<div className="displayFlexRow" style={{justifyContent: 'center', marginLeft: '10px'}}>
 							{
 								params.row.hazardsListName.map(c =>
 									<img style={{width: '20px', height: '20px', margin: '2px', marginLeft: '5px'}} key={`${c}_iconeKey`}
 											 src={getHazardImage(c)}/>)
 							}
-						</div>
+						</div>*/}
 					</div>
 				</div>
 			),
