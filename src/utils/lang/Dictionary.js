@@ -40,9 +40,9 @@ i18next.use(initReactI18next).init({
 					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles, COSECs, rooms and storages will be deleted. \nAll sub-units will be deleted too.'
 				},
 				unit: {
-					name: 'Name',
+					name: 'Unit',
 					institute: 'Institute',
-					school: 'School',
+					school: 'Faculty',
 					search: 'Search...',
 					unitList: 'Units',
 					addNewUnit: 'Add new unit'
@@ -202,9 +202,9 @@ i18next.use(initReactI18next).init({
 					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les locaux et les stockages seront aussi supprimées, ainsi que toutes les sous-unités.'
 				},
 				unit: {
-					name: 'Nom',
+					name: 'Unité',
 					institute: 'Institut',
-					school: 'Ecole',
+					school: 'Faculté',
 					search: 'Rechercher...',
 					unitList: 'Unités',
 					addNewUnit: 'Ajouter une nouvelle unité'
