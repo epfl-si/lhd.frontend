@@ -1,15 +1,16 @@
-import biological from "../../../public/pictogrammes/04_Risque_biologique.svg"
-import chemical from "../../../public/pictogrammes/34_toxique.svg"
-import compressedGas from "../../../public/pictogrammes/21_gas bottle flammable.svg"
+import biological from "../../../public/pictogrammes/Biological.svg"
+import chemical from "../../../public/pictogrammes/Chemical.svg"
+import compressedGas from "../../../public/pictogrammes/CompressedGas.svg"
 import cryogenics from "../../../public/pictogrammes/51_liquide_cryogenic.svg"
-import electrical from "../../../public/pictogrammes/31_danger electrique.svg"
-import eMRadiation from "../../../public/pictogrammes/52_radiation non ionisantes.svg"
-import ionisingRadiation from "../../../public/pictogrammes/02_radiation_ionisante.svg"
-import laser from "../../../public/pictogrammes/03_ rayonnement_laser.svg"
-import staticMagneticField from "../../../public/pictogrammes/06_champ magnetique.svg"
-import nanoparticles from "../../../public/pictogrammes/05_Risque_Nano.svg"
-import noise from "../../../public/pictogrammes/54_bruit.svg"
-import temperature from "../../../public/pictogrammes/53_basse temperature.svg"
+import electrical from "../../../public/pictogrammes/Electrical.svg"
+import eMRadiation from "../../../public/pictogrammes/TimeVaryingEMF.svg"
+import ionisingRadiation from "../../../public/pictogrammes/IonisingRadiation.svg"
+import laser from "../../../public/pictogrammes/Laser.svg"
+import staticMagneticField from "../../../public/pictogrammes/StaticMagneticField.svg"
+import nanoparticles from "../../../public/pictogrammes/Nanoparticles.svg"
+import noise from "../../../public/pictogrammes/Noise.svg"
+import temperature from "../../../public/pictogrammes/Temperature.svg"
+import incoherentLightSource from "../../../public/pictogrammes/IncoherentLightSource.svg"
 
 export function getHazardImage(hazardName: string) {
   let image;
@@ -49,6 +50,9 @@ export function getHazardImage(hazardName: string) {
       break;
     case "Temperature":
       image = temperature;
+      break;
+    case "IncoherentLightSource":
+      image = incoherentLightSource;
       break;
   }
   return image;
