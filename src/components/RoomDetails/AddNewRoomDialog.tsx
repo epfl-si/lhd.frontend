@@ -98,7 +98,8 @@ export const AddNewRoomDialog = ({
 								 onCancelClick={close}
 								 cancelLabel={t('generic.cancelButton')}
 								 okLabel={t('generic.saveButton')}
-								 title={t('room.addNewRoom')}>
+								 title={t('room.addNewRoom')}
+								 type='selection'>
 			<MultipleSelection selected={[]} objectName="NewRoom"
 												 onChangeSelection={onSelectRoom}
 												 getCardTitle={getNewRoomTitle}

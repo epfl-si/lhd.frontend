@@ -98,7 +98,8 @@ export const AddNewUnitDialog = ({
 								 onCancelClick={close}
 								 cancelLabel={t('generic.cancelButton')}
 								 okLabel={t('generic.saveButton')}
-								 title={t('unit.addNewUnit')}>
+								 title={t('unit.addNewUnit')}
+								 type='selection'>
 			<MultipleSelection selected={[]} objectName="NewUnit"
 												 onChangeSelection={onSelectUnit}
 												 getCardTitle={getNewUnitTitle}

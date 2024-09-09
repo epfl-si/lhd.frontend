@@ -14,6 +14,7 @@ interface AlertDialogProps {
 	okLabel: string;
 	cancelLabel: string;
 	openDialog: boolean;
+	type?: 'alert' | 'selection';
 }
 
 export const AlertDialog = ({
@@ -23,7 +24,8 @@ export const AlertDialog = ({
 	children,
 	okLabel,
 	cancelLabel,
-	openDialog
+	openDialog,
+	type
 }: AlertDialogProps) => {
 	const [open, setOpen] = React.useState(false);
 
@@ -41,7 +43,7 @@ export const AlertDialog = ({
 					{title}
 				</DialogTitle>
 				<DialogContent
-				style={{minWidth:'300px', minHeight: '400px'}}>
+				style={type == 'selection' ? {minWidth:'300px', minHeight: '400px'} : {}}>
 					{children}
 				</DialogContent>
 				<DialogActions>
