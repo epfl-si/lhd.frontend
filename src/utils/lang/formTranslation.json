@@ -7,12 +7,12 @@
     "Delete": "Supprimer",
     "Chemical": "",
     "Level": "",
-    "CMR substance": "aaaaaaa",
-    "Corrosive substance": "a",
-    "Explosive substance": "b",
-    "Flammable substance": "c",
-    "Oxidizing agent": "d",
-    "Toxic substance": "e",
+    "CMR substance": "",
+    "Corrosive substance": "",
+    "Explosive substance": "",
+    "Flammable substance": "",
+    "Oxidizing agent": "",
+    "Toxic substance": "",
     "Environmental hazard": "",
     "Gas": "",
     "Flammable": "",
@@ -120,6 +120,8 @@
     "Source": "",
     "Value (db(A))": "",
     "Duration (h)": "",
-    "Dose": ""
+    "Dose": "",
+    "Temperature (°C)": "",
+    "Place": ""
   }
 }
