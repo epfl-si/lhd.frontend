@@ -37,7 +37,12 @@ export const HazardTab = ({
       );
 
       if (resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string') {
-        setAvailableHazardsInDB([...resultsHazardCategory.data]);
+        const sortedHazardCategories = resultsHazardCategory.data.sort((a:hazardFormType,b: hazardFormType) =>
+          a.hazard_category.hazard_category_name ?
+            a.hazard_category.hazard_category_name.localeCompare(b.hazard_category.hazard_category_name) :
+            0
+        )
+        setAvailableHazardsInDB([...sortedHazardCategories]);
       }
 
       toggleDivVisibility();
