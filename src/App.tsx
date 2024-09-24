@@ -58,7 +58,7 @@ function App() {
 				<Alert severity="warning">
 					<b>{t('login.warning')}</b>
 				</Alert>
-				<LanguageSwitcher />
+				{/*<LanguageSwitcher />*/}
 				<DialogTitle>{t('login.title')}</DialogTitle>
 				<DialogContent>{t('login.content')}</DialogContent>
 				<DialogActions>
