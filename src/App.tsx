@@ -150,7 +150,7 @@ function App() {
 							gridGap={4}
 						>
 							<LoginButton/>
-							<LanguageSwitcher/>
+							{/*<LanguageSwitcher/>*/}
 						</Box>
 					</Avatar>
 				</Base.User>
