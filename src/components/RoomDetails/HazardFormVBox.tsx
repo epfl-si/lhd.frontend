@@ -284,10 +284,6 @@ export const HazardFormVBox = ({
                src={getHazardImage(selectedHazardCategory)}/>
           <strong style={{marginLeft: '10px'}}>{t(`hazards.`.concat(selectedHazardCategory))}</strong>
         </div>
-        <Button size="icon"
-                iconName={"#plus-circle"}
-                onClick={() => onAddHazard(true, submissionsList.current)}
-                style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
       </div>
       {otherRoom && otherRoom.hazardReferences.map(ref => {
         if (ref.hazards.room?.name) {
@@ -334,6 +330,10 @@ export const HazardFormVBox = ({
           }))}</label>}
       <hr/>
     </div>
+    <Button size="icon"
+            iconName={"#plus-circle"}
+            onClick={() => onAddHazard(true, submissionsList.current)}
+            style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
     {submissionsList.current.map(sf => <div key={sf.id + action + 'div'}>
       <HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
                   key={sf.id + action} roomList={roomList} organismList={organismList}/>
@@ -341,13 +341,16 @@ export const HazardFormVBox = ({
         <Button size="icon"
                 iconName={"#plus-circle"}
                 onClick={() => onAddHazardChild(sf.id)}
-                style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>}
-      {sf.children && sf.children.map(child => <div key={child.id + action + 'div'}>
+                style={{visibility: action == "Edit" ? "visible" : "hidden", marginLeft: '30px'}}/>}
+      {sf.children && sf.children.map(child => <div key={child.id + action + 'div'} style={{marginLeft: '30px', display: "flex", flexDirection: "row"}}>
+        <Button size="icon"
+                iconName={"#corner-down-right"}
+                style={{marginRight: '5px'}}/>
           <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
                       key={child.id + action} roomList={roomList} organismList={organismList}/>
         </div>
       )}
-        <hr />
+        <hr style={{height: '3px', backgroundColor: '#FFCECE'}}/>
       </div>
     )}
     <div style={{marginTop: '50px', visibility: action != "Read" ? "visible" : "hidden"}}>
