@@ -95,9 +95,9 @@ export const HazardFormVBox = ({
     submissionsList.current = submissions;
     const map: {[key: string]: boolean} = {};
     submissions.forEach(s => {
-      map[s.id] = getValidationFromMapItem(s.id, id, isValid, JSON.stringify(s));
+      map[s.id] = s.submission.data.status == 'Deleted' || getValidationFromMapItem(s.id, id, isValid, JSON.stringify(s));
       s.children?.forEach(child => {
-        map[child.id] = getValidationFromMapItem(child.id, id, isValid, JSON.stringify(child));
+        map[child.id] = child.submission.data.status == 'Deleted' || getValidationFromMapItem(child.id, id, isValid, JSON.stringify(child));
       })
     });
     formsMapValidation.current = map;
@@ -345,7 +345,7 @@ export const HazardFormVBox = ({
       {sf.children && sf.children.map(child => <div key={child.id + action + 'div'} style={{marginLeft: '30px', display: "flex", flexDirection: "row"}}>
         <Button size="icon"
                 iconName={"#corner-down-right"}
-                style={{marginRight: '5px'}}/>
+                style={{marginRight: '5px', zIndex: '10'}}/>
           <HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
                       key={child.id + action} roomList={roomList} organismList={organismList}/>
         </div>
