@@ -9,7 +9,8 @@ export function TableToolbar() {
 	return (
 		<GridToolbarContainer>
 			<GridToolbarColumnsButton />
-			{/*<GridToolbarDensitySelector />*/}
+			{/*<GridToolbarDensitySelector />
+			<GridToolbarFilterButton />*/}
 			<GridToolbarExport />
 		</GridToolbarContainer>
 	);
