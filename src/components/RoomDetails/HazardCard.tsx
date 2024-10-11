@@ -29,7 +29,8 @@ export const HazardCard = ({
   }: HazardCardProps) => {
   const { t } = useTranslation();
   const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
-  const categoriesWithAdditionalInfo = room.hazardAdditionalInfo.map(h => h.hazard_category.hazard_category_name);
+  const categoriesWithAdditionalInfo = room.hazardAdditionalInfo?.map(h => h.hazard_category?.hazard_category_name);
+  const hazardInfo = room.hazardAdditionalInfo?.filter(h => h.hazard_category?.hazard_category_name == hazardName)[0] || {};
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [actionButton, setActionButton] = useState<string>('Read');
 
@@ -54,6 +55,10 @@ export const HazardCard = ({
     }
   }
 
+  function checkStringValue(value: string | undefined) {
+    return (value && value != '') ? value : null;
+  }
+
   return <FormCard key={hazardName.concat("_key")} keyValue={hazardName.concat("_key")}>
     <div style={{backgroundColor: `${backgroundColor}`}} className="displayFlexRow">
       <div className="displayFlexRow">
@@ -62,11 +67,10 @@ export const HazardCard = ({
         <strong className="textCard" style={{marginRight: '15px', color: listSavedCategories.includes(hazardName) ? "black" : "gray"}}>
           {t(`hazards.`.concat(hazardName))}
         </strong>
-        {categoriesWithAdditionalInfo.includes(hazardName) ?
+        {(categoriesWithAdditionalInfo && categoriesWithAdditionalInfo.includes(hazardName) && (checkStringValue(hazardInfo.comment) || checkStringValue(hazardInfo.filePath))) ?
           <Button size="icon"
                   iconName={"#twitch"}
-                  title={room.hazardAdditionalInfo?.filter(h => h.hazard_category?.hazard_category_name == hazardName)
-                    .map(h => h.comment?.concat(h.filePath && h.filePath != '' ? (" - " + h.filePath.split('/').pop()) : ''))[0]}
+                  title={hazardInfo.comment?.concat(hazardInfo.filePath && hazardInfo.filePath != '' ? (" - " + hazardInfo.filePath.split('/').pop()) : '')}
                   onClick={() => {openAlertDialog('Edit', isDirtyState);}}/> : <></>
         }
       </div>
