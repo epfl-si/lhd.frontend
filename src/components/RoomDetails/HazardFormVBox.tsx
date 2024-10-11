@@ -278,24 +278,33 @@ export const HazardFormVBox = ({
 
   return <div style={{display: 'flex', flexDirection: 'column'}}>
     <div style={{display: 'flex', flexDirection: 'column'}}>
-      <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
-        <div style={{display: 'flex', flexDirection: 'row', marginBottom: '20px'}}>
-          <img style={{margin: '5px', width: '30px', height: '30px'}}
-               src={getHazardImage(selectedHazardCategory)}/>
-          <strong style={{marginLeft: '10px'}}>{t(`hazards.`.concat(selectedHazardCategory))}</strong>
-        </div>
+      <div style={{display: 'flex', flexDirection: 'row'}}>
+        <img style={{margin: '5px', width: '30px', height: '30px'}}
+             src={getHazardImage(selectedHazardCategory)}/>
+        <strong className="hazardTitle">{t(`hazards.`.concat(selectedHazardCategory))}</strong>
+        {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label
+          style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
+          className="hazardTitle">({sprintf(t(`hazards.modification_info`), hazardAdditionalInfo.modified_by,
+          (new Date(hazardAdditionalInfo.modified_on)).toLocaleString('fr-CH', {
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false
+          }))})</label>}
       </div>
       {otherRoom && otherRoom.hazardReferences.map(ref => {
-        if (ref.hazards.room?.name) {
+        if ( ref.hazards.room?.name ) {
           const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
           const url = `/roomdetails?room=${encodeURIComponent(ref.hazards.room?.name)}`;
           return <div>
-              <label style={{fontSize: "small"}}>
-                {submission != null ? (submission.data.line + 'mT ' + submission.data.position) : ''}
-                {t(`hazards.otherRooms`)}
-                <a href={url}>{ref.hazards.room?.name}</a>
-              </label>
-            </div>
+            <label style={{fontSize: "small"}}>
+              {submission != null ? (submission.data.line + 'mT ' + submission.data.position) : ''}
+              {t(`hazards.otherRooms`)}
+              <a href={url}>{ref.hazards.room?.name}</a>
+            </label>
+          </div>
         } else {
           return <></>
         }
@@ -310,24 +319,13 @@ export const HazardFormVBox = ({
         isReadonly={action == 'Read'}
       />
       <div>
-        <input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf' key={'newFile' + selectedHazardCategory}/>
+        <input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'
+               key={'newFile' + selectedHazardCategory}/>
       </div>
       {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
-        <a  style={{fontSize: 'small'}} onClick={handleClickFileLink} href={hazardAdditionalInfo.filePath}>
+        <a style={{fontSize: 'small'}} onClick={handleClickFileLink} href={hazardAdditionalInfo.filePath}>
           {hazardAdditionalInfo.filePath.split('/').pop()}
         </a>}
-      {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label style={{
-        fontStyle: "italic",
-        fontSize: "small"
-      }}>{sprintf(t(`hazards.modification_info`), hazardAdditionalInfo.modified_by,
-          (new Date(hazardAdditionalInfo.modified_on)).toLocaleString('fr-CH', {
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: false
-          }))}</label>}
       <hr/>
     </div>
     <Button size="icon"
