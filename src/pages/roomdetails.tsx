@@ -7,14 +7,12 @@ import {roomDetailsType} from '../utils/ressources/types';
 import {Tabs} from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
 import '../../css/styles.scss'
 import "epfl-elements-react/src/stories/molecules/formCard.css";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {useTranslation} from "react-i18next";
 import "formiojs/dist/formio.full.min.css";
 import {HazardTab} from "../components/RoomDetails/HazardTab";
 import {DetailsTab} from "../components/RoomDetails/DetailsTab";
 import {BackButton} from "../components/global/BackButton";
 import {useHistory} from "react-router-dom";
-import {getHazardImage} from "../components/RoomDetails/HazardProperties";
 
 export default function RoomDetails() {
 	const { t } = useTranslation();
