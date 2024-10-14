@@ -75,7 +75,8 @@ export const HazardForm = ({
 		handleRender();
 	}, [handleRender]);
 
-	return <Form
+	return <div style={{ width: '100%' }}>
+		<Form
 		onChange={handleChange}
 		onFocus={handleFocus}
 		onRender={handleRender}
@@ -83,4 +84,5 @@ export const HazardForm = ({
 		key={submission.id + action}
 		submission={submission.submission}
 		form={submission.form}/>
+	</div>
 };

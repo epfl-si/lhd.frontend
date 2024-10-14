@@ -25,7 +25,6 @@ export const HazardTab = ({
   const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
   const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
-  const [isDirtyState, setIsDirtyState] = useState<boolean>(false);
   const roomList = useRef<string[]>([]);
   const organismList = useRef<object[]>([]);
 
@@ -95,7 +94,6 @@ export const HazardTab = ({
   function onEditHazard(hazard: string) {
     onChangeHazard(hazard);
     onSaveRoom();
-    setIsDirtyState(false);
     setAction('Edit');
   }
 
@@ -122,9 +120,7 @@ export const HazardTab = ({
                     room={room}
                     onOpen={onReadHazard}
                     onEdit={onEditHazard}
-                    onAdd={onAddHazard}
-                    isDirtyState={isDirtyState}
-                    setDirtyState={setIsDirtyState}/>
+                    onAdd={onAddHazard}/>
       )}
     </div>
     <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
@@ -139,9 +135,9 @@ export const HazardTab = ({
       <HazardFormVBox room={room}
                       action={action}
                       onChangeAction={onEditHazard}
+                      onReadAction={onReadHazard}
                       selectedHazardCategory={selectedHazardCategory}
                       lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
-                      setDirtyState={setIsDirtyState}
                       organismList={organismList.current}
                       roomList={roomList.current}/>
     </div>

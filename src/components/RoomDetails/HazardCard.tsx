@@ -10,48 +10,35 @@ interface HazardCardProps {
   room: roomDetailsType;
   hazardName: string;
   backgroundColor: string;
-  isDirtyState : boolean;
   onOpen?: (hazardName: string) => void;
   onEdit?: (hazardName: string) => void;
   onAdd?: (hazardName: string) => void;
-  setDirtyState: (modified: boolean) => void;
 }
 
 export const HazardCard = ({
   room,
   hazardName,
   backgroundColor,
-  isDirtyState,
   onOpen,
   onEdit,
   onAdd,
-  setDirtyState
   }: HazardCardProps) => {
   const { t } = useTranslation();
   const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
   const categoriesWithAdditionalInfo = room.hazardAdditionalInfo?.map(h => h.hazard_category?.hazard_category_name);
   const hazardInfo = room.hazardAdditionalInfo?.filter(h => h.hazard_category?.hazard_category_name == hazardName)[0] || {};
-  const [openDialog, setOpenDialog] = useState<boolean>(false);
-  const [actionButton, setActionButton] = useState<string>('Read');
 
-  function openAlertDialog (action: string, openDialog: boolean) {
-    setActionButton(action);
-    if (openDialog) {
-      setOpenDialog(true);
-    } else {
-      setDirtyState(false);
-      switch (action) {
-        case 'Read' :
-          if ( onOpen ) onOpen(hazardName);
-          break;
-        case 'Edit' :
-          if ( onEdit ) onEdit(hazardName);
-          break;
-        case 'Add' :
-          if ( onAdd ) onAdd(hazardName);
-          break;
-      }
-      setOpenDialog(false)
+  function openAlertDialog (action: string) {
+    switch (action) {
+      case 'Read' :
+        if ( onOpen ) onOpen(hazardName);
+        break;
+      case 'Edit' :
+        if ( onEdit ) onEdit(hazardName);
+        break;
+      case 'Add' :
+        if ( onAdd ) onAdd(hazardName);
+        break;
     }
   }
 
@@ -71,7 +58,7 @@ export const HazardCard = ({
           <Button size="icon"
                   iconName={"#twitch"}
                   title={hazardInfo.comment?.concat(hazardInfo.filePath && hazardInfo.filePath != '' ? (" - " + hazardInfo.filePath.split('/').pop()) : '')}
-                  onClick={() => {openAlertDialog('Edit', isDirtyState);}}/> : <></>
+                  onClick={() => {openAlertDialog('Edit');}}/> : <></>
         }
       </div>
       <div className="displayFlexRow" style={{alignItems: 'center'}}>
@@ -79,26 +66,18 @@ export const HazardCard = ({
           <>
             <Button size="icon"
                     iconName={"#edit-3"}
-                    onClick={() => {openAlertDialog('Edit', isDirtyState);}}/>
+                    onClick={() => {openAlertDialog('Edit');}}/>
             <Button size="icon"
                     iconName={"#eye"}
-                    onClick={() => {openAlertDialog('Read', isDirtyState);}}
+                    onClick={() => {openAlertDialog('Read');}}
                     style={{marginLeft: '10px'}}/>
           </> :
           <Button size="icon"
                   iconName={"#plus-circle"}
-                  onClick={() => {openAlertDialog('Add', isDirtyState);}}
+                  onClick={() => {openAlertDialog('Add');}}
                   style={{marginLeft: '10px'}}/>
         }
       </div>
-      <AlertDialog openDialog={openDialog}
-                 onOkClick={() => openAlertDialog(actionButton, false)}
-                 onCancelClick={() => setOpenDialog(false)}
-                 cancelLabel={t('generic.cancelButton')}
-                 okLabel={t('generic.continueButton')}
-                 title={t('hazard_details.unsavedChangesMessageTitle')}>
-        {t('hazard_details.unsavedChangesMessageDescription')}
-      </AlertDialog>
     </div>
   </FormCard>
 };

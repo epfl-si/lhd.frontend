@@ -9,12 +9,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 interface AlertDialogProps {
 	onOkClick?: () => void;
 	onCancelClick?: () => void;
-	title: string;
+	title?: string;
 	children?: React.ReactNode;
 	okLabel: string;
 	cancelLabel: string;
 	openDialog: boolean;
 	type?: 'alert' | 'selection';
+	isOkDisabled?: boolean;
 }
 
 export const AlertDialog = ({
@@ -25,7 +26,8 @@ export const AlertDialog = ({
 	okLabel,
 	cancelLabel,
 	openDialog,
-	type
+	type,
+	isOkDisabled
 }: AlertDialogProps) => {
 	const [open, setOpen] = React.useState(false);
 
@@ -38,17 +40,21 @@ export const AlertDialog = ({
 				open={open}
 				onClose={onCancelClick}
 				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description">
-				<DialogTitle id="alert-dialog-title">
+				aria-describedby="alert-dialog-description"
+				fullWidth={true}
+				maxWidth={"lg"}
+			>
+				{title && <DialogTitle id="alert-dialog-title">
 					{title}
-				</DialogTitle>
+				</DialogTitle>}
 				<DialogContent
 				style={type == 'selection' ? {minWidth:'300px', minHeight: '400px'} : {}}>
 					{children}
 				</DialogContent>
 				<DialogActions>
-				<Button onClick={onCancelClick}>{cancelLabel}</Button>
-					<Button onClick={onOkClick} autoFocus>
+					<Button onClick={onCancelClick}>{cancelLabel}</Button>
+					<Button onClick={onOkClick}
+									disabled={isOkDisabled || false} autoFocus>
 						{okLabel}
 					</Button>
 				</DialogActions>
