@@ -5,9 +5,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
 import {HazardEditForm} from "./HazardEditForm";
 import {HazardTitle} from "./HazardTitle";
-import TableContainer from '@material-ui/core/TableContainer';
-import {Paper, Table, TableBody, TableCell, tableCellClasses, TableHead, TableRow} from "@mui/material";
-import {styled} from "@mui/joy";
+import {HazardList} from "./HazardList";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -77,35 +75,6 @@ export const HazardFormVBox = ({
     return subForm;
   }
 
-  const getValueFromSubmission = (item: any): any => {
-    if (typeof item === 'object' && item !== null) {
-      const entries = Object.entries(item);
-      if (entries.length > 0) {
-        const [dynamicKey, value] = entries[0];
-        return getValueFromSubmission(value);
-      }
-    } else {
-      return item;
-    }
-  }
-
-  const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: '#FFCECE',
-      color: theme.palette.common.black,
-      fontSize: "small",
-      fontWeight: "bold"
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: "small",
-    },
-  }));
-
-  function splitCamelCase(str: string) {
-    const label = str.replace(/([a-z])([A-Z])/g, '$1 $2') // Insert a space between lowercase and uppercase letters
-    return label.charAt(0).toUpperCase() + label.slice(1);
-  }
-
   return <div style={{display: 'flex', flexDirection: 'column'}}>
     <HazardTitle hazardAdditionalInfo={hazardAdditionalInfo}
                  selectedHazardCategory={selectedHazardCategory}
@@ -114,31 +83,7 @@ export const HazardFormVBox = ({
                  isReadonly={true}
     />
 
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            {fields.current.map((field) => (
-              <StyledTableCell>{splitCamelCase(field)}</StyledTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {submissionsList.map((submission) => (
-            <TableRow
-              key={submission.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              {fields.current.map((field) => (
-                <StyledTableCell component="th" scope="row">
-                  {getValueFromSubmission(submission.submission.data[field])}
-                </StyledTableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <HazardList fields={fields.current} submissionsList={submissionsList} />
 
     <HazardEditForm room={room}
                     selectedHazardCategory={selectedHazardCategory}
