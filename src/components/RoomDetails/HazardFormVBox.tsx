@@ -34,16 +34,26 @@ export const HazardFormVBox = ({
   const hazardAdditionalInfo = room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory);
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
   const fields = useRef<string[]>([]);
+  const childFields = useRef<string[]>([]);
 
   useEffect(() => {
     const forms = readOrEditHazard();
     setSubmissionList(forms);
     fields.current = Object.keys(forms.length>0 ? forms[0].submission.data : []).filter(key => key != 'status' && key != "delete");
+    findChildFields(forms);
     if(selectedHazardCategory == 'StaticMagneticField') {
       loadOtherRoomsForStaticMagneticField();
     }
   }, [oidc.accessToken, action, selectedHazardCategory, room]);
 
+  const findChildFields = (forms: submissionForm[]) => {
+    const formsWithChildren = forms.filter(f => f.children && f.children.length>0);
+    if (formsWithChildren.length > 0 && formsWithChildren[0].children && formsWithChildren[0].children.length > 0) {
+      childFields.current = Object.keys(formsWithChildren[0].children[0].submission.data).filter(key => key != 'status' && key != "delete");
+    } else {
+      childFields.current = [];
+    }
+  }
   const loadOtherRoomsForStaticMagneticField = async () => {
     const results = await fetchOtherRoomsForStaticMagneticField(
       env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -83,7 +93,9 @@ export const HazardFormVBox = ({
                  isReadonly={true}
     />
 
-    <HazardList fields={fields.current} submissionsList={submissionsList} />
+    <HazardList fields={fields.current}
+                childFields={childFields.current}
+                submissionsList={submissionsList} />
 
     <HazardEditForm room={room}
                     selectedHazardCategory={selectedHazardCategory}

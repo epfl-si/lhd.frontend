@@ -13,23 +13,30 @@ import {styled} from "@mui/joy";
 interface HazardListProps {
   fields: string[];
   submissionsList: submissionForm[];
+  childFields: string[];
 }
 
 export const HazardList = ({
   fields,
-  submissionsList
+  submissionsList,
+  childFields
   }: HazardListProps) => {
 
-  const getValueFromSubmission = (item: any): any => {
+  const getValueFromSubmission = (item: any): string => {
+    const values: any[] = [];
     if (typeof item === 'object' && item !== null) {
-      const entries = Object.entries(item);
-      if (entries.length > 0) {
-        const [dynamicKey, value] = entries[0];
-        return getValueFromSubmission(value);
+      const keys = Object.keys(item);
+      if (keys.indexOf("organism") > -1 ) {
+        values.push(getValueFromSubmission(item["organism"]));
+      } else {
+        keys.forEach(k => {
+          values.push(getValueFromSubmission(item[k]));
+        })
       }
     } else {
-      return item;
+      values.push(item);
     }
+    return values.join(", ");
   }
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -44,13 +51,26 @@ export const HazardList = ({
     },
   }));
 
+  const StyledTableCellForChild = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: '#fafafa',
+      color: theme.palette.common.black,
+      fontSize: "small",
+      fontWeight: "bold"
+    },
+    [`&.${tableCellClasses.body}`]: {
+      backgroundColor: '#fafafa',
+      fontSize: "small",
+    },
+  }));
+
   function splitCamelCase(str: string) {
     const label = str.replace(/([a-z])([A-Z])/g, '$1 $2') // Insert a space between lowercase and uppercase letters
     return label.charAt(0).toUpperCase() + label.slice(1);
   }
 
   return <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+    <Table size="small" aria-label="a dense table">
       <TableHead>
         <TableRow>
           {fields.map((field) => (
@@ -60,16 +80,51 @@ export const HazardList = ({
       </TableHead>
       <TableBody>
         {submissionsList.map((submission) => (
-          <TableRow
-            key={submission.id}
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-          >
-            {fields.map((field) => (
-              <StyledTableCell component="th" scope="row">
-                {getValueFromSubmission(submission.submission.data[field])}
+          <>
+            <TableRow
+              key={submission.id}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              {fields.map((field) => {
+                const label = getValueFromSubmission(submission.submission.data[field]);
+                return <StyledTableCell component="th" scope="row">
+                  {label}
+                </StyledTableCell>
+              })}
+            </TableRow>
+            {submission.children && submission.children.length > 0 && <TableRow>
+              <StyledTableCell colSpan={fields.length}>
+                <TableContainer component={Paper}>
+                  <Table size="small" aria-label="a dense table">
+                    <TableHead>
+                      <TableRow>
+                        {childFields.map((childField) => (
+                          <StyledTableCellForChild>{splitCamelCase(childField)}</StyledTableCellForChild>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {submission.children?.map((submissionChild) => (
+                        <>
+                          <TableRow
+                            key={submissionChild.id}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                          >
+                            {childFields.map((childField) => {
+                              const label = getValueFromSubmission(submissionChild.submission.data[childField]);
+                              return <StyledTableCellForChild component="th" scope="row">
+                                {label}
+                              </StyledTableCellForChild>
+                            })}
+                          </TableRow>
+                        </>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
               </StyledTableCell>
-            ))}
-          </TableRow>
+            </TableRow>}
+          </>
         ))}
       </TableBody>
     </Table>
