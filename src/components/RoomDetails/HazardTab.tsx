@@ -24,9 +24,10 @@ export const HazardTab = ({
   const [selectedHazardCategory, setSelectedHazardCategory] = useState<string>('');
   const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
-  const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+  const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name).filter(uniqueFilter);
   const roomList = useRef<string[]>([]);
   const organismList = useRef<object[]>([]);
+  const [isNewHazardListVisible, setNewHazardListVisible] = useState(false);
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -51,6 +52,10 @@ export const HazardTab = ({
     fetchRoomList();
     fetchOrganismList();
   }, [oidc.accessToken]);
+
+  function uniqueFilter(value: string, index: number, self: string[]) {
+    return self.indexOf(value) === index;
+  }
 
   const fetchRoomList = async () => {
     const results = await fetchRoomsForDropDownComponent(
@@ -111,27 +116,54 @@ export const HazardTab = ({
     setAvailableHazardsInDB([...newHazardArray]);
   }
 
+  const handleClickForNewHazardVisibility = () => {
+    setNewHazardListVisible(!isNewHazardListVisible);
+  };
+
   return <div style={{display: 'flex', flexDirection: 'row'}}>
     <div className="roomHazardCardsDiv" style={{display: (isLittleScreen && selectedHazardCategory != '') ? 'none' : 'flex'}}>
-      {availableHazardsInDB.map(h =>
-        <HazardCard hazardName={h.hazard_category.hazard_category_name}
-                    backgroundColor={`${h.isSelected ? '#FFCECE' : ''}`}
-                    key={h.hazard_category.hazard_category_name}
-                    room={room}
-                    onOpen={onReadHazard}
-                    onEdit={onEditHazard}
-                    onAdd={onAddHazard}/>
-      )}
+      <div style={{flexDirection: 'column'}}>
+        {availableHazardsInDB.map(h => {
+          return listSavedCategories.includes(h.hazard_category.hazard_category_name) ?
+            <HazardCard hazardName={h.hazard_category.hazard_category_name}
+                        backgroundColor={`${h.isSelected ? '#FFCECE' : ''}`}
+                        key={h.hazard_category.hazard_category_name}
+                        room={room}
+                        onOpen={onReadHazard}
+                        onEdit={onEditHazard}
+                        listSavedCategories={listSavedCategories}/> :
+            <></>
+        })}
+      </div>
+      <div>
+        <Button size="icon"
+                iconName={"#plus-circle"}
+                onClick={handleClickForNewHazardVisibility}
+                style={{visibility: isNewHazardListVisible ? 'hidden' : 'visible'}}        />
+        {isNewHazardListVisible &&
+          <div style={{flexDirection: 'column'}}>
+          {availableHazardsInDB.map(h => {
+            return !listSavedCategories.includes(h.hazard_category.hazard_category_name) ?
+              <HazardCard hazardName={h.hazard_category.hazard_category_name}
+                          backgroundColor={`${h.isSelected ? '#FFCECE' : ''}`}
+                          key={h.hazard_category.hazard_category_name}
+                          room={room}
+                          onAdd={onAddHazard}
+                          listSavedCategories={listSavedCategories}/> :
+              <></>
+          })}
+        </div>}
+      </div>
     </div>
     <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
       {isLittleScreen && listSavedCategories.includes(selectedHazardCategory) ?
         <div style={{display: 'flex', flexDirection: 'row'}}>
-          <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>
+          <BackButton icon="#menu" onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>
           <Button size="icon"
                   iconName={"#edit-3"}
                   onClick={() => onEditHazard(selectedHazardCategory)}
                   style={{marginLeft: '10px', display: action != "Edit" ? 'flex' : 'none'}}/>
-        </div> : <BackButton icon="#menu"  onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>}
+        </div> : <BackButton icon="#menu" onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>}
       <HazardFormVBox room={room}
                       action={action}
                       onChangeAction={onEditHazard}

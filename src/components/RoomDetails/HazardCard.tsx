@@ -13,6 +13,7 @@ interface HazardCardProps {
   onOpen?: (hazardName: string) => void;
   onEdit?: (hazardName: string) => void;
   onAdd?: (hazardName: string) => void;
+  listSavedCategories: string[];
 }
 
 export const HazardCard = ({
@@ -22,9 +23,9 @@ export const HazardCard = ({
   onOpen,
   onEdit,
   onAdd,
+  listSavedCategories
   }: HazardCardProps) => {
   const { t } = useTranslation();
-  const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
   const categoriesWithAdditionalInfo = room.hazardAdditionalInfo?.map(h => h.hazard_category?.hazard_category_name);
   const hazardInfo = room.hazardAdditionalInfo?.filter(h => h.hazard_category?.hazard_category_name == hazardName)[0] || {};
 
@@ -51,7 +52,7 @@ export const HazardCard = ({
       <div className="displayFlexRow">
         <img style={{margin: '5px', width: '30px', height: '30px'}}
              src={getHazardImage(hazardName)}/>
-        <strong className="textCard" style={{marginRight: '15px', color: listSavedCategories.includes(hazardName) ? "black" : "gray"}}>
+        <strong className="textCard" style={{color: listSavedCategories.includes(hazardName) ? "black" : "gray"}}>
           {t(`hazards.`.concat(hazardName))}
         </strong>
         {(categoriesWithAdditionalInfo && categoriesWithAdditionalInfo.includes(hazardName) && (checkStringValue(hazardInfo.comment) || checkStringValue(hazardInfo.filePath))) ?
