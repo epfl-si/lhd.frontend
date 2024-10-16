@@ -1,12 +1,11 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {HazardCard} from "./HazardCard";
 import {hazardFormType, roomDetailsType} from "../../utils/ressources/types";
 import {fetchHazardForms, fetchOrganism, fetchRoomsForDropDownComponent} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardFormVBox} from "./HazardFormVBox";
-import {BackButton} from "../global/BackButton";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {NewHazardChoise} from "./NewHazardChoise";
 
 interface HazardTabProps {
   room: roomDetailsType;
@@ -22,7 +21,6 @@ export const HazardTab = ({
   // Remembers the left-hand side hazard category (e.g. lasers) that the user has selected.
   // The initial value means none of them.
   const [selectedHazardCategory, setSelectedHazardCategory] = useState<string>('');
-  const [isLittleScreen, setIsLittleScreen] = useState<boolean>(false);
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
   const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name).filter(uniqueFilter);
   const roomList = useRef<string[]>([]);
@@ -45,8 +43,6 @@ export const HazardTab = ({
         setAvailableHazardsInDB([...sortedHazardCategories]);
       }
 
-      toggleDivVisibility();
-      window.addEventListener("resize", toggleDivVisibility);
     };
     loadFetch();
     fetchRoomList();
@@ -83,14 +79,6 @@ export const HazardTab = ({
     return [];
   }
 
-  function toggleDivVisibility() {
-    if (window.innerWidth <= 1024) {
-      setIsLittleScreen(true);
-    } else {
-      setIsLittleScreen(false);
-    }
-  }
-
   function onReadHazard(hazard: string) {
     onChangeHazard(hazard);
     setAction('Read');
@@ -120,58 +108,26 @@ export const HazardTab = ({
     setNewHazardListVisible(!isNewHazardListVisible);
   };
 
-  return <div style={{display: 'flex', flexDirection: 'row'}}>
-    <div className="roomHazardCardsDiv" style={{display: (isLittleScreen && selectedHazardCategory != '') ? 'none' : 'flex'}}>
-      <div style={{flexDirection: 'column'}}>
-        {availableHazardsInDB.map(h => {
-          return listSavedCategories.includes(h.hazard_category.hazard_category_name) ?
-            <HazardCard hazardName={h.hazard_category.hazard_category_name}
-                        backgroundColor={`${h.isSelected ? '#FFCECE' : ''}`}
-                        key={h.hazard_category.hazard_category_name}
-                        room={room}
-                        onOpen={onReadHazard}
-                        onEdit={onEditHazard}
-                        listSavedCategories={listSavedCategories}/> :
-            <></>
-        })}
-      </div>
-      <div>
-        <Button size="icon"
-                iconName={"#plus-circle"}
-                onClick={handleClickForNewHazardVisibility}
-                style={{visibility: isNewHazardListVisible ? 'hidden' : 'visible'}}        />
-        {isNewHazardListVisible &&
-          <div style={{flexDirection: 'column'}}>
-          {availableHazardsInDB.map(h => {
-            return !listSavedCategories.includes(h.hazard_category.hazard_category_name) ?
-              <HazardCard hazardName={h.hazard_category.hazard_category_name}
-                          backgroundColor={`${h.isSelected ? '#FFCECE' : ''}`}
-                          key={h.hazard_category.hazard_category_name}
-                          room={room}
-                          onAdd={onAddHazard}
-                          listSavedCategories={listSavedCategories}/> :
-              <></>
-          })}
-        </div>}
-      </div>
+  return <div>
+    <div>
+      <Button size="icon"
+              iconName={"#plus-circle"}
+              onClick={handleClickForNewHazardVisibility}
+              style={{visibility: isNewHazardListVisible ? 'hidden' : 'visible'}}/>
+      <NewHazardChoise
+        openDialog={isNewHazardListVisible}
+        onAddHazard={onAddHazard}
+        onCancelClick={setNewHazardListVisible}
+        availableHazardsInDB={availableHazardsInDB}
+        listSavedCategories={listSavedCategories}/>
     </div>
-    <div className="roomHazarFormDiv" style={{display: (selectedHazardCategory != '' ? 'flex' : 'none')}}>
-      {isLittleScreen && listSavedCategories.includes(selectedHazardCategory) ?
-        <div style={{display: 'flex', flexDirection: 'row'}}>
-          <BackButton icon="#menu" onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>
-          <Button size="icon"
-                  iconName={"#edit-3"}
-                  onClick={() => onEditHazard(selectedHazardCategory)}
-                  style={{marginLeft: '10px', display: action != "Edit" ? 'flex' : 'none'}}/>
-        </div> : <BackButton icon="#menu" onClickButton={() => setSelectedHazardCategory('')} alwaysPresent={false}/>}
-      <HazardFormVBox room={room}
-                      action={action}
-                      onChangeAction={onEditHazard}
-                      onReadAction={onReadHazard}
-                      selectedHazardCategory={selectedHazardCategory}
-                      lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
-                      organismList={organismList.current}
-                      roomList={roomList.current}/>
-    </div>
+    <HazardFormVBox room={room}
+                    action={action}
+                    onChangeAction={onEditHazard}
+                    onReadAction={onReadHazard}
+                    selectedHazardCategory={selectedHazardCategory}
+                    lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
+                    organismList={organismList.current}
+                    roomList={roomList.current}/>
   </div>
 };

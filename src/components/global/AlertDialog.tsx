@@ -53,10 +53,10 @@ export const AlertDialog = ({
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={onCancelClick}>{cancelLabel}</Button>
-					<Button onClick={onOkClick}
+					{onOkClick && <Button onClick={onOkClick}
 									disabled={isOkDisabled || false} autoFocus>
 						{okLabel}
-					</Button>
+					</Button>}
 				</DialogActions>
 			</Dialog>
 	);

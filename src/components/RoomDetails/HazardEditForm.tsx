@@ -31,7 +31,6 @@ interface HazardEditFormProps {
 	organismList: object[];
 	initialSubmissionsList: submissionForm[];
 	hazardAdditionalInfo: hazardAdditionalInfoType | undefined;
-	otherRoom: roomDetailsType | null;
 }
 
 export const HazardEditForm = ({
@@ -45,7 +44,6 @@ export const HazardEditForm = ({
 		 organismList,
 		 initialSubmissionsList,
 		 hazardAdditionalInfo,
-		 otherRoom,
 }: HazardEditFormProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -242,11 +240,11 @@ export const HazardEditForm = ({
 		<div style={{display: 'flex', flexDirection: 'column'}}>
 			<HazardTitle hazardAdditionalInfo={hazardAdditionalInfo}
 									 selectedHazardCategory={selectedHazardCategory}
-									 otherRoom={otherRoom}
 									 handleFileChange={handleFileChange}
 									 comment={comment}
 									 setComment={setComment}
 									 isReadonly={false}
+									 room={room}
 			/>
 			<Button size="icon"
 							iconName={"#plus-circle"}

@@ -144,6 +144,8 @@ export type submissionForm = {
 	form?: object;
 	children?: submissionForm[];
 	formName?: string;
+	room?: roomDetailsType;
+	category?: string;
 }
 
 export type hazLevelsType = {
