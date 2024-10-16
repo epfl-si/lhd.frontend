@@ -16,35 +16,145 @@ export type columnType = {
 	width: number;
 };
 
-type kindType = {
+export type kindType = {
 	name: string;
 };
 
-type occupanciesType = {
-	cosecs?: cosecsType[];
-	professors?: professorsType[];
-	unit?: unitType;
+export type hazardCategory = {
+	hazard_category_name: string;
 };
 
-type cosecsType = {
+export type lhdUnitsFromAPIType = {
 	name: string;
+	path: string;
+	unitId: string;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
-type professorsType = {
+export type lhdUnitsType = {
 	name: string;
+	unitId?: number;
+	id: string;
+	cosecs: personType[];
+	professors: personType[];
+	subUnits: lhdUnitsType[];
+	institute?: instituteType;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
-type unitType = {
+type instituteType = {
+	name?: string;
+	school?: schoolType;
+}
+
+type schoolType = {
+	name?: string;
+}
+
+export type personType = {
 	name: string;
+	surname: string;
+	sciper: number;
+	email?: string;
+	type?: string;
+	status?: 'New' | 'Deleted' | 'Default';
 };
 
 export type roomDetailsType = {
-	id: number;
+	id: string,
 	name: string;
+	building?: string;
+	sector?: string;
+	floor?: string;
 	kind?: kindType;
-	occupancies: occupanciesType[];
+	vol?: number;
+	vent?: string;
+	adminuse?: string;
+	hazards: hazardType[];
+	hazardAdditionalInfo?: hazardAdditionalInfoType[];
+	hazardReferences?: hazardReferencesType[]
+	lhd_units: lhdUnitsType[];
+	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
+	hazardsListName?: string[];
+	status?: 'New' | 'Deleted' | 'Default';
 };
+
+export type hazardReferencesType = {
+	submission: string;
+	hazards: hazardType;
+}
+
+export type hazardAdditionalInfoType = {
+	comment?: string;
+	modified_by?: string;
+	modified_on?: string;
+	hazard_category?: hazardCategory;
+	file?: string;
+	fileName?: string;
+	filePath?: string;
+}
+
+export type hazardType = {
+	id: string;
+	submission: string;
+	hazard_form_history: hazardFormHistoryType;
+	children: hazardChildType[];
+	room?: roomDetailsType;
+}
+
+export type hazardChildType = {
+	submission: string;
+	id: string;
+	hazard_form_child_history: hazardFormChildHistoryType;
+}
+
+export type hazardFormChildHistoryType = {
+	form: string;
+	version: string;
+	hazard_form_child: hazardFormChildType;
+}
+
+export type hazardFormHistoryType = {
+	form: string;
+	version: string;
+	hazard_form: hazardFormType;
+}
+
+export type hazardFormType = {
+	id: string;
+	form: string;
+	version: string;
+	hazard_category: hazardCategory;
+	isSelected?: boolean;
+	children?: hazardFormChildType[];
+}
+
+export type hazardFormChildType = {
+	id: string;
+	form: string;
+	version: string;
+	hazard_form_child_name: string;
+	category?: string;
+}
+
+export type submissionForm = {
+	id: string;
+	submission: object;
+	form?: object;
+	children?: submissionForm[];
+	formName?: string;
+	room?: roomDetailsType;
+	category?: string;
+}
+
+export type hazLevelsType = {
+	haz_type: hazType;
+}
+
+export type hazType = {
+	haz_en: string;
+}
 
 export type roomType = {
 	[key: string]: roomType | any;
