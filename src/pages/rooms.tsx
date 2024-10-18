@@ -7,14 +7,13 @@ import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {columnType, roomDetailsType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {getHazardImage} from "../components/RoomDetails/HazardProperties";
-import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {useHistory} from "react-router-dom";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
+import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
+import {useHistory} from "react-router-dom";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -29,8 +28,6 @@ export const RoomControl = ({
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<roomDetailsType[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState<string>();
-	const [page, setPage] = useState<number>();
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
@@ -42,6 +39,8 @@ export const RoomControl = ({
 	const isMediumDevice = useMediaQuery("only screen and (min-width : 769px) and (max-width : 992px)");
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
 	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
+	const [page, setPage] = useState<number>(0);
+	const [search, setSearch] = React.useState<string>('');
 
 	const columnsLarge: columnType[] = [
 			{field: "name", headerName: t('room.name'), width: 150},
@@ -125,14 +124,8 @@ export const RoomControl = ({
 	}, [search, page]);
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		if (urlParams.has('search')) {
-			setSearch(decodeURIComponent(urlParams.get('search') as string));
-		} else {
-			setSearch("");
-		}
-		setPage(0);
 		handleCurrentPage("rooms");
+		setPage(0);
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
@@ -163,13 +156,6 @@ export const RoomControl = ({
 		}
 	};
 
-	function onChangeInput(newValue: string) {
-		const val = newValue ?? '';
-		setSearch(val);
-		setPage(0);
-		history.push(`/roomcontrol?search=${encodeURIComponent(val)}`);
-	}
-
 	const handleClose = () => {
 		setOpenNotification(false);
 	};
@@ -180,15 +166,20 @@ export const RoomControl = ({
 				{t(`room.roomList`)}
 			</Typography>
 			<div className="utilsBar">
-				<DebounceInput
+				<MultipleAutocomplete
+					setPage={setPage}
+					setSearch={setSearch}
+				/>
+				{/*<DebounceInput
 					key={search}
 					input={search}
 					id={search + "'_id"}
 					onChange={onChangeInput}
 					placeholder={t(`room.search`)}
 					className="debounce-input"
-				/>
+				/>*/}
 				<Button
+					style={{minWidth: '10%', padding: '10px'}}
 					onClick={() => setOpenDialog(true)}
 					label={t(`generic.addNew`)}
 					iconName={`${featherIcons}#plus-circle`}
@@ -207,7 +198,7 @@ export const RoomControl = ({
 			<AddNewRoomDialog openDialog={openDialog} close={() => setOpenDialog(false)}
 												save={(searchVal: string) => {
 													setOpenDialog(false);
-													onChangeInput(searchVal);
+													history.push(`/roomcontrol?search=${encodeURIComponent(searchVal)}`);
 												}}/>
 			<Notifications
 				open={openNotification}
