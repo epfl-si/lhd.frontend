@@ -8,28 +8,13 @@ i18next.use(initReactI18next).init({
 		en: {
 			translation: {
 				room: {
+					search: 'Search...',
+					roomList: 'Rooms',
 					name: 'Room',
-					occupancies: {
-						cosecs: {
-							name: 'Cosec',
-						},
-						professors: {
-							name: 'Professor',
-						},
-						unit: {
-							name: 'Unit',
-							institute: {
-								name: 'Institute',
-								school: {
-									name: 'School',
-								},
-							},
-							unitId: 'Unit ID',
-						},
-					},
 					building: 'Building',
 					sector: 'Sector',
 					floor: 'Floor',
+					addNewRoom: 'Add new room',
 					kind: {
 						name: 'Designation',
 					},
@@ -42,6 +27,25 @@ i18next.use(initReactI18next).init({
 							},
 						},
 					},
+				},
+				unit_details: {
+					personPlaceholder: 'Select a person',
+					profTab: 'Prof / Resp',
+					cosecTab: 'COSECs',
+					subunitTab: 'Sub-Units',
+					title: 'Details on unit',
+					addNewUnit: 'Add a new sub-unit',
+					noSubUnits: 'No sub-unit present',
+					deleteUnitConfirmationMessageTitle: 'Are you sur to delete this unit?',
+					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles, COSECs, rooms and storages will be deleted. \nAll sub-units will be deleted too.'
+				},
+				unit: {
+					name: 'Unit',
+					institute: 'Institute',
+					school: 'Faculty',
+					search: 'Search...',
+					unitList: 'Units',
+					addNewUnit: 'Add new unit'
 				},
 				logout: 'Logout',
 				login: {
@@ -65,6 +69,21 @@ i18next.use(initReactI18next).init({
 						label: 'Search entries',
 						placeholder: 'Entries',
 					},
+				},
+				room_details: {
+					details: 'Details',
+					unitPlaceholder: 'Search a unit',
+					hazards: 'Hazards',
+					title: 'Details on room ',
+					designation: 'Designation',
+					building: 'Building',
+					sector: 'Sector',
+					floor: 'Floor',
+					attachUnit: 'Attach a unit',
+					attachUnitTitle: 'Room attached to the following units:',
+					undoDeletionUnit: 'Undo the deletion of the unit from this room',
+					deleteUnit: 'Delete this unit from the room',
+					adminuse: 'Type DIN'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -96,33 +115,78 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				generic: {
+					saveButton: 'Save',
+					deleteButton: 'Delete',
+					cancelButton: 'Cancel',
+					continueButton: 'Continue',
+					addNew: 'Add new',
+					search: 'Search',
+					comment: 'Comment'
+				},
+				datagrid: {
+					columns: 'Columns',
+					filters: 'Filters',
+					density: 'Density',
+					export: 'Export',
+					exportCSV: 'Download as CSV',
+					print: 'Print'
+				},
+				menu: {
+					rooms: 'Rooms / Hazards',
+					units: 'Units',
+					dispensations: 'Dispensations',
+					hazardFormControl: 'Hazard Form Control'
+				},
+				hazards: {
+					Biological: 'Biological',
+					Chemical: 'Chemical',
+					CompressedGas: 'Compressed Gas',
+					Cryogenics: 'Cryogenics',
+					Electrical: 'Electrical',
+					TimeVaryingEMF: 'Time Varying EMF',
+					IncoherentLightSource: 'Incoherent Light Source',
+					IonisingRadiation: 'Ionising Radiation',
+					Laser: 'Laser',
+					Nanoparticles: 'Nanoparticles',
+					Noise: 'Noise',
+					StaticMagneticField: 'Static Magnetic Field',
+					Temperature: 'Temperature',
+					modification_info: 'Modified by %s on %s',
+					otherRooms: ' due to magnet located in room '
+				},
+				hazardFormControl: {
+					title: 'Hazard Forms',
+					version: 'Version',
+					category: 'Category',
+					addNewCategory: 'Add new hazard category',
+					newHazardCategory: 'Insert the new hazard category',
+					newHazardFormChild: 'Insert the sub-form name',
+					insertNewVersion: 'Insert the hazard form version',
+					newVersionCurrentIs: 'Current version: ',
+					Create: 'Create',
+					Modify: 'Modify form of: ',
+					fillMandatoryFields: 'Some mandatory fields are empty',
+					versionError: 'New version must be more than current version',
+					childListTitle: 'Children form list',
+					hazard_form_child_name: 'Name'
+				},
+				hazard_details: {
+					unsavedChangesMessageTitle: 'Unsaved changes',
+					unsavedChangesMessageDescription: 'You have unsaved changes. Are you sure you want to continue? All unsaved changes will be lost.'
+				}
 			},
 		},
 		fr: {
 			translation: {
 				room: {
-					name: 'Salle',
-					occupancies: {
-						cosecs: {
-							name: 'Cosec',
-						},
-						professors: {
-							name: 'Professeur',
-						},
-						unit: {
-							name: 'Unité',
-							institute: {
-								name: 'Institut',
-								school: {
-									name: 'École',
-								},
-							},
-							unitId: 'ID Unité',
-						},
-					},
+					search: 'Rechercher...',
+					roomList: 'Locaux',
+					name: 'Local',
 					building: 'Bâtiment',
 					sector: 'Secteur',
 					floor: 'Étage',
+					addNewRoom: 'Ajouter un local',
 					kind: {
 						name: 'Désignation',
 					},
@@ -136,13 +200,32 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				unit_details: {
+					personPlaceholder: 'Sélectionner une personne',
+					profTab: 'Prof / Resp',
+					cosecTab: 'COSECs',
+					subunitTab: 'Sous-Unités',
+					title: 'Détails de l\'unité',
+					addNewUnit: 'Ajouter une nouvelle sous-unité',
+					noSubUnits: 'Aucune sous-unité présente',
+					deleteUnitConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette unité?',
+					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les locaux et les stockages seront aussi supprimées, ainsi que toutes les sous-unités.'
+				},
+				unit: {
+					name: 'Unité',
+					institute: 'Institut',
+					school: 'Faculté',
+					search: 'Rechercher...',
+					unitList: 'Unités',
+					addNewUnit: 'Ajouter une nouvelle unité'
+				},
 				logout: 'Déconnexion',
 				login: {
 					button: 'Connexion',
 					warning: "Attention - Vous n'êtes pas connecté !",
 					title: 'Connectez-vous pour accéder à LHD',
 					content:
-						"Vous essayez d'accéder à des données sensibles, veuillez fournir des identifiants pour confirmer votre identité.",
+						"Vous essayez d'accéder à des données sensibles, veuillez fournir vos identifiants pour confirmer votre identité.",
 				},
 				copy: {
 					params: 'Copier le lien avec les paramètres',
@@ -158,6 +241,21 @@ i18next.use(initReactI18next).init({
 						label: 'Rechercher des entrées',
 						placeholder: 'Entrées',
 					},
+				},
+				room_details: {
+					details: 'Détails',
+					unitPlaceholder: 'Chercher une unité',
+					hazards: 'Dangers',
+					title: 'Détails du local ',
+					designation: 'Désignation',
+					building: 'Bâtiment',
+					sector: 'Secteur',
+					floor: 'Étage',
+					attachUnit: 'Rattacher une unité',
+					attachUnitTitle: 'Local rattaché aux unités suivantes:',
+					undoDeletionUnit: 'Annuler la suppression de l\'unité de ce local',
+					deleteUnit: 'Supprimer cette unité de ce local',
+					adminuse: 'Type DIN'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
@@ -189,6 +287,66 @@ i18next.use(initReactI18next).init({
 						},
 					},
 				},
+				generic: {
+					saveButton: 'Enregistrer',
+					deleteButton: 'Supprimer',
+					cancelButton: 'Annuler',
+					continueButton: 'Continuer',
+					addNew: 'Ajouter',
+					search: 'Rechercher',
+					comment: 'Commentaire'
+				},
+				datagrid: {
+					columns: 'Colonnes',
+					filters: 'Filtres',
+					density: 'Densité',
+					export: 'Exporter',
+					exportCSV: 'Télécharger comme CSV',
+					print: 'Imprimer'
+				},
+				menu: {
+					rooms: 'Locaux / Dangers',
+					units: 'Unités',
+					dispensations: 'Dispensations',
+					hazardFormControl: 'Contrôle des formulaires de dangers'
+				},
+				hazards: {
+					Biological: 'Biologique',
+					Chemical: 'Chimique',
+					CompressedGas: 'Gaz compressé',
+					Cryogenics: 'Cryogénie',
+					Electrical: 'Électrique',
+					TimeVaryingEMF: 'Time Varying EMF',
+					IncoherentLightSource: 'Source Lumineuse incohérente',
+					IonisingRadiation: 'Rayonnement Ionisant',
+					Laser: 'Laser',
+					Nanoparticles: 'Nanoparticules',
+					Noise: 'Bruit',
+					StaticMagneticField: 'Champ Magnétique Statique',
+					Temperature: 'Température',
+					modification_info: 'Modifié par %s le %s',
+					otherRooms: ' dû à l\'aimant situé dans la salle '
+				},
+				hazardFormControl: {
+					title: 'Formulaires des dangers',
+					version: 'Version',
+					category: 'Catégorie',
+					addNewCategory: 'Ajouter une nouvelle catégorie de danger',
+					newHazardCategory: 'Insérer la nouvelle catégorie de danger',
+					newHazardFormChild: 'Insérer le nom du formulaire enfant',
+					insertNewVersion: 'Insérer la version du formulaire du danger',
+					newVersionCurrentIs: 'Version courante: ',
+					Create: 'Créer',
+					Modify: 'Modifier le formulaire de: ',
+					fillMandatoryFields: 'Certains champs obligatoires sont vides',
+					versionError: 'La nouvelle version doit être plus récente que la version courante',
+					childListTitle: 'Liste des formulaires enfants',
+					hazard_form_child_name: 'Nom'
+				},
+				hazard_details: {
+					unsavedChangesMessageTitle: 'Changements non enregistrés',
+					unsavedChangesMessageDescription: 'Vous avez des changements qui ne sont pas enregistrés. Êtes-vous sûr de vouloir continuer? Tous les changements non sauvegardés seront perdus.'
+				}
 			},
 		},
 	},

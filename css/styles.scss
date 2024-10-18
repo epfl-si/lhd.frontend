@@ -1,0 +1,206 @@
+@import './bootstrap.scss';
+
+.dashed-card {
+    background-color: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-color: black;
+    border-style: dashed;
+}
+
+.solid_card {
+    background-color: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    border-color: unset;
+    border-style: unset;
+}
+
+.tab-text-title {
+    font-weight: normal;
+    font-size: small;
+    display: contents;
+}
+
+.form-card-div {
+    margin-top: 10px;
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: 350px;
+}
+
+.displayFlexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.displayFlexRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.li-multiselection-divider {
+    color: darkgray;
+    background-color: lavender;
+    font-weight: bold;
+    font-size: small;
+}
+
+.deletedBackground {
+    background: #FFCECE;
+    text-decoration: line-through;
+}
+
+// Medium devices (tablets, less than 992px)
+@media (max-width: 1024px) {
+    .debounce-input {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    .roomDetailsDiv {
+        width: 100%;
+    }
+    .roomHazardCardsDiv {
+        width: 100%;
+        flex-direction: column;
+    }
+    .roomHazarFormDiv {
+        width: 100%;
+        flex-direction: column;
+    }
+    .textCard {
+        margin-left: 10px;
+        font-size: small;
+        margin-right: 15px;
+    }
+    .utilsBar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 1025px) {
+    .debounce-input {
+        margin-bottom: 10px;
+        width: 40%;
+    }
+    .roomDetailsDiv {
+        width: 30%;
+    }
+    .roomHazardCardsDiv {
+        width: 20%;
+        flex-direction: column;
+    }
+    .roomHazarFormDiv {
+        width: 80%;
+        padding: 20px;
+        flex-direction: column;
+    }
+    .textCard {
+        margin-left: 10px;
+        font-size: small;
+        margin-right: 15px;
+    }
+    .utilsBar {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+}
+
+@media (min-width: 640px) {
+    .choices__list--dropdown .choices__item--selectable, .choices__list[aria-expanded] .choices__item--selectable {
+        padding-right: 5px !important;
+        font-size: small !important;
+    }
+}
+
+.MuiDataGrid-row {
+    cursor: pointer !important;
+}
+
+.form-control, .selectize-control .selectize-input {
+    font-size: small !important;
+}
+
+.form-group label {
+    font-size: small !important;
+    font-weight: bolder !important;
+}
+
+.formio-component-htmlelement {
+    font-size: small !important;
+}
+
+.css-j204z7-MuiFormControlLabel-root .MuiFormControlLabel-label {
+    font-size: small !important;
+}
+
+.css-1qqsdnr-MuiAutocomplete-root .MuiInput-root .MuiInput-input {
+    font-size: small !important;
+}
+
+.MuiInputBase-input {
+    font-size: small !important;
+}
+
+.debounceInput {
+    font-size: small !important;
+}
+
+.MuiInputLabel-formControl {
+    font-weight: bolder !important;
+}
+
+.labelDetails {
+    font-size: small;
+    font-weight: bolder;
+    color: gray;
+}
+
+.valueDetails {
+    font-size: small;
+    margin-left: 5px;
+}
+
+
+.hazardTitle {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: small;
+}
+
+.container {
+    position: relative;
+    display: inline-block;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+}
+
+.icon {
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.form-group {
+    margin-bottom: 0rem !important;
+}
+
+button {
+    margin: 5px !important;
+}

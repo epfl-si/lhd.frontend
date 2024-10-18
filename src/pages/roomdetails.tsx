@@ -1,97 +1,78 @@
-import { Box, Button, Card, CardContent, Typography } from '@material-ui/core';
-import { Stack } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import DetailRow from '../components/RoomDetails/DetailRow';
-import DetailDrawer from '../components/RoomDetails/DetailDrawer';
-import { fetchRoomDetails } from '../utils/graphql/FetchingTools';
-import { env } from '../utils/env.js';
-import { useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import { roomDetailsType } from '../utils/ressources/types';
-import DispensationTable from '../components/RoomDetails/DispensationTable';
+import {Box, Typography} from '@material-ui/core';
+import React, {useEffect, useState} from 'react';
+import {fetchRoomDetails} from '../utils/graphql/FetchingTools';
+import {env} from '../utils/env.js';
+import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
+import {roomDetailsType} from '../utils/ressources/types';
+import {Tabs} from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
+import '../../css/styles.scss'
+import "epfl-elements-react/src/stories/molecules/formCard.css";
+import {useTranslation} from "react-i18next";
+import "formiojs/dist/formio.full.min.css";
+import {HazardTab} from "../components/RoomDetails/HazardTab";
+import {DetailsTab} from "../components/RoomDetails/DetailsTab";
+import {BackButton} from "../components/global/BackButton";
+import {useHistory} from "react-router-dom";
 
 export default function RoomDetails() {
+	const { t } = useTranslation();
+	const history = useHistory();
 	const oidc = useOpenIDConnectContext();
-	const [data, setData] = useState<roomDetailsType[]>([]);
+	const [data, setData] = useState<roomDetailsType | null>(null);
+	const [listSavedCategories, setListSavedCategories] = useState<string[]>([]);
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const loadFetch = async () => {
-			const results = await fetchRoomDetails(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				urlParams.get('room'),
-				{}
-			);
-			if (results.status === 200) {
-				if (results.data) {
-					if (typeof results.data !== 'string') {
-						setData(results.data);
-					}
-				} else {
-					console.error('Bad GraphQL results', results);
-				}
-			}
-			console.log(results);
-		};
 		loadFetch();
-	}, [oidc.accessToken]);
+	}, [oidc.accessToken, window.location.search]);
+
+	const loadFetch = async () => {
+		const urlParams = new URLSearchParams(window.location.search);
+
+		const results = await fetchRoomDetails(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			decodeURIComponent(urlParams.get('room') as string),
+			{}
+		);
+		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
+			setData(results.data[0]);
+			const listCat = results.data[0].hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+			const listCatFiltered = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
+			setListSavedCategories(listCatFiltered)
+		} else {
+			console.error('Bad GraphQL results', results);
+		}
+	}
 
 	return (
-		<Box
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
-			flexDirection="column"
-			gridGap={16}
-		>
-			<Typography variant="h3">Details on room {data[0]?.name}</Typography>
-			<Card style={{ minWidth: 350, width: '30%' }}>
-				<CardContent>
-					<Typography variant="caption">Basic information on room</Typography>
-					<Stack>
-						<DetailRow title="Designation" value={data[0]?.kind?.name} />
-						<DetailRow
-							title="Cosec"
-							value={data[0]?.occupancies[0]?.cosecs?.map(e => e.name).join(', ')}
-						/>
-						<DetailRow
-							title="Professor/Responsible"
-							value={data[0]?.occupancies[0]?.professors
-								?.map(e => e.name)
-								.join(', ')}
-						/>
-						<DetailRow title="Unit" value={data[0]?.occupancies[0]?.unit?.name} />
-						<DetailRow
-							title="Number of audits per year"
-							value={data[0]?.yearly_audits?.toString()}
-						/>
-						<Button color="secondary">Access ISIDOR</Button>
-					</Stack>
-				</CardContent>
-			</Card>
-			<Box width="100%">
-				<DetailDrawer title="Audit Reports">none</DetailDrawer>
-				<DetailDrawer title="Hazards">none</DetailDrawer>
-				<DetailDrawer title="Authorisations">none</DetailDrawer>
-				<DetailDrawer title="Dispensations">
-					{data[0]?.dispensations?.length !== 0 && (
-						<DispensationTable data={data[0]?.dispensations} />
-					)}
-				</DetailDrawer>
-				<DetailDrawer title="Cadastre">none</DetailDrawer>
-				<DetailDrawer title="Supplies interruptions">none</DetailDrawer>
-			</Box>
+		<Box>
+			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/roomcontrol")}} alwaysPresent={false}/>
+			<Typography gutterBottom>{t(`room_details.title`).concat(data?.name)}</Typography>
+			<Tabs>
+				<Tabs.Tab id="details">
+					<Tabs.Tab.Title>
+						<span className="tab-text-title">{t(`room_details.details`)}</span>
+					</Tabs.Tab.Title>
+					<Tabs.Tab.Content>
+						{data && <DetailsTab roomData={data} onSaveRoom={loadFetch}/>}
+					</Tabs.Tab.Content>
+				</Tabs.Tab>
+				<Tabs.Tab id="hazards">
+					<Tabs.Tab.Title>
+						<div className="displayFlexColumn" style={{justifyContent: 'center'}}>
+							<span className="tab-text-title">{t(`room_details.hazards`)}</span>
+							{/*<div className="displayFlexRow" style={{justifyContent: 'center'}}>
+								{listSavedCategories.map(c =>
+									<img style={{width: '20px', height: '20px', margin: '10px'}} key={`${c}_iconeKey`}
+											 src={getHazardImage(c)}/>)}
+							</div>*/}
+						</div>
+					</Tabs.Tab.Title>
+					<Tabs.Tab.Content>
+						{data && <HazardTab room={data} onSaveRoom={loadFetch}/>}
+					</Tabs.Tab.Content>
+				</Tabs.Tab>
+			</Tabs>
 		</Box>
 	);
 }
-// dispensations {
-// 	slug
-// 	versions {
-// 		subject
-// 		date_end
-// 		status
-// 		holders {
-// 			name
-// 		}
-// 	}
-// }
