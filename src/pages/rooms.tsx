@@ -198,7 +198,8 @@ export const RoomControl = ({
 			<AddNewRoomDialog openDialog={openDialog} close={() => setOpenDialog(false)}
 												save={(searchVal: string) => {
 													setOpenDialog(false);
-													history.push(`/roomcontrol?search=${encodeURIComponent(searchVal)}`);
+													setSearch(`Room=${encodeURIComponent(searchVal)}`);
+													history.push(`/roomcontrol?Room=${encodeURIComponent(searchVal)}`);
 												}}/>
 			<Notifications
 				open={openNotification}
