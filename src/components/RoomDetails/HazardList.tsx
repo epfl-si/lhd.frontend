@@ -4,6 +4,7 @@ import {Paper, Table, TableBody, TableCell, tableCellClasses, TableHead, TableRo
 import TableContainer from "@material-ui/core/TableContainer";
 import {styled} from "@mui/joy";
 import {HazardTitle} from "./HazardTitle";
+import {splitCamelCase} from "../../utils/ressources/jsonUtils";
 
 interface HazardListProps {
 	submissionsList: submissionForm[];
@@ -76,11 +77,6 @@ export const HazardList = ({
 			fontSize: "small",
 		},
 	}));
-
-	function splitCamelCase(str: string) {
-		const label = str.replace(/([a-z])([A-Z])/g, '$1 $2') // Insert a space between lowercase and uppercase letters
-		return label.charAt(0).toUpperCase() + label.slice(1);
-	}
 
 	return <div style={{display: 'flex', flexDirection: 'column'}}>
 		{Object.keys(groupedSubmissionList).sort().map((cat, index) => {

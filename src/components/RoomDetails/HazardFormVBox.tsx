@@ -3,6 +3,7 @@ import {hazardFormType, roomDetailsType, submissionForm} from "../../utils/resso
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardEditForm} from "./HazardEditForm";
 import {HazardList} from "./HazardList";
+import {readOrEditHazard} from "../../utils/ressources/jsonUtils";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
@@ -31,26 +32,9 @@ export const HazardFormVBox = ({
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
 
   useEffect(() => {
-    const forms = readOrEditHazard();
+    const forms = readOrEditHazard(room, action, currentForm, true);
     setSubmissionList(forms);
   }, [oidc.accessToken, action, selectedHazardCategory, room]);
-
-  const readOrEditHazard = (): submissionForm[] => {
-    const subForm: submissionForm[] = [];
-    room.hazards.forEach(h => {
-      const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
-      //if (category == selectedHazardCategory) {
-        const childrenList: submissionForm[] = [];
-        h.children.forEach(child => {
-          childrenList.push({id: child.id, submission: JSON.parse(child.submission),
-            form: action == 'Read' ? JSON.parse(child.hazard_form_child_history.form) : JSON.parse(child.hazard_form_child_history.hazard_form_child.form)});
-        })
-        subForm.push({id: h.id, submission: JSON.parse(h.submission), form: action == 'Read' ? JSON.parse(h.hazard_form_history.form) : currentForm,
-          children: childrenList, room: room, category: category});
-      //}
-    });
-    return subForm;
-  }
 
   return <div>
     <HazardList submissionsList={submissionsList}
