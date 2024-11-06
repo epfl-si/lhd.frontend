@@ -340,6 +340,51 @@ export const fetchRooms = async (
 	};
 };
 
+export const fetchRoomsWithHazards = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string
+): Promise<fetchRoomResultsTypeWithPagination> => {
+	const query: string = `query RoomFetch { 
+				roomsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
+					rooms {
+						id
+						name
+						building
+						sector
+						floor
+						vol
+						vent
+						kind {
+							name
+						}
+						hazards {
+							submission
+							children {
+								submission
+							}
+							hazard_form_history {
+								hazard_form {
+									hazard_category {
+										hazard_category_name
+									}
+								}
+							}
+						}
+    			}
+    			totalCount
+				},
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.roomsWithPagination,
+	};
+};
+
 export const fetchRoomsForDropDownComponent = async (
 	address: string | undefined,
 	authToken: string | undefined

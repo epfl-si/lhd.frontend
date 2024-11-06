@@ -77,6 +77,7 @@ export type roomDetailsType = {
 	haz_levels: hazLevelsType[];
 	yearly_audits?: number;
 	hazardsListName?: string[];
+	submissionList?: submissionForm[];
 	status?: 'New' | 'Deleted' | 'Default';
 };
 

@@ -1,10 +1,10 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchRooms} from "../utils/graphql/FetchingTools";
+import {fetchRooms, fetchRoomsWithHazards} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, roomDetailsType, notificationType} from "../utils/ressources/types";
+import {columnType, roomDetailsType, notificationType, submissionForm} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
@@ -14,6 +14,8 @@ import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {useHistory} from "react-router-dom";
+import {readOrEditHazard, splitCamelCase} from "../utils/ressources/jsonUtils";
+import {HazardList} from "../components/RoomDetails/HazardList";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -53,18 +55,52 @@ export const RoomControl = ({
 				}
 				return "";
 			}},
+		{field: "submissionList", headerName: t('room_details.hazards'), flex: 1,
+			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
+			),
+		}
 			/*{
-				field: "hazardsListName", headerName: t('room_details.hazards'), minWidth: 300,
-				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
-					<div className="displayFlexRow" style={{justifyContent: 'center'}}>
-						{
-							params.row.hazardsListName.map(c =>
-								<img style={{width: '30px', height: '30px', margin: '5px'}} key={`${c}_iconeKey`}
-										 src={getHazardImage(c)}/>)
-						}
-					</div>
-				),
+				field: "submissionList",
+				headerName: t('room_details.hazards'),
+				width: 800,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => {
+					return (
+						<div style={{ display: "flex", flexDirection: 'row'}}>
+							{params.row.submissionList ? params.row.submissionList.map((obj, index) => (
+								<div key={index} style={{ marginRight: '10px', marginBottom: "8px"}}>
+									{Object.entries(obj.submission.data)
+										.map(([key, value]) => {
+											if (key !== 'status' && key !== 'delete' && key !== 'comment') {
+												return (
+													<span key={key}>
+												<strong>{splitCamelCase(key)}:</strong> {value}
+														<br />
+											</span>
+												);
+											}
+											return null;
+										})
+										.filter(Boolean)}
+								</div>
+							)) : ''}
+						</div>
+					);
+				},
 			}*/
+
+		/*{
+		field: "hazardsListName", headerName: t('room_details.hazards'), minWidth: 300,
+		renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+			<div className="displayFlexRow" style={{justifyContent: 'center'}}>
+				{
+					params.row.hazardsListName.map(c =>
+						<img style={{width: '30px', height: '30px', margin: '5px'}} key={`${c}_iconeKey`}
+								 src={getHazardImage(c)}/>)
+				}
+			</div>
+		),
+	}*/
 	];
 
 	const columnsMedium: columnType[] = [
@@ -80,6 +116,11 @@ export const RoomControl = ({
 				</span>
 			),
 		},
+		{field: "submissionList", headerName: t('room_details.hazards'), flex: 1,
+			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
+			),
+		}
 		/*{
 			field: "hazardsListName", headerName: t('room_details.hazards'), minWidth: 300,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
@@ -96,7 +137,7 @@ export const RoomControl = ({
 
 	const columnsSmall: columnType[] = [
 		{
-			field: "name", headerName: t('room.name'), minWidth: 300,
+			field: "name", headerName: t('room.name'), flex: 1,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				<div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					<span>
@@ -114,6 +155,7 @@ export const RoomControl = ({
 							}
 						</div>*/}
 					</div>
+					<div>{params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>}</div>
 				</div>
 			),
 		}
@@ -131,18 +173,38 @@ export const RoomControl = ({
 	const loadFetch = async () => {
 		if (page != undefined) {
 			setLoading(true);
-			const results = await fetchRooms(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				PAGE_SIZE,
-				PAGE_SIZE * page,
-				search ?? ''
-			);
-			if ( results.status === 200 && results.data ) {
+			const hazards = search && search != null ? (search.match(/Hazard/g)) : [];
+			const numberOfSearchedHazards = hazards && hazards!=null ? hazards.length : 0;
+			let results = {};
+			if (numberOfSearchedHazards == 1) {
+				results = await fetchRoomsWithHazards(
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					PAGE_SIZE,
+					PAGE_SIZE * page,
+					search ?? ''
+				);
+			} else {
+				results = await fetchRooms(
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					PAGE_SIZE,
+					PAGE_SIZE * page,
+					search ?? ''
+				);
+			}
+
+			if ( results.status && results.status === 200 && results.data ) {
 				const roomsList: roomDetailsType[] = results.data.rooms;
 				roomsList.forEach(r => {
 					const listCat = r.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
 					r.hazardsListName = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
+					if (numberOfSearchedHazards == 1) {
+						const match = search.match(/Hazard=([^&]*)/);
+						const hazardValue = match ? match[1] : null;
+						r.submissionList = readOrEditHazard(r, 'Read', null, false)
+							.filter(h => h.category ? (h.category.toLowerCase().indexOf(hazardValue ? hazardValue.toLowerCase() : '') > -1) : true);
+					}
 				});
 				setTableData(roomsList);
 				setTotalCount(results.data.totalCount);

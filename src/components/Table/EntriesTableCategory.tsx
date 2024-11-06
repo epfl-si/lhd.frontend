@@ -5,6 +5,7 @@ import {TableToolbar} from './TableToolbar';
 import {useHistory} from 'react-router-dom';
 import {columnType, parameterType} from '../../utils/ressources/types';
 import {useTranslation} from "react-i18next";
+import {styled} from '@mui/material/styles';
 
 type EntriesTableCategoryProps = {
 	optionsList?: parameterType[];
@@ -17,6 +18,20 @@ type EntriesTableCategoryProps = {
 	totalCount?: number;
 	loadServerRows?: (newPage: number) => void;
 };
+
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+	"& .MuiDataGrid-cell": {
+		maxHeight: "none !important",
+		whiteSpace: "normal"
+	},
+	"& .MuiDataGrid-row": {
+		maxHeight: "none !important"
+	},
+	"& .MuiDataGrid-virtualScrollerContent": {
+		height: "100% !important", // Force it to take 100% of the available height
+		overflowY: 'auto'
+	},
+}));
 
 export function EntriesTableCategory({
 	optionsList,
@@ -42,7 +57,7 @@ export function EntriesTableCategory({
 		<Box width="100%" height="500px">
 			{tableData !== null ? (
 				(pageToOpen == 'room' || pageToOpen == 'unit') ?
-					<DataGrid
+					<StyledDataGrid
 						loading={loading}
 						disableSelectionOnClick={true}
 						rows={tableData}
@@ -55,6 +70,7 @@ export function EntriesTableCategory({
 							toolbarExportCSV: t('datagrid.exportCSV'),
 							toolbarExportPrint: t('datagrid.print')
 						}}
+						disableVirtualization
 						components={{
 							Toolbar: TableToolbar,
 						}}
