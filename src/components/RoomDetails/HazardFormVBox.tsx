@@ -38,7 +38,7 @@ export const HazardFormVBox = ({
 
   return <div>
     <HazardList submissionsList={submissionsList}
-                onChangeAction={onChangeAction}/>
+                onChangeAction={onChangeAction} inRoomDetails={true}/>
 
     <HazardEditForm room={room}
                     selectedHazardCategory={selectedHazardCategory}

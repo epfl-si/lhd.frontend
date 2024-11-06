@@ -9,11 +9,13 @@ import {splitCamelCase} from "../../utils/ressources/jsonUtils";
 interface HazardListProps {
 	submissionsList: submissionForm[];
 	onChangeAction?: (hazardName: string) => void;
+	inRoomDetails: boolean;
 }
 
 export const HazardList = ({
 														 submissionsList,
-														 onChangeAction
+														 onChangeAction,
+														 inRoomDetails
 													 }: HazardListProps) => {
 	const fields = useRef<string[]>([]);
 	const childFields = useRef<string[]>([]);
@@ -53,28 +55,34 @@ export const HazardList = ({
 		return values.join(", ");
 	}
 
-	const StyledTableCell = styled(TableCell)(({theme}) => ({
+	const StyledTableCell = styled(TableCell, {
+		shouldForwardProp: (prop) => prop !== 'inRoomDetails',
+	})<{ inRoomDetails: boolean }>(({ theme, inRoomDetails }) => ({
 		[`&.${tableCellClasses.head}`]: {
 			backgroundColor: 'lightgray',
 			color: theme.palette.common.black,
-			fontSize: "small",
-			fontWeight: "bold"
+			fontSize: inRoomDetails ? "small" : "x-small",
+			fontWeight: "bold",
+			padding: "1px 16px"
 		},
 		[`&.${tableCellClasses.body}`]: {
-			fontSize: "small",
+			fontSize: inRoomDetails ? "small" : "x-small"
 		},
 	}));
 
-	const StyledTableCellForChild = styled(TableCell)(({theme}) => ({
+	const StyledTableCellForChild = styled(TableCell, {
+		shouldForwardProp: (prop) => prop !== 'inRoomDetails',
+	})<{ inRoomDetails: boolean }>(({ theme, inRoomDetails }) => ({
 		[`&.${tableCellClasses.head}`]: {
 			backgroundColor: '#fafafa',
 			color: theme.palette.common.black,
-			fontSize: "small",
-			fontWeight: "bold"
+			fontSize: inRoomDetails ? "small" : "x-small",
+			fontWeight: "bold",
+			padding: "1px 16px"
 		},
 		[`&.${tableCellClasses.body}`]: {
 			backgroundColor: '#fafafa',
-			fontSize: "small",
+			fontSize: inRoomDetails ? "small" : "x-small"
 		},
 	}));
 
@@ -83,15 +91,15 @@ export const HazardList = ({
 			fields.current = Object.keys(groupedSubmissionList[cat].length > 0 ? groupedSubmissionList[cat][0].submission.data : []).filter(key => key != 'status' && key != "delete");
 			findChildFields(groupedSubmissionList[cat]);
 			return <div style={{marginTop: '10px'}}>
-				<HazardTitle selectedHazardCategory={cat}
+				{inRoomDetails && <HazardTitle selectedHazardCategory={cat}
 														isReadonly={true}
-														onChangeAction={onChangeAction}/>
-				<TableContainer component={Paper}>
+														onChangeAction={onChangeAction}/>}
+				<TableContainer component={Paper} style={{marginBottom: '5px'}}>
 					<Table size="small" aria-label="a dense table">
 						<TableHead>
 							<TableRow>
 								{fields.current.map((field) => (
-									<StyledTableCell>{splitCamelCase(field)}</StyledTableCell>
+									<StyledTableCell inRoomDetails={inRoomDetails}>{splitCamelCase(field)}</StyledTableCell>
 								))}
 							</TableRow>
 						</TableHead>
@@ -104,7 +112,7 @@ export const HazardList = ({
 									>
 										{fields.current.map((field) => {
 											const label = getValueFromSubmission(submission.submission.data[field]);
-											return <StyledTableCell component="th" scope="row">
+											return <StyledTableCell inRoomDetails={inRoomDetails} component="th" scope="row">
 												{label}
 											</StyledTableCell>
 										})}
@@ -116,7 +124,7 @@ export const HazardList = ({
 								  <TableHead>
 									  <TableRow>
                       {childFields.current.map((childField) => (
-                        <StyledTableCellForChild>{splitCamelCase(childField)}</StyledTableCellForChild>
+                        <StyledTableCellForChild inRoomDetails={inRoomDetails}>{splitCamelCase(childField)}</StyledTableCellForChild>
                       ))}
 									  </TableRow>
 								  </TableHead>
@@ -129,7 +137,7 @@ export const HazardList = ({
                         >
                           {childFields.current.map((childField) => {
                             const label = getValueFromSubmission(submissionChild.submission.data[childField]);
-                            return <StyledTableCellForChild component="th" scope="row">
+                            return <StyledTableCellForChild inRoomDetails={inRoomDetails} component="th" scope="row">
                               {label}
                             </StyledTableCellForChild>
                           })}
