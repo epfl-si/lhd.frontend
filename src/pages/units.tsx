@@ -40,15 +40,13 @@ export const UnitControl = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const columns: columnType[] = [
 		{
-			field: "unitId", headerName: '', width: 30,
+			field: "unitId", headerName: t('unit.subUnit'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
 				params.row.unitId ? <></> :
-					<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-						<use xlinkHref={`${featherIcons}#layers`}></use>
-					</svg>
+					<>✔️</>
 			),
 		},
-		{field: "name", headerName: t('unit.name'), width: 230},
+		{field: "name", headerName: t('unit.name'), width: 300},
 		{
 			field: "institute", headerName: t('unit.institute'), width: 130, valueGetter: (params) => {
 				if (params.row.institute && params.row.institute.name) {
