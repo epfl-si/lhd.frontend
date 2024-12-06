@@ -148,6 +148,19 @@
 
 .css-1qqsdnr-MuiAutocomplete-root .MuiInput-root .MuiInput-input {
     font-size: small !important;
+    padding-bottom: 8px !important;
+}
+
+.css-1q60rmi-MuiAutocomplete-endAdornment {
+    top: calc(50% - 20px) !important;
+}
+
+.choices__item.choices__item--selectable {
+    margin-bottom: 5px !important;
+}
+
+.was-validated .form-control:invalid, .was-validated .selectize-control .selectize-input:invalid, .selectize-control .was-validated .selectize-input:invalid, .form-control.is-invalid, .selectize-control .is-invalid.selectize-input {
+   background-image: none !important;
 }
 
 .MuiInputBase-input {
