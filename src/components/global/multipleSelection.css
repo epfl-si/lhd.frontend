@@ -37,7 +37,12 @@
 
 .liItem {
     cursor: pointer;
-    display: block
+    display: block;
+    margin-bottom: 5px;
+}
+
+.liItem:hover {
+    background-color: ghostwhite;
 }
 
 .spanLHD {
