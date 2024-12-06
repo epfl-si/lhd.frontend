@@ -58,6 +58,7 @@ export function EntriesTableCategory({
 			{tableData !== null ? (
 				(pageToOpen == 'room' || pageToOpen == 'unit') ?
 					<StyledDataGrid
+						style={{fontSize: 'small'}}
 						loading={loading}
 						disableSelectionOnClick={true}
 						rows={tableData}
@@ -101,6 +102,7 @@ export function EntriesTableCategory({
 						page={page}
 					/> :
 				<DataGrid
+					style={{fontSize: 'small'}}
 					loading={loading}
 					disableSelectionOnClick={true}
 					rows={tableData}

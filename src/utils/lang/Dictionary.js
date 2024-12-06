@@ -46,7 +46,9 @@ i18next.use(initReactI18next).init({
 					search: 'Search...',
 					unitList: 'Units',
 					addNewUnit: 'Add new unit',
-					subUnit: 'SubUnit'
+					subUnit: 'SubUnit',
+					cosec: 'COSECs',
+					prof: 'Prof / Resp',
 				},
 				logout: 'Logout',
 				login: {
@@ -219,7 +221,9 @@ i18next.use(initReactI18next).init({
 					search: 'Rechercher...',
 					unitList: 'Unités',
 					addNewUnit: 'Ajouter une nouvelle unité',
-					subUnit: 'SubUnit'
+					subUnit: 'SubUnit',
+					cosec: 'COSECs',
+					prof: 'Prof / Resp',
 				},
 				logout: 'Déconnexion',
 				login: {

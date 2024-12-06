@@ -2,9 +2,9 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
 import {fetchunitsFromFullTextAndPagination} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
-import {Box, Typography} from "@material-ui/core";
+import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType, notificationType} from "../utils/ressources/types";
+import {columnType, lhdUnitsType, notificationType, roomDetailsType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
@@ -37,8 +37,11 @@ export const UnitControl = ({
 		type: "info",
 		text: '',
 	});
+	const isMediumDevice = useMediaQuery("only screen and (min-width : 769px) and (max-width : 992px)");
+	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
+	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const columns: columnType[] = [
+	const columnsLarge: columnType[] = [
 		{
 			field: "unitId", headerName: t('unit.subUnit'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
@@ -60,6 +63,100 @@ export const UnitControl = ({
 				}
 				return "";
 			}},
+		{
+			field: "professors", headerName: t('unit.prof'), width: 200,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
+				return <span style={{lineHeight: '20px', fontSize: "small"}}>
+					{professors}
+				</span>
+			},
+		},
+		{
+			field: "cosecs", headerName: t('unit.cosec'), width: 200,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
+				return <span style={{lineHeight: '20px', fontSize: "small"}}>
+					{cosecs}
+				</span>
+			},
+		},
+	];
+
+	const columnsMedium: columnType[] = [
+		{
+			field: "unitId", headerName: t('unit.subUnit'), width: 100,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				params.row.unitId ? <></> :
+					<>✔️</>
+			),
+		},
+		{
+			field: "name", headerName: t('unit.name'), minWidth: 300,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				const names: string[] = [];
+				if (params.row.institute && params.row.institute.name) {
+					names.push(params.row.institute.name);
+				}
+				if (params.row.institute && params.row.institute.school && params.row.institute.school.name) {
+					names.push(params.row.institute.school.name);
+				}
+				return <span style={{lineHeight: '20px', fontSize: "small"}}>
+					<b>{params.row.name}</b>
+					<br/>
+					{names.join(', ')}
+				</span>
+			},
+		},
+		{
+			field: "cosecs", headerName: t('unit.prof') + ' - ' + t('unit.cosec'), width: 200,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
+				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
+				return <div style={{display: "flex", flexDirection:"column"}}><span style={{lineHeight: '20px', fontSize: "small"}}>
+						{professors != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.prof')} :</span>{professors}</> : ''}
+					</span>
+					<span style={{lineHeight: '20px', fontSize: "small"}}>
+					{cosecs != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.cosec')} :</span>{cosecs}</> : ''}
+				</span></div>
+			},
+		},
+	];
+
+	const columnsSmall: columnType[] = [
+		{
+			field: "unitId", headerName: t('unit.subUnit'), width: 100,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				params.row.unitId ? <></> :
+					<>✔️</>
+			),
+		},
+		{
+			field: "name", headerName: t('unit.name'), minWidth: 300,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				const names: string[] = [];
+				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
+				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
+				if (params.row.institute && params.row.institute.name) {
+					names.push(params.row.institute.name);
+				}
+				if (params.row.institute && params.row.institute.school && params.row.institute.school.name) {
+					names.push(params.row.institute.school.name);
+				}
+				return <span style={{lineHeight: '20px', fontSize: "small"}}>
+					<b>{params.row.name}</b>
+					<br/>
+					{names.join(', ')}
+					<div style={{display: "flex", flexDirection: "column"}}><span
+						style={{lineHeight: '20px', fontSize: "small"}}>
+						{professors != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.prof')} :</span>{professors}</> : ''}
+					</span>
+					<span style={{lineHeight: '20px', fontSize: "small"}}>
+					{cosecs != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.cosec')} :</span>{cosecs}</> : ''}
+				</span></div>
+				</span>
+			},
+		}
 	];
 
 	useEffect(() => {
@@ -127,7 +224,7 @@ export const UnitControl = ({
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
-				columns={columns}
+				columns={(isExtraLargeDevice || isLargeDevice) ? columnsLarge : (isMediumDevice ? columnsMedium : columnsSmall)}
 				loading={loading}
 				pageToOpen={"unit"}
 				loadServerRows={setPage}
