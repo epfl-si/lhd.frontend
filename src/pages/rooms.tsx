@@ -46,9 +46,9 @@ export const RoomControl = ({
 
 	const columnsLarge: columnType[] = [
 			{field: "name", headerName: t('room.name'), width: 150},
-			{field: "building", headerName: t('room.building'), width: 100},
-			{field: "sector", headerName: t('room.sector'), width: 100},
-			{field: "floor", headerName: t('room.floor'), width: 100},
+			{field: "building", headerName: t('room.building'), width: 100, hide: true},
+			{field: "sector", headerName: t('room.sector'), width: 100, hide: true},
+			{field: "floor", headerName: t('room.floor'), width: 100, hide: true},
 			{field: "kind", headerName: t('room.kind.name'), width: 200, valueGetter: (params) => {
 				if (params.row.kind && params.row.kind.name) {
 					return params.row.kind.name;
