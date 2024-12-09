@@ -328,6 +328,25 @@ export const fetchRooms = async (
 								}
 							}
 						}
+						lhd_units {
+							id
+							unitId
+							name
+							institute {
+								name
+								school {
+									name
+								}
+							}
+							cosecs {
+								name
+								surname
+							}
+							professors {
+								name
+								surname
+							}
+						}
     			}
     			totalCount
 				},
@@ -371,6 +390,25 @@ export const fetchRoomsWithHazards = async (
 										hazard_category_name
 									}
 								}
+							}
+						}
+						lhd_units {
+							id
+							unitId
+							name
+							institute {
+								name
+								school {
+									name
+								}
+							}
+							cosecs {
+								name
+								surname
+							}
+							professors {
+								name
+								surname
 							}
 						}
     			}

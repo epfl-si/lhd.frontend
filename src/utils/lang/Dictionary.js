@@ -27,6 +27,7 @@ i18next.use(initReactI18next).init({
 							},
 						},
 					},
+					unit: 'Unit'
 				},
 				unit_details: {
 					personPlaceholder: 'Select a person',

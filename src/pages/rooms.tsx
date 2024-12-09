@@ -4,7 +4,14 @@ import {fetchRooms, fetchRoomsWithHazards} from "../utils/graphql/FetchingTools"
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, roomDetailsType, notificationType, submissionForm} from "../utils/ressources/types";
+import {
+	columnType,
+	roomDetailsType,
+	notificationType,
+	submissionForm,
+	personType,
+	lhdUnitsType
+} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
@@ -16,6 +23,7 @@ import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {useHistory} from "react-router-dom";
 import {readOrEditHazard, splitCamelCase} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
+import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -59,35 +67,35 @@ export const RoomControl = ({
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
 			),
-		}
-			/*{
-				field: "submissionList",
-				headerName: t('room_details.hazards'),
-				width: 800,
-				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => {
-					return (
-						<div style={{ display: "flex", flexDirection: 'row'}}>
-							{params.row.submissionList ? params.row.submissionList.map((obj, index) => (
-								<div key={index} style={{ marginRight: '10px', marginBottom: "8px"}}>
-									{Object.entries(obj.submission.data)
-										.map(([key, value]) => {
-											if (key !== 'status' && key !== 'delete' && key !== 'comment') {
-												return (
-													<span key={key}>
-												<strong>{splitCamelCase(key)}:</strong> {value}
-														<br />
+		},
+		{field: "lhd_units", headerName: t('room.unit'), flex: 1,
+			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+				params.row.lhd_units ?
+					<div className="form-card-div">
+						{params.row.lhd_units.map(item => {
+								return (
+									<FormCard
+										keyValue={item.name}
+										key={item.name}
+										style={{lineHeight: 'normal'}}>
+										<div className="displayFlexColumn">
+											<span className="text-muted" style={{fontWeight: "bold", fontSize: 'small'}}>
+												{(item.institute?.school?.name ?? '').concat(' ').concat(item.institute?.name ?? '').concat(' ').concat(item.name)}
 											</span>
-												);
+											{
+												<div className="displayFlexColumn">
+													{item.cosecs && item.cosecs.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Cosec:</b> {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+													{item.professors && item.professors.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Prof:</b> {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+												</div>
 											}
-											return null;
-										})
-										.filter(Boolean)}
-								</div>
-							)) : ''}
-						</div>
-					);
-				},
-			}*/
+										</div>
+									</FormCard>
+								)
+							}
+						)}
+					</div> : <></>
+			),
+		}
 
 		/*{
 		field: "hazardsListName", headerName: t('room_details.hazards'), minWidth: 300,
@@ -110,15 +118,42 @@ export const RoomControl = ({
 				<span style={{lineHeight: '20px', fontSize: "smaller"}}>
 					<b>{params.row.name}</b>{` (${params.row.kind ? params.row.kind.name : ''})`}
 					<br/>
-					{`${(params.row.building ? params.row.building : '') + 
-					(params.row.sector ? (',' + params.row.sector) : '') + 
-					(params.row.floor ? (',' +params.row.floor) : '')}`}
+					{`${(params.row.building ? params.row.building : '') +
+					(params.row.sector ? (',' + params.row.sector) : '') +
+					(params.row.floor ? (',' + params.row.floor) : '')}`}
+					<br/>
+					{params.row.lhd_units ?
+						<div className="form-card-div">
+							{params.row.lhd_units.map(item => {
+									return (
+										<FormCard
+											keyValue={item.name}
+											key={item.name}
+											style={{lineHeight: 'normal'}}>
+											<div className="displayFlexColumn">
+											<span className="text-muted" style={{fontWeight: "bold", fontSize: 'small'}}>
+												{(item.institute?.school?.name ?? '').concat(' ').concat(item.institute?.name ?? '').concat(' ').concat(item.name)}
+											</span>
+												{
+													<div className="displayFlexColumn">
+														{item.cosecs && item.cosecs.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Cosec:</b> {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+														{item.professors && item.professors.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Prof:</b> {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+													</div>
+												}
+											</div>
+										</FormCard>
+									)
+								}
+							)}
+						</div> : <></>}
 				</span>
 			),
 		},
-		{field: "submissionList", headerName: t('room_details.hazards'), flex: 1,
+		{
+			field: "submissionList", headerName: t('room_details.hazards'), flex: 1,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
-				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
+				params.row.submissionList ?
+					<HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
 			),
 		}
 		/*{
@@ -155,6 +190,30 @@ export const RoomControl = ({
 							}
 						</div>*/}
 					</div>
+					<div>{params.row.lhd_units ?
+						<div className="form-card-div">
+							{params.row.lhd_units.map(item => {
+									return (
+										<FormCard
+											keyValue={item.name}
+											key={item.name}
+											style={{lineHeight: 'normal'}}>
+											<div className="displayFlexColumn">
+											<span className="text-muted" style={{fontWeight: "bold", fontSize: 'small'}}>
+												{(item.institute?.school?.name ?? '').concat(' ').concat(item.institute?.name ?? '').concat(' ').concat(item.name)}
+											</span>
+												{
+													<div className="displayFlexColumn">
+														{item.cosecs && item.cosecs.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Cosec:</b> {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+														{item.professors && item.professors.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Prof:</b> {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+													</div>
+												}
+											</div>
+										</FormCard>
+									)
+								}
+							)}
+						</div> : <></>}</div>
 					<div>{params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>}</div>
 				</div>
 			),
