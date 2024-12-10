@@ -51,6 +51,12 @@ type schoolType = {
 	name?: string;
 }
 
+export type reportFile = {
+	name: string;
+	path: string;
+	unitName: string;
+}
+
 export type personType = {
 	name: string;
 	surname: string;

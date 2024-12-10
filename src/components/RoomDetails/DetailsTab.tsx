@@ -4,7 +4,7 @@ import {fetchRoomTypes, fetchunitsFromFullText} from "../../utils/graphql/Fetchi
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {Autocomplete, FormControlLabel, Stack, Switch} from "@mui/material";
-import {TextField} from "@material-ui/core";
+import {TextField, useMediaQuery} from "@material-ui/core";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
@@ -13,6 +13,7 @@ import {updateRoom} from "../../utils/graphql/PostingTools";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import {useTranslation} from "react-i18next";
 import '../../../css/styles.scss'
+import {AuditReportPanel} from "../Units/AuditReportPanel";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -34,6 +35,8 @@ export const DetailsTab = ({
     text: '',
   });
   const [openNotification, setOpenNotification] = useState<boolean>(false);
+  const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
+  const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 
   useEffect(() => {
     const loadFetch = async () => {
@@ -118,78 +121,90 @@ export const DetailsTab = ({
     return [];
   };
 
-  return <Stack spacing={2} className="roomDetailsDiv">
-    <div className="displayFlexColumn">
-      <div><label className='labelDetails'>{t(`room_details.building`)}: </label><label
-        className='valueDetails'>{room.building}</label>
-      </div>
-      <div><label className='labelDetails'>{t(`room_details.sector`)}: </label><label
-        className='valueDetails'>{room.sector}</label>
-      </div>
-      <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
-        className='valueDetails'>{room.floor}</label>
-      </div>
-      <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
-        className='valueDetails'>{room.adminuse}</label>
-      </div>
-    </div>
-    <Autocomplete
-      value={room.kind?.name}
-      onChange={(event: any, newValue: string | null) => {
-        if ( newValue ) {
-          room.kind = {name: newValue};
-          setRoom({...room});
-        }
-      }}
-      id="designation"
-      key={room.kind?.name}
-      options={roomKind.flatMap(k => k.name)}
-      renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)}/>}
-    />
-    <TextField
-      id="volume"
-      label="Volume (m³)"
-      type="number"
-      InputLabelProps={{
-        shrink: true,
-      }}
-      variant="standard"
-      value={room.vol || 0}
-      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-        room.vol = parseInt(event.target.value);
-        setRoom({...room});
-      }}
-    />
-    <FormControlLabel
-      control={
-        <Switch
-          id="ventilation"
-          checked={room.vent === 'y'}
-          name="ventilation"
+  return <div style={{display: "flex", flexDirection: "row"}}>
+    <div style={{width: (isExtraLargeDevice || isLargeDevice) ? '50%' : '100%'}}>
+      <Stack spacing={2} className="roomDetailsDiv"
+             style={{width: (isExtraLargeDevice || isLargeDevice) ? '80%' : '100%'}}>
+        <div className="displayFlexColumn">
+          <div><label className='labelDetails'>{t(`room_details.building`)}: </label><label
+            className='valueDetails'>{room.building}</label>
+          </div>
+          <div><label className='labelDetails'>{t(`room_details.sector`)}: </label><label
+            className='valueDetails'>{room.sector}</label>
+          </div>
+          <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
+            className='valueDetails'>{room.floor}</label>
+          </div>
+          <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
+            className='valueDetails'>{room.adminuse}</label>
+          </div>
+        </div>
+        <Autocomplete
+          value={room.kind?.name}
+          onChange={(event: any, newValue: string | null) => {
+            if ( newValue ) {
+              room.kind = {name: newValue};
+              setRoom({...room});
+            }
+          }}
+          id="designation"
+          key={room.kind?.name}
+          options={roomKind.flatMap(k => k.name)}
+          renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)}/>}
+        />
+        <TextField
+          id="volume"
+          label="Volume (m³)"
+          type="number"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="standard"
+          value={room.vol || 0}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            room.vent = event.target.checked ? 'y' : 'n';
+            room.vol = parseInt(event.target.value);
             setRoom({...room});
-          }}/>
-      }
-      label="Ventilation"
-    />
-    <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
-    <MultipleSelection selected={savedUnits} objectName="Unit"
-                       onChangeSelection={onChangeUnits}
-                       getCardTitle={getUnitTitle}
-                       fetchData={fetchUnitsList}/>
+          }}
+        />
+        <FormControlLabel
+          control={
+            <Switch
+              id="ventilation"
+              checked={room.vent === 'y'}
+              name="ventilation"
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                room.vent = event.target.checked ? 'y' : 'n';
+                setRoom({...room});
+              }}/>
+          }
+          label="Ventilation"
+        />
+        {(!isExtraLargeDevice && !isLargeDevice) ?
+          <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}
+        <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
+        <MultipleSelection selected={savedUnits} objectName="Unit"
+                           onChangeSelection={onChangeUnits}
+                           getCardTitle={getUnitTitle}
+                           fetchData={fetchUnitsList}/>
 
-    <div style={{marginTop: '50px'}}>
-      <Button
-        onClick={() => saveRoomDetails()}
-        label="Save"
-        iconName={`${featherIcons}#save`}
-        primary/>
+        <div style={{marginTop: '50px'}}>
+          <Button
+            onClick={() => saveRoomDetails()}
+            label="Save"
+            iconName={`${featherIcons}#save`}
+            primary/>
+        </div>
+        <Notifications
+          open={openNotification}
+          notification={notificationType}
+          close={handleClose}
+        />
+      </Stack>
     </div>
-    <Notifications
-      open={openNotification}
-      notification={notificationType}
-      close={handleClose}
-    />
-  </Stack>
+      {
+        (isExtraLargeDevice || isLargeDevice) ?
+        <div style={{width: '50%'}}><AuditReportPanel lhd_units={roomData.lhd_units}/></div>
+        : <></>
+      }
+  </div>
 };

@@ -56,3 +56,13 @@ export const fetchFile = async (
 
 	return { status: response?.status, data: {} };
 }
+
+export const handleClickFileLink = async (event: any, token: string | undefined, filePath: string) => {
+	if (!event.defaultPrevented) {
+		event.preventDefault();
+		await fetchFile(
+			token,
+			filePath
+		);
+	}
+};

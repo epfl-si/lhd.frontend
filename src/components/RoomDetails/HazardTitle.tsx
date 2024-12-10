@@ -3,7 +3,7 @@ import {getHazardImage} from "./HazardProperties";
 import {useTranslation} from "react-i18next";
 import {hazardAdditionalInfoType, roomDetailsType} from "../../utils/ressources/types";
 import {sprintf} from "sprintf-js";
-import {fetchFile} from "../../utils/ressources/file";
+import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {TextArea} from "epfl-elements-react/src/stories/molecules/inputFields/TextArea.tsx";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
@@ -54,17 +54,6 @@ export const HazardTitle = ({
       console.error('Bad GraphQL results', results);
     }
   }
-
-  const handleClickFileLink = async (event: any) => {
-    if (!event.defaultPrevented) {
-      event.preventDefault();
-      debugger;
-      await fetchFile(
-        oidc.accessToken,
-        hazardAdditionalInfo!.filePath!
-      );
-    }
-  };
 
   return <div style={{marginTop: '10px'}}>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
@@ -118,7 +107,9 @@ export const HazardTitle = ({
              key={'newFile' + selectedHazardCategory}/>
     </div>}
     {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
-      <a style={{fontSize: 'small'}} onClick={handleClickFileLink} href={hazardAdditionalInfo.filePath}>
+      <a style={{fontSize: 'small'}}
+         onClick={e => handleClickFileLink(e, oidc.accessToken, hazardAdditionalInfo!.filePath!)}
+         href={hazardAdditionalInfo.filePath}>
         {hazardAdditionalInfo.filePath.split('/').pop()}
       </a>}
   </div>
