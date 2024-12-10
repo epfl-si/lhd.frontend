@@ -375,7 +375,6 @@ export const saveNewRoomsFromAPI = async (
 									id: ${u.id},
 									building: "${u.building}",
 									sector: "${u.sector}",
-									adminuse: "${u.adminuse}"
 								}`)}]) {
                 errors {
                   message

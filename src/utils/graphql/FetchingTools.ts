@@ -747,7 +747,6 @@ export const fetchRoomsFromAPI = async (
 			building
 			floor
 			sector
-			adminuse
 		}
 	}`;
 
