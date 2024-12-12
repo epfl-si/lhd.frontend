@@ -26,7 +26,7 @@ export const fetchFile = async (
 	path: string
 ): Promise<any> => {
 	const response =
-		await fetch(`${env().REACT_APP_GRAPHQL_ENDPOINT_URL}/files/`, {
+		await fetch(`${env().REACT_APP_ENDPOINT_URL}/files/`, {
 			headers: {
 				accept: '*/*',
 				'content-type': 'application/json',
