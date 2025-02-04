@@ -226,6 +226,7 @@ export const fetchUnitDetails = async (
 								responsible {
 									sciper
 								}
+								unitType
 								institute {
 									name
 									school {

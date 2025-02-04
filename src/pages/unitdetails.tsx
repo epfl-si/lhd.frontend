@@ -76,8 +76,9 @@ export default function UnitDetails() {
 		const unitName: string = unit?.name || '';
 		const instituteName: string = unit?.institute?.name ? unit.institute.name + ' ' : '';
 		const schoolName: string = unit?.institute?.school?.name ? unit.institute.school.name + ' ' : '';
+		const unitType: string = unit?.unitType || '';
 
-		return schoolName + instituteName + unitName;
+		return schoolName + instituteName + unitName + (unitType != '' ? (' (' + unitType + ')') : '');
 	}
 
 	function saveUnitDetails() {

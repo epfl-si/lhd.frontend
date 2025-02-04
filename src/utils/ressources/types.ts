@@ -44,6 +44,7 @@ export type lhdUnitsType = {
 	subUnits: lhdUnitsType[];
 	institute?: instituteType;
 	responsible?: responsible;
+	unitType: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
