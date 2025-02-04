@@ -187,7 +187,9 @@ export default function UnitDetails() {
 															 onChangeSelection={onChangeProfs}
 															 objectName="Person"
 															 getCardTitle={getPersonTitle}
-															 fetchData={fetchPeople}/>
+															 fetchData={fetchPeople}
+															 unitResponsible={data[0]?.responsible?.sciper}
+						/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 				<ResponsiveTabs.Tab key="cosec" id="cosec">

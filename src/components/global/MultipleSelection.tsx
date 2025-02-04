@@ -31,6 +31,7 @@ interface SelectionProps<Member> {
 	fetchData: (search: string) => Promise<Member[]>;
 
 	intoModal?: boolean;
+	unitResponsible?: number;
 }
 
 export const MultipleSelection = <Member extends Record<string, any>>({
@@ -39,7 +40,8 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 	onChangeSelection,
 	getCardTitle,
 	fetchData,
-	intoModal
+	intoModal,
+	unitResponsible
 }: SelectionProps<Member>) => {
 	const { t } = useTranslation();
 	const [currentlySelected, setCurrentlySelected] = React.useState<Member[]>(selected);
@@ -178,6 +180,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 							key={objectName == 'Person' ? item.sciper + "" : item.name}>
 							<div className="displayFlexColumn">
 								<small className="text-muted" style={{fontWeight: "bold"}}>
+									{unitResponsible && unitResponsible == item.sciper ? '⭐ ' : ''}
 									{getCardTitle(item)}
 								</small>
 								{

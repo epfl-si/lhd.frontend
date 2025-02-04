@@ -223,6 +223,9 @@ export const fetchUnitDetails = async (
 							id
 							unitId
 								name
+								responsible {
+									sciper
+								}
 								institute {
 									name
 									school {
@@ -725,6 +728,10 @@ export const fetchUnitsFromAPI = async (
 			name
 			path
 			unitId
+			responsibleId
+			responsibleFirstName
+			responsibleLastName
+			responsibleEmail
 		}
 	}`;
 

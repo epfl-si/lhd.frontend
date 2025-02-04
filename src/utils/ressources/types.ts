@@ -28,6 +28,10 @@ export type lhdUnitsFromAPIType = {
 	name: string;
 	path: string;
 	unitId: string;
+	responsibleId: number;
+	responsibleFirstName: string;
+	responsibleLastName: string;
+	responsibleEmail: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
@@ -39,8 +43,13 @@ export type lhdUnitsType = {
 	professors: personType[];
 	subUnits: lhdUnitsType[];
 	institute?: instituteType;
+	responsible?: responsible;
 	status?: 'New' | 'Deleted' | 'Default';
 };
+
+type responsible = {
+	sciper: number;
+}
 
 type instituteType = {
 	name?: string;

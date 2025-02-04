@@ -349,6 +349,10 @@ export const saveNewUnitsFromAPI = async (
 									status: "${u.status}",
 									unitId: ${u.unitId},
 									path: "${u.path}"
+									responsibleId: ${u.responsibleId},
+									responsibleFirstName: "${u.responsibleFirstName}",
+									responsibleLastName: "${u.responsibleLastName}",
+									responsibleEmail: "${u.responsibleEmail}",
 								}`)}]) {
                 errors {
                   message
