@@ -86,6 +86,7 @@ export type roomDetailsType = {
 	vol?: number;
 	vent?: string;
 	adminuse?: string;
+	site?: string;
 	hazards: hazardType[];
 	hazardAdditionalInfo?: hazardAdditionalInfoType[];
 	hazardReferences?: hazardReferencesType[]

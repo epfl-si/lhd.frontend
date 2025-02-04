@@ -126,6 +126,9 @@ export const DetailsTab = ({
       <Stack spacing={2} className="roomDetailsDiv"
              style={{width: (isExtraLargeDevice || isLargeDevice) ? '80%' : '100%'}}>
         <div className="displayFlexColumn">
+          <div><label className='labelDetails'>{t(`room_details.site`)}: </label><label
+            className='valueDetails'>{room.site}</label>
+          </div>
           <div><label className='labelDetails'>{t(`room_details.building`)}: </label><label
             className='valueDetails'>{room.building}</label>
           </div>

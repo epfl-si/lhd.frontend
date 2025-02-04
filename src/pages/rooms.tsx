@@ -54,6 +54,7 @@ export const RoomControl = ({
 
 	const columnsLarge: columnType[] = [
 			{field: "name", headerName: t('room.name'), width: 150},
+			{field: "site", headerName: t('room.site'), width: 100, hide: true},
 			{field: "building", headerName: t('room.building'), width: 100, hide: true},
 			{field: "sector", headerName: t('room.sector'), width: 100, hide: true},
 			{field: "floor", headerName: t('room.floor'), width: 100, hide: true},
@@ -118,7 +119,8 @@ export const RoomControl = ({
 				<span style={{lineHeight: '20px', fontSize: "smaller"}}>
 					<b>{params.row.name}</b>{` (${params.row.kind ? params.row.kind.name : ''})`}
 					<br/>
-					{`${(params.row.building ? params.row.building : '') +
+					{`${(params.row.site ? params.row.site : '') +
+					(params.row.building ? (',' + params.row.building) : '') +
 					(params.row.sector ? (',' + params.row.sector) : '') +
 					(params.row.floor ? (',' + params.row.floor) : '')}`}
 					<br/>
@@ -179,7 +181,8 @@ export const RoomControl = ({
 						<b>{params.row.name}</b>{` (${params.row.kind ? params.row.kind.name : ''})`}
 					</span>
 					<div style={{display: "flex", flexDirection: 'row'}}>
-						{`${(params.row.building ? params.row.building : '') +
+						{`${(params.row.site ? params.row.site : '') +
+						(params.row.building ? (',' + params.row.building) : '') +
 						(params.row.sector ? (',' + params.row.sector) : '') +
 						(params.row.floor ? (',' + params.row.floor) : '')}`}
 						{/*<div className="displayFlexRow" style={{justifyContent: 'center', marginLeft: '10px'}}>

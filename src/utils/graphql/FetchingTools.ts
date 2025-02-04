@@ -111,6 +111,7 @@ export const fetchRoomDetails = async (
 					vol
 					vent
 					adminuse
+					site
 					kind {
 						name
 					}
@@ -325,6 +326,7 @@ export const fetchRooms = async (
 						floor
 						vol
 						vent
+						site
 						kind {
 							name
 						}
@@ -385,6 +387,7 @@ export const fetchRoomsWithHazards = async (
 						floor
 						vol
 						vent
+						site
 						kind {
 							name
 						}
@@ -755,6 +758,7 @@ export const fetchRoomsFromAPI = async (
 			building
 			floor
 			sector
+			site
 		}
 	}`;
 

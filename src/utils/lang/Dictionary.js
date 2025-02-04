@@ -13,6 +13,7 @@ i18next.use(initReactI18next).init({
 					name: 'Room',
 					building: 'Building',
 					sector: 'Sector',
+					site: 'Site',
 					floor: 'Floor',
 					addNewRoom: 'Add new room',
 					kind: {
@@ -82,6 +83,7 @@ i18next.use(initReactI18next).init({
 					designation: 'Designation',
 					building: 'Building',
 					sector: 'Sector',
+					site: 'Site',
 					floor: 'Floor',
 					attachUnit: 'Attach a unit',
 					attachUnitTitle: 'Room attached to the following units:',
@@ -189,6 +191,7 @@ i18next.use(initReactI18next).init({
 					name: 'Local',
 					building: 'Bâtiment',
 					sector: 'Secteur',
+					site: 'Site',
 					floor: 'Étage',
 					addNewRoom: 'Ajouter un local',
 					kind: {
@@ -257,6 +260,7 @@ i18next.use(initReactI18next).init({
 					designation: 'Désignation',
 					building: 'Bâtiment',
 					sector: 'Secteur',
+					site: 'Site',
 					floor: 'Étage',
 					attachUnit: 'Rattacher une unité',
 					attachUnitTitle: 'Local rattaché aux unités suivantes:',
