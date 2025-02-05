@@ -73,6 +73,7 @@ export const HazardTab = ({
     );
     if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
       organismList.current = results.data;
+      organismList.current.push({filePath: null, organism: "Other", risk_group: 1});
     } else {
       console.error('Bad GraphQL results', results);
     }
