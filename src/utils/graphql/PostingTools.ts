@@ -187,7 +187,6 @@ export const updateRoom = async (
                id: ${room.id},
                name: "${room.name}",
                kind: "${room.kind?.name}",
-							 vol: ${room.vol},
 							 vent: "${room.vent}",
 							 units: [${room.lhd_units.map(u =>
 								`{
@@ -380,6 +379,7 @@ export const saveNewRoomsFromAPI = async (
 									building: "${u.building}",
 									sector: "${u.sector}",
 									site: "${u.site}"
+									vol: ${u.vol}
 								}`)}]) {
                 errors {
                   message

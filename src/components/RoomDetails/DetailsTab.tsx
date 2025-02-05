@@ -67,7 +67,6 @@ export const DetailsTab = ({
         haz_levels: [], hazards: [],
         name: room.name || '',
         kind: room.kind,//designation
-        vol: room.vol,//volume
         vent: room.vent,//ventilation
         lhd_units: selectedUnits
       },
@@ -141,6 +140,9 @@ export const DetailsTab = ({
           <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
             className='valueDetails'>{room.adminuse}</label>
           </div>
+          <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
+            className='valueDetails'>{room.vol}</label>
+          </div>
         </div>
         <Autocomplete
           value={room.kind?.name}
@@ -154,20 +156,6 @@ export const DetailsTab = ({
           key={room.kind?.name}
           options={roomKind.flatMap(k => k.name)}
           renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)}/>}
-        />
-        <TextField
-          id="volume"
-          label="Volume (m³)"
-          type="number"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="standard"
-          value={room.vol || 0}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            room.vol = parseInt(event.target.value);
-            setRoom({...room});
-          }}
         />
         {(!isExtraLargeDevice && !isLargeDevice) ?
           <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}

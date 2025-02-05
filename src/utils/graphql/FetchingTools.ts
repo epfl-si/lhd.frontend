@@ -759,6 +759,7 @@ export const fetchRoomsFromAPI = async (
 			floor
 			sector
 			site
+			vol
 		}
 	}`;
 
