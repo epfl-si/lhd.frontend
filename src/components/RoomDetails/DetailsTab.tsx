@@ -169,19 +169,6 @@ export const DetailsTab = ({
             setRoom({...room});
           }}
         />
-        <FormControlLabel
-          control={
-            <Switch
-              id="ventilation"
-              checked={room.vent === 'y'}
-              name="ventilation"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                room.vent = event.target.checked ? 'y' : 'n';
-                setRoom({...room});
-              }}/>
-          }
-          label="Ventilation"
-        />
         {(!isExtraLargeDevice && !isLargeDevice) ?
           <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}
         <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
