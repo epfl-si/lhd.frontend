@@ -47,12 +47,14 @@ export const fetchFile = async (
 
 	const blob = await response.blob();
 	const downloadUrl = window.URL.createObjectURL(blob);
-	const link = document.createElement('a');
+	window.open(downloadUrl, '_blank');
+	// Optional: If user wants to download it with a correct name
+	/*const link = document.createElement('a');
 	link.href = downloadUrl;
 	link.download = path.split('/').pop() || 'download';
 	document.body.appendChild(link);
 	link.click();
-	link.remove();
+	link.remove();*/
 
 	return { status: response?.status, data: {} };
 }
