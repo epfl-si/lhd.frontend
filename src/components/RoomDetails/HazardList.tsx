@@ -142,9 +142,9 @@ export const HazardList = ({
                             const label = getValueFromSubmission(submissionChild.submission.data[childField]);
                             return <StyledTableCellForChild inRoomDetails={inRoomDetails} component="th" scope="row">
                               {
-																(childField == 'linkFile') ?
+																(childField == 'fileLink') ?
 																	<a href={label}
-																		 onClick={e => handleClickFileLink(e, oidc.accessToken, label)}>File</a>
+																		 onClick={e => handleClickFileLink(e, oidc.accessToken, label)}>{label.split('/').pop()}</a>
 																	: label
 															}
                             </StyledTableCellForChild>
