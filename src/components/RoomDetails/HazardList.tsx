@@ -5,6 +5,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import {styled} from "@mui/joy";
 import {HazardTitle} from "./HazardTitle";
 import {splitCamelCase} from "../../utils/ressources/jsonUtils";
+import {handleClickFileLink} from "../../utils/ressources/file";
+import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 
 interface HazardListProps {
 	submissionsList: submissionForm[];
@@ -17,6 +19,7 @@ export const HazardList = ({
 														 onChangeAction,
 														 inRoomDetails
 													 }: HazardListProps) => {
+	const oidc = useOpenIDConnectContext();
 	const fields = useRef<string[]>([]);
 	const childFields = useRef<string[]>([]);
 	const [groupedSubmissionList, setGroupedSubmissionList] = useState<{ [category: string]: submissionForm[] }>({});
@@ -138,7 +141,12 @@ export const HazardList = ({
                           {childFields.current.map((childField) => {
                             const label = getValueFromSubmission(submissionChild.submission.data[childField]);
                             return <StyledTableCellForChild inRoomDetails={inRoomDetails} component="th" scope="row">
-                              {label}
+                              {
+																(childField == 'linkFile') ?
+																	<a href={label}
+																		 onClick={e => handleClickFileLink(e, oidc.accessToken, label)}>File</a>
+																	: label
+															}
                             </StyledTableCellForChild>
                           })}
                         </TableRow>

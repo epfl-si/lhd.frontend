@@ -2,8 +2,8 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {submissionForm} from "../../utils/ressources/types";
 import {Form} from "@formio/react";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import { fetchFile } from '../../utils/ressources/file';
-import { useTranslation } from 'react-i18next';
+import {handleClickFileLink} from '../../utils/ressources/file';
+import {useTranslation} from 'react-i18next';
 import formTraslation from '../../utils/lang/formTranslation.json';
 
 interface HazardFormProps {
@@ -47,13 +47,7 @@ export const HazardForm = ({
 	}, []);
 
 	const handleClick = async (event: any) => {
-		if (!event.defaultPrevented) {
-			event.preventDefault();
-			await fetchFile(
-				oidc.accessToken,
-				decodeURIComponent(event.target.href.substring(event.target.href.indexOf('d_bio/')))
-			);
-		}
+		handleClickFileLink(event, oidc.accessToken, decodeURIComponent(event.target.href.substring(event.target.href.indexOf('d_bio/'))))
 	};
 
 	const handleRender = useCallback(() => {
