@@ -188,6 +188,7 @@ export const updateRoom = async (
                name: "${room.name}",
                kind: "${room.kind?.name}",
 							 vent: "${room.vent}",
+							 lab_type_is_different: ${room.lab_type_is_different}
 							 units: [${room.lhd_units.map(u =>
 								`{
 									name: "${u.name}",

@@ -111,6 +111,8 @@ export const fetchRoomDetails = async (
 					vol
 					vent
 					adminuse
+					facultyuse
+					lab_type_is_different
 					site
 					kind {
 						name

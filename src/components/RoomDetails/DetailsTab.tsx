@@ -3,7 +3,7 @@ import {kindType, lhdUnitsType, notificationType, roomDetailsType} from "../../u
 import {fetchRoomTypes, fetchunitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {Autocomplete, FormControlLabel, Stack, Switch} from "@mui/material";
+import {Autocomplete, Checkbox, FormControlLabel, Stack, Switch} from "@mui/material";
 import {TextField, useMediaQuery} from "@material-ui/core";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
@@ -68,7 +68,8 @@ export const DetailsTab = ({
         name: room.name || '',
         kind: room.kind,//designation
         vent: room.vent,//ventilation
-        lhd_units: selectedUnits
+        lhd_units: selectedUnits,
+        lab_type_is_different: room.lab_type_is_different
       },
     ).then(res => {
       handleOpen(res);
@@ -140,11 +141,22 @@ export const DetailsTab = ({
           <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
             className='valueDetails'>{room.adminuse}</label>
           </div>
+          <div><label className='labelDetails'>{t(`room_details.facultyuse`)}: </label><label
+            className='valueDetails'>{room.facultyuse}</label>
+          </div>
           <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
             className='valueDetails'>{room.vol}</label>
           </div>
         </div>
+        <FormControlLabel
+          label="Is DIN sub-type different?"
+          control={<Checkbox checked={room.lab_type_is_different} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            room.lab_type_is_different = event.target.checked;
+            setRoom({...room});
+          }} />}
+        />
         <Autocomplete
+          disabled={!room.lab_type_is_different}
           value={room.kind?.name}
           onChange={(event: any, newValue: string | null) => {
             if ( newValue ) {

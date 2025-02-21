@@ -86,6 +86,8 @@ export type roomDetailsType = {
 	vol?: number;
 	vent?: string;
 	adminuse?: string;
+	facultyuse?: string;
+	lab_type_is_different?: boolean;
 	site?: string;
 	hazards: hazardType[];
 	hazardAdditionalInfo?: hazardAdditionalInfoType[];

@@ -89,7 +89,8 @@ i18next.use(initReactI18next).init({
 					attachUnitTitle: 'Room attached to the following units:',
 					undoDeletionUnit: 'Undo the deletion of the unit from this room',
 					deleteUnit: 'Delete this unit from the room',
-					adminuse: 'Type DIN',
+					adminuse: 'DIN Type',
+					facultyuse: 'DIN Sub-type',
 					volume: 'Volume (m³)'
 				},
 				fetchError: {
@@ -268,6 +269,7 @@ i18next.use(initReactI18next).init({
 					undoDeletionUnit: 'Annuler la suppression de l\'unité de ce local',
 					deleteUnit: 'Supprimer cette unité de ce local',
 					adminuse: 'Type DIN',
+					facultyuse: 'Sous-type DIN',
 					volume: 'Volume (m³)'
 				},
 				fetchError: {
