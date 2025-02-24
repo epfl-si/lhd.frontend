@@ -762,6 +762,7 @@ export const fetchRoomsFromAPI = async (
 			sector
 			site
 			vol
+			facultyuse
 		}
 	}`;
 
