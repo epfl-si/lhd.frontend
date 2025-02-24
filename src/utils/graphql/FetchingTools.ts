@@ -812,6 +812,24 @@ export const fetchReportFiles = async (
 	};
 };
 
+export const fetchDoorPlug = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	roomName: string
+): Promise<any> => {
+	const query = `query fetchDoorPlug {
+  fetchDoorPlug (roomName: "${roomName}") {
+			fileUrl
+  }
+}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data
+	};
+};
+
 export const fetchHazardFormChild = async (
 	address: string | undefined,
 	authToken: string | undefined,

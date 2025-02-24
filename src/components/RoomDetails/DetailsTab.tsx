@@ -14,6 +14,7 @@ import {notificationsVariants} from "../../utils/ressources/variants";
 import {useTranslation} from "react-i18next";
 import '../../../css/styles.scss'
 import {AuditReportPanel} from "../Units/AuditReportPanel";
+import {DoorPlug} from "./DoorPlug";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -193,7 +194,10 @@ export const DetailsTab = ({
     </div>
       {
         (isExtraLargeDevice || isLargeDevice) ?
-        <div style={{width: '50%'}}><AuditReportPanel lhd_units={roomData.lhd_units}/></div>
+        <div style={{width: '50%'}}>
+          <DoorPlug roomName={roomData.name}/>
+          <AuditReportPanel lhd_units={roomData.lhd_units}/>
+        </div>
         : <></>
       }
   </div>
