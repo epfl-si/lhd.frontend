@@ -139,39 +139,48 @@ export const DetailsTab = ({
           <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
             className='valueDetails'>{room.floor}</label>
           </div>
+          <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
+            className='valueDetails'>{room.vol}</label>
+          </div>
           <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
             className='valueDetails'>{room.adminuse}</label>
           </div>
-          <div><label className='labelDetails'>{t(`room_details.facultyuse`)}: </label><label
-            className='valueDetails'>{room.facultyuse}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
-            className='valueDetails'>{room.vol}</label>
+          <div style={{display: "flex", flexDirection: "column"}}>
+            <div style={{display: "flex", flexDirection: "row", alignItems: "baseline"}}>
+              <label className='labelDetails'>{t(`room_details.facultyuse`)}: </label>
+              <label
+                className='valueDetails'>{room.facultyuse}</label>
+              <Button
+                style={{marginLeft: '10px'}}
+                onClick={() => {
+                  room.lab_type_is_different = !room.lab_type_is_different;
+                  if ( !room.lab_type_is_different ) {
+                    room.kind = roomKind.find(k => k.name == room.facultyuse?.trim());
+                  }
+                  setRoom({...room});
+                }}
+                size="icon"
+                iconName={room.lab_type_is_different ? "#delete" : "#edit-2"}/>
+            </div>
+            <Autocomplete
+              style={{visibility: room.lab_type_is_different ? "visible" : "hidden"}}
+              value={room.kind?.name}
+              onChange={(event: any, newValue: string | null) => {
+                if ( newValue ) {
+                  room.kind = {name: newValue};
+                  setRoom({...room});
+                }
+              }}
+              id="designation"
+              key={room.kind?.name}
+              options={roomKind.flatMap(k => k.name)}
+              renderInput={(params) => <TextField {...params} />}
+            />
           </div>
         </div>
 
         <DoorPlug roomName={roomData.name}/>
-        <FormControlLabel
-          label="Is DIN sub-type different?"
-          control={<Checkbox checked={room.lab_type_is_different} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            room.lab_type_is_different = event.target.checked;
-            setRoom({...room});
-          }} />}
-        />
-        <Autocomplete
-          disabled={!room.lab_type_is_different}
-          value={room.kind?.name}
-          onChange={(event: any, newValue: string | null) => {
-            if ( newValue ) {
-              room.kind = {name: newValue};
-              setRoom({...room});
-            }
-          }}
-          id="designation"
-          key={room.kind?.name}
-          options={roomKind.flatMap(k => k.name)}
-          renderInput={(params) => <TextField {...params} label={t(`room_details.designation`)}/>}
-        />
+
         {(!isExtraLargeDevice && !isLargeDevice) ?
           <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}
         <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
