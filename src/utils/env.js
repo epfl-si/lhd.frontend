@@ -15,7 +15,8 @@ const _env_development = {
   REACT_APP_ENDPOINT_URL: "//localhost:3001",
   REACT_APP_OPENID_SCOPE: "openid",
   REACT_CLIENT_ID: "LHDv3",
-  LHDv2_BASE_URL:"https://lhd-127-0-0-1.nip.io/"
+  LHDv2_BASE_URL:"https://lhd-127-0-0-1.nip.io/",
+  CRISTAL_URL:"cristal-test.epfl.ch"
 };
 
 const _env_production = {
@@ -25,7 +26,8 @@ const _env_production = {
   REACT_APP_ENDPOINT_URL: "https://lhd.epfl.ch",
   REACT_APP_OPENID_SCOPE: "openid profile tequila",
   REACT_CLIENT_ID: "LHDv3_prod",
-  LHDv2_BASE_URL:"/"
+  LHDv2_BASE_URL:"/",
+  CRISTAL_URL:"cristal.epfl.ch"
 };
 
 export function env() {

@@ -149,6 +149,8 @@ export const DetailsTab = ({
             className='valueDetails'>{room.vol}</label>
           </div>
         </div>
+
+        <DoorPlug roomName={roomData.name}/>
         <FormControlLabel
           label="Is DIN sub-type different?"
           control={<Checkbox checked={room.lab_type_is_different} onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,7 +197,6 @@ export const DetailsTab = ({
       {
         (isExtraLargeDevice || isLargeDevice) ?
         <div style={{width: '50%'}}>
-          <DoorPlug roomName={roomData.name}/>
           <AuditReportPanel lhd_units={roomData.lhd_units}/>
         </div>
         : <></>
