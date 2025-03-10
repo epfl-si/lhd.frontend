@@ -95,8 +95,8 @@ export const SubUnits = ({
 			</div>
 			<div className="form-card-div">
 				<ul>
-					<li><i className="fa-angle-right rotate"></i>
-						<span><i className="far fa-gem ic-w mx-1"></i>{currentlySelected.length>0 ? parentName : t('unit_details.noSubUnits')}</span>
+					<li>
+						<span>{currentlySelected.length>0 ? parentName : t('unit_details.noSubUnits')}</span>
 						<ul className="nested">
 							{currentlySelected.map(item => {
 									return (<li><FormCard
