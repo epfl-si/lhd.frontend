@@ -91,7 +91,8 @@ i18next.use(initReactI18next).init({
 					deleteUnit: 'Delete this unit from the room',
 					adminuse: 'DIN Type',
 					facultyuse: 'DIN Sub-type',
-					volume: 'Volume (m³)'
+					volume: 'Volume (m³)',
+					fichePorte: 'Fiche de porte'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -270,7 +271,8 @@ i18next.use(initReactI18next).init({
 					deleteUnit: 'Supprimer cette unité de ce local',
 					adminuse: 'Type DIN',
 					facultyuse: 'Sous-type DIN',
-					volume: 'Volume (m³)'
+					volume: 'Volume (m³)',
+					fichePorte: 'Fiche de porte'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',

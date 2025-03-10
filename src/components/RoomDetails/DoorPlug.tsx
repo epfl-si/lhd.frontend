@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "../../../css/styles.scss";
+import {useTranslation} from "react-i18next";
 
 interface DoorPlugProps {
 	roomName: string;
@@ -8,6 +9,7 @@ interface DoorPlugProps {
 export const DoorPlug = ({
 	roomName,
 }: DoorPlugProps) => {
+	const {t} = useTranslation();
 	const [pdfUrl, setPdfUrl] = useState<string>('');
 	const [exists, setExists] = useState<boolean>(false);
 
@@ -18,7 +20,6 @@ export const DoorPlug = ({
 
 	async function checkIfPDFExists(url: string) {
 		try {
-			console.log(url)
 			const response = await fetch(url, { method: "HEAD" });
 			console.log(response)
 			setExists(response.ok);
@@ -29,6 +30,6 @@ export const DoorPlug = ({
 
 	return exists ?
 		<div className="form-card-div">
-			<a style={{fontSize: 'small'}} href={pdfUrl}>CRISTAL</a>
+			<a style={{fontSize: 'small'}} href={pdfUrl} target="_blank">{t(`room_details.fichePorte`)}</a>
 		</div> : <></>
 };
