@@ -192,7 +192,7 @@ export const HazardEditForm = ({
 			addHazard(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(submissionsToSave).replaceAll('"','\\"'),
+				JSON.stringify(submissionsToSave).replaceAll('"','\\"').replace(/\r?\n/g, "\\n"),
 				lastVersionForm,
 				room.name,
 				{
