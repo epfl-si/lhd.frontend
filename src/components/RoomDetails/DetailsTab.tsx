@@ -150,6 +150,7 @@ export const DetailsTab = ({
               <label className='labelDetails'>{t(`room_details.facultyuse`)}: </label>
               <label
                 className='valueDetails'>{room.facultyuse}</label>
+
               <Button
                 style={{marginLeft: '10px'}}
                 onClick={() => {
@@ -161,6 +162,7 @@ export const DetailsTab = ({
                 }}
                 size="icon"
                 iconName={room.lab_type_is_different ? "#delete" : "#edit-2"}/>
+
             </div>
             <Autocomplete
               style={{visibility: room.lab_type_is_different ? "visible" : "hidden"}}
