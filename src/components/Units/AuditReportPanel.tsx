@@ -51,6 +51,16 @@ export const AuditReportPanel = ({
 		}
 	}
 
+	function extractDateAndStatus(filename: string) {
+		const match = filename.match(/(\d{4}-\d{2}-\d{2})(?:_([a-zA-Z]+))?/);
+		if (match) {
+			const date = match[1];
+			const status = match[2] ? ` (${match[2]})` : "";
+			return date + status;
+		}
+		return filename;
+	}
+
 	return <div className="form-card-div">
 		{reportFiles && reportFiles.length > 0 &&
 		<ExpansionPanel style={{width: '100%'}}>
@@ -72,7 +82,7 @@ export const AuditReportPanel = ({
 									return <a style={{fontSize: 'small'}}
 														onClick={e => handleClickFileLink(e, oidc.accessToken, file.path)}
 														href={file.path}>
-										{file.name}
+										{extractDateAndStatus(file.name)}
 									</a>
 								} else {
 									return <></>
