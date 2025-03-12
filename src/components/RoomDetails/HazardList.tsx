@@ -143,8 +143,8 @@ export const HazardList = ({
                             return <StyledTableCellForChild inRoomDetails={inRoomDetails} component="th" scope="row">
                               {
 																(childField == 'fileLink') ?
-																	<a href={label}
-																		 onClick={e => handleClickFileLink(e, oidc.accessToken, label)}>{label.split('/').pop()}</a>
+																	(label && label != 'NA' ? <a href={label}
+																		 onClick={e => handleClickFileLink(e, oidc.accessToken, label)}>{label.split('/').pop()}</a> : '')
 																	: label
 															}
                             </StyledTableCellForChild>
