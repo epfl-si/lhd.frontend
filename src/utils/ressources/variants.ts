@@ -44,6 +44,18 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'No unit has been chosen',
 	},
+	'save-new-organism-error': {
+		type: 'error',
+		text: 'New organism has not been saved',
+	},
+	'save-new-organism-success': {
+		type: 'success',
+		text: 'New organism has been saved',
+	},
+	'no-organism-chosen': {
+		type: 'error',
+		text: 'Organism name and risk are mandatory',
+	},
 	'no-room-chosen': {
 		type: 'error',
 		text: 'No room has been chosen',

@@ -35,6 +35,14 @@ export type lhdUnitsFromAPIType = {
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
+export type organismType = {
+	organism: string;
+	risk_group: number;
+	filePath: string;
+	updated_on: Date;
+	updated_by: string;
+}
+
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;

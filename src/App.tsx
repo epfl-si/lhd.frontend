@@ -17,6 +17,7 @@ import {fetchConnectedUser} from "./utils/graphql/FetchingTools";
 import {env} from "./utils/env";
 import HazardFormChildDetails from "./pages/hazardformchilddetails";
 import "../css/styles.scss";
+import {OrganismsControl} from "./pages/organisms";
 
 function App() {
 	const { t } = useTranslation();
@@ -77,6 +78,9 @@ function App() {
 						</li>
 						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
+						</li>
+						<li style={{backgroundColor: `${selectedMenu == 'organisms' ? '#FFCECE' : ''}`}}>
+							<Link to="/organismscontrol">{t(`menu.organisms`)}</Link>
 						</li>
 						{connectedUser.groups.includes('LHD_acces_admin') &&
 				<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
@@ -140,6 +144,9 @@ function App() {
 					<Switch>
 						<Route path="/unitcontrol">
 						<UnitControl handleCurrentPage={handleCurrentPage}/>
+						</Route>
+						<Route path="/organismscontrol">
+							<OrganismsControl handleCurrentPage={handleCurrentPage}/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails/>

@@ -435,3 +435,25 @@ export const updateHazardFormChild = async (
 
 	return makeQuery(query, {}, address, authToken);
 };
+
+export const saveNewOrganism = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	organismName: string,
+	risk: number,
+	file: {name?: string, content?: string}
+): Promise<any> => {
+	const query = `mutation addOrganism {
+               addOrganism(organismName: "${organismName}",
+                risk: ${risk},
+                fileContent: "${file.content ?? ''}",
+                fileName: "${file.name ?? ''}")
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+	return makeQuery(query, {}, address, authToken);
+};

@@ -12,7 +12,7 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
-	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild';
+	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism';
 	page?: number;
 	pageSize?: number;
 	totalCount?: number;
@@ -126,6 +126,8 @@ export function EntriesTableCategory({
 								return row.hazard_category.hazard_category_name;
 							case "hazardFormsChild":
 								return row.hazard_form_child_name;
+							case "organism":
+								return row.organism;
 						}
 					}}
 				/>

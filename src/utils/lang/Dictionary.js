@@ -144,8 +144,21 @@ i18next.use(initReactI18next).init({
 				menu: {
 					rooms: 'Rooms / Hazards',
 					units: 'Units',
+					organisms: 'Organisms',
 					dispensations: 'Dispensations',
 					hazardFormControl: 'Hazard Form Control'
+				},
+				organism: {
+					organismsList: 'Organisms',
+					name: 'Name',
+					risk: 'Risk',
+					file: 'File',
+					search: 'Search',
+					updated_on: 'Updated on',
+					updated_by: 'Updated by',
+					updated: 'Updated',
+					addNewOrganism: 'Add new organism',
+					organismName: 'Organism name'
 				},
 				hazards: {
 					Biological: 'Biological',
@@ -324,8 +337,21 @@ i18next.use(initReactI18next).init({
 				menu: {
 					rooms: 'Locaux / Dangers',
 					units: 'Unités',
+					organisms: 'Organismes',
 					dispensations: 'Dispensations',
 					hazardFormControl: 'Contrôle des formulaires de dangers'
+				},
+				organism: {
+					organismsList: 'Organismes',
+					name: 'Nom',
+					risk: 'Risque',
+					file: 'Fichier',
+					search: 'Rechercher',
+					updated_on: 'Modifié le',
+					updated_by: 'Modifié par',
+					updated: 'Modified',
+					addNewOrganism: 'Ajouter un nouveau organisme',
+					organismName: 'Nom de l\'organisme'
 				},
 				hazards: {
 					Biological: 'Biologique',

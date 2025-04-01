@@ -1,5 +1,5 @@
-import {hazardCategory, kindType, lhdUnitsType, reportFile, roomDetailsType, roomType} from '../ressources/types';
-import { formatDataToColumns } from './ParsingTools';
+import {kindType, lhdUnitsType, organismType, reportFile, roomDetailsType, roomType} from '../ressources/types';
+import {formatDataToColumns} from './ParsingTools';
 import {makeQuery} from "./Utils";
 
 type fetchResultsType = {
@@ -35,6 +35,11 @@ type fetchUnitsType = {
 type fetchUnitsTypeWithPagination = {
 	status?: number;
 	data?: unitsWithPaginationType;
+};
+
+type fetchOrganismsTypeWithPagination = {
+	status?: number;
+	data?: organismType[];
 };
 
 type fetchReportFiles = {
@@ -853,5 +858,27 @@ export const fetchHazardFormChild = async (
 	return {
 		status: result.status,
 		data: result.data?.hazardFormChildren
+	};
+};
+
+export const fetchOrganismsFromFullText = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	search: string
+): Promise<fetchOrganismsTypeWithPagination> => {
+	const query: string = `query OrganismFetchFromFullText {
+						organismsFromFullText(search: "${search}") {
+							organism
+							risk_group
+							filePath
+							updated_on
+							updated_by
+						}
+					}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.organismsFromFullText,
 	};
 };
