@@ -92,39 +92,51 @@ function App() {
 						</li>
 						}
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
-						<><li><a onClick={() => setOpenAuthorisations(!openAuthorisations)}>Authorisations</a>
-							<ul style={{display: openAuthorisations ? 'block' : 'none'}}>
-								<li><a href={env().LHDv2_BASE_URL + "auth_SST/lhd_auth_SST.php"}>Toxic Chemicals</a></li>
-								<li><a href={env().LHDv2_BASE_URL + "auth_OFSP/lhd_auth_OFSP.php"}>OFSP/IFSN</a></li>
-							</ul>
+				<>
+					<li><a onClick={() => setOpenAuthorisations(!openAuthorisations)}>Authorisations</a>
+						<ul style={{display: openAuthorisations ? 'block' : 'none'}}>
+							<li><a href={env().LHDv2_BASE_URL + "auth_SST/lhd_auth_SST.php"}>Toxic Chemicals</a></li>
+							<li><a href={env().LHDv2_BASE_URL + "auth_OFSP/lhd_auth_OFSP.php"}>OFSP/IFSN</a></li>
+						</ul>
+					</li>
+					<li><a href={env().LHDv2_BASE_URL + "auth_DSPS/lhd_auth_dsps.php"}>Dispensations</a></li>
+					<li><a href={env().LHDv2_BASE_URL + "cut/lhd_cut.php"}>Supplies interruptions</a></li>
+					<li><a onClick={() => setOpenAudit(!openAudit)}>Audit</a>
+						<ul style={{display: openAudit ? 'block' : 'none'}}>
+							<li><a href={env().LHDv2_BASE_URL + "audit/lhd_audit.php"}>List of reports</a></li>
+							<li><a href={env().LHDv2_BASE_URL + "audit_report/make_report/lhd_auditsR.php"}>Make audit
+								report</a>
+							</li>
+							<li><a href={env().LHDv2_BASE_URL + "audit_report/make_nreport/lhd_auditsN.php"}>Make number
+								of audit
+								report</a></li>
+						</ul>
+					</li>
+				</>
+						}
+						<li><a href={env().LHDv2_BASE_URL + "lhd_cosecs/barcodes/"}>LHD Barcode</a>
 						</li>
-						<li><a href={env().LHDv2_BASE_URL + "auth_DSPS/lhd_auth_dsps.php"}>Dispensations</a></li>
-						<li><a href={env().LHDv2_BASE_URL + "cut/lhd_cut.php"}>Supplies interruptions</a></li>
-						<li><a onClick={() => setOpenAudit(!openAudit)}>Audit</a>
-							<ul style={{display: openAudit ? 'block' : 'none'}}>
-								<li><a href={env().LHDv2_BASE_URL + "audit/lhd_audit.php"}>List of reports</a></li>
-								<li><a href={env().LHDv2_BASE_URL + "audit_report/make_report/lhd_auditsR.php"}>Make audit report</a>
-								</li>
-								<li><a href={env().LHDv2_BASE_URL + "audit_report/make_nreport/lhd_auditsN.php"}>Make number of audit
-									report</a></li>
-							</ul>
-						</li>
-						<li><a href={env().LHDv2_BASE_URL + "aa/aa_validation/lhd_aa_validation.php"}>Accred/Archibus</a></li>
-						<li><a onClick={() => setOpenUpdates(!openUpdates)}>Updates</a>
-							<ul style={{display: openUpdates ? 'block' : 'none'}}>
-								<li><a href={env().LHDv2_BASE_URL + "updates/update_auth_sst_list/lhd_update_auth_sst_list.php"}>Toxic
-									Chemicals</a></li>
-								<li><a
-									href={env().LHDv2_BASE_URL + "updates/update_auth_dsps/lhd_update_auth_dsps.php"}>Dispensations</a>
-								</li>
-							</ul>
-						</li>
-						<li><a onClick={() => setOpenLinks(!openLinks)}>Links</a>
-							<ul style={{display: openLinks ? 'block' : 'none'}}>
-								<li><a href="http://geoportail.epfl.ch" target="_blank">Geoportail</a></li>
-								<li><a href="http://isic.epfl.ch/chemical-stores" target="_blank">Chemical stores</a></li>
-							</ul>
-						</li></>
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+				<>
+					<li><a href={env().LHDv2_BASE_URL + "aa/aa_validation/lhd_aa_validation.php"}>Accred/Archibus</a>
+					</li>
+					<li><a onClick={() => setOpenUpdates(!openUpdates)}>Updates</a>
+						<ul style={{display: openUpdates ? 'block' : 'none'}}>
+							<li><a
+								href={env().LHDv2_BASE_URL + "updates/update_auth_sst_list/lhd_update_auth_sst_list.php"}>Toxic
+								Chemicals</a></li>
+							<li><a
+								href={env().LHDv2_BASE_URL + "updates/update_auth_dsps/lhd_update_auth_dsps.php"}>Dispensations</a>
+							</li>
+						</ul>
+					</li>
+					<li><a onClick={() => setOpenLinks(!openLinks)}>Links</a>
+						<ul style={{display: openLinks ? 'block' : 'none'}}>
+							<li><a href="http://geoportail.epfl.ch" target="_blank">Geoportail</a></li>
+							<li><a href="http://isic.epfl.ch/chemical-stores" target="_blank">Chemical stores</a></li>
+						</ul>
+					</li>
+				</>
 						}
 					</ul>
 				</Base.AsideMenu>
