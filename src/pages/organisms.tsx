@@ -19,10 +19,12 @@ import {AddNewOrganismDialog} from "../components/organism/AddNewOrganismDialog"
 
 interface OrganismsControlProps {
 	handleCurrentPage: (page: string) => void;
+	isUserAuthorized: boolean;
 }
 
 export const OrganismsControl = ({
 	handleCurrentPage,
+	isUserAuthorized
 }: OrganismsControlProps) => {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -161,11 +163,11 @@ export const OrganismsControl = ({
 					placeholder={t(`organism.search`)}
 					className="debounce-input"
 				/>
-				<Button
+				{isUserAuthorized && <Button
 					onClick={() => setOpenDialog(true)}
 					label={t(`generic.addNew`)}
 					iconName={`${featherIcons}#plus-circle`}
-					primary/>
+					primary/>}
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}

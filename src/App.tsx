@@ -73,21 +73,26 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
 						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? '#FFCECE' : ''}`}}>
 							<Link to="/roomcontrol">{t(`menu.rooms`)}</Link>
 						</li>
+						}
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
 						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
+						}
 						<li style={{backgroundColor: `${selectedMenu == 'organisms' ? '#FFCECE' : ''}`}}>
 							<Link to="/organismscontrol">{t(`menu.organisms`)}</Link>
 						</li>
 						{connectedUser.groups.includes('LHD_acces_admin') &&
-				<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
-					<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
-				</li>
+						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
+							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
+						</li>
 						}
-						<li><a onClick={() => setOpenAuthorisations(!openAuthorisations)}>Authorisations</a>
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						<><li><a onClick={() => setOpenAuthorisations(!openAuthorisations)}>Authorisations</a>
 							<ul style={{display: openAuthorisations ? 'block' : 'none'}}>
 								<li><a href={env().LHDv2_BASE_URL + "auth_SST/lhd_auth_SST.php"}>Toxic Chemicals</a></li>
 								<li><a href={env().LHDv2_BASE_URL + "auth_OFSP/lhd_auth_OFSP.php"}>OFSP/IFSN</a></li>
@@ -119,7 +124,8 @@ function App() {
 								<li><a href="http://geoportail.epfl.ch" target="_blank">Geoportail</a></li>
 								<li><a href="http://isic.epfl.ch/chemical-stores" target="_blank">Chemical stores</a></li>
 							</ul>
-						</li>
+						</li></>
+						}
 					</ul>
 				</Base.AsideMenu>
 				<Base.Breadcrumbs>
@@ -143,10 +149,12 @@ function App() {
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
 						<Route path="/unitcontrol">
-						<UnitControl handleCurrentPage={handleCurrentPage}/>
+						<UnitControl handleCurrentPage={handleCurrentPage}
+												 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 						<Route path="/organismscontrol">
-							<OrganismsControl handleCurrentPage={handleCurrentPage}/>
+							<OrganismsControl handleCurrentPage={handleCurrentPage}
+																isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails/>
@@ -165,7 +173,8 @@ function App() {
 							<HazardFormChildDetails />
 						</Route>
 						<Route path="/roomcontrol">
-							<RoomControl handleCurrentPage={handleCurrentPage}/>
+							<RoomControl handleCurrentPage={handleCurrentPage}
+													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 					</Switch>
 				</div>
