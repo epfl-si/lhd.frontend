@@ -229,7 +229,7 @@ export const RoomControl = ({
 		if (isUserAuthorized) {
 			loadFetch();
 		}
-	}, [search, page]);
+	}, [search, page, isUserAuthorized]);
 
 	useEffect(() => {
 		handleCurrentPage("rooms");

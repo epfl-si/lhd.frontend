@@ -165,7 +165,7 @@ export const UnitControl = ({
 		if (isUserAuthorized) {
 			loadFetch();
 		}
-	}, [search, page]);
+	}, [search, page, isUserAuthorized]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
