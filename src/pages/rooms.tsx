@@ -27,10 +27,12 @@ import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
+	isUserAuthorized: boolean;
 }
 
 export const RoomControl = ({
 	handleCurrentPage,
+	isUserAuthorized
 }: RoomControlProps) => {
 	const PAGE_SIZE = 100;
 	const history = useHistory();
@@ -224,7 +226,9 @@ export const RoomControl = ({
 	];
 
 	useEffect(() => {
-		loadFetch();
+		if (isUserAuthorized) {
+			loadFetch();
+		}
 	}, [search, page]);
 
 	useEffect(() => {
@@ -286,6 +290,7 @@ export const RoomControl = ({
 
 	return (
 		<Box>
+			{isUserAuthorized ? <>
 			<Typography gutterBottom>
 				{t(`room.roomList`)}
 			</Typography>
@@ -329,7 +334,7 @@ export const RoomControl = ({
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
-			/>
+			/></> : <b>You are not authorized for this page</b>}
 		</Box>
 	);
 }

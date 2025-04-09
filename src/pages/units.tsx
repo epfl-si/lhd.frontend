@@ -18,10 +18,12 @@ import Notifications from "../components/Table/Notifications";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
+	isUserAuthorized: boolean;
 }
 
 export const UnitControl = ({
 	handleCurrentPage,
+	isUserAuthorized
 }: UnitControlProps) => {
 	const PAGE_SIZE = 100;
 	const history = useHistory();
@@ -160,7 +162,9 @@ export const UnitControl = ({
 	];
 
 	useEffect(() => {
-		loadFetch();
+		if (isUserAuthorized) {
+			loadFetch();
+		}
 	}, [search, page]);
 
 	useEffect(() => {
@@ -204,6 +208,7 @@ export const UnitControl = ({
 
 	return (
 		<Box>
+			{isUserAuthorized ? <>
 			<Typography gutterBottom>
 				{t(`unit.unitList`)}
 			</Typography>
@@ -241,7 +246,7 @@ export const UnitControl = ({
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
-			/>
+			/></> : <b>You are not authorized for this page</b>}
 		</Box>
 	);
 }
