@@ -66,12 +66,12 @@ export const RoomControl = ({
 				}
 				return "";
 			}},
-		{field: "submissionList", headerName: t('room_details.hazards'), flex: 1,
+		{field: "submissionList", headerName: t('room_details.hazards'), flex: 1, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
 			),
 		},
-		{field: "lhd_units", headerName: t('room.unit'), flex: 1,
+		{field: "lhd_units", headerName: t('room.unit'), flex: 1, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.lhd_units ?
 					<div className="form-card-div">
@@ -154,7 +154,7 @@ export const RoomControl = ({
 			),
 		},
 		{
-			field: "submissionList", headerName: t('room_details.hazards'), flex: 1,
+			field: "submissionList", headerName: t('room_details.hazards'), flex: 1, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.submissionList ?
 					<HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>

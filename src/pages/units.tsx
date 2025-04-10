@@ -4,7 +4,7 @@ import {fetchunitsFromFullTextAndPagination} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType, notificationType, roomDetailsType} from "../utils/ressources/types";
+import {columnType, lhdUnitsType, notificationType, organismType, roomDetailsType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
@@ -50,6 +50,9 @@ export const UnitControl = ({
 				params.row.unitId ? <></> :
 					<>✔️</>
 			),
+			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
+				return params.value ? '' : '✔️';
+			}
 		},
 		{field: "name", headerName: t('unit.name'), width: 300},
 		{
@@ -66,16 +69,16 @@ export const UnitControl = ({
 				return "";
 			}},
 		{
-			field: "professors", headerName: t('unit.prof'), width: 200,
+			field: "professors", headerName: t('unit.prof'), width: 200,disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
 				return <span style={{lineHeight: '20px', fontSize: "small"}}>
 					{professors}
 				</span>
-			},
+			}
 		},
 		{
-			field: "cosecs", headerName: t('unit.cosec'), width: 200,
+			field: "cosecs", headerName: t('unit.cosec'), width: 200,disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
 				return <span style={{lineHeight: '20px', fontSize: "small"}}>
@@ -92,6 +95,9 @@ export const UnitControl = ({
 				params.row.unitId ? <></> :
 					<>✔️</>
 			),
+			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
+				return params.value ? '' : '✔️';
+			}
 		},
 		{
 			field: "name", headerName: t('unit.name'), minWidth: 300,
@@ -111,7 +117,7 @@ export const UnitControl = ({
 			},
 		},
 		{
-			field: "cosecs", headerName: t('unit.prof') + ' - ' + t('unit.cosec'), width: 200,
+			field: "cosecs", headerName: t('unit.prof') + ' - ' + t('unit.cosec'), width: 200, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
 				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
@@ -132,6 +138,9 @@ export const UnitControl = ({
 				params.row.unitId ? <></> :
 					<>✔️</>
 			),
+			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
+				return params.value ? '' : '✔️';
+			}
 		},
 		{
 			field: "name", headerName: t('unit.name'), minWidth: 300,
