@@ -50,6 +50,8 @@ export const AddNewOrganismDialog = ({
 	async function onAddOrganism() {
 		if ( textInput != '' && risk != undefined ) {
 			let fileBase64 = await readFileAsBase64(selectedFile ?? undefined);
+			const date = new Date();
+			const fileName = fileBase64 ? date.toISOString().split("T")[0] + "_" + textInput.replaceAll(" ", "_").replaceAll("/", "_") + ".pdf" : '';
 			saveNewOrganism(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
@@ -57,7 +59,7 @@ export const AddNewOrganismDialog = ({
 				risk,
 				{
 					content: fileBase64 ?? '',
-					name: selectedFile?.name
+					name: fileName
 				}
 			).then(res => {
 				handleOpen(res);
