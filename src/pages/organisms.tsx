@@ -44,7 +44,7 @@ export const OrganismsControl = ({
 	const columnsLarge: columnType[] = [
 		{field: "organism", headerName: t('organism.name'), width: 300},
 		{field: "risk_group", headerName: t('organism.risk'), width: 100},
-		{field: "filePath", headerName: t('organism.file'), width: 300,
+		{field: "filePath", headerName: t('organism.file'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
 																 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
@@ -54,6 +54,11 @@ export const OrganismsControl = ({
 		{field: "updated_on", headerName: t('organism.updated_on'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				const date = new Date(params.row.updated_on);
+				return date.toLocaleDateString("en-GB");
+			},
+			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
+				if (!params.value) return "";
+				const date = new Date(params.value);
 				return date.toLocaleDateString("en-GB");
 			}
 		},
@@ -71,7 +76,7 @@ export const OrganismsControl = ({
 				</div>
 			}
 		},
-		{field: "filePath", headerName: t('organism.file'), width: 300,
+		{field: "filePath", headerName: t('organism.file'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
 																																onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
