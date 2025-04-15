@@ -868,6 +868,7 @@ export const fetchOrganismsFromFullText = async (
 ): Promise<fetchOrganismsTypeWithPagination> => {
 	const query: string = `query OrganismFetchFromFullText {
 						organismsFromFullText(search: "${search}") {
+							id
 							organism
 							risk_group
 							filePath

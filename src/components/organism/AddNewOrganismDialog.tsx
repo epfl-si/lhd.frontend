@@ -4,12 +4,12 @@ import {useTranslation} from "react-i18next";
 import {AlertDialog} from "../global/AlertDialog";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {hazardFormType, notificationType} from "../../utils/ressources/types";
+import {hazardFormType, notificationType, organismType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {saveNewOrganism} from "../../utils/graphql/PostingTools";
+import {saveNewOrganism, updateOrganism} from "../../utils/graphql/PostingTools";
 import {TextField} from "@material-ui/core";
-import {readFileAsBase64} from "../../utils/ressources/file";
+import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
 import {Numeric} from "epfl-elements-react/src/stories/molecules/inputFields/Numeric.tsx";
 import {fetchHazardForms} from "../../utils/graphql/FetchingTools";
 
@@ -17,12 +17,14 @@ interface AddNewOrganismDialogProps {
 	openDialog: boolean;
 	save: (searchVal: string) => void;
 	close: () => void;
+	selectedOrganism?: organismType;
 }
 
 export const AddNewOrganismDialog = ({
 	openDialog,
 	close,
-	save
+	save,
+ selectedOrganism
 }: AddNewOrganismDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -31,15 +33,15 @@ export const AddNewOrganismDialog = ({
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [textInput, setTextInput] = useState<string>("");
-	const [risk, setRisk] = useState<number>();
+	const [textInput, setTextInput] = useState<string>(selectedOrganism ? selectedOrganism.organism : "");
+	const [risk, setRisk] = useState<number | undefined>(selectedOrganism ? selectedOrganism.risk_group : undefined);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 	useEffect(() => {
-		setTextInput('');
-		setRisk(undefined);
+		setTextInput(selectedOrganism ? selectedOrganism.organism : '');
+		setRisk(selectedOrganism ? selectedOrganism.risk_group : undefined);
 		setSelectedFile(null)
-	}, [openDialog]);
+	}, [openDialog, selectedOrganism]);
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files.length > 0) {
@@ -52,29 +54,45 @@ export const AddNewOrganismDialog = ({
 			let fileBase64 = await readFileAsBase64(selectedFile ?? undefined);
 			const date = new Date();
 			const fileName = fileBase64 ? date.toISOString().split("T")[0] + "_" + textInput.replaceAll(" ", "_").replaceAll("/", "_") + ".pdf" : '';
-			saveNewOrganism(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				textInput,
-				risk,
-				{
-					content: fileBase64 ?? '',
-					name: fileName
-				}
-			).then(res => {
-				handleOpen(res);
-			});
+			if (selectedOrganism) {
+				updateOrganism(
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					JSON.stringify(selectedOrganism.id),
+					textInput,
+					risk,
+					{
+						content: fileBase64 ?? '',
+						name: fileName
+					}
+				).then(res => {
+					handleOpen(res);
+				});
+			} else {
+				saveNewOrganism(
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					textInput,
+					risk,
+					{
+						content: fileBase64 ?? '',
+						name: fileName
+					}
+				).then(res => {
+					handleOpen(res);
+				});
+			}
 		} else {
 			setNotificationType(notificationsVariants['no-organism-chosen']);
 			setOpenNotification(true);
 		}
 	}
 
-	const handleOpen = (res: any) => {
+	const handleOpen = (res: any, saveNew: boolean) => {
 		debugger;
-		if ( res.data?.addOrganism?.errors ) {
+		if (saveNew ? res.data?.addOrganism?.errors : res.data?.updateOrganism?.errors ) {
 			const notif: notificationType = {
-				text: res.data?.addOrganism?.errors[0].message,
+				text: saveNew ? res.data?.addOrganism?.errors[0].message : res.data?.updateOrganism?.errors[0].message,
 				type: 'error'
 			};
 			setNotificationType(notif);
@@ -116,6 +134,12 @@ export const AddNewOrganismDialog = ({
 					max={3}
 					onChange={setRisk}
 				/>
+				{selectedOrganism && selectedOrganism.filePath &&
+						<div><a href={selectedOrganism.filePath}
+							 onClick={e => handleClickFileLink(e, oidc.accessToken, selectedOrganism.filePath)}>
+							{selectedOrganism.filePath.split('/').pop()}
+						</a></div>
+				}
 				<input
 					style={{marginTop: '10px'}}
 					type="file"

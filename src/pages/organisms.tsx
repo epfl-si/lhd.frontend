@@ -31,6 +31,7 @@ export const OrganismsControl = ({
 	const oidc = useOpenIDConnectContext();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [tableData, setTableData] = useState<organismType[]>([]);
+	const [selectedOrganism, setSelectedOrganism] = useState<organismType>();
 	const [loading, setLoading] = useState(false);
 	const [search, setSearch] = React.useState('');
 	const [notificationType, setNotificationType] = useState<notificationType>({
@@ -133,6 +134,7 @@ export const OrganismsControl = ({
 			oidc.accessToken,
 			search
 		);
+		debugger;
 		if (results.status === 200 && results.data){
 			setTableData(results.data);
 		} else {
@@ -153,6 +155,11 @@ export const OrganismsControl = ({
 	const handleClose = () => {
 		setOpenNotification(false);
 	};
+
+	const modifyOrganism = (dataOrganism: organismType) => {
+		setOpenDialog(true);
+		setSelectedOrganism(dataOrganism);
+	}
 
 	return (
 		<Box>
@@ -179,12 +186,14 @@ export const OrganismsControl = ({
 				columns={(isExtraLargeDevice || isLargeDevice) ? columnsLarge : (isMediumDevice ? columnsMedium : columnsSmall)}
 				loading={loading}
 				pageToOpen={"organism"}
+				onClickOrganism={modifyOrganism}
 			/>
 			<AddNewOrganismDialog openDialog={openDialog} close={() => setOpenDialog(false)}
 												save={(searchVal: string) => {
 													setOpenDialog(false);
 													onChangeInput(searchVal);
-												}}/>
+												}}
+												selectedOrganism={selectedOrganism}/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

@@ -3,7 +3,7 @@ import {DataGrid} from '@mui/x-data-grid';
 import React from 'react';
 import {TableToolbar} from './TableToolbar';
 import {useHistory} from 'react-router-dom';
-import {columnType, parameterType} from '../../utils/ressources/types';
+import {columnType, organismType, parameterType} from '../../utils/ressources/types';
 import {useTranslation} from "react-i18next";
 import {styled} from '@mui/material/styles';
 
@@ -17,6 +17,7 @@ type EntriesTableCategoryProps = {
 	pageSize?: number;
 	totalCount?: number;
 	loadServerRows?: (newPage: number) => void;
+	onClickOrganism?: (dataOrganism: organismType) => void;
 };
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -42,7 +43,8 @@ export function EntriesTableCategory({
 	page,
 	pageSize,
 	totalCount,
-	loadServerRows
+	loadServerRows,
+	onClickOrganism
 }: EntriesTableCategoryProps) {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -118,6 +120,9 @@ export function EntriesTableCategory({
 							case "hazardFormsChild":
 								history.push(`/hazardFormChildDetails?name=${e.row['hazard_form_child_name']}`);
 								break;
+							case "organism":
+								if (onClickOrganism) onClickOrganism(e.row as organismType);
+								break;
 						}
 					}}
 					getRowId={(row: any) =>  {
@@ -127,7 +132,7 @@ export function EntriesTableCategory({
 							case "hazardFormsChild":
 								return row.hazard_form_child_name;
 							case "organism":
-								return row.organism;
+								return row.id;
 						}
 					}}
 				/>
