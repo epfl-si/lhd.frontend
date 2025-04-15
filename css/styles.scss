@@ -1,5 +1,9 @@
 @import './bootstrap.scss';
 
+.nav-aside a {
+    color: #495057 !important;
+}
+
 .dashed-card {
     background-color: rgb(243, 243, 243);
     border-radius: 10px;
