@@ -457,3 +457,27 @@ export const saveNewOrganism = async (
             }`;
 	return makeQuery(query, {}, address, authToken);
 };
+
+export const updateOrganism = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	organismName: string,
+	risk: number,
+	file: {name?: string, content?: string}
+): Promise<any> => {
+	const query = `mutation updateOrganism {
+               updateOrganism(id: ${id},
+                organismName: "${organismName}",
+                risk: ${risk},
+                fileContent: "${file.content ?? ''}",
+                fileName: "${file.name ?? ''}")
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+	return makeQuery(query, {}, address, authToken);
+};

@@ -36,6 +36,7 @@ export type lhdUnitsFromAPIType = {
 };
 
 export type organismType = {
+	id: string;
 	organism: string;
 	risk_group: number;
 	filePath: string;
