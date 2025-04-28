@@ -18,6 +18,7 @@ import {Redirect, useHistory} from "react-router-dom";
 import {AlertDialog} from "../components/global/AlertDialog";
 import {UnitTabTitle} from "../components/Units/UnitTabTitle";
 import {BackButton} from "../components/global/BackButton";
+import {Text} from "epfl-elements-react/src/stories/molecules/inputFields/Text";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -39,6 +40,8 @@ export default function UnitDetails() {
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [openDialogEdit, setOpenDialogEdit] = useState<boolean>(false);
+	const [inputValueForEdit, setInputValueForEdit] = React.useState('');
 
 	useEffect(() => {
 		fetchData();
@@ -64,6 +67,7 @@ export default function UnitDetails() {
 						setSelectedCosecs(results.data[0]?.cosecs);
 						setSelectedProfs(results.data[0]?.professors);
 						setSelectedSubUnits(results.data[0].subUnits);
+						setInputValueForEdit(results.data[0].name.substring(results.data[0].name.indexOf('(') + 1, results.data[0].name.indexOf(')')));
 					}
 				}
 			} else {
@@ -82,15 +86,20 @@ export default function UnitDetails() {
 	}
 
 	function saveUnitDetails() {
+		let newName: string = data[0]?.unitId ? data[0]?.name : data[0]?.name.replace(/\(.*?\)/, `(${inputValueForEdit})`);
 		updateUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			{id: JSON.stringify(data[0]?.id), unit: data[0]?.name, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
+			{id: JSON.stringify(data[0]?.id), unit: newName, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
 		).then(res => {
 			if(res.status == 200 && !res.data?.updateUnit?.errors) {
 				fetchData();
 			}
+			setOpenDialogEdit(false);
 			handleOpen(res);
+			if (!data[0]?.unitId && newName != data[0]?.name) {
+				history.push(`/unitdetails?unit=${encodeURIComponent(newName)}`);
+			}
 		});
 	}
 
@@ -164,13 +173,19 @@ export default function UnitDetails() {
 	return (
 		<div>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}} alwaysPresent={false}/>
-			<Typography gutterBottom>
+			<Typography style={{display:"flex"}} gutterBottom>
 				{
 					(data[0]?.unitId ? '' :
 						<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
 							<use xlinkHref={`${featherIcons}#layers`}></use>
 						</svg>)
 				} {(t(`unit_details.title`)).concat(' ').concat(getUnitTitle(data[0]))}
+				{(data[0]?.unitId ? '' :
+				<Button
+					style={{marginLeft: '10px'}}
+					onClick={() => setOpenDialogEdit(true)}
+					size="icon"
+					iconName="#edit-2"/>)}
 			</Typography>
 
 			<ResponsiveTabs
@@ -243,6 +258,23 @@ export default function UnitDetails() {
 									 okLabel={t('generic.deleteButton')}
 									 title={t('unit_details.deleteUnitConfirmationMessageTitle')}>
 				{t('unit_details.deleteUnitConfirmationMessageDescription')}
+			</AlertDialog>
+			<AlertDialog openDialog={openDialogEdit}
+									 onOkClick={() => saveUnitDetails()}
+									 onCancelClick={() => setOpenDialogEdit(false)}
+									 cancelLabel={t('generic.cancelButton')}
+									 okLabel={t('generic.saveButton')}
+									 title={t('unit_details.editName')}
+									 type='selection'>
+				<Text
+					name="input_subUnitEdit"
+					id="input_subUnitEdit"
+					onChange={(newValue: string) => setInputValueForEdit(newValue)}
+					placeholder={t('unit_details.editName')}
+					type="text"
+					value={inputValueForEdit}
+					style={{flex: 'auto'}}
+				/>
 			</AlertDialog>
 		</div>
 	);
