@@ -18,6 +18,7 @@ import {env} from "./utils/env";
 import HazardFormChildDetails from "./pages/hazardformchilddetails";
 import "../css/styles.scss";
 import {OrganismsControl} from "./pages/organisms";
+import {HazardsControl} from "./pages/hazards";
 
 function App() {
 	const { t } = useTranslation();
@@ -76,6 +77,11 @@ function App() {
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
 						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? '#FFCECE' : ''}`}}>
 							<Link to="/roomcontrol">{t(`menu.rooms`)}</Link>
+						</li>
+						}
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						<li style={{backgroundColor: `${selectedMenu == 'hazards' ? '#FFCECE' : ''}`}}>
+							<Link to="/hazardscontrol">{t(`menu.hazards`)}</Link>
 						</li>
 						}
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
@@ -186,6 +192,10 @@ function App() {
 						</Route>
 						<Route path="/roomcontrol">
 							<RoomControl handleCurrentPage={handleCurrentPage}
+													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+						</Route>
+						<Route path="/hazardscontrol">
+							<HazardsControl handleCurrentPage={handleCurrentPage}
 													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 					</Switch>

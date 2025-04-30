@@ -85,6 +85,15 @@ export type personType = {
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
+export type hazardDetailsType = {
+	lab_display: string,
+	hazard_category_name: string,
+	parent_submission: string,
+	child_submission: string,
+	id_lab_has_hazards_child: number
+	id_lab_has_hazards: number
+}
+
 export type roomDetailsType = {
 	id: string,
 	name: string;
