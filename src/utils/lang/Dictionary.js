@@ -164,6 +164,7 @@ i18next.use(initReactI18next).init({
 					updated_by: 'Updated by',
 					updated: 'Updated',
 					addNewOrganism: 'Add new organism',
+					modifyOrganism: 'Modify the organism',
 					organismName: 'Organism name'
 				},
 				hazards: {
@@ -363,6 +364,7 @@ i18next.use(initReactI18next).init({
 					updated_by: 'Modifié par',
 					updated: 'Modified',
 					addNewOrganism: 'Ajouter un nouveau organisme',
+					modifyOrganism: 'Modifier l\'organisme',
 					organismName: 'Nom de l\'organisme'
 				},
 				hazards: {

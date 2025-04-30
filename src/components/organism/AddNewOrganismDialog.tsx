@@ -114,7 +114,7 @@ export const AddNewOrganismDialog = ({
 									 onCancelClick={close}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
-									 title={t('organism.addNewOrganism')}
+									 title={selectedOrganism ? t('organism.modifyOrganism') : t('organism.addNewOrganism')}
 									 type='selection'>
 				<TextField
 					label={t('organism.organismName')}
