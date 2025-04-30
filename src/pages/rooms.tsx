@@ -4,14 +4,7 @@ import {fetchRooms, fetchRoomsWithHazards} from "../utils/graphql/FetchingTools"
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {
-	columnType,
-	roomDetailsType,
-	notificationType,
-	submissionForm,
-	personType,
-	lhdUnitsType
-} from "../utils/ressources/types";
+import {columnType, notificationType, personType, roomDetailsType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
@@ -21,7 +14,7 @@ import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {useHistory} from "react-router-dom";
-import {readOrEditHazard, splitCamelCase} from "../utils/ressources/jsonUtils";
+import {readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
 
@@ -298,6 +291,7 @@ export const RoomControl = ({
 				<MultipleAutocomplete
 					setPage={setPage}
 					setSearch={setSearch}
+					parent="roomcontrol"
 				/>
 				{/*<DebounceInput
 					key={search}

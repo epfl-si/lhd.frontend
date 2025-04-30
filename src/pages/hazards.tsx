@@ -11,6 +11,7 @@ import {SelectChangeEvent} from "@mui/material";
 import {useHistory} from "react-router-dom";
 import {splitCamelCase} from "../utils/ressources/jsonUtils";
 import {handleClickFileLink} from "../utils/ressources/file";
+import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -35,17 +36,7 @@ export const HazardsControl = ({
 	const [categoryList, setCategoryList] = React.useState<hazardCategory[]>([]);
 	const [isTableReady, setIsTableReady] = React.useState<boolean>(false);
 	const columns = React.useRef([{field: "lab_display", headerName: t('room.name'), width: 150}]);
-
-	/*useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const queryArray: OptionType[] = []
-		urlParams.forEach((value, key) => {
-			queryArray.push({title: key + "=" + decodeURIComponent(value), encodedTitle: key + "=" + value});
-		});
-		setSelectedOptions(queryArray);
-		setPage(0);
-		setSearch(window.location.search.replace("?",''));
-	}, [window.location.search]);*/
+	const [keys, setKeys] = React.useState<string[]>([]);
 
 	useEffect(() => {
 		if (isUserAuthorized && search != '') {
@@ -103,7 +94,7 @@ export const HazardsControl = ({
 				parent_submission: JSON.parse(h.parent_submission).data
 			};
 		});
-		const allKeys = new Set();
+		const allKeys = new Set<string>();
 		for (const item of parsedHazards) {
 			for (const key of ['child_submission', 'parent_submission']) {
 				if (item[key]) {
@@ -111,6 +102,7 @@ export const HazardsControl = ({
 				}
 			}
 		}
+		setKeys(Array.from(allKeys));
 		const result = parsedHazards.map(item => {
 			const flat = {
 				lab_display: item.lab_display,
@@ -166,26 +158,15 @@ export const HazardsControl = ({
 		history.push(`/hazardscontrol?Category=${(event.target.value)}`);
 	};
 
-	const handleFilterChange = (newFilterModel: { items: any[] }) => {
-		if (newFilterModel.items[0] && newFilterModel.items[0].value) {
-			const qs = newFilterModel.items[0].columnField + "=" + newFilterModel.items[0].value;
-			setQueryString(qs);
-			history.push(`/hazardscontrol?Category=${search}&${qs}`);
-		} else {
-			setQueryString('');
-		}
-	};
-
-	// TODO operators, roomName filter, les trois exceptions, filtres dans l'URL...
-
 	return (
 		<Box>
 			{isUserAuthorized ? <>
 			<Typography gutterBottom>
 				{t(`hazard.hazardList`)}
 			</Typography>
-			<div className="utilsBar" style={{display: "flex", flexDirection: "column", width: "50%"}}>
+			<div className="utilsBar" style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
 				<Select
+					style={{width: '50%', marginRight: "10px"}}
 					labelId="demo-simple-select-label"
 					id="demo-simple-select"
 					value={search}
@@ -194,6 +175,14 @@ export const HazardsControl = ({
 				>
 					{categoryList.map(cat => <MenuItem value={cat.hazard_category_name}>{cat.hazard_category_name}</MenuItem>)}
 				</Select>
+				<MultipleAutocomplete
+						setPage={setPage}
+						setSearch={setQueryString}
+						parent="hazardscontrol"
+						category={search}
+						columns={keys}
+						setCategory={setSearch}
+				/>
 			</div>
 				{search && isTableReady &&
 			<EntriesTableCategory
@@ -202,7 +191,6 @@ export const HazardsControl = ({
 				loading={loading}
 				pageToOpen={"hazards"}
 				loadServerRows={setPage}
-				setFilters={handleFilterChange}
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
