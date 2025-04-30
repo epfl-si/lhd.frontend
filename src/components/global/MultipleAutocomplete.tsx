@@ -3,10 +3,16 @@ import {TextField} from "@material-ui/core";
 import React, {useCallback, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
+import {splitCamelCase} from "../../utils/ressources/jsonUtils";
+import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 
 interface MultipleAutocompleteProps {
 	setSearch: (search: string) => void;
 	setPage: (newPage: number) => void;
+	setCategory?: (newCategory: string) => void;
+	parent: string;
+	category?: string;
+	columns?: string[];
 }
 
 export interface OptionType {
@@ -16,7 +22,11 @@ export interface OptionType {
 
 export const MultipleAutocomplete = ({
 																			 setPage,
-																			 setSearch
+																			 setSearch,
+																			 parent,
+																			 category,
+																			 columns,
+																			 setCategory
 }: MultipleAutocompleteProps) => {
 	const history = useHistory();
 	const {t} = useTranslation();
@@ -29,11 +39,15 @@ export const MultipleAutocomplete = ({
 		const urlParams = new URLSearchParams(window.location.search);
 		const queryArray: OptionType[] = []
 		urlParams.forEach((value, key) => {
-			queryArray.push({title: key + "=" + decodeURIComponent(value), encodedTitle: key + "=" + value});
+			if (key != 'Category') {
+				queryArray.push({title: key + "=" + decodeURIComponent(value), encodedTitle: key + "=" + value});
+			} else if ( setCategory ) {
+				setCategory(value);
+			}
 		});
 		setSelectedOptions(queryArray);
 		setPage(0);
-		setSearch(window.location.search.replace("?",''));
+		setSearch(queryArray.map(qs => qs.title).join('&'));
 	}, [window.location.search]);
 
 	function onChangeInput(event: any, newValue: string) {
@@ -46,7 +60,7 @@ export const MultipleAutocomplete = ({
 			setOptions([]);
 			getOptionsAsync(query).then(callback);
 		}, 200),
-		[]
+		[columns]
 	);
 
 	useEffect(() => {
@@ -62,12 +76,11 @@ export const MultipleAutocomplete = ({
 
 	const onChange = (event: unknown, value: OptionType[]) => {
 		setSelectedOptions(value);
-		const queryString = value.map(v => v.title).join("&");
-		//setSearch(value);
+		const queryString = value.map(v => v.encodedTitle).join("&");
 		setInputValue('');
 		setSearch(queryString);
 		setPage(0);
-		history.push(`/roomcontrol?${(queryString)}`);
+		history.push(`/${parent}?${category ? 'Category=' + category + '&' : ''}${(queryString)}`);
 	};
 
 	const getOptionLabel = (option: OptionType): string => option.title;
@@ -76,17 +89,24 @@ export const MultipleAutocomplete = ({
 
 	const getOptionsAsync = (query: string): Promise<OptionType[]> => {
 		return new Promise((resolve) => {
-				resolve(
-					[
-						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
-						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query) },
-						{ title: "Building="+query, encodedTitle: "Building="+ encodeURIComponent(query) },
-						{ title: "Sector="+query, encodedTitle: "Sector="+ encodeURIComponent(query) },
-						{ title: "Floor="+query, encodedTitle: "Floor="+ encodeURIComponent(query) },
-						{ title: "Designation="+query, encodedTitle: "Designation="+ encodeURIComponent(query) },
-						{ title: "Hazard="+query, encodedTitle: "Hazard="+ encodeURIComponent(query) },
-					]
-				);
+			if (parent == 'hazardscontrol') {
+				const filterArray: OptionType[] = [{ title: "Room=" + query, encodedTitle: "lab_display=" + encodeURIComponent(query)}];
+				columns?.forEach(col => {
+					filterArray.push({ title: splitCamelCase(col) + "=" + query, encodedTitle: col + "=" + encodeURIComponent(query)})
+				})
+				resolve(filterArray);
+			} else {resolve(
+				[
+					{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
+					{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query) },
+					{ title: "Building="+query, encodedTitle: "Building="+ encodeURIComponent(query) },
+					{ title: "Sector="+query, encodedTitle: "Sector="+ encodeURIComponent(query) },
+					{ title: "Floor="+query, encodedTitle: "Floor="+ encodeURIComponent(query) },
+					{ title: "Designation="+query, encodedTitle: "Designation="+ encodeURIComponent(query) },
+					{ title: "Hazard="+query, encodedTitle: "Hazard="+ encodeURIComponent(query) },
+				]
+			);
+			}
 		});
 	};
 
