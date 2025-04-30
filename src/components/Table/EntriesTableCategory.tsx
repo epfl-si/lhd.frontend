@@ -12,7 +12,7 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
-	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism';
+	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism' | 'hazards';
 	page?: number;
 	pageSize?: number;
 	totalCount?: number;
@@ -58,7 +58,7 @@ export function EntriesTableCategory({
 	return (
 		<Box width="100%" height="500px">
 			{tableData !== null ? (
-				(pageToOpen == 'room' || pageToOpen == 'unit') ?
+				(pageToOpen == 'room' || pageToOpen == 'unit' || pageToOpen == 'hazards') ?
 					<StyledDataGrid
 						style={{fontSize: 'small'}}
 						loading={loading}
@@ -93,6 +93,8 @@ export function EntriesTableCategory({
 									return row.name;
 								case "room":
 									return row.id;
+								case "hazards":
+									return row.id_lab_has_hazards_child ?? row.id_lab_has_hazards;
 							}
 						}}
 						pagination

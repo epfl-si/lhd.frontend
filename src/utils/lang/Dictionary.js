@@ -30,6 +30,10 @@ i18next.use(initReactI18next).init({
 					},
 					unit: 'Unit'
 				},
+				hazard: {
+					hazardList: 'Hazards',
+					category: 'Category',
+				},
 				unit_details: {
 					personPlaceholder: 'Select a person',
 					profTab: 'Prof / Resp',
@@ -143,11 +147,12 @@ i18next.use(initReactI18next).init({
 					print: 'Print'
 				},
 				menu: {
-					rooms: 'Rooms / Hazards',
+					rooms: 'Rooms',
 					units: 'Units',
 					organisms: 'Organisms',
 					dispensations: 'Dispensations',
-					hazardFormControl: 'Hazard Form Control'
+					hazardFormControl: 'Hazard Form Control',
+					hazards: 'Hazards'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -223,6 +228,10 @@ i18next.use(initReactI18next).init({
 							},
 						},
 					},
+				},
+				hazard: {
+					hazardList: 'Dangers',
+					category: 'Catégorie',
 				},
 				unit_details: {
 					personPlaceholder: 'Sélectionner une personne',
@@ -337,11 +346,12 @@ i18next.use(initReactI18next).init({
 					print: 'Imprimer'
 				},
 				menu: {
-					rooms: 'Locaux / Dangers',
+					rooms: 'Locaux',
 					units: 'Unités',
 					organisms: 'Organismes',
 					dispensations: 'Dispensations',
-					hazardFormControl: 'Contrôle des formulaires de dangers'
+					hazardFormControl: 'Contrôle des formulaires de dangers',
+					hazards: 'Dangers'
 				},
 				organism: {
 					organismsList: 'Organismes',

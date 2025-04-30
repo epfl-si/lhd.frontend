@@ -1,4 +1,12 @@
-import {kindType, lhdUnitsType, organismType, reportFile, roomDetailsType, roomType} from '../ressources/types';
+import {
+	hazardDetailsType,
+	kindType,
+	lhdUnitsType,
+	organismType,
+	reportFile,
+	roomDetailsType,
+	roomType
+} from '../ressources/types';
 import {formatDataToColumns} from './ParsingTools';
 import {makeQuery} from "./Utils";
 
@@ -15,6 +23,16 @@ type fetchRoomResultsType = {
 type fetchRoomResultsTypeWithPagination = {
 	status?: number;
 	data?: roomsWithPaginationType;
+};
+
+type fetchHazardsResultsTypeWithPagination = {
+	status?: number;
+	data?: hazardsWithPaginationType;
+};
+
+type hazardsWithPaginationType = {
+	hazards: hazardDetailsType[];
+	totalCount: number;
 };
 
 type roomsWithPaginationType = {
@@ -881,5 +899,51 @@ export const fetchOrganismsFromFullText = async (
 	return {
 		status: result.status,
 		data: result.data?.organismsFromFullText,
+	};
+};
+
+export const fetchHazardCategories = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query: string = `query categorylist {
+              hazardCategories {
+                hazard_category_name
+              }
+            }`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.hazardCategories,
+	};
+};
+
+export const fetchHazards = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string,
+	queryString: string
+): Promise<fetchHazardsResultsTypeWithPagination> => {
+	const query: string = `query HazardFetch { 
+				hazardsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", queryString: "${queryString}") {
+					hazards {
+						lab_display
+						hazard_category_name
+						parent_submission
+						child_submission
+						id_lab_has_hazards_child
+						id_lab_has_hazards
+					}
+					totalCount
+				},
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.hazardsWithPagination,
 	};
 };
