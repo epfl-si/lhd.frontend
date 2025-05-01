@@ -123,6 +123,8 @@ export const OrganismsControl = ({
 		const urlParams = new URLSearchParams(window.location.search);
 		if ( urlParams.has('search') ) {
 			setSearch(decodeURIComponent(urlParams.get('search') as string));
+		} else {
+			setSearch('');
 		}
 		handleCurrentPage("organisms");
 	}, [oidc.accessToken]);
@@ -134,7 +136,6 @@ export const OrganismsControl = ({
 			oidc.accessToken,
 			search
 		);
-		debugger;
 		if (results.status === 200 && results.data){
 			setTableData(results.data);
 		} else {
@@ -176,7 +177,10 @@ export const OrganismsControl = ({
 					className="debounce-input"
 				/>
 				{isUserAuthorized && <Button
-					onClick={() => setOpenDialog(true)}
+					onClick={() => {
+						setOpenDialog(true);
+						setSelectedOrganism(undefined);
+					}}
 					label={t(`generic.addNew`)}
 					iconName={`${featherIcons}#plus-circle`}
 					primary/>}
@@ -188,12 +192,16 @@ export const OrganismsControl = ({
 				pageToOpen={"organism"}
 				onClickOrganism={modifyOrganism}
 			/>
-			<AddNewOrganismDialog openDialog={openDialog} close={() => setOpenDialog(false)}
-												save={(searchVal: string) => {
-													setOpenDialog(false);
-													onChangeInput(searchVal);
-												}}
-												selectedOrganism={selectedOrganism}/>
+			<AddNewOrganismDialog openDialog={openDialog}
+														close={() => {
+															setOpenDialog(false);
+															setSearch('');
+														}}
+														save={(searchVal: string) => {
+															setOpenDialog(false);
+															onChangeInput(searchVal);
+														}}
+														selectedOrganism={selectedOrganism}/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}
