@@ -84,7 +84,7 @@ export const OrganismsControl = ({
 	];
 
 	const columnsMedium: columnType[] = [
-		{field: "organism", headerName: t('organism.updated'), width: 300,
+		{field: "organism", headerName: t('organism.name'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				const date = new Date(params.row.updated_on);
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
@@ -108,11 +108,22 @@ export const OrganismsControl = ({
 					{params.row.updated_by + '(' + date.toLocaleDateString("en-GB") + ')'}
 				</div>
 			}
-		}
+		},
+		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+			renderCell: (params: GridRenderCellParams<any, organismType>) => (
+				<><Button size="icon"
+									iconName={"#edit-3"}
+									onClick={() => modifyOrganism(params.row)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => handleDelete(params.row)}/></>
+			)
+		},
 	];
 
 	const columnsSmall: columnType[] = [
-		{field: "organism", headerName: t('organism.updated'), width: 300,
+		{field: "organism", headerName: t('organism.name'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				const date = new Date(params.row.updated_on);
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>

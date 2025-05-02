@@ -80,4 +80,12 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Bad GraphQL query',
 	},
+	'update_error': {
+		type: 'error',
+		text: 'Update failed',
+	},
+	'update_success': {
+		type: 'success',
+		text: 'Update success',
+	},
 };
