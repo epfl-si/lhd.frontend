@@ -39,9 +39,6 @@ export const AddNewOrganismDialog = ({
 	const [textInput, setTextInput] = useState<string>(selectedOrganism ? selectedOrganism.organism : "");
 	const [risk, setRisk] = useState<number | undefined>(selectedOrganism ? selectedOrganism.risk_group : undefined);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
-	const [loadingDelete, setLoadingDelete] = useState(false);
-	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
-	const [deleted, setDeleted] = useState(false);
 
 	useEffect(() => {
 		setTextInput(selectedOrganism ? selectedOrganism.organism : '');
@@ -112,39 +109,6 @@ export const AddNewOrganismDialog = ({
 		setOpenNotification(false);
 	};
 
-	const handleDelete = async () => {
-		setLoadingDelete(true);
-		const results = await fetchHazards(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			20,
-			0,
-			'Biological',
-			'organism=' + selectedOrganism?.organism
-		);
-
-		if ( results.status && results.status === 200 && results.data && results.data.totalCount > 0) {
-			setOpenDialogDelete(true);
-		} else {
-			deleteOrg();
-		}
-		setLoadingDelete(false);
-	};
-
-	function deleteOrg() {
-		deleteOrganism(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			JSON.stringify(selectedOrganism?.id),
-		).then(res => {
-			if(res.status == 200 && !res.data?.deleteOrganism?.errors) {
-				setOpenDialogDelete(false);
-				close();
-				setDeleted(true);
-			}
-		});
-	}
-
 	return (
 		<>
 			<AlertDialog openDialog={openDialog}
@@ -184,28 +148,12 @@ export const AddNewOrganismDialog = ({
 					accept='.pdf'
 					onChange={handleFileChange}
 				/>
-				{selectedOrganism && <div style={{marginTop: '20px', paddingLeft: '0px'}}><Button
-			onClick={handleDelete}
-			label={t(`generic.deleteButton`)}
-			iconName={`${featherIcons}#trash`}
-			primary/></div>
-				}
-			</AlertDialog>
-			<AlertDialog openDialog={openDialogDelete}
-									 onCancelClick={() => setOpenDialogDelete(false)}
-									 cancelLabel={t('generic.cancelButton')}
-									 okLabel={t('generic.deleteButton')}
-									 title={t('organism.deleteOrganismTitle')}>
-				{t('organism.deleteOrganismMessageStart')}
-				<a href={'/hazardscontrol?Category=Biological&organism='+selectedOrganism?.organism} target="_blank">{t('organism.link')}</a>
-				{t('organism.deleteOrganismMessageEnd')}
 			</AlertDialog>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
 			/>
-			{deleted && <Redirect to="/organismscontrol"/>}
 		</>
 	);
 }

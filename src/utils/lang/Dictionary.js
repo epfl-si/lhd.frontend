@@ -166,10 +166,11 @@ i18next.use(initReactI18next).init({
 					addNewOrganism: 'Add new organism',
 					modifyOrganism: 'Modify the organism',
 					organismName: 'Organism name',
-					deleteOrganismTitle: 'Delete organism alert',
+					deleteOrganismTitle: 'Delete organism: ',
 					deleteOrganismMessageStart: 'This organism is still used in some hazads. Please, verify hazards following ',
-					deleteOrganismMessageEnd: ' and delete them before deleting the organism: ',
-					link: 'this link'
+					deleteOrganismMessageEnd: ' and delete them before deleting the organism',
+					link: 'this link',
+					retry: 'Retry'
 				},
 				hazards: {
 					Biological: 'Biological',
@@ -370,10 +371,11 @@ i18next.use(initReactI18next).init({
 					addNewOrganism: 'Ajouter un nouveau organisme',
 					modifyOrganism: 'Modifier l\'organisme',
 					organismName: 'Nom de l\'organisme',
-					deleteOrganismTitle: 'Supprimer l\'organism',
+					deleteOrganismTitle: 'Supprimer l\'organism: ',
 					deleteOrganismMessageStart: 'Cet organisme est encore utilisé dans certains dangers. Veuillez vérifier les dangers en suivant ',
-					deleteOrganismMessageEnd: ' et les supprimer avant de supprimer l\'organisme: ',
-					link: 'ce lien'
+					deleteOrganismMessageEnd: ' et les supprimer avant de supprimer l\'organisme.',
+					link: 'ce lien',
+					retry: 'Réessayer'
 				},
 				hazards: {
 					Biological: 'Biologique',
