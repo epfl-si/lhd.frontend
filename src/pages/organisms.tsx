@@ -1,6 +1,6 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchOrganismsFromFullText} from "../utils/graphql/FetchingTools";
+import {fetchHazards, fetchOrganismsFromFullText} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
@@ -9,13 +9,15 @@ import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {useHistory} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {handleClickFileLink} from "../utils/ressources/file";
 import {AddNewOrganismDialog} from "../components/organism/AddNewOrganismDialog";
+import {deleteOrganism} from "../utils/graphql/PostingTools";
+import {AlertDialog} from "../components/global/AlertDialog";
 
 interface OrganismsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -42,6 +44,10 @@ export const OrganismsControl = ({
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
 	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
+	const [loadingDelete, setLoadingDelete] = useState(false);
+	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
+	const [deleted, setDeleted] = useState(false);
+
 	const columnsLarge: columnType[] = [
 		{field: "organism", headerName: t('organism.name'), width: 300},
 		{field: "risk_group", headerName: t('organism.risk'), width: 100},
@@ -64,6 +70,17 @@ export const OrganismsControl = ({
 			}
 		},
 		{field: "updated_by", headerName: t('organism.updated_by'), width: 300},
+		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+			renderCell: (params: GridRenderCellParams<any, organismType>) => (
+				<><Button size="icon"
+								iconName={"#edit-3"}
+								onClick={() => modifyOrganism(params.row)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => handleDelete(params.row)}/></>
+			)
+		},
 	];
 
 	const columnsMedium: columnType[] = [
@@ -117,7 +134,8 @@ export const OrganismsControl = ({
 
 	useEffect(() => {
 		loadFetch();
-	}, [search]);
+		setDeleted(false);
+	}, [search, deleted]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(window.location.search);
@@ -162,6 +180,42 @@ export const OrganismsControl = ({
 		setSelectedOrganism(dataOrganism);
 	}
 
+	const handleDelete = async (dataOrganism: organismType | undefined) => {
+		if (!dataOrganism) return;
+		setLoadingDelete(true);
+		setSelectedOrganism(dataOrganism);
+		const results = await fetchHazards(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			20,
+			0,
+			'Biological',
+			'organism=' + dataOrganism?.organism
+		);
+
+		if ( results.status && results.status === 200 && results.data && results.data.totalCount > 0) {
+			setOpenDialogDelete(true);
+		} else {
+			deleteOrg(dataOrganism);
+		}
+		setLoadingDelete(false);
+	};
+
+	function deleteOrg(dataOrganism: organismType) {
+		deleteOrganism(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			JSON.stringify(dataOrganism?.id),
+		).then(res => {
+			if(res.status == 200 && !res.data?.deleteOrganism?.errors) {
+				setOpenDialogDelete(false);
+				setDeleted(true);
+				setSelectedOrganism(undefined);
+				setSearch('');
+			}
+		});
+	}
+
 	return (
 		<Box>
 			<Typography gutterBottom>
@@ -190,7 +244,6 @@ export const OrganismsControl = ({
 				columns={(isExtraLargeDevice || isLargeDevice) ? columnsLarge : (isMediumDevice ? columnsMedium : columnsSmall)}
 				loading={loading}
 				pageToOpen={"organism"}
-				onClickOrganism={modifyOrganism}
 			/>
 			<AddNewOrganismDialog openDialog={openDialog}
 														close={() => {
@@ -207,6 +260,17 @@ export const OrganismsControl = ({
 				notification={notificationType}
 				close={handleClose}
 			/>
+			<AlertDialog openDialog={openDialogDelete}
+									 onCancelClick={() => setOpenDialogDelete(false)}
+									 onOkClick={() => handleDelete(selectedOrganism)}
+									 cancelLabel={t('generic.cancelButton')}
+									 okLabel={t('organism.retry')}
+									 title={t('organism.deleteOrganismTitle') + selectedOrganism?.organism}>
+				{t('organism.deleteOrganismMessageStart')}
+				<a href={'/hazardscontrol?Category=Biological&organism='+selectedOrganism?.organism} target="_blank">{t('organism.link')}</a>
+				{t('organism.deleteOrganismMessageEnd')}
+			</AlertDialog>
+			{deleted && <Redirect to="/organismscontrol"/>}
 		</Box>
 	);
 }
