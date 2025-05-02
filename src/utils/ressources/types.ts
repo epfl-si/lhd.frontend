@@ -90,7 +90,7 @@ export type hazardDetailsType = {
 	hazard_category_name: string,
 	parent_submission: string,
 	child_submission: string,
-	id_lab_has_hazards_child: number
+	id_lab_has_hazards_child: string,
 	id_lab_has_hazards: number
 }
 

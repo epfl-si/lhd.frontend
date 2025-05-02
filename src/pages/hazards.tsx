@@ -4,14 +4,19 @@ import {fetchHazardCategories, fetchHazards} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, MenuItem, Select, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {hazardCategory, hazardDetailsType} from "../utils/ressources/types";
+import {hazardCategory, hazardDetailsType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";
-import {useHistory} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import {splitCamelCase} from "../utils/ressources/jsonUtils";
 import {handleClickFileLink} from "../utils/ressources/file";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {AlertDialog} from "../components/global/AlertDialog";
+import {deleteHazardChild, deleteUnit} from "../utils/graphql/PostingTools";
+import Notifications from "../components/Table/Notifications";
+import {notificationsVariants} from "../utils/ressources/variants";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -37,12 +42,21 @@ export const HazardsControl = ({
 	const [isTableReady, setIsTableReady] = React.useState<boolean>(false);
 	const columns = React.useRef([{field: "lab_display", headerName: t('room.name'), width: 150}]);
 	const [keys, setKeys] = React.useState<string[]>([]);
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [selectedHazard, setSelectedHazard] = useState<string>();
+	const [deleted, setDeleted] = useState(false);
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (isUserAuthorized && search != '') {
 			loadFetch();
 		}
-	}, [search, queryString, page, isUserAuthorized]);
+		setDeleted(false);
+	}, [search, queryString, page, isUserAuthorized, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("hazards");
@@ -82,6 +96,25 @@ export const HazardsControl = ({
 			}
 			setLoading(false);
 		}
+	};
+
+	const handleOpen = (res: any) => {
+		if (res.data?.deleteHazardChild?.errors || res.data?.deleteHazardChild?.errors) {
+			const notif: notificationType = {
+				text: res.data?.deleteHazardChild?.errors[0].message,
+				type: 'error'
+			};
+			setNotificationType(notif);
+		} else if (res.status === 200) {
+			setNotificationType(notificationsVariants['update_success']);
+		} else {
+			setNotificationType(notificationsVariants['update_error']);
+		}
+		setOpenNotification(true);
+	};
+
+	const handleClose = () => {
+		setOpenNotification(false);
 	};
 
 	const parseAndFlatResult = (hazards: hazardDetailsType[]) => {
@@ -127,6 +160,20 @@ export const HazardsControl = ({
 					}
 				}
 			}
+			if (search == 'Biological') {
+				columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
+					renderCell: (params: GridRenderCellParams<any, any>) => (
+							<Button size="icon"
+											style={{visibility: params.row.id_lab_has_hazards_child ? "visible" : "hidden"}}
+											iconName={`#trash`}
+											onClick={() => {
+												console.log(params.row)
+												setOpenDialog(true);
+												setSelectedHazard(params.row.id_lab_has_hazards_child);
+											}}/>
+					)
+				});
+			}
 			setIsTableReady(true)
 
 			// Overwrite with actual values
@@ -157,6 +204,21 @@ export const HazardsControl = ({
 		columns.current = [{field: "lab_display", headerName: t('room.name'), width: 150}];
 		history.push(`/hazardscontrol?Category=${(event.target.value)}`);
 	};
+
+	function handleHazardDelete() {
+		deleteHazardChild(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			JSON.stringify(selectedHazard),
+		).then(res => {
+			if(res.status == 200 && !res.data?.deleteHazardChild?.errors) {
+				setDeleted(true);
+			}
+			handleOpen(res);
+			setOpenDialog(false);
+			setSelectedHazard('');
+		});
+	}
 
 	return (
 		<Box>
@@ -195,6 +257,22 @@ export const HazardsControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>}
+				<AlertDialog openDialog={openDialog}
+											onOkClick={handleHazardDelete}
+											onCancelClick={() => {
+												setOpenDialog(false);
+												setSelectedHazard('');
+											}}
+											cancelLabel={t('generic.cancelButton')}
+											okLabel={t('generic.deleteButton')}
+											title={t('hazards.deleteHazardConfirmationMessageTitle')}>
+			</AlertDialog>
+				<Notifications
+					open={openNotification}
+					notification={notificationType}
+					close={handleClose}
+				/>
+				{deleted ? <Redirect to={"/hazardscontrol?Category=Biological&" + queryString}/> : <></>}
 			</> : <b>You are not authorized for this page</b>}
 		</Box>
 	);

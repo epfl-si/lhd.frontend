@@ -284,6 +284,26 @@ export const deleteOrganism = async (
 	return makeQuery(query, {}, address, authToken);
 };
 
+export const deleteHazardChild = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteHazardChild {
+               deleteHazardChild(id: ${id} )
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	console.log(query)
+	return makeQuery(query, {}, address, authToken);
+};
+
+
 export const addHazard = async (
 	address: string | undefined,
 	authToken: string | undefined,

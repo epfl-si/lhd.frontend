@@ -43,7 +43,7 @@ i18next.use(initReactI18next).init({
 					addNewUnit: 'Add a new sub-unit',
 					noSubUnits: 'No sub-unit present',
 					editName: 'Edit the sub-unit name',
-					deleteUnitConfirmationMessageTitle: 'Are you sur to delete this unit?',
+					deleteUnitConfirmationMessageTitle: 'Are you sure to delete this unit?',
 					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles, COSECs, rooms and storages will be deleted. \nAll sub-units will be deleted too.'
 				},
 				unit: {
@@ -170,7 +170,8 @@ i18next.use(initReactI18next).init({
 					deleteOrganismMessageStart: 'This organism is still used in some hazads. Please, verify hazards following ',
 					deleteOrganismMessageEnd: ' and delete them before deleting the organism',
 					link: 'this link',
-					retry: 'Retry'
+					retry: 'Retry',
+					actions: 'Actions'
 				},
 				hazards: {
 					Biological: 'Biological',
@@ -187,7 +188,8 @@ i18next.use(initReactI18next).init({
 					StaticMagneticField: 'Static Magnetic Field',
 					Temperature: 'Temperature',
 					modification_info: 'Modified by %s on %s',
-					otherRooms: ' due to magnet located in room '
+					otherRooms: ' due to magnet located in room ',
+					deleteHazardConfirmationMessageTitle: 'Are you sure you want to delete this hazard?'
 				},
 				hazardFormControl: {
 					title: 'Hazard Forms',
@@ -375,7 +377,8 @@ i18next.use(initReactI18next).init({
 					deleteOrganismMessageStart: 'Cet organisme est encore utilisé dans certains dangers. Veuillez vérifier les dangers en suivant ',
 					deleteOrganismMessageEnd: ' et les supprimer avant de supprimer l\'organisme.',
 					link: 'ce lien',
-					retry: 'Réessayer'
+					retry: 'Réessayer',
+					actions: 'Actions'
 				},
 				hazards: {
 					Biological: 'Biologique',
@@ -392,7 +395,8 @@ i18next.use(initReactI18next).init({
 					StaticMagneticField: 'Champ Magnétique Statique',
 					Temperature: 'Température',
 					modification_info: 'Modifié par %s le %s',
-					otherRooms: ' dû à l\'aimant situé dans la salle '
+					otherRooms: ' dû à l\'aimant situé dans la salle ',
+					deleteHazardConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer ce danger?',
 				},
 				hazardFormControl: {
 					title: 'Formulaires des dangers',
