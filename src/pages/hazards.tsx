@@ -8,13 +8,13 @@ import {hazardCategory, hazardDetailsType, notificationType} from "../utils/ress
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";
-import {Redirect, useHistory} from "react-router-dom";
+import {Redirect, useHistory, useLocation} from "react-router-dom";
 import {splitCamelCase} from "../utils/ressources/jsonUtils";
 import {handleClickFileLink} from "../utils/ressources/file";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {AlertDialog} from "../components/global/AlertDialog";
-import {deleteHazardChild, deleteUnit} from "../utils/graphql/PostingTools";
+import {deleteHazardChild} from "../utils/graphql/PostingTools";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
 
@@ -27,6 +27,7 @@ export const HazardsControl = ({
 	handleCurrentPage,
 	isUserAuthorized
 }: HazardsControlProps) => {
+	const location = useLocation();
 	const PAGE_SIZE = 100;
 	const {t} = useTranslation();
 	const history = useHistory();
@@ -50,6 +51,13 @@ export const HazardsControl = ({
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (location.search == '') {
+			setSearch('');
+			setQueryString('');
+		}
+	}, [location]);
 
 	useEffect(() => {
 		if (isUserAuthorized && search != '') {

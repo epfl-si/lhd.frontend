@@ -13,7 +13,7 @@ import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import {readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
@@ -27,6 +27,7 @@ export const RoomControl = ({
 	handleCurrentPage,
 	isUserAuthorized
 }: RoomControlProps) => {
+	const location = useLocation();
 	const PAGE_SIZE = 100;
 	const history = useHistory();
 	const {t} = useTranslation();
@@ -222,7 +223,7 @@ export const RoomControl = ({
 		if (isUserAuthorized) {
 			loadFetch();
 		}
-	}, [search, page, isUserAuthorized]);
+	}, [search, page, isUserAuthorized, location]);
 
 	useEffect(() => {
 		handleCurrentPage("rooms");
