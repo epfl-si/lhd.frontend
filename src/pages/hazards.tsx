@@ -4,7 +4,7 @@ import {fetchHazardCategories, fetchHazards} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, MenuItem, Select, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {hazardCategory, hazardDetailsType, notificationType} from "../utils/ressources/types";
+import {hazardCategory, hazardDetailsType, notificationType, organismType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";
@@ -41,7 +41,12 @@ export const HazardsControl = ({
 	const [queryString, setQueryString] = React.useState<string>('');
 	const [categoryList, setCategoryList] = React.useState<hazardCategory[]>([]);
 	const [isTableReady, setIsTableReady] = React.useState<boolean>(false);
-	const columns = React.useRef([{field: "lab_display", headerName: t('room.name'), width: 150}]);
+	const columns = React.useRef([{
+		field: "lab_display", headerName: t('room.name'), width: 150,
+		renderCell: (params: GridRenderCellParams<any, any>) => (
+			<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
+		)
+	}]);
 	const [keys, setKeys] = React.useState<string[]>([]);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [selectedHazard, setSelectedHazard] = useState<string>();
@@ -209,7 +214,10 @@ export const HazardsControl = ({
 		setSearch(event.target.value as string);
 		setIsTableReady(false);
 		setQueryString('');
-		columns.current = [{field: "lab_display", headerName: t('room.name'), width: 150}];
+		columns.current = [{field: "lab_display", headerName: t('room.name'), width: 150,
+			renderCell: (params: GridRenderCellParams<any, any>) => (
+				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
+			)}];
 		history.push(`/hazardscontrol?Category=${(event.target.value)}`);
 	};
 
