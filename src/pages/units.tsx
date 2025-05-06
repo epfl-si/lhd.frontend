@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
@@ -25,6 +25,7 @@ export const UnitControl = ({
 	handleCurrentPage,
 	isUserAuthorized
 }: UnitControlProps) => {
+	const location = useLocation();
 	const PAGE_SIZE = 100;
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -177,12 +178,14 @@ export const UnitControl = ({
 	}, [search, page, isUserAuthorized]);
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
+		const urlParams = new URLSearchParams(location.search);
 		if (urlParams.has('search')) {
 			setSearch(decodeURIComponent(urlParams.get('search') as string));
+		} else {
+			setSearch('');
 		}
 		handleCurrentPage("units");
-	}, [oidc.accessToken]);
+	}, [oidc.accessToken, location]);
 
 	const loadFetch = async () => {
 		setLoading(true);

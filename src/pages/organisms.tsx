@@ -9,7 +9,7 @@ import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {Redirect, useHistory} from "react-router-dom";
+import {Redirect, useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {notificationsVariants} from "../utils/ressources/variants";
@@ -143,20 +143,22 @@ export const OrganismsControl = ({
 		}
 	];
 
+	const location = useLocation();
+
 	useEffect(() => {
 		loadFetch();
 		setDeleted(false);
 	}, [search, deleted]);
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
+		const urlParams = new URLSearchParams(location.search);
 		if ( urlParams.has('search') ) {
 			setSearch(decodeURIComponent(urlParams.get('search') as string));
 		} else {
 			setSearch('');
 		}
 		handleCurrentPage("organisms");
-	}, [oidc.accessToken]);
+	}, [oidc.accessToken, location]);
 
 	const loadFetch = async () => {
 		setLoading(true);
