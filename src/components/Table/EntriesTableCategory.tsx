@@ -17,7 +17,6 @@ type EntriesTableCategoryProps = {
 	pageSize?: number;
 	totalCount?: number;
 	loadServerRows?: (newPage: number) => void;
-	onClickOrganism?: (dataOrganism: organismType) => void;
 };
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -44,7 +43,6 @@ export function EntriesTableCategory({
 	pageSize,
 	totalCount,
 	loadServerRows,
-	onClickOrganism
 }: EntriesTableCategoryProps) {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -79,9 +77,6 @@ export function EntriesTableCategory({
 						}}
 						onRowClick={e => {
 							switch ( pageToOpen ) {
-								case "unit":
-									history.push(`/unitdetails?unit=${encodeURIComponent(e.row['name'])}`);
-									break;
 								case "room":
 									history.push(`/roomdetails?room=${encodeURIComponent(e.row['name'])}`);
 									break;
@@ -121,9 +116,6 @@ export function EntriesTableCategory({
 								break;
 							case "hazardFormsChild":
 								history.push(`/hazardFormChildDetails?name=${e.row['hazard_form_child_name']}`);
-								break;
-							case "organism":
-								if (onClickOrganism) onClickOrganism(e.row as organismType);
 								break;
 						}
 					}}
