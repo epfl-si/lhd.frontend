@@ -9,12 +9,13 @@ import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {useHistory, useLocation} from "react-router-dom";
+import {Redirect, useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
+import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -44,6 +45,9 @@ export const UnitControl = ({
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
 	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
+	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
+	const [selectedUnit, setSelectedUnit] = useState<lhdUnitsType>();
+	const [deleted, setDeleted] = useState(false);
 	const columnsLarge: columnType[] = [
 		{
 			field: "unitId", headerName: t('unit.subUnit'), width: 100,
@@ -86,6 +90,20 @@ export const UnitControl = ({
 					{cosecs}
 				</span>
 			},
+		},
+		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				<><Button size="icon"
+									iconName={"#edit-3"}
+									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => {
+										setOpenDialogDelete(true);
+										setSelectedUnit(params.row);
+									}}/></>
+			)
 		},
 	];
 
@@ -130,6 +148,20 @@ export const UnitControl = ({
 				</span></div>
 			},
 		},
+		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				<><Button size="icon"
+									iconName={"#edit-3"}
+									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => {
+										setOpenDialogDelete(true);
+										setSelectedUnit(params.row);
+									}}/></>
+			)
+		},
 	];
 
 	const columnsSmall: columnType[] = [
@@ -168,14 +200,29 @@ export const UnitControl = ({
 				</span></div>
 				</span>
 			},
-		}
+		},
+		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				<><Button size="icon"
+									iconName={"#edit-3"}
+									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => {
+										setOpenDialogDelete(true);
+										setSelectedUnit(params.row);
+									}}/></>
+			)
+		},
 	];
 
 	useEffect(() => {
 		if (isUserAuthorized) {
 			loadFetch();
 		}
-	}, [search, page, isUserAuthorized]);
+		setDeleted(false);
+	}, [search, page, isUserAuthorized, deleted]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(location.search);
@@ -254,6 +301,11 @@ export const UnitControl = ({
 													setOpenDialog(false);
 													onChangeInput(searchVal);
 												}}/>
+				<DeleteUnitDialog unit={selectedUnit}
+													openDialog={openDialogDelete}
+													setOpenDialog={setOpenDialogDelete}
+													setDeleted={setDeleted}
+				/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

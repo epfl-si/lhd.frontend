@@ -72,13 +72,13 @@ export const OrganismsControl = ({
 		{field: "updated_by", headerName: t('organism.updated_by'), width: 300},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				<><Button size="icon"
+				isUserAuthorized ? <><Button size="icon"
 								iconName={"#edit-3"}
 								onClick={() => modifyOrganism(params.row)}/>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></>
+									onClick={() => handleDelete(params.row)}/></> : <></>
 			)
 		},
 	];

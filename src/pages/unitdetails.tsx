@@ -19,6 +19,7 @@ import {AlertDialog} from "../components/global/AlertDialog";
 import {UnitTabTitle} from "../components/Units/UnitTabTitle";
 import {BackButton} from "../components/global/BackButton";
 import {Text} from "epfl-elements-react/src/stories/molecules/inputFields/Text";
+import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -100,19 +101,6 @@ export default function UnitDetails() {
 			if (!data[0]?.unitId && newName != data[0]?.name) {
 				history.push(`/unitdetails?unit=${encodeURIComponent(newName)}`);
 			}
-		});
-	}
-
-	function deleteUnitDetails() {
-		deleteUnit(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			JSON.stringify(data[0]?.id),
-		).then(res => {
-			if(res.status == 200 && !res.data?.deleteUnit?.errors) {
-				setDeleted(true);
-			}
-			handleOpen(res);
 		});
 	}
 
@@ -251,14 +239,11 @@ export default function UnitDetails() {
 				close={handleClose}
 			/>
 			{deleted ? <Redirect to="/unitcontrol"/> : <></>}
-			<AlertDialog openDialog={openDialog}
-									 onOkClick={deleteUnitDetails}
-									 onCancelClick={() => setOpenDialog(false)}
-									 cancelLabel={t('generic.cancelButton')}
-									 okLabel={t('generic.deleteButton')}
-									 title={t('unit_details.deleteUnitConfirmationMessageTitle')}>
-				{t('unit_details.deleteUnitConfirmationMessageDescription')}
-			</AlertDialog>
+			<DeleteUnitDialog unit={data[0]}
+												openDialog={openDialog}
+												setOpenDialog={setOpenDialog}
+												setDeleted={setDeleted}
+			/>
 			<AlertDialog openDialog={openDialogEdit}
 									 onOkClick={() => saveUnitDetails()}
 									 onCancelClick={() => setOpenDialogEdit(false)}
