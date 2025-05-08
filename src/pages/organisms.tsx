@@ -49,16 +49,16 @@ export const OrganismsControl = ({
 	const [deleted, setDeleted] = useState(false);
 
 	const columnsLarge: columnType[] = [
-		{field: "organism", headerName: t('organism.name'), width: 300},
-		{field: "risk_group", headerName: t('organism.risk'), width: 100},
-		{field: "filePath", headerName: t('organism.file'), width: 300, disableExport: true,
+		{field: "organism", headerName: t('organism.name'), width: 200},
+		{field: "risk_group", headerName: t('organism.risk'), width: 80},
+		{field: "filePath", headerName: t('organism.file'), width: 200, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
 																 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
 					<></>
 			)
 		},
-		{field: "updated_on", headerName: t('organism.updated_on'), width: 300,
+		{field: "updated_on", headerName: t('organism.updated_on'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				const date = new Date(params.row.updated_on);
 				return date.toLocaleDateString("en-GB");
@@ -69,8 +69,8 @@ export const OrganismsControl = ({
 				return date.toLocaleDateString("en-GB");
 			}
 		},
-		{field: "updated_by", headerName: t('organism.updated_by'), width: 300},
-		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+		{field: "updated_by", headerName: t('organism.updated_by'), width: 200},
+		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				isUserAuthorized ? <><Button size="icon"
 								iconName={"#edit-3"}
@@ -84,32 +84,34 @@ export const OrganismsControl = ({
 	];
 
 	const columnsMedium: columnType[] = [
-		{field: "organism", headerName: t('organism.name'), width: 300,
+		{field: "organism", headerName: t('organism.name'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
-				const date = new Date(params.row.updated_on);
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					<span>
-						<b>{params.row.organism}</b>{` (${t('organism.risk')} : ${params.row.risk_group})`}
+						<b>{params.row.organism}</b><br/>{` (${t('organism.risk')} : ${params.row.risk_group})`}
 					</span>
 				</div>
-			}
+			},
+			valueGetter: (params: GridRenderCellParams<any, organismType>) => params.row.organism
 		},
-		{field: "filePath", headerName: t('organism.file'), width: 300, disableExport: true,
+		{field: "filePath", headerName: t('organism.file'), width: 150, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
 																																onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
 					<></>
 			)
 		},
-		{field: "updated_by", headerName: t('organism.updated'), width: 300,
+		{field: "updated_by", headerName: t('organism.updated'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				const date = new Date(params.row.updated_on);
-				return <div style={{display: "flex", flexDirection: 'row'}}>
-					{params.row.updated_by + '(' + date.toLocaleDateString("en-GB") + ')'}
+				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
+					{params.row.updated_by}
+					<br/>
+					{'(' + date.toLocaleDateString("en-GB") + ')'}
 				</div>
 			}
 		},
-		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				<><Button size="icon"
 									iconName={"#edit-3"}

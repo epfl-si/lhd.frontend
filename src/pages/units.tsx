@@ -74,22 +74,26 @@ export const UnitControl = ({
 				return "";
 			}},
 		{
-			field: "professors", headerName: t('unit.prof'), width: 200,disableExport: true,
+			field: "professors", headerName: t('unit.prof'), width: 200,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
 				return <span style={{lineHeight: '20px', fontSize: "small"}}>
 					{professors}
 				</span>
-			}
+			},
+			valueGetter: (params: GridRenderCellParams<any, lhdUnitsType>) =>
+				params.row.professors.map(c => c.name + ' ' + c.surname).join(', ')
 		},
 		{
-			field: "cosecs", headerName: t('unit.cosec'), width: 200,disableExport: true,
+			field: "cosecs", headerName: t('unit.cosec'), width: 200,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
 				return <span style={{lineHeight: '20px', fontSize: "small"}}>
 					{cosecs}
 				</span>
 			},
+			valueGetter: (params: GridRenderCellParams<any, lhdUnitsType>) =>
+				params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ')
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
