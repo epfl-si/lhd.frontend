@@ -102,7 +102,7 @@ export const MultipleAutocomplete = ({
 					{ title: "Building="+query, encodedTitle: "Building="+ encodeURIComponent(query) },
 					{ title: "Sector="+query, encodedTitle: "Sector="+ encodeURIComponent(query) },
 					{ title: "Floor="+query, encodedTitle: "Floor="+ encodeURIComponent(query) },
-					{ title: "Volume="+query, encodedTitle: "Volume="+ encodeURIComponent(query) },
+					{ title: "Volume (±10)="+query, encodedTitle: "Volume="+ encodeURIComponent(query) },
 					{ title: "Designation="+query, encodedTitle: "Designation="+ encodeURIComponent(query) },
 					{ title: "Hazard="+query, encodedTitle: "Hazard="+ encodeURIComponent(query) },
 				]
