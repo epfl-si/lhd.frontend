@@ -97,6 +97,7 @@ i18next.use(initReactI18next).init({
 					adminuse: 'DIN Type',
 					facultyuse: 'DIN Sub-type',
 					volume: 'Volume (m³)',
+					vol: 'Vol (m³)',
 					fichePorte: 'Fiche de porte'
 				},
 				fetchError: {
@@ -304,6 +305,7 @@ i18next.use(initReactI18next).init({
 					adminuse: 'Type DIN',
 					facultyuse: 'Sous-type DIN',
 					volume: 'Volume (m³)',
+					vol: 'Vol (m³)',
 					fichePorte: 'Fiche de porte'
 				},
 				fetchError: {
