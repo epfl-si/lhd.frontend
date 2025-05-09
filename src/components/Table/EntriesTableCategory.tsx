@@ -58,7 +58,7 @@ export function EntriesTableCategory({
 			{tableData !== null ? (
 				(pageToOpen == 'room' || pageToOpen == 'unit' || pageToOpen == 'hazards') ?
 					<StyledDataGrid
-						style={{fontSize: 'small'}}
+						style={{fontSize:`${pageToOpen == 'room' ? 'x-small' : 'small'}`}}
 						loading={loading}
 						disableSelectionOnClick={true}
 						rows={tableData}
