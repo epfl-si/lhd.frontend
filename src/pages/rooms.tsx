@@ -54,6 +54,7 @@ export const RoomControl = ({
 			{field: "building", headerName: t('room.building'), width: 100, hide: true},
 			{field: "sector", headerName: t('room.sector'), width: 100, hide: true},
 			{field: "floor", headerName: t('room.floor'), width: 100, hide: true},
+			{field: "vol", headerName: t('room_details.volume'), width: 50},
 			{field: "kind", headerName: t('room.kind.name'), width: 200, valueGetter: (params) => {
 				if (params.row.kind && params.row.kind.name) {
 					return params.row.kind.name;
