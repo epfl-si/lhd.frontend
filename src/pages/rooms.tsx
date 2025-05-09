@@ -49,11 +49,11 @@ export const RoomControl = ({
 	const [search, setSearch] = React.useState<string>('');
 
 	const columnsLarge: columnType[] = [
-			{field: "name", headerName: t('room.name'), width: 150},
-			{field: "site", headerName: t('room.site'), width: 100, hide: true},
-			{field: "building", headerName: t('room.building'), width: 100, hide: true},
-			{field: "sector", headerName: t('room.sector'), width: 100, hide: true},
-			{field: "floor", headerName: t('room.floor'), width: 100, hide: true},
+			{field: "name", headerName: t('room.name'), width: 100},
+			{field: "site", headerName: t('room.site'), width: 100},
+			{field: "building", headerName: t('room.building'), width: 50},
+			{field: "sector", headerName: t('room.sector'), width: 50},
+			{field: "floor", headerName: t('room.floor'), width: 50},
 			{field: "vol", headerName: t('room_details.volume'), width: 50},
 			{field: "adminuse", headerName: t('room_details.adminuse'), width: 100},
 			{field: "kind", headerName: t('room.kind.name'), width: 200, valueGetter: (params) => {
