@@ -49,13 +49,13 @@ export const RoomControl = ({
 	const [search, setSearch] = React.useState<string>('');
 
 	const columnsLarge: columnType[] = [
-			{field: "name", headerName: t('room.name'), width: 100},
-			{field: "site", headerName: t('room.site'), width: 100},
-			{field: "building", headerName: t('room.building'), width: 50},
-			{field: "sector", headerName: t('room.sector'), width: 50},
-			{field: "floor", headerName: t('room.floor'), width: 50},
-			{field: "vol", headerName: t('room_details.vol'), width: 80},
-			{field: "kind", headerName: t('room.kind.name'), width: 200, valueGetter: (params) => {
+			{field: "name", headerName: t('room.name'), flex: 0.2},
+			{field: "site", headerName: t('room.site'), flex: 0.2},
+			{field: "building", headerName: t('room.building'), flex: 0.2},
+			{field: "sector", headerName: t('room.sector'), flex: 0.1},
+			{field: "floor", headerName: t('room.floor'), flex: 0.1},
+			{field: "vol", headerName: t('room_details.vol'), flex: 0.2},
+			{field: "kind", headerName: t('room.kind.name'), flex: 0.4, valueGetter: (params) => {
 				if (params.row.kind && params.row.kind.name) {
 					return params.row.kind.name;
 				}
@@ -66,7 +66,7 @@ export const RoomControl = ({
 				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
 			),
 		},
-		{field: "lhd_units", headerName: t('room.unit'), flex: 1, disableExport: true,
+		{field: "lhd_units", headerName: t('room.unit'), flex: 0.8, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.lhd_units ?
 					<div className="form-card-div">
