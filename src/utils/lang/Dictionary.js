@@ -16,6 +16,10 @@ i18next.use(initReactI18next).init({
 					site: 'Site',
 					floor: 'Floor',
 					addNewRoom: 'Add new room',
+					exportRoom: 'Export rooms',
+					units: 'Units (mandatory for cosecs ou professors export)',
+					cosecs: 'Cosecs',
+					profs: 'Professors',
 					kind: {
 						name: 'Designation',
 					},
@@ -137,7 +141,8 @@ i18next.use(initReactI18next).init({
 					continueButton: 'Continue',
 					addNew: 'Add new',
 					search: 'Search',
-					comment: 'Comment'
+					comment: 'Comment',
+					export: 'Export'
 				},
 				datagrid: {
 					columns: 'Columns',
@@ -225,6 +230,10 @@ i18next.use(initReactI18next).init({
 					site: 'Site',
 					floor: 'Étage',
 					addNewRoom: 'Ajouter un local',
+					exportRoom: 'Exporter la liste des locaux',
+					units: 'Unités (obligatoire pour l\'export des cosec ou des professeurs)',
+					cosecs: 'Cosecs',
+					profs: 'Professeurs',
 					kind: {
 						name: 'Désignation',
 					},
@@ -345,7 +354,8 @@ i18next.use(initReactI18next).init({
 					continueButton: 'Continuer',
 					addNew: 'Ajouter',
 					search: 'Rechercher',
-					comment: 'Commentaire'
+					comment: 'Commentaire',
+					export: 'Exporter'
 				},
 				datagrid: {
 					columns: 'Colonnes',

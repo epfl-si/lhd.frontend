@@ -17,6 +17,7 @@ import {useHistory, useLocation} from "react-router-dom";
 import {readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
+import {ExportDialog} from "../components/RoomDetails/ExportDialog";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -36,6 +37,7 @@ export const RoomControl = ({
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [openDialogExport, setOpenDialogExport] = useState<boolean>(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -309,6 +311,12 @@ export const RoomControl = ({
 					label={t(`generic.addNew`)}
 					iconName={`${featherIcons}#plus-circle`}
 					primary/>
+				<Button
+					style={{minWidth: '10%', padding: '10px'}}
+					onClick={() => setOpenDialogExport(true)}
+					label={t(`generic.export`)}
+					iconName={`${featherIcons}#download`}
+					primary/>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
@@ -320,12 +328,15 @@ export const RoomControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
-			<AddNewRoomDialog openDialog={openDialog} close={() => setOpenDialog(false)}
+				<AddNewRoomDialog openDialog={openDialog} close={() => setOpenDialog(false)}
 												save={(searchVal: string) => {
 													setOpenDialog(false);
 													setSearch(`Room=${encodeURIComponent(searchVal)}`);
 													history.push(`/roomcontrol?Room=${encodeURIComponent(searchVal)}`);
 												}}/>
+				<ExportDialog openDialog={openDialogExport}
+											close={() => setOpenDialogExport(false)}
+											save={() => setOpenDialogExport(false)}/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

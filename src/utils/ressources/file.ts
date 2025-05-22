@@ -1,4 +1,6 @@
 import {env} from "../env";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 export async function readFileAsBase64(file: File | undefined): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -68,3 +70,22 @@ export const handleClickFileLink = async (event: any, token: string | undefined,
 		);
 	}
 };
+
+export function exportToExcel(data: any, fileName = 'export.xlsx') {
+	// Convert JSON to worksheet
+	const worksheet = XLSX.utils.json_to_sheet(data);
+
+	// Create a new workbook and append the worksheet
+	const workbook = XLSX.utils.book_new();
+	XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+	// Write workbook to binary array
+	const excelBuffer = XLSX.write(workbook, {
+		bookType: 'xlsx',
+		type: 'array',
+	});
+
+	// Create a Blob and trigger download
+	const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+	saveAs(dataBlob, fileName);
+}
