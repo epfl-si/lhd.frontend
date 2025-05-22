@@ -6546,6 +6546,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/file-saver@npm:^2.0.7":
+  version: 2.0.7
+  resolution: "@types/file-saver@npm:2.0.7"
+  checksum: c3d1cd80eab1214767922cabac97681f3fb688e82b74890450d70deaca49537949bbc96d80d363d91e8f0a4752c7164909cc8902d9721c5c4809baafc42a3801
+  languageName: node
+  linkType: hard
+
 "@types/find-cache-dir@npm:^3.2.1":
   version: 3.2.1
   resolution: "@types/find-cache-dir@npm:3.2.1"
@@ -6972,6 +6979,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/xlsx@npm:^0.0.36":
+  version: 0.0.36
+  resolution: "@types/xlsx@npm:0.0.36"
+  dependencies:
+    xlsx: "npm:*"
+  checksum: f3fe3325963293bd7e949cbdeb2be21f1cf385ea0ab11c252a5c035c2453c077436c288a27abc80da70a2fd851833aa4e1878045aa7861f07ba84da0c66ac4b1
+  languageName: node
+  linkType: hard
+
 "@types/yargs-parser@npm:*":
   version: 21.0.0
   resolution: "@types/yargs-parser@npm:21.0.0"
@@ -7347,6 +7363,13 @@ __metadata:
   version: 1.2.2
   resolution: "address@npm:1.2.2"
   checksum: 57d80a0c6ccadc8769ad3aeb130c1599e8aee86a8d25f671216c40df9b8489d6c3ef879bc2752b40d1458aa768f947c2d91e5b2fedfe63cf702c40afdfda9ba9
+  languageName: node
+  linkType: hard
+
+"adler-32@npm:~1.3.0":
+  version: 1.3.1
+  resolution: "adler-32@npm:1.3.1"
+  checksum: e11d70c113a49e6f04c249d8201813d46fcbc331e6c4593c926b9700e26a09898b3c0dea8595fd83dcb804bde359012f129d2322f7cc8177737aa14979490cc9
   languageName: node
   linkType: hard
 
@@ -8203,6 +8226,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cfb@npm:~1.2.1":
+  version: 1.2.2
+  resolution: "cfb@npm:1.2.2"
+  dependencies:
+    adler-32: "npm:~1.3.0"
+    crc-32: "npm:~1.2.0"
+  checksum: e418fef195bb03bd30af18dbbccc1c21670194258cc1ac6e955becbded51fa5465ce195971252d941044b5978995483e881c9b0e40a90171debecb7ebb0b24be
+  languageName: node
+  linkType: hard
+
 "chai@npm:^4.3.10, chai@npm:^4.3.7":
   version: 4.3.10
   resolution: "chai@npm:4.3.10"
@@ -8421,6 +8454,13 @@ __metadata:
   version: 2.0.0
   resolution: "clsx@npm:2.0.0"
   checksum: 943766d1b02fee3538c871e56638d87f973fbc2d6291ce221215ea436fdecb9be97ad323f411839c2d52c45640c449b1a53fbfe7e8b3d529b4e263308b630c9a
+  languageName: node
+  linkType: hard
+
+"codepage@npm:~1.15.0":
+  version: 1.15.0
+  resolution: "codepage@npm:1.15.0"
+  checksum: e4c07ac36eb528370c7acdf9e2bca44160444576d5d852dd5640531a6a427aa9ef2eb56b3c841a1638e807faa4975e2eeebfe57a5c48f123392250edc98a9398
   languageName: node
   linkType: hard
 
@@ -8690,6 +8730,15 @@ __metadata:
     path-type: "npm:^4.0.0"
     yaml: "npm:^1.10.0"
   checksum: 861bf4c2c9e88e6c50f14278b25bb0509c484623de11fadf3788a3d543bc7c45178aeebeb6657293b12dc8bd1b86d926c5f25c803c4dc3821d628a1b24c3d20b
+  languageName: node
+  linkType: hard
+
+"crc-32@npm:~1.2.0, crc-32@npm:~1.2.1":
+  version: 1.2.2
+  resolution: "crc-32@npm:1.2.2"
+  bin:
+    crc32: bin/crc32.njs
+  checksum: 824f696a5baaf617809aa9cd033313c8f94f12d15ebffa69f10202480396be44aef9831d900ab291638a8022ed91c360696dd5b1ba691eb3f34e60be8835b7c3
   languageName: node
   linkType: hard
 
@@ -9322,7 +9371,7 @@ __metadata:
 
 "epfl-elements-react@file:../epfl-elements-react::locator=lhd3-frontend%40workspace%3A.":
   version: 0.0.0
-  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=8795bf&locator=lhd3-frontend%40workspace%3A."
+  resolution: "epfl-elements-react@file:../epfl-elements-react#../epfl-elements-react::hash=e19e17&locator=lhd3-frontend%40workspace%3A."
   dependencies:
     bootstrap: "npm:^4"
     csstype: "npm:^3.1.3"
@@ -9331,7 +9380,7 @@ __metadata:
     react-bootstrap: "npm:^2.10.0"
   peerDependencies:
     react: ^17 || ^18
-  checksum: 1d6e748131ca015eb4d4a061be1872c7f97eb9b4ef3c2a73a23dc723cf836284970a4a6785287a2e4c112f24d3e7cdbf2d42bfb3c9ff71d7261764613cba3cf4
+  checksum: 074f76e0e852bd2625f8a80395cf5023fde90c77c522d5899115cdc0ef0a2c9c4fb22c52d207ce8faf929fc4a167ddb96bc9b050911340f8005740fdb08261a1
   languageName: node
   linkType: hard
 
@@ -10287,6 +10336,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"file-saver@npm:^2.0.5":
+  version: 2.0.5
+  resolution: "file-saver@npm:2.0.5"
+  checksum: fbba443d9b682fec0be6676c048a7ac688b9bd33b105c02e8e1a1cb3e354ed441198dc1f15dcbc137fa044bea73f8a7549f2617e3a952fa7d96390356d54a7c3
+  languageName: node
+  linkType: hard
+
 "file-system-cache@npm:2.3.0":
   version: 2.3.0
   resolution: "file-system-cache@npm:2.3.0"
@@ -10566,6 +10622,13 @@ __metadata:
   version: 0.2.0
   resolution: "forwarded@npm:0.2.0"
   checksum: 29ba9fd347117144e97cbb8852baae5e8b2acb7d1b591ef85695ed96f5b933b1804a7fac4a15dd09ca7ac7d0cdc104410e8102aae2dd3faa570a797ba07adb81
+  languageName: node
+  linkType: hard
+
+"frac@npm:~1.1.2":
+  version: 1.1.2
+  resolution: "frac@npm:1.1.2"
+  checksum: fbfbb28003bb84506dd35e7aad8543c5a358bdc95451d0065b6127d40d2c45106f14221575c3e9ce3ea4bf0bbf1225b73c5d655965c9f4ce44332cbe1b34667d
   languageName: node
   linkType: hard
 
@@ -12413,6 +12476,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^5.11.4"
     "@testing-library/react": "npm:^11.1.0"
     "@testing-library/user-event": "npm:^12.1.10"
+    "@types/file-saver": "npm:^2.0.7"
     "@types/mocha": "npm:^10.0.0"
     "@types/node": "npm:^20.7.0"
     "@types/react": "npm:^17.0.0"
@@ -12420,6 +12484,7 @@ __metadata:
     "@types/react-router-dom": "npm:^5.3.3"
     "@types/semver": "npm:^7"
     "@types/sprintf-js": "npm:^1.1.4"
+    "@types/xlsx": "npm:^0.0.36"
     bootstrap: "npm:^5.1.3"
     caniuse-lite: "npm:^1.0.30001304"
     chai: "npm:^4.3.6"
@@ -12432,6 +12497,7 @@ __metadata:
     eslint: "npm:^8.38.0"
     eslint-config-react-app: "npm:^7.0.1"
     eslint-plugin-storybook: "npm:^0.6.15"
+    file-saver: "npm:^2.0.5"
     formiojs: "npm:4.18.2"
     i18next: "npm:^22.0.3"
     mocha: "npm:^10.1.0"
@@ -12447,6 +12513,7 @@ __metadata:
     typescript: "npm:^5.0.4"
     vite: "npm:^5.0.5"
     web-vitals: "npm:^1.0.1"
+    xlsx: "npm:^0.18.5"
   languageName: unknown
   linkType: soft
 
@@ -15279,6 +15346,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ssf@npm:~0.11.2":
+  version: 0.11.2
+  resolution: "ssf@npm:0.11.2"
+  dependencies:
+    frac: "npm:~1.1.2"
+  checksum: 37f4b0f076e69a58554dbbe5d24fab412b7afc05ef48cdcb05b61db7e55b8a7002288047d95050571add4a50db30a772a26f04de23987300659154b199df8aef
+  languageName: node
+  linkType: hard
+
 "ssri@npm:^10.0.0":
   version: 10.0.5
   resolution: "ssri@npm:10.0.5"
@@ -16440,10 +16516,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wmf@npm:~1.0.1":
+  version: 1.0.2
+  resolution: "wmf@npm:1.0.2"
+  checksum: b82d3d95403d6f072ad734ade57779f10be9139ba7054b3b97707759c5b01bd5b677134fde4c5f08ffa26bc0d89153273c42359bb9a3d0f18d9a079a113f7990
+  languageName: node
+  linkType: hard
+
 "word-wrap@npm:^1.2.3":
   version: 1.2.3
   resolution: "word-wrap@npm:1.2.3"
   checksum: 08a677e1578b9cc367a03d52bc51b6869fec06303f68d29439e4ed647257411f857469990c31066c1874678937dac737c9f8f20d3fd59918fb86b7d926a76b15
+  languageName: node
+  linkType: hard
+
+"word@npm:~0.3.0":
+  version: 0.3.0
+  resolution: "word@npm:0.3.0"
+  checksum: e28a233aca36f9897f08d6db1a881bbe4ceae9e2da6753e09f5fdaae4e8d04149f5c4d9c74dc277eeef0dc043e459b11d122e294b9ea0f2bd3f8310f0b117964
   languageName: node
   linkType: hard
 
@@ -16539,6 +16629,23 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 815ff01d9bc20a249b2228825d9739268a03a4408c2e0b14d49b0e2ae89d7f10847e813b587ba26992bdc33e9d03bed131e4cae73ff996baf789d53e99c31186
+  languageName: node
+  linkType: hard
+
+"xlsx@npm:*, xlsx@npm:^0.18.5":
+  version: 0.18.5
+  resolution: "xlsx@npm:0.18.5"
+  dependencies:
+    adler-32: "npm:~1.3.0"
+    cfb: "npm:~1.2.1"
+    codepage: "npm:~1.15.0"
+    crc-32: "npm:~1.2.1"
+    ssf: "npm:~0.11.2"
+    wmf: "npm:~1.0.1"
+    word: "npm:~0.3.0"
+  bin:
+    xlsx: bin/xlsx.njs
+  checksum: 402df8d1e2678d57ad942332d78049c629695145478c7519800f1d6017c1ddd001417586d9c9cca7d55a43af68e47b77f6eca0399a77093b6ea1f131352f92cb
   languageName: node
   linkType: hard
 
