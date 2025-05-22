@@ -947,3 +947,48 @@ export const fetchHazards = async (
 		data: result.data?.hazardsWithPagination,
 	};
 };
+
+export const fetchRoomsForExport = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	hazardCategory: string,
+	units: boolean,
+	cosecs: boolean,
+	profs: boolean
+): Promise<any> => {
+	let unitSelect = ''
+	if (units) {
+		unitSelect = 'unit\n institut\n faculty'
+	}
+	let cosecSelect = ''
+	if (cosecs) {
+		cosecSelect = 'cosec\n email_cosec'
+	}
+	let profSelect = ''
+	if (profs) {
+		profSelect = 'professor\n email_professor'
+	}
+	const query: string = `query HazardFetchForExport { 
+				hazardFetchForExport (hazardCategory: "${hazardCategory}", units: ${units}, cosecs: ${cosecs}, profs: ${profs}) {
+						lab_display
+						site
+						building
+						sector
+						floor
+						vol
+						labType
+						${unitSelect}
+						${cosecSelect}
+						${profSelect}
+						hazard
+						parent_submission
+						child_submission
+				},
+			}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.hazardFetchForExport,
+	};
+};
