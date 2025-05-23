@@ -142,6 +142,9 @@ export const DetailsTab = ({
           <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
             className='valueDetails'>{room.vol}</label>
           </div>
+          <div><label className='labelDetails'>{t(`unit.name`)}: </label><label
+            className='valueDetails'>{room.assignedTo}</label>
+          </div>
           <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
             className='valueDetails'>{room.adminuse}</label>
           </div>
