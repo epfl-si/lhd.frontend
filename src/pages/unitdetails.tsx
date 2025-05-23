@@ -20,6 +20,7 @@ import {UnitTabTitle} from "../components/Units/UnitTabTitle";
 import {BackButton} from "../components/global/BackButton";
 import {Text} from "epfl-elements-react/src/stories/molecules/inputFields/Text";
 import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
+import {AuditReportPanel} from "../components/Units/AuditReportPanel";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -219,7 +220,7 @@ export default function UnitDetails() {
 					</ResponsiveTabs.Tab>) : <></>
 				}
 			</ResponsiveTabs>
-
+			<AuditReportPanel lhd_units={data} style={{marginLeft: '20px'}}/>
 			<div style={{marginTop: '50px'}}>
 				<Button
 					onClick={() => setOpenDialog(true)}
