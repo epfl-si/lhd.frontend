@@ -59,5 +59,6 @@ export function readOrEditHazard(room: roomDetailsType, action: string, currentF
 
 export function splitCamelCase(str: string) {
 	const label = str.replace(/([a-z])([A-Z])/g, '$1 $2') // Insert a space between lowercase and uppercase letters
-	return label.charAt(0).toUpperCase() + label.slice(1);
+	const txt = label.charAt(0).toUpperCase() + label.slice(1);
+	return txt.replaceAll('_', ' ');
 }
