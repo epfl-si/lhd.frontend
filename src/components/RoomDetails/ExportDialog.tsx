@@ -68,32 +68,13 @@ export const ExportDialog = ({
 	};
 
 	const parseAndFlatResult = (hazards: any[]) => {
-		const parsedHazards = hazards.map(h => {
-			return {
-				lab_display: h.lab_display,
-				site: h.site,
-				building: h.building,
-				sector: h.sector,
-				floor: h.floor,
-				vol: h.vol,
-				labType: h.labType,
-				cosec: h.cosec,
-				email_cosec: h.email_cosec,
-				professor: h.professor,
-				email_professor: h.email_professor,
-				hazard: h.hazard,
-				child_submission: h.child_submission ? JSON.parse(h.child_submission).data : {},
-				parent_submission: h.parent_submission ? JSON.parse(h.parent_submission).data : {}
-			};
-		});
-
-		const flatList = parsedHazards.map(lab => {
-			const { parent_submission = {}, child_submission = {}, ...rest } = lab;
+		const flatList = hazards.map(lab => {
+			const { parent_submission = undefined, child_submission = undefined, ...rest } = lab;
 
 			const flat =  {
 				...rest,
-				...parent_submission,
-				...child_submission,
+				...(parent_submission ? JSON.parse(parent_submission).data : {}),
+				...(child_submission ? JSON.parse(child_submission).data : {}),
 			};
 
 			if ('chemical' in flat)
