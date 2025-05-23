@@ -137,6 +137,7 @@ export const fetchRoomDetails = async (
 					facultyuse
 					lab_type_is_different
 					site
+					assignedTo
 					kind {
 						name
 					}

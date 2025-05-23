@@ -116,6 +116,7 @@ export type roomDetailsType = {
 	hazardsListName?: string[];
 	submissionList?: submissionForm[];
 	status?: 'New' | 'Deleted' | 'Default';
+	assignedTo?: string;
 };
 
 export type hazardReferencesType = {
