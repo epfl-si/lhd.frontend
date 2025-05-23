@@ -106,7 +106,7 @@ export const ExportDialog = ({
 								 okLabel={t('generic.saveButton')}
 								 title={t('room.exportRoom')}
 								 type='selection'
-								 isOkDisabled={hazard == '' || (!units && (cosecs || profs))}
+								 isOkDisabled={hazard == ''}
 		>
 			<div style={{display:"flex", flexDirection: "column"}}>
 				<Select
@@ -124,6 +124,10 @@ export const ExportDialog = ({
 							checked={units}
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 								setUnits(event.target.checked);
+								if(!event.target.checked) {
+									setCosecs(false)
+									setProfs(false)
+								}
 							}}/>
 					}
 					label={t('room.units')}
@@ -132,6 +136,7 @@ export const ExportDialog = ({
 					control={
 						<Switch
 							id="cosecs"
+							disabled={!units}
 							checked={cosecs}
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 								setCosecs(event.target.checked);
@@ -143,6 +148,7 @@ export const ExportDialog = ({
 					control={
 						<Switch
 							id="profs"
+							disabled={!units}
 							checked={profs}
 							onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 								setProfs(event.target.checked);
