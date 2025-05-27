@@ -15,6 +15,8 @@ import {useTranslation} from "react-i18next";
 import '../../../css/styles.scss'
 import {AuditReportPanel} from "../Units/AuditReportPanel";
 import {DoorPlug} from "./DoorPlug";
+import {DeleteRoomDialog} from "./DeleteRoomDialog";
+import {Redirect} from "react-router-dom";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -35,6 +37,8 @@ export const DetailsTab = ({
     type: "info",
     text: '',
   });
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [deleted, setDeleted] = useState(false);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
   const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
@@ -196,17 +200,28 @@ export const DetailsTab = ({
 
         <div style={{marginTop: '50px'}}>
           <Button
+            onClick={() => setOpenDialog(true)}
+            label={t(`generic.deleteButton`)}
+            iconName={`${featherIcons}#trash`}
+            primary/>
+          <Button
             onClick={() => saveRoomDetails()}
             label="Save"
             iconName={`${featherIcons}#save`}
             primary/>
         </div>
+        <DeleteRoomDialog room={room}
+                          openDialog={openDialog}
+                          setOpenDialog={setOpenDialog}
+                          setDeleted={setDeleted}
+        />
         <Notifications
           open={openNotification}
           notification={notificationType}
           close={handleClose}
         />
       </Stack>
+      {deleted ? <Redirect to="/roomcontrol"/> : <></>}
     </div>
       {
         (isExtraLargeDevice || isLargeDevice) ?
