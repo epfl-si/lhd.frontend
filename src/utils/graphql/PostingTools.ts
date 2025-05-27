@@ -266,6 +266,24 @@ export const deleteUnit = async (
 	return makeQuery(query, {}, address, authToken);
 };
 
+export const deleteRoom = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteRoom {
+               deleteRoom(id: ${id} )
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
 export const deleteOrganism = async (
 	address: string | undefined,
 	authToken: string | undefined,

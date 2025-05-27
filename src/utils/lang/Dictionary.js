@@ -102,7 +102,9 @@ i18next.use(initReactI18next).init({
 					facultyuse: 'DIN Sub-type',
 					volume: 'Volume (m³)',
 					vol: 'Vol (m³)',
-					fichePorte: 'Fiche de porte'
+					fichePorte: 'Fiche de porte',
+					deleteRoomConfirmationMessageTitle: 'Are you sure to delete this room: ',
+					deleteRoomConfirmationMessageDescription: 'All relationships with units, authorizations, dispensations and all corresponding hazards stored in this room will be deleted.'
 				},
 				fetchError: {
 					header: 'An error has occurred',
@@ -315,7 +317,9 @@ i18next.use(initReactI18next).init({
 					facultyuse: 'Sous-type DIN',
 					volume: 'Volume (m³)',
 					vol: 'Vol (m³)',
-					fichePorte: 'Fiche de porte'
+					fichePorte: 'Fiche de porte',
+					deleteRoomConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer ce local: ',
+					deleteRoomConfirmationMessageDescription: 'Toutes les rélations avec les unités, les autorisations, les dispensations, le cadastre, ainsi que tous les dangers de ce local seront aussi supprimées.'
 				},
 				fetchError: {
 					header: 'Erreur de chargement',
