@@ -60,7 +60,8 @@ export const ExportDialog = ({
 			);
 			if ( results.status === 200 && results.data ) {
 				const data = parseAndFlatResult(results.data);
-				exportToExcel(data, 'labs_export.xlsx');
+				const now = new Date()
+				exportToExcel(data, `labs_${hazard}_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}.xlsx`);
 				save();
 			} else {
 				console.error('Bad GraphQL results', results);
