@@ -325,14 +325,14 @@ export const deleteHazardChild = async (
 export const addHazard = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	submission: string,
+	submission: {},
 	lastVersionForm: hazardFormType,
 	room: string,
 	additionalInfo: hazardAdditionalInfoType
 ): Promise<any> => {
 	const query = `mutation addHazard {
-               addHazardToRoom(room: "${room}", 
-               submission: "${submission}", 
+               addHazardToRoom(room: "${room}",
+               submission: ${JSON.stringify(JSON.stringify(submission))}, 
                additionalInfo: {
                	comment: "${additionalInfo.comment}",
                	file: "${additionalInfo.file ?? ''}",
