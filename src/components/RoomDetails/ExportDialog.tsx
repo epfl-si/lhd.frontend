@@ -8,7 +8,7 @@ import {fetchHazardCategories, fetchRoomsForExport} from "../../utils/graphql/Fe
 import {hazardCategory} from "../../utils/ressources/types";
 import {MenuItem, Select} from "@material-ui/core";
 import {FormControlLabel, SelectChangeEvent, Switch} from "@mui/material";
-import {exportToExcel} from "../../utils/ressources/file";
+import {exportToExcel, getHazardExportFileName} from "../../utils/ressources/file";
 
 interface ExportDialogProps {
 	openDialog: boolean;
@@ -60,8 +60,7 @@ export const ExportDialog = ({
 			);
 			if ( results.status === 200 && results.data ) {
 				const data = parseAndFlatResult(results.data);
-				const now = new Date()
-				exportToExcel(data, `labs_${hazard}_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}.xlsx`);
+				exportToExcel(data, getHazardExportFileName(hazard));
 				save();
 			} else {
 				console.error('Bad GraphQL results', results);

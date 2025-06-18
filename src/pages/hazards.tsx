@@ -10,13 +10,14 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";
 import {Redirect, useHistory, useLocation} from "react-router-dom";
 import {splitCamelCase} from "../utils/ressources/jsonUtils";
-import {handleClickFileLink} from "../utils/ressources/file";
+import {exportToExcel, getHazardExportFileName, handleClickFileLink} from "../utils/ressources/file";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {AlertDialog} from "../components/global/AlertDialog";
 import {deleteHazardChild} from "../utils/graphql/PostingTools";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -236,6 +237,38 @@ export const HazardsControl = ({
 		});
 	}
 
+	const onExport = async () => {
+		if ( isUserAuthorized && search != '' ) {
+			setLoading(true);
+			const results = await fetchHazards(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				0,
+				0,
+				search,
+				queryString
+			);
+
+			if ( results.status && results.status === 200 && results.data ) {
+				const data = parseAndFlatResult(results.data.hazards);
+				const filteredData = [];
+				for (const obj of data) {
+					const newObj = {};
+					for (let key in obj) {
+						if (!['id_lab_has_hazards_child', 'id_lab_has_hazards', 'delete', 'status'].includes(key)) {
+							newObj[key] = obj[key];
+						}
+					}
+					filteredData.push(newObj);
+				}
+				exportToExcel(filteredData, getHazardExportFileName(search));
+			} else {
+				console.error('Bad GraphQL results', results);
+			}
+			setLoading(false);
+		}
+	}
+
 	return (
 		<Box>
 			{isUserAuthorized ? <>
@@ -261,6 +294,12 @@ export const HazardsControl = ({
 						columns={keys}
 						setCategory={setSearch}
 				/>
+				<Button
+					style={{minWidth: '10%', padding: '10px', marginLeft: '10px'}}
+					onClick={() => onExport()}
+					label={t(`generic.export`)}
+					iconName={`${featherIcons}#download`}
+					primary/>
 			</div>
 				{search && isTableReady &&
 			<EntriesTableCategory
