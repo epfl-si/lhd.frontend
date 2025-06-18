@@ -133,6 +133,10 @@ export function exportToExcel(data: any, fileName = 'export.xlsx') {
 	saveAs(dataBlob, fileName);
 }
 
+export function getHazardExportFileName (hazard: string) {
+	const now = new Date()
+	return `lhd_${hazard}_${now.getFullYear()}${now.getMonth()}${now.getDate()}_${now.getHours()}${now.getMinutes()}${now.getSeconds()}.xlsx`;
+}
 
 function checkType(value: any) {
 	if(Array.isArray(value)) {
