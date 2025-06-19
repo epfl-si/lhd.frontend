@@ -955,7 +955,8 @@ export const fetchRoomsForExport = async (
 	hazardCategory: string,
 	units: boolean,
 	cosecs: boolean,
-	profs: boolean
+	profs: boolean,
+	search: string
 ): Promise<any> => {
 	let unitSelect = ''
 	if (units) {
@@ -970,7 +971,7 @@ export const fetchRoomsForExport = async (
 		profSelect = 'professor\n email_professor'
 	}
 	const query: string = `query HazardFetchForExport { 
-				hazardFetchForExport (hazardCategory: "${hazardCategory}", units: ${units}, cosecs: ${cosecs}, profs: ${profs}) {
+				hazardFetchForExport (hazardCategory: "${hazardCategory}", units: ${units}, cosecs: ${cosecs}, profs: ${profs}, search: "${search}") {
 						lab_display
 						site
 						building
@@ -987,6 +988,7 @@ export const fetchRoomsForExport = async (
 				},
 			}`;
 
+	console.log(query)
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,

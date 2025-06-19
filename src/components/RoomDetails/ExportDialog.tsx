@@ -14,12 +14,14 @@ interface ExportDialogProps {
 	openDialog: boolean;
 	save: () => void;
 	close: () => void;
+	search: string;
 }
 
 export const ExportDialog = ({
 	openDialog,
 	close,
-	save
+	save,
+	search
 }: ExportDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -34,7 +36,6 @@ export const ExportDialog = ({
 		setUnits(false)
 		setProfs(false)
 		setCosecs(false)
-		setHazard('')
 	}, [openDialog]);
 
 	const loadCategories = async  () => {
@@ -44,6 +45,14 @@ export const ExportDialog = ({
 		);
 		if ( categories.status && categories.status === 200 && categories.data ) {
 			setCategoryList(categories.data);
+			const hazards = search && search != null ? (search.match(/Hazard/g)) : [];
+			const numberOfSearchedHazards = hazards && hazards!=null ? hazards.length : 0;
+			if (numberOfSearchedHazards == 1) {
+				const selectedCat: hazardCategory = categories.data.find((cat: hazardCategory) => cat.hazard_category_name.indexOf(hazards![0]));
+				setHazard(selectedCat.hazard_category_name);
+			} else {
+				setHazard('')
+			}
 		} else {
 			console.error('Bad GraphQL results', categories);
 		}
@@ -56,7 +65,8 @@ export const ExportDialog = ({
 				hazard,
 				units,
 				cosecs,
-				profs
+				profs,
+				search
 			);
 			if ( results.status === 200 && results.data ) {
 				const data = parseAndFlatResult(results.data);
