@@ -335,6 +335,7 @@ export const RoomControl = ({
 													history.push(`/roomcontrol?Room=${encodeURIComponent(searchVal)}`);
 												}}/>
 				<ExportDialog openDialog={openDialogExport}
+											search={search}
 											close={() => setOpenDialogExport(false)}
 											save={() => setOpenDialogExport(false)}/>
 			<Notifications
