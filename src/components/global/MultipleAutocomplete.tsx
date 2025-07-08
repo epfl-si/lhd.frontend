@@ -90,7 +90,11 @@ export const MultipleAutocomplete = ({
 	const getOptionsAsync = (query: string): Promise<OptionType[]> => {
 		return new Promise((resolve) => {
 			if (parent == 'hazardscontrol') {
-				const filterArray: OptionType[] = [{ title: "Room=" + query, encodedTitle: "lab_display=" + encodeURIComponent(query)}];
+				const filterArray: OptionType[] = [
+					{ title: "Room=" + query, encodedTitle: "Room=" + encodeURIComponent(query)},
+					{ title: "Cosec="+query, encodedTitle: "Cosec="+ encodeURIComponent(query) },
+					{ title: "Prof="+query, encodedTitle: "Prof="+ encodeURIComponent(query) }
+				];
 				columns?.forEach(col => {
 					filterArray.push({ title: splitCamelCase(col) + "=" + query, encodedTitle: col + "=" + encodeURIComponent(query)})
 				})
@@ -105,6 +109,8 @@ export const MultipleAutocomplete = ({
 					{ title: "Volume (±10)="+query, encodedTitle: "Volume="+ encodeURIComponent(query) },
 					{ title: "Designation="+query, encodedTitle: "Designation="+ encodeURIComponent(query) },
 					{ title: "Hazard="+query, encodedTitle: "Hazard="+ encodeURIComponent(query) },
+					{ title: "Cosec="+query, encodedTitle: "Cosec="+ encodeURIComponent(query) },
+					{ title: "Prof="+query, encodedTitle: "Prof="+ encodeURIComponent(query) },
 				]
 			);
 			}

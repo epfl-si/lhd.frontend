@@ -295,6 +295,7 @@ export const HazardsControl = ({
 						setCategory={setSearch}
 				/>
 				<Button
+					isDisabled={tableData.length == 0}
 					style={{minWidth: '10%', padding: '10px', marginLeft: '10px'}}
 					onClick={() => onExport()}
 					label={t(`generic.export`)}
