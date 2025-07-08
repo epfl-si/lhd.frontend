@@ -14,10 +14,10 @@ import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {useHistory, useLocation} from "react-router-dom";
-import {readOrEditHazard} from "../utils/ressources/jsonUtils";
+import {convertToTable, readOrEditHazard, splitCamelCase} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
 import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
-import {ExportDialog} from "../components/RoomDetails/ExportDialog";
+import {exportToExcel, getHazardExportFileName, handleClickFileLink} from "../utils/ressources/file";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -37,7 +37,6 @@ export const RoomControl = ({
 	const [loading, setLoading] = useState(false);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
-	const [openDialogExport, setOpenDialogExport] = useState<boolean>(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -285,6 +284,95 @@ export const RoomControl = ({
 		setOpenNotification(false);
 	};
 
+	const onExport = async () => {
+			setLoading(true);
+			const searchParameters = search && search != null ? (search.split('&')) : [];
+			const hazards = searchParameters && searchParameters!=null ? searchParameters.filter(s => s.startsWith('Hazard')) : [];
+			const hazardName = hazards.length == 1 ? hazards[0].split('=')[1] : 'search';
+			let results = {};
+			if (hazards.length == 1) {
+				results = await fetchRoomsWithHazards(
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					0, 0,
+					search ?? ''
+				);
+			} else {
+				results = await fetchRooms(
+					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					oidc.accessToken,
+					0, 0,
+					search ?? ''
+				);
+			}
+
+			if ( results.status && results.status === 200 && results.data ) {
+				const dataExport = convertToTable(results.data.rooms, hazardName)
+				const allKeys = new Set<string>();
+				for (const item of dataExport) {
+					for (const key of ['child_submission', 'parent_submission']) {
+						if (item[key]) {
+							Object.keys(item[key]).forEach(k => allKeys.add(k));
+						}
+					}
+				}
+				const result = dataExport.map(item => {
+					const flat = {
+						room: item.room,
+						building: item.building,
+						sector: item.sector,
+						floor: item.floor,
+						vol: item.vol,
+						vent: item.vent,
+						site: item.site,
+						kind: item.kind,
+						unit: item.unit,
+						institute: item.institute,
+						school: item.school,
+						cosec: item.cosec,
+						cosecEmail: item.cosecEmail,
+						professor: item.professor,
+						professorEmail: item.professorEmail,
+					};
+
+					if (hazardName != 'search') {
+						flat['hazardCategory'] = item.hazardCategory;
+					}
+
+					// Add all keys with null by default
+					for (const k of allKeys) {
+						if (k !== 'status' && k !== 'delete' && k != 'fileLink') {
+							flat[k] = null;
+						}
+					}
+
+					// Overwrite with actual values
+					for ( const key of ['child_submission', 'parent_submission']) {
+						if (item[key]) {
+							Object.entries(item[key]).forEach(([k, v]) => {
+								if (k == 'chemical')
+									flat[k] = v['haz_en'];
+								else if (k == 'organism')
+									flat[k] = v['organism'];
+								else if (k == 'container')
+									flat[k] = v['name'];
+								else if (k !== 'status' && k !== 'delete' && k != 'fileLink')
+									flat[k] = v;
+							});
+						}
+					}
+
+					return flat;
+				});
+				exportToExcel(result, getHazardExportFileName(hazardName));
+			} else {
+				console.error('Bad GraphQL results', results);
+
+				setNotificationType(notificationsVariants['bad_graphql_query']);
+				setOpenNotification(true);
+			}
+			setLoading(false);
+	};
 	return (
 		<Box>
 			{isUserAuthorized ? <>
@@ -313,7 +401,7 @@ export const RoomControl = ({
 					primary/>
 				<Button
 					style={{minWidth: '10%', padding: '10px'}}
-					onClick={() => setOpenDialogExport(true)}
+					onClick={onExport}
 					label={t(`generic.export`)}
 					iconName={`${featherIcons}#download`}
 					primary/>
@@ -334,10 +422,6 @@ export const RoomControl = ({
 													setSearch(`Room=${encodeURIComponent(searchVal)}`);
 													history.push(`/roomcontrol?Room=${encodeURIComponent(searchVal)}`);
 												}}/>
-				<ExportDialog openDialog={openDialogExport}
-											search={search}
-											close={() => setOpenDialogExport(false)}
-											save={() => setOpenDialogExport(false)}/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

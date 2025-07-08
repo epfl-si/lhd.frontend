@@ -378,10 +378,12 @@ export const fetchRooms = async (
 							cosecs {
 								name
 								surname
+								email
 							}
 							professors {
 								name
 								surname
+								email
 							}
 						}
     			}
@@ -443,10 +445,12 @@ export const fetchRoomsWithHazards = async (
 							cosecs {
 								name
 								surname
+								email
 							}
 							professors {
 								name
 								surname
+								email
 							}
 						}
     			}
