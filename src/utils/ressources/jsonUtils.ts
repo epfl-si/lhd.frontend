@@ -62,3 +62,51 @@ export function splitCamelCase(str: string) {
 	const txt = label.charAt(0).toUpperCase() + label.slice(1);
 	return txt.replaceAll('_', ' ');
 }
+
+export function convertToTable(roomsList: roomDetailsType[], hazardName: string) {
+	const dataExport = [];
+	roomsList.forEach(r => {
+		const lhdUnits = r.lhd_units && r.lhd_units.length > 0 ? r.lhd_units : [null];
+		const hazards = hazardName != 'search' && r.hazards && r.hazards.length > 0 ? r.hazards : [null];
+
+		lhdUnits.forEach(u => {
+			const cosecs = u && u.cosecs && u.cosecs.length > 0 ? u.cosecs : [null];
+			const professors = u && u.professors && u.professors.length > 0 ? u.professors : [null];
+
+			cosecs.forEach(cos => {
+				professors.forEach(prof => {
+
+					hazards.forEach(haz => {
+						if (hazardName == 'search' || (hazardName != 'search' && haz && haz.hazard_form_history.hazard_form.hazard_category.hazard_category_name.toLowerCase().indexOf(hazardName.toLowerCase()) > -1)) {
+							const children = haz && haz.children && haz.children.length > 0 ? haz.children : [null];
+
+							children.forEach(child => {
+								dataExport.push({
+									room: r.name,
+									building: r.building,
+									sector: r.sector,
+									floor: r.floor,
+									vol: r.vol,
+									vent: r.vent,
+									site: r.site,
+									kind: r.kind?.name ?? null,
+									unit: u?.name ?? null,
+									institute: u?.institute?.name ?? null,
+									school: u?.institute?.school?.name ?? null,
+									cosec: cos ? `${cos.name} ${cos.surname}` : null,
+									cosecEmail: cos?.email ?? null,
+									professor: prof ? `${prof.name} ${prof.surname}` : null,
+									professorEmail: prof?.email ?? null,
+									hazardCategory: hazardName != 'search' && haz ? haz.hazard_form_history.hazard_form.hazard_category.hazard_category_name : null,
+									parent_submission: haz?.submission ? JSON.parse(haz.submission).data : {},
+									child_submission: child?.submission ? JSON.parse(child.submission).data : {},
+								});
+							});
+						}
+					});
+				});
+			});
+		});
+	});
+	return dataExport;
+}
