@@ -92,6 +92,7 @@ export const MultipleAutocomplete = ({
 			if (parent == 'hazardscontrol') {
 				const filterArray: OptionType[] = [
 					{ title: "Room=" + query, encodedTitle: "Room=" + encodeURIComponent(query)},
+					{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
 					{ title: "Cosec="+query, encodedTitle: "Cosec="+ encodeURIComponent(query) },
 					{ title: "Prof="+query, encodedTitle: "Prof="+ encodeURIComponent(query) }
 				];
