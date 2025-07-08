@@ -63,15 +63,71 @@ export function splitCamelCase(str: string) {
 	return txt.replaceAll('_', ' ');
 }
 
-export function convertToTable(roomsList: roomDetailsType[], hazardName: string) {
+export function convertToTable(roomsList: roomDetailsType[], search: string) {
+	const result: Record<string, string[]> = {};
+
+	search.split('&').forEach(pair => {
+		const [key, value] = pair.split('=');
+		if (key in result) {
+			result[key].push(value);
+		} else {
+			result[key] = [value];
+		}
+	});
 	const dataExport = [];
 	roomsList.forEach(r => {
-		const lhdUnits = r.lhd_units && r.lhd_units.length > 0 ? r.lhd_units : [null];
+		let lhdUnits = [];
+		if (r.lhd_units && r.lhd_units.length > 0) {
+			if (result['Unit'] && result['Unit'].length > 0) {
+				result['Unit'].forEach(u => {
+					const ulower = u.toLowerCase();
+					const unit = r.lhd_units.filter(un => un.name.toLowerCase().indexOf(ulower) > -1 ||
+						(un.institute && un.institute.name && un.institute.name.toLowerCase().indexOf(ulower) > -1) ||
+						(un.institute && un.institute.school && un.institute.school.name && un.institute.school.name.toLowerCase().indexOf(ulower) > -1)
+					);
+					lhdUnits.push(...unit);
+				});
+			} else {
+				lhdUnits = r.lhd_units;
+			}
+		} else {
+			lhdUnits = [null];
+		}
+		const hazardName = result['Hazard'] && result['Hazard'].length == 1 ? result['Hazard'][0] : 'search';
 		const hazards = hazardName != 'search' && r.hazards && r.hazards.length > 0 ? r.hazards : [null];
 
 		lhdUnits.forEach(u => {
-			const cosecs = u && u.cosecs && u.cosecs.length > 0 ? u.cosecs : [null];
-			const professors = u && u.professors && u.professors.length > 0 ? u.professors : [null];
+			//const cosecs = u && u.cosecs && u.cosecs.length > 0 ? u.cosecs : [null];
+			//const professors = u && u.professors && u.professors.length > 0 ? u.professors : [null];
+			let cosecs = [];
+			if (u && u.cosecs && u.cosecs.length > 0) {
+				if (result['Cosec'] && result['Cosec'].length > 0) {
+					result['Cosec'].forEach(cos => {
+						const cosLower = cos.toLowerCase();
+						const cosec = u.cosecs.filter(co => co.name.toLowerCase().indexOf(cosLower) > -1 || co.surname.toLowerCase().indexOf(cosLower) > -1 || co.email.toLowerCase().indexOf(cosLower) > -1);
+						cosecs.push(...cosec);
+					});
+				} else {
+					cosecs = u.cosecs;
+				}
+			} else {
+				cosecs = [null];
+			}
+
+			let professors = [];
+			if (u && u.professors && u.professors.length > 0) {
+				if (result['Prof'] && result['Prof'].length > 0) {
+					result['Prof'].forEach(pr => {
+						const profLower = pr.toLowerCase();
+						const cosec = u.professors.filter(p => p.name.toLowerCase().indexOf(profLower) > -1 || p.surname.toLowerCase().indexOf(profLower) > -1 || p.email.toLowerCase().indexOf(profLower) > -1);
+						professors.push(...cosec);
+					});
+				} else {
+					professors = u.professors;
+				}
+			} else {
+				professors = [null];
+			}
 
 			cosecs.forEach(cos => {
 				professors.forEach(prof => {
