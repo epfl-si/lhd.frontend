@@ -400,6 +400,7 @@ export const RoomControl = ({
 					iconName={`${featherIcons}#plus-circle`}
 					primary/>
 				<Button
+					isDisabled={tableData.length == 0}
 					style={{minWidth: '10%', padding: '10px'}}
 					onClick={onExport}
 					label={t(`generic.export`)}
