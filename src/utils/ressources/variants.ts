@@ -80,6 +80,10 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Bad GraphQL query',
 	},
+	'no_data_for_export': {
+		type: 'error',
+		text: 'No data to export for the selected filter',
+	},
 	'update_error': {
 		type: 'error',
 		text: 'Update failed',

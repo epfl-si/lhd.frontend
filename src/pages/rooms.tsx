@@ -307,64 +307,69 @@ export const RoomControl = ({
 			}
 
 			if ( results.status && results.status === 200 && results.data ) {
-				const dataExport = convertToTable(results.data.rooms, hazardName)
-				const allKeys = new Set<string>();
-				for (const item of dataExport) {
-					for (const key of ['child_submission', 'parent_submission']) {
-						if (item[key]) {
-							Object.keys(item[key]).forEach(k => allKeys.add(k));
+				const dataExport = convertToTable(results.data.rooms, search)
+				if (dataExport && dataExport.length > 0) {
+					const allKeys = new Set<string>();
+					for (const item of dataExport) {
+						for (const key of ['child_submission', 'parent_submission']) {
+							if (item[key]) {
+								Object.keys(item[key]).forEach(k => allKeys.add(k));
+							}
 						}
 					}
+					const result = dataExport.map(item => {
+						const flat = {
+							room: item.room,
+							building: item.building,
+							sector: item.sector,
+							floor: item.floor,
+							vol: item.vol,
+							vent: item.vent,
+							site: item.site,
+							kind: item.kind,
+							unit: item.unit,
+							institute: item.institute,
+							school: item.school,
+							cosec: item.cosec,
+							cosecEmail: item.cosecEmail,
+							professor: item.professor,
+							professorEmail: item.professorEmail,
+						};
+
+						if (hazardName != 'search') {
+							flat['hazardCategory'] = item.hazardCategory;
+						}
+
+						// Add all keys with null by default
+						for (const k of allKeys) {
+							if (k !== 'status' && k !== 'delete' && k != 'fileLink') {
+								flat[k] = null;
+							}
+						}
+
+						// Overwrite with actual values
+						for ( const key of ['child_submission', 'parent_submission']) {
+							if (item[key]) {
+								Object.entries(item[key]).forEach(([k, v]) => {
+									if (k == 'chemical')
+										flat[k] = v['haz_en'];
+									else if (k == 'organism')
+										flat[k] = v['organism'];
+									else if (k == 'container')
+										flat[k] = v['name'];
+									else if (k !== 'status' && k !== 'delete' && k != 'fileLink')
+										flat[k] = v;
+								});
+							}
+						}
+
+						return flat;
+					});
+					exportToExcel(result, getHazardExportFileName(hazardName));
+				} else {
+					setNotificationType(notificationsVariants['no_data_for_export']);
+					setOpenNotification(true);
 				}
-				const result = dataExport.map(item => {
-					const flat = {
-						room: item.room,
-						building: item.building,
-						sector: item.sector,
-						floor: item.floor,
-						vol: item.vol,
-						vent: item.vent,
-						site: item.site,
-						kind: item.kind,
-						unit: item.unit,
-						institute: item.institute,
-						school: item.school,
-						cosec: item.cosec,
-						cosecEmail: item.cosecEmail,
-						professor: item.professor,
-						professorEmail: item.professorEmail,
-					};
-
-					if (hazardName != 'search') {
-						flat['hazardCategory'] = item.hazardCategory;
-					}
-
-					// Add all keys with null by default
-					for (const k of allKeys) {
-						if (k !== 'status' && k !== 'delete' && k != 'fileLink') {
-							flat[k] = null;
-						}
-					}
-
-					// Overwrite with actual values
-					for ( const key of ['child_submission', 'parent_submission']) {
-						if (item[key]) {
-							Object.entries(item[key]).forEach(([k, v]) => {
-								if (k == 'chemical')
-									flat[k] = v['haz_en'];
-								else if (k == 'organism')
-									flat[k] = v['organism'];
-								else if (k == 'container')
-									flat[k] = v['name'];
-								else if (k !== 'status' && k !== 'delete' && k != 'fileLink')
-									flat[k] = v;
-							});
-						}
-					}
-
-					return flat;
-				});
-				exportToExcel(result, getHazardExportFileName(hazardName));
 			} else {
 				console.error('Bad GraphQL results', results);
 
