@@ -8,17 +8,28 @@ import { env } from './utils/env';
 
 import "epfl-elements/dist/css/elements.css";
 
+const environmentVariables = env();
+
 if (! window.IS_PRODUCTION) {
 	new EventSource('/esbuild').addEventListener('change', () => window.location.reload())
 }
 
+const context = {
+	clientId: environmentVariables.REACT_CLIENT_ID,
+}
+
+if (Object.keys(environmentVariables).indexOf("REACT_CLIENT_SECRET") > -1) {
+	console.log("in test/prod environment")
+	context.clientSecret = environmentVariables.REACT_CLIENT_SECRET
+} else {
+	console.log("in dev environment")
+	context.scope = environmentVariables.REACT_APP_OPENID_SCOPE
+}
+
 ReactDOM.render(
 	<OIDCContext
-		authServerUrl={env().REACT_APP_AUTH_SERVER_URL}
-		client={{
-			clientId: env().REACT_CLIENT_ID,
-			scope: env().REACT_APP_OPENID_SCOPE,
-		}}
+		authServerUrl={environmentVariables.REACT_APP_AUTH_SERVER_URL}
+		client={context}
 	>
 		<App />
 	</OIDCContext>,
