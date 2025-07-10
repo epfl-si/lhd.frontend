@@ -4,6 +4,7 @@ import App from './App.tsx';
 import reportWebVitals from './utils/web/reportWebVitals';
 import './utils/lang/Dictionary';
 import { OIDCContext } from '@epfl-si/react-appauth';
+import { LocalStorageBackend } from "@openid/appauth";
 import { env } from './utils/env';
 
 import "epfl-elements/dist/css/elements.css";
@@ -15,7 +16,7 @@ if (! window.IS_PRODUCTION) {
 }
 
 const context = {
-	clientId: environmentVariables.REACT_CLIENT_ID,
+	clientId: environmentVariables.REACT_CLIENT_ID
 }
 
 if (Object.keys(environmentVariables).indexOf("REACT_CLIENT_SECRET") > -1) {
@@ -30,6 +31,7 @@ ReactDOM.render(
 	<OIDCContext
 		authServerUrl={environmentVariables.REACT_APP_AUTH_SERVER_URL}
 		client={context}
+		storage={new LocalStorageBackend()}
 	>
 		<App />
 	</OIDCContext>,
