@@ -28,6 +28,7 @@ function App() {
 	const [connectedUser, setConnectedUser] = useState<object>({userName: '', groups: []});
 
 	useEffect(() => {
+		console.log('isLoggedIn',isLoggedIn);
 		if (isLoggedIn) {
 			loadFetch();
 		}
@@ -38,6 +39,7 @@ function App() {
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken
 		);
+		console.log('results',results);
 		if (results.status === 200 && results.data) {
 			console.log('ConnectedUser',results.data);
 			setConnectedUser({userName: results.data.preferred_username, groups: results.data.groups});
@@ -48,7 +50,6 @@ function App() {
 		setSelectedMenu(page);
 	}
 
-	const [openCadastre, setOpenCadastre] = useState(false);
 	const [openAuthorisations, setOpenAuthorisations] = useState(false);
 	const [openAudit, setOpenAudit] = useState(false);
 	const [openUpdates, setOpenUpdates] = useState(false);
