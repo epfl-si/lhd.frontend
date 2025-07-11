@@ -28,7 +28,7 @@ function App() {
 	const [connectedUser, setConnectedUser] = useState<object>({userName: '', groups: []});
 
 	useEffect(() => {
-		console.log('isLoggedIn',isLoggedIn);
+		console.log('isLoggedIn', oidc.idToken);
 		if (isLoggedIn) {
 			loadFetch();
 		}
