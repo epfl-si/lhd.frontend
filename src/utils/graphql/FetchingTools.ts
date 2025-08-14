@@ -952,3 +952,31 @@ export const fetchHazards = async (
 		data: result.data?.hazardsWithPagination,
 	};
 };
+
+
+export const fetchChemicals = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string
+): Promise<any> => {
+	const query = `query fetchChemicals {
+		chemicalsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
+			chemicals {
+        id
+        cas_auth_chem
+        auth_chem_en
+        flag_auth_chem
+      }
+      totalCount
+		}
+	}`;
+
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.chemicalsWithPagination
+	};
+};

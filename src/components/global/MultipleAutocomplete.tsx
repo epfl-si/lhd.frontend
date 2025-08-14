@@ -100,7 +100,16 @@ export const MultipleAutocomplete = ({
 					filterArray.push({ title: splitCamelCase(col) + "=" + query, encodedTitle: col + "=" + encodeURIComponent(query)})
 				})
 				resolve(filterArray);
-			} else {resolve(
+			} else if (parent == 'chemicals') {
+				resolve(
+					[
+						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
+						{ title: "Name="+query, encodedTitle: "Name="+ encodeURIComponent(query) },
+						{ title: "Status(Active/Archived)="+query, encodedTitle: "Status="+ encodeURIComponent(query) }
+					]
+				);
+			} else {
+				resolve(
 				[
 					{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
 					{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query) },
