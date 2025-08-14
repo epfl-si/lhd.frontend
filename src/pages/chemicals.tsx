@@ -1,0 +1,264 @@
+import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import React, {useEffect, useState} from "react";
+import {fetchChemicals} from "../utils/graphql/FetchingTools";
+import {env} from "../utils/env";
+import {Box, Typography, useMediaQuery} from "@material-ui/core";
+import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
+import {chemicalsType, columnType, notificationType} from "../utils/ressources/types";
+import {useTranslation} from "react-i18next";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {GridRenderCellParams} from "@mui/x-data-grid";
+import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
+import {Redirect, useHistory, useLocation} from "react-router-dom";
+import "../../css/styles.scss";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {notificationsVariants} from "../utils/ressources/variants";
+import Notifications from "../components/Table/Notifications";
+import {AlertDialog} from "../components/global/AlertDialog";
+import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
+
+interface ChemicalsControlProps {
+	handleCurrentPage: (page: string) => void;
+	isUserAuthorized: boolean;
+}
+
+export const ChemicalsControl = ({
+	handleCurrentPage,
+	isUserAuthorized
+}: ChemicalsControlProps) => {
+	const history = useHistory();
+	const { t } = useTranslation();
+	const oidc = useOpenIDConnectContext();
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [tableData, setTableData] = useState<chemicalsType[]>([]);
+	const [selectedChemical, setSelectedChemical] = useState<chemicalsType>();
+	const [loading, setLoading] = useState(false);
+	const [search, setSearch] = React.useState('');
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const isMediumDevice = useMediaQuery("only screen and (min-width : 769px) and (max-width : 992px)");
+	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
+	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
+	const [loadingDelete, setLoadingDelete] = useState(false);
+	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
+	const [deleted, setDeleted] = useState(false);
+	const PAGE_SIZE = 100;
+	const [page, setPage] = useState<number>(0);
+	const [totalCount, setTotalCount] = useState<number>(0);
+
+	const columnsLarge: columnType[] = [
+		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 200},
+		{field: "auth_chem_en", headerName: t('chemical.name'), width: 300},
+		{field: "flag_auth_chem", headerName: t('chemical.status'), width: 80,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
+				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
+			}},
+		// {field: "log", headerName: t('organism.log'), width: 100,
+		// 	renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
+		// 		const date = new Date(params.row.updated_on);
+		// 		return date.toLocaleDateString("en-GB");
+		// 	},
+		// 	valueFormatter: (params: GridRenderCellParams<any, chemicalsType>) => {
+		// 		if (!params.value) return "";
+		// 		const date = new Date(params.value);
+		// 		return date.toLocaleDateString("en-GB");
+		// 	}
+		// },
+		{field: "id", headerName: t('chemical.actions'), width: 100,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
+				<><Button size="icon"
+								iconName={"#edit-3"}
+								onClick={() => modify(params.row)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => handleDelete(params.row)}/></>
+			)
+		},
+	];
+
+	const columnsMedium: columnType[] = [
+		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 150,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
+				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
+					<span>
+						<b>{params.row.cas_auth_chem}</b><br/>{params.row.auth_chem_en}
+					</span>
+				</div>
+			},
+		},
+		{field: "flag_auth_chem", headerName: t('chemical.status'), width: 80,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
+				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
+			}},
+		{field: "id", headerName: t('chemical.actions'), width: 100,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
+				<><Button size="icon"
+									iconName={"#edit-3"}
+									onClick={() => modify(params.row)}/>
+					<Button size="icon"
+									style={{marginLeft: '10px'}}
+									iconName={`#trash`}
+									onClick={() => handleDelete(params.row)}/></>
+			)
+		},
+	];
+
+	const columnsSmall: columnType[] = [
+		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
+				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
+						<b>{params.row.cas_auth_chem} (<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>
+							{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}
+						</span>)</b>{params.row.auth_chem_en}
+				</div>
+			}
+		}
+	];
+
+	const location = useLocation();
+
+	useEffect(() => {
+		if (isUserAuthorized) {
+			loadFetch();
+		}
+		setDeleted(false);
+	}, [search, deleted, page, isUserAuthorized]);
+
+	useEffect(() => {
+		handleCurrentPage("chemicals");
+		setPage(0);
+	}, [oidc.accessToken]);
+
+	const loadFetch = async () => {
+		setLoading(true);
+		const results = await fetchChemicals(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			PAGE_SIZE,
+			PAGE_SIZE * page,
+			search
+		);
+		if (results.status === 200 && results.data){
+			setTableData(results.data.chemicals);
+			setTotalCount(results.data.totalCount);
+		} else {
+			console.error('Bad GraphQL results', results);
+			setNotificationType(notificationsVariants['bad_graphql_query']);
+			setOpenNotification(true);
+		}
+		setLoading(false);
+	};
+
+	function onChangeInput(newValue: string) {
+		const val = newValue ?? '';
+		setSearch(val);
+		history.push(`/organismscontrol?search=${encodeURIComponent(val)}`);
+	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
+
+	const modify = (data: chemicalsType) => {
+		setOpenDialog(true);
+		setSelectedChemical(data);
+	}
+
+	const handleDelete = async (data: chemicalsType | undefined) => {
+		if (!data) return;
+		setLoadingDelete(true);
+		setSelectedChemical(data);
+		/*const results = await fetchChemicalAuthorizations(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			20,
+			0,
+			selectedChemical
+		);
+
+		if ( results.status && results.status === 200 && results.data && results.data.totalCount > 0) {
+			setOpenDialogDelete(true);
+		} else {
+			deleteChem(data);
+		}*/
+		setLoadingDelete(false);
+	};
+
+	function deleteChem(data: chemicalsType) {
+		/*deleteChemical(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			JSON.stringify(data?.id),
+		).then(res => {
+			if(res.status == 200 && !res.data?.deleteChemical?.errors) {
+				setOpenDialogDelete(false);
+				setDeleted(true);
+				setSelectedChemical(undefined);
+				setSearch('');
+			}
+		});*/
+	}
+
+	return (
+		<Box>
+			<Typography gutterBottom>
+				{t(`chemical.chemicalList`)}
+			</Typography>
+			<div className="utilsBar">
+				<MultipleAutocomplete
+					setPage={setPage}
+					setSearch={setSearch}
+					parent="chemicals"
+				/>
+				{isUserAuthorized && <Button
+					onClick={() => {
+						setOpenDialog(true);
+						setSelectedChemical(undefined);
+					}}
+					label={t(`generic.addNew`)}
+					iconName={`${featherIcons}#plus-circle`}
+					primary/>}
+			</div>
+			<EntriesTableCategory
+				tableData={tableData}
+				columns={(isExtraLargeDevice || isLargeDevice) ? columnsLarge : (isMediumDevice ? columnsMedium : columnsSmall)}
+				loading={loading}
+				pageToOpen={"chemicals"}
+				loadServerRows={setPage}
+				page={page}
+				totalCount={totalCount}
+				pageSize={PAGE_SIZE}
+			/>
+			{/*<AddNewChemicalDialog openDialog={openDialog}
+														close={() => {
+															setOpenDialog(false);
+															setSearch('');
+														}}
+														save={(searchVal: string) => {
+															setOpenDialog(false);
+															onChangeInput(searchVal);
+														}}
+														selectedOrganism={selectedChemical}/>*/}
+			<Notifications
+				open={openNotification}
+				notification={notificationType}
+				close={handleClose}
+			/>
+			<AlertDialog openDialog={openDialogDelete}
+									 onCancelClick={() => setOpenDialogDelete(false)}
+									 onOkClick={() => handleDelete(selectedChemical)}
+									 cancelLabel={t('generic.cancelButton')}
+									 okLabel={t('organism.retry')}
+									 title={t('organism.deleteOrganismTitle') + selectedChemical?.cas_auth_chem}>
+				{t('organism.deleteOrganismMessageStart')}
+				<a href={'/hazardscontrol?Category=Biological&organism='+selectedChemical?.cas_auth_chem} target="_blank">{t('organism.link')}</a>
+				{t('organism.deleteOrganismMessageEnd')}
+			</AlertDialog>
+			{deleted && <Redirect to="/organismscontrol"/>}
+		</Box>
+	);
+}

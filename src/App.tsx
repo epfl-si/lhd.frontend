@@ -19,6 +19,7 @@ import HazardFormChildDetails from "./pages/hazardformchilddetails";
 import "../css/styles.scss";
 import {OrganismsControl} from "./pages/organisms";
 import {HazardsControl} from "./pages/hazards";
+import {ChemicalsControl} from "./pages/chemicals";
 
 function App() {
 	const { t } = useTranslation();
@@ -92,6 +93,11 @@ function App() {
 						<li style={{backgroundColor: `${selectedMenu == 'organisms' ? '#FFCECE' : ''}`}}>
 							<Link to="/organismscontrol">{t(`menu.organisms`)}</Link>
 						</li>
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						<li style={{backgroundColor: `${selectedMenu == 'chemicals' ? '#FFCECE' : ''}`}}>
+							<Link to="/chemicals">{t(`menu.chemicals`)}</Link>
+						</li>
+						}
 						{connectedUser.groups.includes('LHD_acces_admin') &&
 						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
@@ -197,6 +203,10 @@ function App() {
 						<Route path="/hazardscontrol">
 							<HazardsControl handleCurrentPage={handleCurrentPage}
 													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+						</Route>
+						<Route path="/chemicals">
+							<ChemicalsControl handleCurrentPage={handleCurrentPage}
+															isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 					</Switch>
 				</div>

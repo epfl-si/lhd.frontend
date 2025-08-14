@@ -160,7 +160,18 @@ i18next.use(initReactI18next).init({
 					organisms: 'Organisms',
 					dispensations: 'Dispensations',
 					hazardFormControl: 'Hazard Form Control',
-					hazards: 'Hazards'
+					hazards: 'Hazards',
+					authChem: 'Chemical authorizations',
+					chemicals: 'Chemicals'
+				},
+				chemical: {
+					chemicalList: 'Chemicals',
+					CASNumber: 'CAS Number',
+					name: 'Name',
+					status: 'Status',
+					actions: 'Actions',
+					active: 'Active',
+					archived: 'Archived'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -375,7 +386,18 @@ i18next.use(initReactI18next).init({
 					organisms: 'Organismes',
 					dispensations: 'Dispensations',
 					hazardFormControl: 'Contrôle des formulaires de dangers',
-					hazards: 'Dangers'
+					hazards: 'Dangers',
+					authChem: 'Autorisations chimiques',
+					chemicals: 'Chimiques'
+				},
+				chemical: {
+					chemicalList: 'Chimiques',
+					CASNumber: 'Numéro CAS',
+					name: 'Nom',
+					status: 'Statut',
+					actions: 'Actions',
+					active: 'Actif',
+					archived: 'Archivé'
 				},
 				organism: {
 					organismsList: 'Organismes',

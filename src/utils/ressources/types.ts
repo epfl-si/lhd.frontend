@@ -44,6 +44,13 @@ export type organismType = {
 	updated_by: string;
 }
 
+export type chemicalsType = {
+	id: string;
+	cas_auth_chem: string;
+	auth_chem_en: string;
+	flag_auth_chem: boolean;
+}
+
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
