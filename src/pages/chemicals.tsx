@@ -8,14 +8,14 @@ import {chemicalsType, columnType, notificationType} from "../utils/ressources/t
 import {useTranslation} from "react-i18next";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {Redirect, useHistory, useLocation} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
-import {AlertDialog} from "../components/global/AlertDialog";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
+import {AddNewChemicalDialog} from "../components/chemical/AddNewChemicalDialog";
+import {deleteChemical} from "../utils/graphql/PostingTools";
 
 interface ChemicalsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -42,8 +42,6 @@ export const ChemicalsControl = ({
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
 	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [loadingDelete, setLoadingDelete] = useState(false);
-	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
 	const [deleted, setDeleted] = useState(false);
 	const PAGE_SIZE = 100;
 	const [page, setPage] = useState<number>(0);
@@ -119,8 +117,6 @@ export const ChemicalsControl = ({
 		}
 	];
 
-	const location = useLocation();
-
 	useEffect(() => {
 		if (isUserAuthorized) {
 			loadFetch();
@@ -155,8 +151,8 @@ export const ChemicalsControl = ({
 
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
-		setSearch(val);
-		history.push(`/organismscontrol?search=${encodeURIComponent(val)}`);
+		setSearch(`CAS=${encodeURIComponent(val)}`);
+		history.push(`/chemicalscontrol?CAS=${encodeURIComponent(val)}`);
 	}
 
 	const handleClose = () => {
@@ -170,37 +166,22 @@ export const ChemicalsControl = ({
 
 	const handleDelete = async (data: chemicalsType | undefined) => {
 		if (!data) return;
-		setLoadingDelete(true);
 		setSelectedChemical(data);
-		/*const results = await fetchChemicalAuthorizations(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			20,
-			0,
-			selectedChemical
-		);
-
-		if ( results.status && results.status === 200 && results.data && results.data.totalCount > 0) {
-			setOpenDialogDelete(true);
-		} else {
-			deleteChem(data);
-		}*/
-		setLoadingDelete(false);
+		deleteChem(data);
 	};
 
 	function deleteChem(data: chemicalsType) {
-		/*deleteChemical(
+		deleteChemical(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			JSON.stringify(data?.id),
 		).then(res => {
 			if(res.status == 200 && !res.data?.deleteChemical?.errors) {
-				setOpenDialogDelete(false);
 				setDeleted(true);
 				setSelectedChemical(undefined);
 				setSearch('');
 			}
-		});*/
+		});
 	}
 
 	return (
@@ -212,7 +193,7 @@ export const ChemicalsControl = ({
 				<MultipleAutocomplete
 					setPage={setPage}
 					setSearch={setSearch}
-					parent="chemicals"
+					parent="chemicalscontrol"
 				/>
 				{isUserAuthorized && <Button
 					onClick={() => {
@@ -233,7 +214,7 @@ export const ChemicalsControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
-			{/*<AddNewChemicalDialog openDialog={openDialog}
+			{<AddNewChemicalDialog openDialog={openDialog}
 														close={() => {
 															setOpenDialog(false);
 															setSearch('');
@@ -242,23 +223,13 @@ export const ChemicalsControl = ({
 															setOpenDialog(false);
 															onChangeInput(searchVal);
 														}}
-														selectedOrganism={selectedChemical}/>*/}
+														selectedChemical={selectedChemical}/>}
 			<Notifications
 				open={openNotification}
 				notification={notificationType}
 				close={handleClose}
 			/>
-			<AlertDialog openDialog={openDialogDelete}
-									 onCancelClick={() => setOpenDialogDelete(false)}
-									 onOkClick={() => handleDelete(selectedChemical)}
-									 cancelLabel={t('generic.cancelButton')}
-									 okLabel={t('organism.retry')}
-									 title={t('organism.deleteOrganismTitle') + selectedChemical?.cas_auth_chem}>
-				{t('organism.deleteOrganismMessageStart')}
-				<a href={'/hazardscontrol?Category=Biological&organism='+selectedChemical?.cas_auth_chem} target="_blank">{t('organism.link')}</a>
-				{t('organism.deleteOrganismMessageEnd')}
-			</AlertDialog>
-			{deleted && <Redirect to="/organismscontrol"/>}
+			{deleted && <Redirect to="/chemicalscontrol"/>}
 		</Box>
 	);
 }

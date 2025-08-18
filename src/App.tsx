@@ -95,7 +95,7 @@ function App() {
 						</li>
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
 						<li style={{backgroundColor: `${selectedMenu == 'chemicals' ? '#FFCECE' : ''}`}}>
-							<Link to="/chemicals">{t(`menu.chemicals`)}</Link>
+							<Link to="/chemicalscontrol">{t(`menu.chemicals`)}</Link>
 						</li>
 						}
 						{connectedUser.groups.includes('LHD_acces_admin') &&
@@ -204,7 +204,7 @@ function App() {
 							<HazardsControl handleCurrentPage={handleCurrentPage}
 													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
-						<Route path="/chemicals">
+						<Route path="/chemicalscontrol">
 							<ChemicalsControl handleCurrentPage={handleCurrentPage}
 															isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>

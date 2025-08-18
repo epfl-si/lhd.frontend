@@ -69,7 +69,7 @@ export const AddNewOrganismDialog = ({
 						name: fileName
 					}
 				).then(res => {
-					handleOpen(res);
+					handleOpen(res, false);
 				});
 			} else {
 				saveNewOrganism(
@@ -82,7 +82,7 @@ export const AddNewOrganismDialog = ({
 						name: fileName
 					}
 				).then(res => {
-					handleOpen(res);
+					handleOpen(res, true);
 				});
 			}
 		} else {
