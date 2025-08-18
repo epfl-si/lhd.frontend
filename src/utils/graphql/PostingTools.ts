@@ -1,5 +1,7 @@
 import {
-	dispensationRequestType, hazardAdditionalInfoType, hazardFormChildType,
+	dispensationRequestType,
+	hazardAdditionalInfoType,
+	hazardFormChildType,
 	hazardFormType,
 	lhdUnitsFromAPIType,
 	lhdUnitsType,
@@ -535,5 +537,69 @@ export const updateOrganism = async (
                 isSuccess
               }
             }`;
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const saveNewChemical = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	cas: string,
+	name: string,
+	status: boolean
+): Promise<any> => {
+	const query = `mutation addChemical {
+                addChemical(auth_chem_en: "${name}",
+                cas_auth_chem: "${cas}",
+                flag_auth_chem: ${status})
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const updateChemical = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	cas: string,
+	name: string,
+	status: boolean
+): Promise<any> => {
+	const query = `mutation updateChemical {
+               updateChemical(id: ${id},
+                auth_chem_en: "${name}",
+                cas_auth_chem: "${cas}",
+                flag_auth_chem: ${status})
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const deleteChemical = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteChemical {
+               deleteChemical(id: ${id})
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
 	return makeQuery(query, {}, address, authToken);
 };

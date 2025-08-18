@@ -52,9 +52,17 @@ export const notificationsVariants = {
 		type: 'success',
 		text: 'New organism has been saved',
 	},
+	'save-new-chemical-success': {
+		type: 'success',
+		text: 'New chemical has been saved',
+	},
 	'no-organism-chosen': {
 		type: 'error',
 		text: 'Organism name and risk are mandatory',
+	},
+	'no-chemical-chosen': {
+		type: 'error',
+		text: 'Chemical name is mandatory',
 	},
 	'no-room-chosen': {
 		type: 'error',

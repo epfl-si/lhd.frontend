@@ -100,7 +100,7 @@ export const MultipleAutocomplete = ({
 					filterArray.push({ title: splitCamelCase(col) + "=" + query, encodedTitle: col + "=" + encodeURIComponent(query)})
 				})
 				resolve(filterArray);
-			} else if (parent == 'chemicals') {
+			} else if (parent == 'chemicalscontrol') {
 				resolve(
 					[
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
