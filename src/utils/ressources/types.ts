@@ -49,6 +49,8 @@ export type chemicalsType = {
 	cas_auth_chem: string;
 	auth_chem_en: string;
 	flag_auth_chem: boolean;
+	auth_code?: string;
+	fastway?: boolean;
 }
 
 export type lhdUnitsType = {

@@ -968,6 +968,8 @@ export const fetchChemicals = async (
         cas_auth_chem
         auth_chem_en
         flag_auth_chem
+        fastway
+        auth_code
       }
       totalCount
 		}
