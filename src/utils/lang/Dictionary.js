@@ -174,6 +174,8 @@ i18next.use(initReactI18next).init({
 					archived: 'Archived',
 					modifyChemical: 'Modify the chemical',
 					addChemical: 'Add a new chemical',
+					fastway: 'Fastway',
+					auth_code: 'Auth code'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -402,6 +404,8 @@ i18next.use(initReactI18next).init({
 					archived: 'Archivé',
 					modifyChemical: 'Modifier le chimique',
 					addChemical: 'Ajouter un nouveau chimique',
+					fastway: 'Fastway',
+					auth_code: 'Auth code'
 				},
 				organism: {
 					organismsList: 'Organismes',
