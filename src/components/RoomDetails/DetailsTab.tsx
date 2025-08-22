@@ -17,6 +17,7 @@ import {AuditReportPanel} from "../Units/AuditReportPanel";
 import {DoorPlug} from "./DoorPlug";
 import {DeleteRoomDialog} from "./DeleteRoomDialog";
 import {Redirect} from "react-router-dom";
+import {AuthorizationPanel} from "./AuthorizationPanel";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -226,7 +227,12 @@ export const DetailsTab = ({
       {
         (isExtraLargeDevice || isLargeDevice) ?
         <div style={{width: '50%'}}>
-          <AuditReportPanel lhd_units={roomData.lhd_units}/>
+          <div>
+            <AuditReportPanel lhd_units={roomData.lhd_units}/>
+          </div>
+          <div>
+            <AuthorizationPanel room={roomData.id}/>
+          </div>
         </div>
         : <></>
       }
