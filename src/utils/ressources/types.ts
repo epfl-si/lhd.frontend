@@ -64,6 +64,8 @@ export type authorizationType = {
 	authorization_rooms: roomDetailsType[];
 	authorization_holders: personType[];
 	authorization_chemicals: chemicalsType[];
+	authorization_radiations: string[];
+	authority?: string;
 }
 
 export type lhdUnitsType = {

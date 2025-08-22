@@ -6,7 +6,6 @@ import {LoginButton, StateEnum, useOpenIDConnectContext,} from '@epfl-si/react-a
 import {Box, Dialog, DialogActions, DialogContent, DialogTitle,} from '@material-ui/core';
 import {Alert} from '@mui/material';
 import {useTranslation} from 'react-i18next';
-import LanguageSwitcher from './components/Table/LanguageSwitcher';
 import RoomDetails from './pages/roomdetails';
 import {UnitControl} from "./pages/units";
 import UnitDetails from "./pages/unitdetails";
@@ -21,6 +20,7 @@ import {OrganismsControl} from "./pages/organisms";
 import {HazardsControl} from "./pages/hazards";
 import {ChemicalsControl} from "./pages/chemicals";
 import {ChemicalsAuthorizationControl} from "./pages/chemicalAuthorizations";
+import {RadioprotectionsAuthorizationControl} from "./pages/radioprotectionAuthorizations";
 
 function App() {
 	const { t } = useTranslation();
@@ -102,6 +102,11 @@ function App() {
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
 						<li style={{backgroundColor: `${selectedMenu == 'chemicalauthorizationscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/chemicalauthorizationscontrol">{t(`menu.authChem`)}</Link>
+						</li>
+						}
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						<li style={{backgroundColor: `${selectedMenu == 'radioprotectionauthorizationscontrol' ? '#FFCECE' : ''}`}}>
+							<Link to="/radioprotectionauthorizationscontrol">{t(`menu.radioprotection`)}</Link>
 						</li>
 						}
 						{connectedUser.groups.includes('LHD_acces_admin') &&
@@ -217,6 +222,10 @@ function App() {
 						<Route path="/chemicalauthorizationscontrol">
 							<ChemicalsAuthorizationControl handleCurrentPage={handleCurrentPage}
 																isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+						</Route>
+						<Route path="/radioprotectionauthorizationscontrol">
+							<RadioprotectionsAuthorizationControl handleCurrentPage={handleCurrentPage}
+																						 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 					</Switch>
 				</div>

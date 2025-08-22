@@ -164,7 +164,8 @@ i18next.use(initReactI18next).init({
 					hazardFormControl: 'Hazard Form Control',
 					hazards: 'Hazards',
 					authChem: 'Chemical authorizations',
-					chemicals: 'Chemical under authorisation'
+					chemicals: 'Chemical under authorization',
+					radioprotection: 'Radioprotection authorization'
 				},
 				chemical: {
 					chemicalList: 'Chemicals',
@@ -189,7 +190,8 @@ i18next.use(initReactI18next).init({
 					status: 'Status',
 					cas: 'CAS',
 					holders: 'Holders',
-					renewals: 'Renewals'
+					renewals: 'Renewals',
+					source: 'Source'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -408,7 +410,8 @@ i18next.use(initReactI18next).init({
 					hazardFormControl: 'Contrôle des formulaires de dangers',
 					hazards: 'Dangers',
 					authChem: 'Autorisations chimiques',
-					chemicals: 'Chimiques sous authorisation'
+					chemicals: 'Chimiques sous autorisation',
+					radioprotection: 'Autorisation de radioprotection'
 				},
 				chemical: {
 					chemicalList: 'Chimiques',
@@ -433,7 +436,8 @@ i18next.use(initReactI18next).init({
 					status: 'Statut',
 					cas: 'CAS',
 					holders: 'Responsable',
-					renewals: 'Renouvellements'
+					renewals: 'Renouvellements',
+					source: 'Source'
 				},
 				organism: {
 					organismsList: 'Organismes',
