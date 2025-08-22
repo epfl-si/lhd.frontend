@@ -48,14 +48,26 @@ export const ChemicalsControl = ({
 	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const columnsLarge: columnType[] = [
-		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 200},
-		{field: "auth_chem_en", headerName: t('chemical.name'), width: 300},
+		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 200,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
+				params.row.cas_auth_chem
+			)},
+		{field: "auth_chem_en", headerName: t('chemical.name'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
+				params.row.auth_chem_en
+			)},
 		{field: "flag_auth_chem", headerName: t('chemical.status'), width: 80,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
 			}},
-		{field: "fastway", headerName: t('chemical.fastway'), width: 300},
-		{field: "auth_code", headerName: t('chemical.auth_code'), width: 300},
+		{field: "fastway", headerName: t('chemical.fastway'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
+				params.row.fastway
+			)},
+		{field: "auth_code", headerName: t('chemical.auth_code'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
+				params.row.auth_code
+			)},
 		// {field: "log", headerName: t('organism.log'), width: 100,
 		// 	renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 		// 		const date = new Date(params.row.updated_on);

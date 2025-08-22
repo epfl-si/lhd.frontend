@@ -54,20 +54,31 @@ export const UnitControl = ({
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
 				params.row.unitId ? <></> :
 					<>✔️</>
-			),
-			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
-				return params.value ? '' : '✔️';
-			}
-		},
-		{field: "name", headerName: t('unit.name'), width: 300},
+			)},
+		{field: "name", headerName: t('unit.name'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				params.row.name
+			)},
 		{
-			field: "institute", headerName: t('unit.institute'), width: 130, valueGetter: (params) => {
+			field: "institute", headerName: t('unit.institute'), width: 130,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				if (params.row.institute && params.row.institute.name) {
+					return params.row.institute.name;
+				}
+				return "";
+			}, valueGetter: (params) => {
 				if (params.row.institute && params.row.institute.name) {
 						return params.row.institute.name;
 				}
 				return "";
 			}},
-		{field: "school", headerName: t('unit.school'), width: 130, valueGetter: (params) => {
+		{field: "school", headerName: t('unit.school'), width: 130,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
+				if (params.row.institute && params.row.institute.school && params.row.institute.school.name) {
+					return params.row.institute.school.name;
+				}
+				return "";
+			}, valueGetter: (params) => {
 				if (params.row.institute && params.row.institute.school && params.row.institute.school.name) {
 						return params.row.institute.school.name;
 				}
