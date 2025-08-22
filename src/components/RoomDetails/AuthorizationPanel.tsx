@@ -26,7 +26,6 @@ export const AuthorizationPanel = ({
 }: AuthorizationPanelProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
-	const [isOpen, setIsOpen] = React.useState<boolean>(false);
 	const [authorizations, setAuthorizations] = React.useState<authorizationType[]>([]);
 	const [loading, setLoading] = useState(false);
 
@@ -39,7 +38,7 @@ export const AuthorizationPanel = ({
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
 				</div>
 			}},
-		{field: "creation_date", headerName: t('authorization.created'), flex: 0.1,
+		{field: "creation_date", headerName: 'Dates', flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				const date = new Date(params.row.creation_date);
 				const dateExp = new Date(params.row.expiration_date);
@@ -52,18 +51,6 @@ export const AuthorizationPanel = ({
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				return <>{params.row.status}</>
 			}},
-		{field: "authorization_rooms", headerName: t('authorization.room'), flex: 0.1,
-			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
-				<div className="form-card-div">
-					{params.row.authorization_rooms.map(item => {
-							return (
-								<span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
-							)
-						}
-					)}
-				</div>
-			),
-		},
 		{field: "authorization_holders", headerName: t('authorization.holders'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div className="form-card-div">
@@ -90,14 +77,9 @@ export const AuthorizationPanel = ({
 		}
 	];
 
-	// useEffect(() => {
-	// 	setIsOpen(false);
-	// }, [room]);
-
 	useEffect(() => {
-		if (true)
-			load();
-	}, [isOpen]);
+		load();
+	}, [room]);
 
 	const load = async () => {
 		setLoading(true);
