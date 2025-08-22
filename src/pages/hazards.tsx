@@ -4,7 +4,7 @@ import {fetchHazardCategories, fetchHazards} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, MenuItem, Select, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {hazardCategory, hazardDetailsType, notificationType, organismType} from "../utils/ressources/types";
+import {hazardCategory, hazardDetailsType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";

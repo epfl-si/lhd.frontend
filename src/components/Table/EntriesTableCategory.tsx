@@ -12,7 +12,7 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
-	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism' | 'hazards' | 'chemicals' | 'chemicalauthorizations';
+	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism' | 'hazards' | 'chemicals' | 'chemicalauthorizations' | 'chemicalauthorizationsByRoom';
 	page?: number;
 	pageSize?: number;
 	totalCount?: number;
@@ -22,7 +22,8 @@ type EntriesTableCategoryProps = {
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 	"& .MuiDataGrid-cell": {
 		maxHeight: "none !important",
-		whiteSpace: "normal"
+		whiteSpace: "normal",
+		lineHeight: "normal !important"
 	},
 	"& .MuiDataGrid-row": {
 		maxHeight: "none !important"
@@ -30,7 +31,7 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 	"& .MuiDataGrid-virtualScrollerContent": {
 		height: "100% !important", // Force it to take 100% of the available height
 		overflowY: 'auto'
-	},
+	}
 }));
 
 export function EntriesTableCategory({
@@ -56,7 +57,13 @@ export function EntriesTableCategory({
 	return (
 		<Box width="100%" height="500px">
 			{tableData !== null ? (
-				(pageToOpen == 'room' || pageToOpen == 'unit' || pageToOpen == 'hazards' || pageToOpen == 'chemicals' || pageToOpen == 'chemicalauthorizations') ?
+				(
+					pageToOpen == 'room' ||
+					pageToOpen == 'unit' ||
+					pageToOpen == 'hazards' ||
+					pageToOpen == 'chemicals' ||
+					pageToOpen == 'chemicalauthorizations'
+				) ?
 					<StyledDataGrid
 						style={{fontSize:`${pageToOpen == 'room' ? 'x-small' : 'small'}`}}
 						loading={loading}
@@ -104,7 +111,7 @@ export function EntriesTableCategory({
 						onPageChange={handlePageChange}
 						page={page}
 					/> :
-				<DataGrid
+				<StyledDataGrid
 					style={{fontSize: 'small'}}
 					loading={loading}
 					disableSelectionOnClick={true}
@@ -131,6 +138,8 @@ export function EntriesTableCategory({
 								return row.hazard_form_child_name;
 							case "organism":
 								return row.id;
+							case "chemicalauthorizationsByRoom":
+								return row.authorization;
 						}
 					}}
 				/>

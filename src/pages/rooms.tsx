@@ -50,18 +50,37 @@ export const RoomControl = ({
 	const [search, setSearch] = React.useState<string>('');
 
 	const columnsLarge: columnType[] = [
-			{field: "name", headerName: t('room.name'), flex: 0.2},
-			{field: "site", headerName: t('room.site'), flex: 0.2},
-			{field: "building", headerName: t('room.building'), flex: 0.2},
-			{field: "sector", headerName: t('room.sector'), flex: 0.1},
-			{field: "floor", headerName: t('room.floor'), flex: 0.1},
-			{field: "vol", headerName: t('room_details.vol'), flex: 0.2},
-			{field: "kind", headerName: t('room.kind.name'), flex: 0.4, valueGetter: (params) => {
-				if (params.row.kind && params.row.kind.name) {
-					return params.row.kind.name;
-				}
-				return "";
-			}},
+			{field: "name", headerName: t('room.name'), flex: 0.2,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+					params.row.name
+				)},
+			{field: "site", headerName: t('room.site'), flex: 0.2,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+					params.row.site
+				)},
+			{field: "building", headerName: t('room.building'), flex: 0.2,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+					params.row.building
+				)},
+			{field: "sector", headerName: t('room.sector'), flex: 0.1,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+					params.row.sector
+				)},
+			{field: "floor", headerName: t('room.floor'), flex: 0.1,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+					params.row.floor
+				)},
+			{field: "vol", headerName: t('room_details.vol'), flex: 0.2,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
+					params.row.vol
+				)},
+			{field: "kind", headerName: t('room.kind.name'), flex: 0.4,
+				renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => {
+					if (params.row.kind && params.row.kind.name) {
+						return params.row.kind.name;
+					}
+					return "";
+				}},
 		{field: "submissionList", headerName: t('room_details.hazards'), flex: 2, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>

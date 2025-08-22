@@ -123,7 +123,7 @@ export const ChemicalsAuthorizationControl = ({
 					<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
 					<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
 				</div>
-			},},
+			}},
 		{field: "authorization_rooms", headerName: t('authorization.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>

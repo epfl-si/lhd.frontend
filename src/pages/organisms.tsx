@@ -49,8 +49,14 @@ export const OrganismsControl = ({
 	const [deleted, setDeleted] = useState(false);
 
 	const columnsLarge: columnType[] = [
-		{field: "organism", headerName: t('organism.name'), width: 200},
-		{field: "risk_group", headerName: t('organism.risk'), width: 80},
+		{field: "organism", headerName: t('organism.name'), width: 200,
+			renderCell: (params: GridRenderCellParams<any, organismType>) => (
+				params.row.organism
+			)},
+		{field: "risk_group", headerName: t('organism.risk'), width: 80,
+			renderCell: (params: GridRenderCellParams<any, organismType>) => (
+				params.row.risk_group
+			)},
 		{field: "filePath", headerName: t('organism.file'), width: 200, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
@@ -69,7 +75,10 @@ export const OrganismsControl = ({
 				return date.toLocaleDateString("en-GB");
 			}
 		},
-		{field: "updated_by", headerName: t('organism.updated_by'), width: 200},
+		{field: "updated_by", headerName: t('organism.updated_by'), width: 200,
+			renderCell: (params: GridRenderCellParams<any, organismType>) => (
+				params.row.updated_by
+			)},
 		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				isUserAuthorized ? <><Button size="icon"
