@@ -221,7 +221,7 @@ export const RadioprotectionsAuthorizationControl = ({
 			PAGE_SIZE,
 			PAGE_SIZE * page,
 			search,
-			'Radioprotection'
+			'IonisingRadiation'
 		);
 		if (results.status === 200 && results.data){
 			setTableData(results.data.authorizations);

@@ -1,28 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import "../../../css/styles.scss";
-import {authorizationType, columnType, kindType, lhdUnitsType, reportFile} from "../../utils/ressources/types";
+import {authorizationType, columnType} from "../../utils/ressources/types";
 import {
-	fetchChemicalAuthorizations,
 	fetchChemicalAuthorizationsByRoom,
-	fetchReportFiles
+	fetchRadioprotectionAuthorizationsByRoom
 } from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
-import {handleClickFileLink} from "../../utils/ressources/file";
-import {Style} from "node:util";
 import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography} from "@material-ui/core";
 import {useTranslation} from "react-i18next";
-import {notificationsVariants} from "../../utils/ressources/variants";
 import {EntriesTableCategory} from "../Table/EntriesTableCategory";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 
 interface AuthorizationPanelProps {
 	room: string;
+	type: string;
 }
 
 export const AuthorizationPanel = ({
-	room
+	room,
+	type
 }: AuthorizationPanelProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -62,33 +59,57 @@ export const AuthorizationPanel = ({
 					)}
 				</div>
 			),
-		},
-		{field: "authorization_chemicals", headerName: t('authorization.cas'), flex: 0.2,
-			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
-				<div className="form-card-div">
-					{params.row.authorization_chemicals.map(item => {
-							return (
-								<span>• {item.auth_chem_en} ({item.cas_auth_chem}) - <b style={{fontSize: "smaller"}}>{item.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
-							)
-						}
-					)}
-				</div>
-			),
 		}
 	];
 
 	useEffect(() => {
+		if (type == 'Chemical')
+			columnsLarge.push({field: "authorization_chemicals", headerName: t('authorization.cas'), flex: 0.2,
+				renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
+					<div className="form-card-div">
+						{params.row.authorization_chemicals.map(item => {
+								return (
+									<span>• {item.auth_chem_en} ({item.cas_auth_chem}) - <b style={{fontSize: "smaller"}}>{item.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
+								)
+							}
+						)}
+					</div>
+				),
+			})
+		else if (type == 'IonisingRadiation')
+			columnsLarge.push({field: "authorization_radiations", headerName: t('authorization.source'), flex: 0.2,
+				renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
+					<div className="form-card-div">
+						{params.row.authorization_radiations.map(item => {
+								return (
+									<span>• {item}</span>
+								)
+							}
+						)}
+					</div>
+				),
+			})
 		load();
-	}, [room]);
+	}, [room, type]);
 
 	const load = async () => {
 		setLoading(true);
-		const results = await fetchChemicalAuthorizationsByRoom(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			room,
-			'Chemical'
-		);
+		let results = {};
+
+		if (type == 'Chemical')
+			results = await fetchChemicalAuthorizationsByRoom(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				room,
+				type
+			);
+		else if (type == 'IonisingRadiation')
+			results = await fetchRadioprotectionAuthorizationsByRoom(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				room,
+				type
+			);
 		if (results.status === 200 && results.data){
 			setAuthorizations(results.data);
 		} else {
@@ -100,7 +121,8 @@ export const AuthorizationPanel = ({
 	return <div className="form-card-div">
 		<ExpansionPanel style={{width: '100%'}}>
 			<ExpansionPanelSummary expandIcon="▽" style={{backgroundColor: '#fafafa'}}>
-				<Typography style={{textDecoration: 'underline', textDecorationColor: 'red'}}>{t('menu.authChem')}</Typography>
+				<Typography style={{textDecoration: 'underline', textDecorationColor: 'red'}}>
+					{type == 'IonisingRadiation' ? t('menu.radioprotection') : t('menu.authChem')}</Typography>
 			</ExpansionPanelSummary>
 			<ExpansionPanelDetails style={{display: "flex", flexDirection: "column"}}>
 				<EntriesTableCategory

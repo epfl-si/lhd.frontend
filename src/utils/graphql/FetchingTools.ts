@@ -1105,3 +1105,39 @@ export const fetchChemicalAuthorizationsByRoom = async (
 		data: result.data?.authorizationsByRoom
 	};
 };
+
+export const fetchRadioprotectionAuthorizationsByRoom = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	roomId: string,
+	type: string
+): Promise<any> => {
+	const query = `query fetchRadioprotectionAuthorizationsByRoom {
+		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
+      authorization
+      creation_date
+      expiration_date
+      renewals
+      authority
+      unit {
+        name
+      }
+      authorization_rooms {
+        name
+      }
+      authorization_holders {
+        surname
+        name
+        sciper
+      }
+      status
+      authorization_radiations
+		}
+	}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.authorizationsByRoom
+	};
+};
