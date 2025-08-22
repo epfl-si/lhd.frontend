@@ -231,7 +231,10 @@ export const DetailsTab = ({
             <AuditReportPanel lhd_units={roomData.lhd_units}/>
           </div>
           <div>
-            <AuthorizationPanel room={roomData.id}/>
+            <AuthorizationPanel room={roomData.id} type='Chemical'/>
+          </div>
+          <div>
+            <AuthorizationPanel room={roomData.id} type='IonisingRadiation'/>
           </div>
         </div>
         : <></>

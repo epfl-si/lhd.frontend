@@ -165,7 +165,7 @@ i18next.use(initReactI18next).init({
 					hazards: 'Hazards',
 					authChem: 'Chemical authorizations',
 					chemicals: 'Chemical under authorization',
-					radioprotection: 'Radioprotection authorization'
+					radioprotection: 'Radioprotection authorizations'
 				},
 				chemical: {
 					chemicalList: 'Chemicals',
@@ -411,7 +411,7 @@ i18next.use(initReactI18next).init({
 					hazards: 'Dangers',
 					authChem: 'Autorisations chimiques',
 					chemicals: 'Chimiques sous autorisation',
-					radioprotection: 'Autorisation de radioprotection'
+					radioprotection: 'Autorisation de radioprotections'
 				},
 				chemical: {
 					chemicalList: 'Chimiques',
