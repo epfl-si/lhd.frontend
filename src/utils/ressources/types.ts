@@ -53,6 +53,19 @@ export type chemicalsType = {
 	fastway?: boolean;
 }
 
+export type authorizationType = {
+	authorization: string;
+	expiration_date: Date;
+	status: string;
+	creation_date: Date;
+	renewals: number;
+	type: string;
+	unit: lhdUnitsType;
+	authorization_rooms: roomDetailsType[];
+	authorization_holders: personType[];
+	authorization_chemicals: chemicalsType[];
+}
+
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;

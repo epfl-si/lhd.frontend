@@ -144,7 +144,9 @@ i18next.use(initReactI18next).init({
 					addNew: 'Add new',
 					search: 'Search',
 					comment: 'Comment',
-					export: 'Export'
+					export: 'Export',
+					from: 'From',
+					to: 'To'
 				},
 				datagrid: {
 					columns: 'Columns',
@@ -175,7 +177,19 @@ i18next.use(initReactI18next).init({
 					modifyChemical: 'Modify the chemical',
 					addChemical: 'Add a new chemical',
 					fastway: 'Fastway',
-					auth_code: 'Auth code'
+					auth_code: 'Auth code',
+					chemicalAuthorizationList: 'Chemical authorizations'
+				},
+				authorization: {
+					room: 'Room',
+					unit: 'Unit',
+					authorization: 'Authorization',
+					created: 'Created',
+					expires: 'Expires',
+					status: 'Status',
+					cas: 'CAS',
+					holders: 'Holders',
+					renewals: 'Renewals'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -374,7 +388,9 @@ i18next.use(initReactI18next).init({
 					addNew: 'Ajouter',
 					search: 'Rechercher',
 					comment: 'Commentaire',
-					export: 'Exporter'
+					export: 'Exporter',
+					from: 'Du',
+					to: 'Au'
 				},
 				datagrid: {
 					columns: 'Colonnes',
@@ -405,7 +421,19 @@ i18next.use(initReactI18next).init({
 					modifyChemical: 'Modifier le chimique',
 					addChemical: 'Ajouter un nouveau chimique',
 					fastway: 'Fastway',
-					auth_code: 'Auth code'
+					auth_code: 'Auth code',
+					chemicalAuthorizationList: 'Autorisations chimiques'
+				},
+				authorization: {
+					room: 'Room',
+					unit: 'Unit',
+					authorization: 'Autorisation',
+					created: 'Créée le',
+					expires: 'Expire le',
+					status: 'Statut',
+					cas: 'CAS',
+					holders: 'Responsable',
+					renewals: 'Renouvellements'
 				},
 				organism: {
 					organismsList: 'Organismes',

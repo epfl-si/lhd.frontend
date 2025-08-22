@@ -108,6 +108,17 @@ export const MultipleAutocomplete = ({
 						{ title: "Status(Active/Archived)="+query, encodedTitle: "Status="+ encodeURIComponent(query) }
 					]
 				);
+			} else if (parent == 'chemicalauthorizationscontrol') {
+				resolve(
+					[
+						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
+						{ title: "Authorization="+query, encodedTitle: "Authorization="+ encodeURIComponent(query) },
+						{ title: "Status(Active/Expired)="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
+						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
+						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
+					]
+				);
 			} else {
 				resolve(
 				[

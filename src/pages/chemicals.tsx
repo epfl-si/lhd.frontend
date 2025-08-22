@@ -128,7 +128,7 @@ export const ChemicalsControl = ({
 	}, [search, deleted, page, isUserAuthorized]);
 
 	useEffect(() => {
-		handleCurrentPage("chemicals");
+		handleCurrentPage("chemicalscontrol");
 		setPage(0);
 	}, [oidc.accessToken]);
 
