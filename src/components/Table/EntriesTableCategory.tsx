@@ -12,7 +12,8 @@ type EntriesTableCategoryProps = {
 	tableData: Object[];
 	columns: columnType[];
 	loading: boolean;
-	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism' | 'hazards' | 'chemicals' | 'chemicalauthorizations' | 'chemicalauthorizationsByRoom';
+	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism' | 'hazards' | 'chemicals' |
+		'chemicalauthorizations' | 'chemicalauthorizationsByRoom' | 'radioprotectionauthorization';
 	page?: number;
 	pageSize?: number;
 	totalCount?: number;
@@ -62,7 +63,8 @@ export function EntriesTableCategory({
 					pageToOpen == 'unit' ||
 					pageToOpen == 'hazards' ||
 					pageToOpen == 'chemicals' ||
-					pageToOpen == 'chemicalauthorizations'
+					pageToOpen == 'chemicalauthorizations' ||
+					pageToOpen == 'radioprotectionauthorization'
 				) ?
 					<StyledDataGrid
 						style={{fontSize:`${pageToOpen == 'room' ? 'x-small' : 'small'}`}}
@@ -98,6 +100,7 @@ export function EntriesTableCategory({
 								case "chemicals":
 									return row.id;
 								case "chemicalauthorizations":
+								case "radioprotectionauthorization":
 									return row.authorization;
 								case "hazards":
 									return row.id_lab_has_hazards_child ?? row.id_lab_has_hazards;

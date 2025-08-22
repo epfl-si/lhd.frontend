@@ -998,7 +998,6 @@ export const fetchChemicalAuthorizations = async (
       creation_date
       expiration_date
       renewals
-      type
       unit {
         name
       }
@@ -1015,6 +1014,47 @@ export const fetchChemicalAuthorizations = async (
         cas_auth_chem
         auth_chem_en
       }
+    }
+      totalCount
+		}
+	}`;
+
+	const result = await makeQuery(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.authorizationsWithPagination
+	};
+};
+
+export const fetchRadioprotectionAuthorizations = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string,
+	type: string
+): Promise<any> => {
+	const query = `query fetchRadioprotectionAuthorizations {
+		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
+			authorizations{
+      authorization
+      creation_date
+      expiration_date
+      renewals
+      authority
+      unit {
+        name
+      }
+      authorization_rooms {
+        name
+      }
+      authorization_holders {
+        surname
+        name
+        sciper
+      }
+      status
+      authorization_radiations
     }
       totalCount
 		}
