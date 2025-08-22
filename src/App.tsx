@@ -20,6 +20,7 @@ import "../css/styles.scss";
 import {OrganismsControl} from "./pages/organisms";
 import {HazardsControl} from "./pages/hazards";
 import {ChemicalsControl} from "./pages/chemicals";
+import {ChemicalsAuthorizationControl} from "./pages/chemicalAuthorizations";
 
 function App() {
 	const { t } = useTranslation();
@@ -94,8 +95,13 @@ function App() {
 							<Link to="/organismscontrol">{t(`menu.organisms`)}</Link>
 						</li>
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
-						<li style={{backgroundColor: `${selectedMenu == 'chemicals' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu == 'chemicalscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/chemicalscontrol">{t(`menu.chemicals`)}</Link>
+						</li>
+						}
+						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						<li style={{backgroundColor: `${selectedMenu == 'chemicalauthorizationscontrol' ? '#FFCECE' : ''}`}}>
+							<Link to="/chemicalauthorizationscontrol">{t(`menu.authChem`)}</Link>
 						</li>
 						}
 						{connectedUser.groups.includes('LHD_acces_admin') &&
@@ -207,6 +213,10 @@ function App() {
 						<Route path="/chemicalscontrol">
 							<ChemicalsControl handleCurrentPage={handleCurrentPage}
 															isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+						</Route>
+						<Route path="/chemicalauthorizationscontrol">
+							<ChemicalsAuthorizationControl handleCurrentPage={handleCurrentPage}
+																isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 					</Switch>
 				</div>
