@@ -994,6 +994,7 @@ export const fetchChemicalAuthorizations = async (
 	const query = `query fetchChemicalAuthorizations {
 		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
 			authorizations{
+      id
       authorization
       creation_date
       expiration_date
@@ -1037,12 +1038,14 @@ export const fetchRadioprotectionAuthorizations = async (
 	const query = `query fetchRadioprotectionAuthorizations {
 		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
 			authorizations{
+      id
       authorization
       creation_date
       expiration_date
       renewals
       authority
       unit {
+        id
         name
       }
       authorization_rooms {
@@ -1054,7 +1057,9 @@ export const fetchRadioprotectionAuthorizations = async (
         sciper
       }
       status
-      authorization_radiations
+      authorization_radiations {
+        source
+      }
     }
       totalCount
 		}
@@ -1075,6 +1080,7 @@ export const fetchChemicalAuthorizationsByRoom = async (
 ): Promise<any> => {
 	const query = `query fetchChemicalAuthorizationsByRoom {
 		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
+      id
       authorization
       creation_date
       expiration_date
@@ -1114,6 +1120,7 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 ): Promise<any> => {
 	const query = `query fetchRadioprotectionAuthorizationsByRoom {
 		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
+      id
       authorization
       creation_date
       expiration_date

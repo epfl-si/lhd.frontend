@@ -603,3 +603,91 @@ export const deleteChemical = async (
 
 	return makeQuery(query, {}, address, authToken);
 };
+
+export const saveNewRadioprotection = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	radioprotection: any
+): Promise<any> => {
+	const query = `mutation addRadioprotection {
+                addAuthorization(
+                  id_unit: ${JSON.stringify(radioprotection.unit.id)},
+                  authorization: "${radioprotection.name}",
+                  expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
+                  status: "${radioprotection.status}",
+                  authority: "${radioprotection.authority}",
+                  type: "IonisingRadiation",
+                  radiations: [
+                    ${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+                  ],
+                  holders: [
+                    ${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
+                  ],
+                  rooms: [
+                    ${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+                  ],
+                )
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	console.log(query)
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const updateRadioprotection = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	radioprotection: any
+): Promise<any> => {
+	const query = `mutation updateRadioprotection {
+                updateAuthorization(
+                  id: ${id},
+                  id_unit: ${JSON.stringify(radioprotection.unit.id)},
+                  expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
+                  status: "${radioprotection.status}",
+                  authority: "${radioprotection.authority}",
+                  radiations: [
+                    ${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+                  ],
+                  holders: [
+                    ${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
+                  ],
+                  rooms: [
+                    ${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+                  ],
+                )
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	console.log(query)
+	return makeQuery(query, {}, address, authToken);
+};
+
+export const deleteRadioprotection = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteRadioprotection {
+               deleteRadioprotection(id: ${id})
+               {
+                errors {
+                  message
+                }
+                isSuccess
+              }
+            }`;
+
+	return makeQuery(query, {}, address, authToken);
+};

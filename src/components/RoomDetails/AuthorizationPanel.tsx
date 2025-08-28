@@ -82,7 +82,7 @@ export const AuthorizationPanel = ({
 					<div className="form-card-div">
 						{params.row.authorization_radiations.map(item => {
 								return (
-									<span>• {item}</span>
+									<span>• {item.source}</span>
 								)
 							}
 						)}
