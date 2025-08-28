@@ -1138,10 +1138,13 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
         sciper
       }
       status
-      authorization_radiations
+      authorization_radiations {
+        source
+      }
 		}
 	}`;
 
+	console.log(query)
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,
