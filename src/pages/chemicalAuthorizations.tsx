@@ -7,7 +7,6 @@ import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {authorizationType, columnType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {useHistory} from "react-router-dom";
 import "../../css/styles.scss";
 import {notificationsVariants} from "../utils/ressources/variants";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
@@ -21,12 +20,9 @@ export const ChemicalsAuthorizationControl = ({
 	handleCurrentPage,
 	isUserAuthorized
 }: ChemicalsAuthorizationControlProps) => {
-	const history = useHistory();
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
-	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [tableData, setTableData] = useState<authorizationType[]>([]);
-	const [selected, setSelected] = useState<authorizationType>();
 	const [loading, setLoading] = useState(false);
 	const [search, setSearch] = React.useState('');
 	const [notificationType, setNotificationType] = useState<notificationType>({

@@ -3,14 +3,19 @@ import React, {useEffect, useState} from "react";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {authorizationType, columnType, notificationType} from "../utils/ressources/types";
+import {authorizationType, columnType, notificationType, organismType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {useHistory} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import "../../css/styles.scss";
 import {notificationsVariants} from "../utils/ressources/variants";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {fetchRadioprotectionAuthorizations} from "../utils/graphql/FetchingTools";
+import Notifications from "../components/Table/Notifications";
+import {AddNewRadioprotectionDialog} from "../components/radioprotection/AddNewRadioprotectionDialog";
+import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {deleteRadioprotection} from "../utils/graphql/PostingTools";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -40,6 +45,8 @@ export const RadioprotectionsAuthorizationControl = ({
 	const PAGE_SIZE = 100;
 	const [page, setPage] = useState<number>(0);
 	const [totalCount, setTotalCount] = useState<number>(0);
+	const [deleted, setDeleted] = useState(false);
+	const [loadingDelete, setLoadingDelete] = useState(false);
 
 	const columnsLarge: columnType[] = [
 		{field: "unit", headerName: t('authorization.unit'), flex: 0.1,
@@ -101,12 +108,25 @@ export const RadioprotectionsAuthorizationControl = ({
 				<div className="form-card-div">
 					{params.row.authorization_radiations.map(item => {
 							return (
-								<span>• {item}</span>
+								<span>• {item.source}<br/></span>
 							)
 						}
 					)}
 				</div>
 			),
+		},
+		{field: "id", headerName: t('organism.actions'), flex: 0.2,
+			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
+				<>
+					<Button size="icon"
+								iconName={"#edit-3"}
+								onClick={() => modify(params.row)}/>
+					<Button size="icon"
+								style={{marginLeft: '10px'}}
+								iconName={`#trash`}
+								onClick={() => deleteAuth(params.row)}/>
+				</>
+			)
 		}
 	];
 
@@ -157,7 +177,7 @@ export const RadioprotectionsAuthorizationControl = ({
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.authorization_radiations.map(item => {
 							return (
-								<span>• {item}</span>
+								<span>• {item.source}<br/></span>
 							)
 						}
 					)}
@@ -185,7 +205,7 @@ export const RadioprotectionsAuthorizationControl = ({
 			);
 			const radiations = params.row.authorization_radiations.map(item => {
 					return (
-						<span>• {item}</span>
+						<span>• {item.source}<br/></span>
 					)
 				}
 			);
@@ -205,8 +225,9 @@ export const RadioprotectionsAuthorizationControl = ({
 	useEffect(() => {
 		if (isUserAuthorized) {
 			loadFetch();
+			setDeleted(false);
 		}
-	}, [search, page, isUserAuthorized]);
+	}, [search, page, isUserAuthorized, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("radioprotectionauthorizationscontrol");
@@ -234,6 +255,38 @@ export const RadioprotectionsAuthorizationControl = ({
 		setLoading(false);
 	};
 
+	function onChangeInput(newValue: string) {
+		const val = newValue ?? '';
+		setSearch(val);
+		history.push(`/radioprotectionauthorizationscontrol?Authorization=${encodeURIComponent(val)}`);
+	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
+
+	const modify = (data: authorizationType) => {
+		setOpenDialog(true);
+		setSelected(data);
+	}
+
+	async function deleteAuth(data: authorizationType) {
+		setLoadingDelete(true);
+		setSelected(data);
+		deleteRadioprotection(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			JSON.stringify(data?.id)
+		).then(res => {
+			if(res.status == 200 && !res.data?.deleteAuth?.errors) {
+				setDeleted(true);
+				setSelected(undefined);
+				setSearch('');
+			}
+			setLoadingDelete(false);
+		});
+	}
+
 	return (
 		<Box>
 			{isUserAuthorized ? <>
@@ -246,6 +299,14 @@ export const RadioprotectionsAuthorizationControl = ({
 					setSearch={setSearch}
 					parent="radioprotectionauthorizationscontrol"
 				/>
+				<Button
+					onClick={() => {
+						setOpenDialog(true);
+						setSelected(undefined);
+					}}
+					label={t(`generic.addNew`)}
+					iconName={`${featherIcons}#plus-circle`}
+					primary/>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
@@ -257,6 +318,22 @@ export const RadioprotectionsAuthorizationControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
+				<AddNewRadioprotectionDialog openDialog={openDialog}
+															close={() => {
+																setOpenDialog(false);
+																setSearch('');
+															}}
+															save={(searchVal: string) => {
+																setOpenDialog(false);
+																onChangeInput(searchVal);
+															}}
+															selectedRadioprotection={selected}/>
+				<Notifications
+					open={openNotification}
+					notification={notificationType}
+					close={handleClose}
+				/>
+				{deleted && <Redirect to="/radioprotectionauthorizationscontrol"/>}
 			</> : <b>You are not authorized for this page</b>}
 		</Box>
 	);

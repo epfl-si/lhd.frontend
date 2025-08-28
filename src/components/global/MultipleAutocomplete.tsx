@@ -119,6 +119,17 @@ export const MultipleAutocomplete = ({
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
 					]
 				);
+			}  else if (parent == 'radioprotectionauthorizationscontrol') {
+				resolve(
+					[
+						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
+						{ title: "Authorization="+query, encodedTitle: "Authorization="+ encodeURIComponent(query) },
+						{ title: "Status(Active/Expired)="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
+						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
+						{ title: "Source="+query, encodedTitle: "Source="+ encodeURIComponent(query)},
+					]
+				);
 			} else {
 				resolve(
 				[

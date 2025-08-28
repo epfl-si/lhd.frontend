@@ -44,6 +44,14 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'No unit has been chosen',
 	},
+	'no-radioprotection-chosen': {
+		type: 'error',
+		text: 'No radiation has been chosen',
+	},
+	'save-new-radioprotection-success': {
+		type: 'success',
+		text: 'New radiation has been saved',
+	},
 	'save-new-organism-error': {
 		type: 'error',
 		text: 'New organism has not been saved',

@@ -191,7 +191,12 @@ i18next.use(initReactI18next).init({
 					cas: 'CAS',
 					holders: 'Holders',
 					renewals: 'Renewals',
-					source: 'Source'
+					source: 'Source',
+					authority: 'Authority',
+					modifyRadioprotection: 'Modify radioprotection',
+					addRadioprotection: 'Add radioprotection',
+					statusActive: 'Active',
+					statusExpired: 'Expired'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -437,7 +442,12 @@ i18next.use(initReactI18next).init({
 					cas: 'CAS',
 					holders: 'Responsable',
 					renewals: 'Renouvellements',
-					source: 'Source'
+					source: 'Source',
+					authority: 'Autorité',
+					modifyRadioprotection: 'Modifier la radioprotection',
+					addRadioprotection: 'Ajouter une radioprotection',
+					statusActive: 'Actif',
+					statusExpired: 'Expiré'
 				},
 				organism: {
 					organismsList: 'Organismes',

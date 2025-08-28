@@ -54,6 +54,7 @@ export type chemicalsType = {
 }
 
 export type authorizationType = {
+	id: string;
 	authorization: string;
 	expiration_date: Date;
 	status: string;
@@ -64,7 +65,7 @@ export type authorizationType = {
 	authorization_rooms: roomDetailsType[];
 	authorization_holders: personType[];
 	authorization_chemicals: chemicalsType[];
-	authorization_radiations: string[];
+	authorization_radiations: sourceType[];
 	authority?: string;
 }
 
@@ -78,6 +79,11 @@ export type lhdUnitsType = {
 	institute?: instituteType;
 	responsible?: responsible;
 	unitType: string;
+	status?: 'New' | 'Deleted' | 'Default';
+};
+
+export type sourceType = {
+	source: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
