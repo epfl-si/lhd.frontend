@@ -20,6 +20,10 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Dispensation update failed',
 	},
+	'chemical-deletion-error': {
+		type: 'error',
+		text: 'Chemical cannot be deleted because some authorization exists for it.',
+	},
 	'disp-delete-success': {
 		type: 'success',
 		text: 'Dispensation has successfully been deleted',

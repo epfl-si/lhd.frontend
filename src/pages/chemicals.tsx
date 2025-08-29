@@ -195,6 +195,9 @@ export const ChemicalsControl = ({
 				setDeleted(true);
 				setSelectedChemical(undefined);
 				setSearch('');
+			} else {
+				setNotificationType(notificationsVariants['chemical-deletion-error']);
+				setOpenNotification(true);
 			}
 		});
 	}
