@@ -51,7 +51,6 @@ function App() {
 	}
 
 	const [openCadastre, setOpenCadastre] = useState(false);
-	const [openAuthorisations, setOpenAuthorisations] = useState(false);
 	const [openAudit, setOpenAudit] = useState(false);
 	const [openUpdates, setOpenUpdates] = useState(false);
 	const [openLinks, setOpenLinks] = useState(false);
@@ -116,12 +115,6 @@ function App() {
 						}
 						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
 				<>
-					<li><a onClick={() => setOpenAuthorisations(!openAuthorisations)}>Authorisations</a>
-						<ul style={{display: openAuthorisations ? 'block' : 'none'}}>
-							<li><a href={env().LHDv2_BASE_URL + "auth_SST/lhd_auth_SST.php"}>Toxic Chemicals</a></li>
-							<li><a href={env().LHDv2_BASE_URL + "auth_OFSP/lhd_auth_OFSP.php"}>OFSP/IFSN</a></li>
-						</ul>
-					</li>
 					<li><a href={env().LHDv2_BASE_URL + "auth_DSPS/lhd_auth_dsps.php"}>Dispensations</a></li>
 					<li><a href={env().LHDv2_BASE_URL + "cut/lhd_cut.php"}>Supplies interruptions</a></li>
 					<li><a onClick={() => setOpenAudit(!openAudit)}>Audit</a>
@@ -145,9 +138,6 @@ function App() {
 					</li>
 					<li><a onClick={() => setOpenUpdates(!openUpdates)}>Updates</a>
 						<ul style={{display: openUpdates ? 'block' : 'none'}}>
-							<li><a
-								href={env().LHDv2_BASE_URL + "updates/update_auth_sst_list/lhd_update_auth_sst_list.php"}>Toxic
-								Chemicals</a></li>
 							<li><a
 								href={env().LHDv2_BASE_URL + "updates/update_auth_dsps/lhd_update_auth_dsps.php"}>Dispensations</a>
 							</li>
