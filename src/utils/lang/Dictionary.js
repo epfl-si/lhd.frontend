@@ -196,7 +196,9 @@ i18next.use(initReactI18next).init({
 					modifyRadioprotection: 'Modify radioprotection',
 					addRadioprotection: 'Add radioprotection',
 					statusActive: 'Active',
-					statusExpired: 'Expired'
+					statusExpired: 'Expired',
+					deleteAuthConfirmationMessageTitle: 'Are you sure you want to delete this authorization : ',
+					deleteAuthConfirmationMessageDescription: 'All relationships with responsible, rooms, sources and chemicals will be deleted.'
 				},
 				organism: {
 					organismsList: 'Organisms',
@@ -447,7 +449,9 @@ i18next.use(initReactI18next).init({
 					modifyRadioprotection: 'Modifier la radioprotection',
 					addRadioprotection: 'Ajouter une radioprotection',
 					statusActive: 'Actif',
-					statusExpired: 'Expiré'
+					statusExpired: 'Expiré',
+					deleteAuthConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette autorisation : ',
+					deleteAuthConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les locaux, les sources et les chimiques seront aussi supprimées.'
 				},
 				organism: {
 					organismsList: 'Organismes',

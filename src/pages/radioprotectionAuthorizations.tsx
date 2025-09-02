@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {authorizationType, columnType, notificationType, organismType} from "../utils/ressources/types";
+import {authorizationType, columnType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
@@ -15,7 +15,7 @@ import Notifications from "../components/Table/Notifications";
 import {AddNewRadioprotectionDialog} from "../components/radioprotection/AddNewRadioprotectionDialog";
 import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import {deleteRadioprotection} from "../utils/graphql/PostingTools";
+import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteRadioprotectionDialog";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -46,7 +46,7 @@ export const RadioprotectionsAuthorizationControl = ({
 	const [page, setPage] = useState<number>(0);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [deleted, setDeleted] = useState(false);
-	const [loadingDelete, setLoadingDelete] = useState(false);
+	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
 
 	const columnsLarge: columnType[] = [
 		{field: "unit", headerName: t('authorization.unit'), flex: 0.1,
@@ -124,7 +124,10 @@ export const RadioprotectionsAuthorizationControl = ({
 					<Button size="icon"
 								style={{marginLeft: '10px'}}
 								iconName={`#trash`}
-								onClick={() => deleteAuth(params.row)}/>
+								onClick={() => {
+									setOpenDialogDelete(true);
+									setSelected(params.row);
+								}}/>
 				</>
 			)
 		}
@@ -226,6 +229,7 @@ export const RadioprotectionsAuthorizationControl = ({
 		if (isUserAuthorized) {
 			loadFetch();
 			setDeleted(false);
+			setSelected(undefined);
 		}
 	}, [search, page, isUserAuthorized, deleted]);
 
@@ -270,23 +274,6 @@ export const RadioprotectionsAuthorizationControl = ({
 		setSelected(data);
 	}
 
-	async function deleteAuth(data: authorizationType) {
-		setLoadingDelete(true);
-		setSelected(data);
-		deleteRadioprotection(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			JSON.stringify(data?.id)
-		).then(res => {
-			if(res.status == 200 && !res.data?.deleteAuth?.errors) {
-				setDeleted(true);
-				setSelected(undefined);
-				setSearch('');
-			}
-			setLoadingDelete(false);
-		});
-	}
-
 	return (
 		<Box>
 			{isUserAuthorized ? <>
@@ -328,6 +315,11 @@ export const RadioprotectionsAuthorizationControl = ({
 																onChangeInput(searchVal);
 															}}
 															selectedRadioprotection={selected}/>
+				<DeleteRadioprotectionDialog auth={selected}
+													openDialog={openDialogDelete}
+													setOpenDialog={setOpenDialogDelete}
+													setDeleted={setDeleted}
+				/>
 				<Notifications
 					open={openNotification}
 					notification={notificationType}
