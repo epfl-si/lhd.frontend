@@ -1014,6 +1014,7 @@ export const fetchChemicalAuthorizations = async (
       authorization_chemicals {
         cas_auth_chem
         auth_chem_en
+        flag_auth_chem
       }
     }
       totalCount
@@ -1101,6 +1102,7 @@ export const fetchChemicalAuthorizationsByRoom = async (
       authorization_chemicals {
         cas_auth_chem
         auth_chem_en
+        flag_auth_chem
       }
 		}
 	}`;
@@ -1144,7 +1146,6 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 		}
 	}`;
 
-	console.log(query)
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
 		status: result.status,
