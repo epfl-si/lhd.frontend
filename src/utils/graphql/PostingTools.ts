@@ -613,6 +613,7 @@ export const saveNewRadioprotection = async (
                 addAuthorization(
                   id_unit: ${JSON.stringify(radioprotection.unit.id)},
                   authorization: "${radioprotection.name}",
+                  creation_date: "${(new Date(radioprotection.creationDate)).toLocaleDateString("en-GB")}",
                   expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
                   status: "${radioprotection.status}",
                   authority: "${radioprotection.authority}",

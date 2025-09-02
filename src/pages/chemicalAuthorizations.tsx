@@ -50,7 +50,7 @@ export const ChemicalsAuthorizationControl = ({
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				return <>{params.row.renewals}</>
 			}},
-		{field: "creation_date", headerName: t('authorization.created'), flex: 0.1,
+		{field: "creation_date", headerName: t('authorization.createdDate'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				const date = new Date(params.row.creation_date);
 				return date.toLocaleDateString("en-GB");
@@ -111,7 +111,7 @@ export const ChemicalsAuthorizationControl = ({
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
 				</div>
 			}},
-		{field: "creation_date", headerName: t('authorization.created'), flex: 0.1,
+		{field: "creation_date", headerName: t('authorization.createdDate'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				const date = new Date(params.row.creation_date);
 				const dateExp = new Date(params.row.expiration_date);
