@@ -242,7 +242,7 @@ export const AddNewRadioprotectionDialog = ({
 						<TextField
 							label={t('authorization.created')}
 							type="date"
-							disabled
+							disabled={!!selectedRadioprotection}
 							value={formatDate(creationDate)}
 							onChange={(e) => setCreationDate(new Date(e.target.value))}
 							style={{flex: '1', margin: "5px"}}
