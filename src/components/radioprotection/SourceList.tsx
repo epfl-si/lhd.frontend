@@ -78,7 +78,6 @@ export const Source = ({
 				<Text
 					id="input_subUnit"
 					onChange={onChangeInput}
-					placeholder={t('unit_details.addNewUnit')}
 					type="text"
 					value={inputValue}
 					style={{flex: 'auto'}}

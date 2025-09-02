@@ -273,20 +273,23 @@ export const AddNewRadioprotectionDialog = ({
 						</Select>
 					</div>
 					<div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: '10px'}}>
-						<div style={{flex: '1', margin: "5px"}}>
+						<div className="authorization-panel">
+							<label className='labelDetails'>{t(`authorization.room`)}</label>
 							<MultipleSelection selected={savedRooms} objectName="NewRoom"
 																 onChangeSelection={onChangeRoom}
 																 getCardTitle={getRoomTitle}
 																 fetchData={fetchRoomList}/>
 						</div>
-						<div style={{flex: '1', margin: "5px"}}>
+						<div className="authorization-panel">
+							<label className='labelDetails'>{t(`authorization.rpe`)}</label>
 							<MultipleSelection selected={savedHolders}
 																 onChangeSelection={onChangeHolder}
 																 objectName="Person"
 																 getCardTitle={getPersonTitle}
 																 fetchData={fetchPeople}/>
 						</div>
-						<div style={{flex: '1', margin: "5px"}}>
+						<div className="authorization-panel">
+							<label className='labelDetails'>{t(`authorization.source`)}</label>
 							<Source selected={savedSources} onChangeSelection={onChangeSources}/>
 						</div>
 					</div>

@@ -226,3 +226,10 @@ button {
 .nav-aside-layout .nav-aside-wrapper {
     min-width: 250px !important;
 }
+
+.authorization-panel {
+    flex: 1;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+}
