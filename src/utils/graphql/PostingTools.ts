@@ -674,13 +674,13 @@ export const updateRadioprotection = async (
 	return makeQuery(query, {}, address, authToken);
 };
 
-export const deleteRadioprotection = async (
+export const deleteAuthorization = async (
 	address: string | undefined,
 	authToken: string | undefined,
 	id: string,
 ): Promise<any> => {
-	const query = `mutation deleteRadioprotection {
-               deleteRadioprotection(id: ${id})
+	const query = `mutation deleteAuthorization {
+               deleteAuthorization(id: ${id})
                {
                 errors {
                   message
