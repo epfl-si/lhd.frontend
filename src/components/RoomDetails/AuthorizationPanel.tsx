@@ -32,7 +32,6 @@ export const AuthorizationPanel = ({
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.unit ? params.row.unit.name : ''}</span>
 					<span>{params.row.authorization}-{params.row.renewals}</span>
-					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
 				</div>
 			}},
 		{field: "creation_date", headerName: 'Dates', flex: 0.1,
@@ -59,36 +58,29 @@ export const AuthorizationPanel = ({
 					)}
 				</div>
 			),
+		},
+		{
+			field: "authorization_chemicals", headerName: type == 'IonisingRadiation' ? t('authorization.source') : t('authorization.cas'), flex: 0.2,
+			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
+				<div className="form-card-div">
+					{type == 'IonisingRadiation' ? params.row.authorization_radiations.map(source => {
+							return (
+								<><span>• {source.source}</span><br/></>
+							)
+						}
+					) : params.row.authorization_chemicals.map(chem => {
+							return (
+								<span>• {chem.auth_chem_en} ({chem.cas_auth_chem}) - <b
+									style={{fontSize: "smaller"}}>{chem.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
+							)
+						}
+					)}
+				</div>
+			),
 		}
 	];
 
 	useEffect(() => {
-		if (type == 'Chemical')
-			columnsLarge.push({field: "authorization_chemicals", headerName: t('authorization.cas'), flex: 0.2,
-				renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
-					<div className="form-card-div">
-						{params.row.authorization_chemicals.map(item => {
-								return (
-									<span>• {item.auth_chem_en} ({item.cas_auth_chem}) - <b style={{fontSize: "smaller"}}>{item.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
-								)
-							}
-						)}
-					</div>
-				),
-			})
-		else if (type == 'IonisingRadiation')
-			columnsLarge.push({field: "authorization_radiations", headerName: t('authorization.source'), flex: 0.2,
-				renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
-					<div className="form-card-div">
-						{params.row.authorization_radiations.map(item => {
-								return (
-									<span>• {item.source}</span>
-								)
-							}
-						)}
-					</div>
-				),
-			})
 		load();
 	}, [room, type]);
 
