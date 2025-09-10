@@ -127,6 +127,10 @@ export const DetailsTab = ({
     return [];
   };
 
+  function getSNOWLinkForRoom() {
+    return `https://epfl.service-now.com/now/nav/ui/classic/params/target/u_scc_ticket_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3DGOTOlocation.nameLIKE${room.name}%26sysparm_query_encoded%3DGOTOlocation.nameLIKE${room.name}%26sysparm_view%3D`;
+  }
+
   return <div style={{display: "flex", flexDirection: "row"}}>
     <div style={{width: (isExtraLargeDevice || isLargeDevice) ? '50%' : '100%'}}>
       <Stack spacing={2} className="roomDetailsDiv"
@@ -227,6 +231,7 @@ export const DetailsTab = ({
       {
         (isExtraLargeDevice || isLargeDevice) ?
         <div style={{width: '50%'}}>
+          <a target="_blank" href={getSNOWLinkForRoom()} rel="noreferrer">{t(`room_details.linkSnow`)}</a>
           <div>
             <AuditReportPanel lhd_units={roomData.lhd_units}/>
           </div>

@@ -103,6 +103,7 @@ i18next.use(initReactI18next).init({
 					volume: 'Volume (m³)',
 					vol: 'Vol (m³)',
 					fichePorte: 'Fiche de porte',
+					linkSnow: 'Link to room safety tickets',
 					deleteRoomConfirmationMessageTitle: 'Are you sure to delete this room: ',
 					deleteRoomConfirmationMessageDescription: 'All relationships with units, authorizations, dispensations and all corresponding hazards stored in this room will be deleted.'
 				},
@@ -288,6 +289,7 @@ i18next.use(initReactI18next).init({
 							},
 						},
 					},
+					unit: 'Unité'
 				},
 				hazard: {
 					hazardList: 'Dangers',
@@ -358,6 +360,7 @@ i18next.use(initReactI18next).init({
 					volume: 'Volume (m³)',
 					vol: 'Vol (m³)',
 					fichePorte: 'Fiche de porte',
+					linkSnow: 'Link vers SNow',
 					deleteRoomConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer ce local: ',
 					deleteRoomConfirmationMessageDescription: 'Toutes les rélations avec les unités, les autorisations, les dispensations, le cadastre, ainsi que tous les dangers de ce local seront aussi supprimées.'
 				},
