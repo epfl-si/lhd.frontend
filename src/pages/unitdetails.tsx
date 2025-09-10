@@ -159,6 +159,10 @@ export default function UnitDetails() {
 		return [];
 	};
 
+	function getSNOWLinkForUnit() {
+		return `https://epfl.service-now.com/now/nav/ui/classic/params/target/u_scc_ticket_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3DGOTOu_requester_as.u_unitLIKE${data[0]?.name}%26sysparm_query_encoded%3DGOTOu_requester_as.u_unitLIKE${data[0]?.name}%26sysparm_view%3D`;
+	}
+
 	return (
 		<div>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}} alwaysPresent={false}/>
@@ -220,6 +224,7 @@ export default function UnitDetails() {
 					</ResponsiveTabs.Tab>) : <></>
 				}
 			</ResponsiveTabs>
+			<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
 			<AuditReportPanel lhd_units={data} style={{marginLeft: '20px'}}/>
 			<div style={{marginTop: '50px'}}>
 				<Button
