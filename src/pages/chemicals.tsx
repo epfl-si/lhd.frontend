@@ -60,14 +60,14 @@ export const ChemicalsControl = ({
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
 			}},
-		{field: "fastway", headerName: t('chemical.fastway'), width: 300,
+		/*{field: "fastway", headerName: t('chemical.fastway'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
 				params.row.fastway
 			)},
 		{field: "auth_code", headerName: t('chemical.auth_code'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
 				params.row.auth_code
-			)},
+			)},*/
 		// {field: "log", headerName: t('organism.log'), width: 100,
 		// 	renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 		// 		const date = new Date(params.row.updated_on);
