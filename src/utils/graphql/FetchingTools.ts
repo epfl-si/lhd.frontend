@@ -356,6 +356,12 @@ export const fetchRooms = async (
 						kind {
 							name
 						}
+						hazardAdditionalInfo {
+							comment
+							hazard_category {
+								hazard_category_name
+							}
+						}
 						hazards {
 							hazard_form_history {
 								hazard_form {
@@ -418,6 +424,12 @@ export const fetchRoomsWithHazards = async (
 						site
 						kind {
 							name
+						}
+						hazardAdditionalInfo {
+							comment
+							hazard_category {
+								hazard_category_name
+							}
 						}
 						hazards {
 							submission

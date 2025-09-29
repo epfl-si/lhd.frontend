@@ -357,6 +357,7 @@ export const RoomControl = ({
 
 						if (hazardName != 'search') {
 							flat['hazardCategory'] = item.hazardCategory;
+							flat['hazardComment'] = item.hazardComment;
 						}
 
 						// Add all keys with null by default

@@ -139,6 +139,9 @@ export function convertToTable(roomsList: roomDetailsType[], search: string) {
 							const children = haz && haz.children && haz.children.length > 0 ? haz.children : [null];
 
 							children.forEach(child => {
+								const catName = hazardName != 'search' && haz ? haz.hazard_form_history.hazard_form.hazard_category.hazard_category_name : null;
+								const infos = r.hazardAdditionalInfo?.filter(info => catName && info.hazard_category && info.hazard_category.hazard_category_name == catName);
+								const comment = (infos && infos.length > 0) ? infos[0].comment : undefined;
 								dataExport.push({
 									room: r.name,
 									building: r.building,
@@ -155,7 +158,8 @@ export function convertToTable(roomsList: roomDetailsType[], search: string) {
 									cosecEmail: cos?.email ?? null,
 									professor: prof ? `${prof.name} ${prof.surname}` : null,
 									professorEmail: prof?.email ?? null,
-									hazardCategory: hazardName != 'search' && haz ? haz.hazard_form_history.hazard_form.hazard_category.hazard_category_name : null,
+									hazardCategory: catName,
+									hazardComment: decodeURIComponent(comment || ''),
 									parent_submission: haz?.submission ? JSON.parse(haz.submission).data : {},
 									child_submission: child?.submission ? JSON.parse(child.submission).data : {},
 								});
