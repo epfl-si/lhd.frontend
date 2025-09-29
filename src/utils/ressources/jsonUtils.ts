@@ -41,6 +41,8 @@ export function readOrEditHazard(room: roomDetailsType, action: string, currentF
 	room.hazards.forEach(h => {
 		try {
 			const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
+			const infos = room.hazardAdditionalInfo?.filter(info => info.hazard_category && info.hazard_category.hazard_category_name == category);
+			const comment = (infos && infos.length > 0) ? infos[0].comment : undefined;
 			//if (category == selectedHazardCategory) {
 			const childrenList: submissionForm[] = [];
 			h.children.forEach(child => {
@@ -48,7 +50,7 @@ export function readOrEditHazard(room: roomDetailsType, action: string, currentF
 					form: withForm ? (action == 'Read' ? JSON.parse(child.hazard_form_child_history.form) : JSON.parse(child.hazard_form_child_history.hazard_form_child.form)) : {}});
 			})
 			subForm.push({id: h.id, submission: JSON.parse(h.submission), form: withForm ? (action == 'Read' ? JSON.parse(h.hazard_form_history.form) : currentForm) : {},
-				children: childrenList, room: room, category: category});
+				children: childrenList, room: room, category: category, comment: comment});
 			//}
 		} catch (error) {
 			console.error(error);

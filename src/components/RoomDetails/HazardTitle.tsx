@@ -72,6 +72,7 @@ export const HazardTitle = ({
             minute: 'numeric',
             hour12: false
           }))})</label>}
+        {isReadonly && <label className="hazardTitle" style={{marginBottom:'0px'}}>{decodeURIComponent(comment || '')}</label>}
       </div>
       {isReadonly && <Button size="icon"
               iconName={"#edit-3"}

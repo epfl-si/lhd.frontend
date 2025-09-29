@@ -95,7 +95,7 @@ export const HazardList = ({
 			findChildFields(groupedSubmissionList[cat]);
 			return <div style={{marginTop: '10px'}}>
 				{inRoomDetails && <HazardTitle selectedHazardCategory={cat}
-														isReadonly={true}
+														isReadonly={true} comment={submissionsList.filter(sub => sub.category == cat)[0].comment}
 														onChangeAction={onChangeAction}/>}
 				<TableContainer component={Paper} style={{marginBottom: '5px'}}>
 					<Table size="small" aria-label="a dense table">

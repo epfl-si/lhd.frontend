@@ -215,6 +215,7 @@ export type submissionForm = {
 	formName?: string;
 	room?: roomDetailsType;
 	category?: string;
+	comment?: string;
 }
 
 export type hazLevelsType = {
