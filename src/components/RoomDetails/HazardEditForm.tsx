@@ -1,7 +1,6 @@
 import * as React from 'react';
 import {useEffect, useRef, useState} from 'react';
 import {HazardForm} from "./HazardForm";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import Notifications from "../Table/Notifications";
 import {AlertDialog} from "../global/AlertDialog";
 import {
@@ -19,6 +18,7 @@ import {addHazard} from "../../utils/graphql/PostingTools";
 import {useTranslation} from "react-i18next";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardTitle} from "./HazardTitle";
+import {Button} from "epfl-elements-react-si-extra";
 
 interface HazardEditFormProps {
 	room: roomDetailsType;

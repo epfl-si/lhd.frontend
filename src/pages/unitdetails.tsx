@@ -1,4 +1,4 @@
-import {Box, Typography} from '@material-ui/core';
+import {Typography} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
 import {env} from '../utils/env.js';
 import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
@@ -6,19 +6,16 @@ import {lhdUnitsType, notificationType, personType} from '../utils/ressources/ty
 import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchPeopleFromFullText, fetchUnitDetails} from "../utils/graphql/FetchingTools";
-import {ResponsiveTabs} from "epfl-elements-react/src/stories/molecules/ResponsiveTabs.tsx";
+import {Button, ResponsiveTabs, Text} from "epfl-elements-react-si-extra";
 import Notifications from "../components/Table/Notifications";
 import {MultipleSelection} from "../components/global/MultipleSelection";
 import {SubUnits} from "../components/Units/SubUnitsList";
-import {deleteUnit, updateUnit} from "../utils/graphql/PostingTools";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {updateUnit} from "../utils/graphql/PostingTools";
 import {useTranslation} from "react-i18next";
 import {Redirect, useHistory} from "react-router-dom";
 import {AlertDialog} from "../components/global/AlertDialog";
 import {UnitTabTitle} from "../components/Units/UnitTabTitle";
 import {BackButton} from "../components/global/BackButton";
-import {Text} from "epfl-elements-react/src/stories/molecules/inputFields/Text";
 import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 import {AuditReportPanel} from "../components/Units/AuditReportPanel";
 
@@ -170,7 +167,7 @@ export default function UnitDetails() {
 				{
 					(data[0]?.unitId ? '' :
 						<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
-							<use xlinkHref={`${featherIcons}#layers`}></use>
+							<use xlinkHref={`#layers`}></use>
 						</svg>)
 				} {(t(`unit_details.title`)).concat(' ').concat(getUnitTitle(data[0]))}
 				{(data[0]?.unitId ? '' :
@@ -226,16 +223,16 @@ export default function UnitDetails() {
 			</ResponsiveTabs>
 			<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
 			<AuditReportPanel lhd_units={data} style={{marginLeft: '20px'}}/>
-			<div style={{marginTop: '50px'}}>
+			<div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
 				<Button
 					onClick={() => setOpenDialog(true)}
 					label={t(`generic.deleteButton`)}
-					iconName={`${featherIcons}#trash`}
+					iconName={`#trash`}
 					primary/>
 				<Button
 					onClick={() => saveUnitDetails()}
 					label={t(`generic.saveButton`)}
-					iconName={`${featherIcons}#save`}
+					iconName={`#save`}
 					style={{marginLeft: '10px'}}
 					primary/>
 			</div>

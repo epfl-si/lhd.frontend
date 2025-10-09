@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {Base} from 'epfl-elements-react/src/Base';
-import {Avatar} from 'epfl-elements-react/src/Avatar';
 import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
 import {LoginButton, StateEnum, useOpenIDConnectContext,} from '@epfl-si/react-appauth';
 import {Box, Dialog, DialogActions, DialogContent, DialogTitle,} from '@material-ui/core';
@@ -21,6 +19,7 @@ import {HazardsControl} from "./pages/hazards";
 import {ChemicalsControl} from "./pages/chemicals";
 import {ChemicalsAuthorizationControl} from "./pages/chemicalAuthorizations";
 import {RadioprotectionsAuthorizationControl} from "./pages/radioprotectionAuthorizations";
+import {Base} from "./components/global/Base";
 
 function App() {
 	const { t } = useTranslation();
@@ -50,7 +49,6 @@ function App() {
 		setSelectedMenu(page);
 	}
 
-	const [openCadastre, setOpenCadastre] = useState(false);
 	const [openAudit, setOpenAudit] = useState(false);
 	const [openUpdates, setOpenUpdates] = useState(false);
 	const [openLinks, setOpenLinks] = useState(false);
@@ -157,7 +155,6 @@ function App() {
 					<li className="breadcrumb-item">Laboratory Hazards Directory</li>
 				</Base.Breadcrumbs>
 				<Base.User>
-					<Avatar>
 						<Box
 							display="flex"
 							flexDirection="row"
@@ -168,14 +165,13 @@ function App() {
 							<LoginButton/>
 							{/*<LanguageSwitcher/>*/}
 						</Box>
-					</Avatar>
 				</Base.User>
 
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
 					<Switch>
 						<Route path="/unitcontrol">
-						<UnitControl handleCurrentPage={handleCurrentPage}
-												 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+							<UnitControl handleCurrentPage={handleCurrentPage}
+													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
 						</Route>
 						<Route path="/organismscontrol">
 							<OrganismsControl handleCurrentPage={handleCurrentPage}

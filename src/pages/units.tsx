@@ -4,14 +4,12 @@ import {fetchunitsFromFullTextAndPagination} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType, notificationType, organismType, roomDetailsType} from "../utils/ressources/types";
+import {columnType, lhdUnitsType, notificationType, organismType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import {Redirect, useHistory, useLocation} from "react-router-dom";
+import {Button, DebounceInput} from "epfl-elements-react-si-extra";
+import {useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
@@ -298,7 +296,7 @@ export const UnitControl = ({
 				<Button
 					onClick={() => setOpenDialog(true)}
 					label={t(`generic.addNew`)}
-					iconName={`${featherIcons}#plus-circle`}
+					iconName={`#plus-circle`}
 					primary/>
 			</div>
 			<EntriesTableCategory

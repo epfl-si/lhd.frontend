@@ -12,12 +12,11 @@ import {Redirect, useHistory, useLocation} from "react-router-dom";
 import {splitCamelCase} from "../utils/ressources/jsonUtils";
 import {exportToExcel, getHazardExportFileName, handleClickFileLink} from "../utils/ressources/file";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {Button} from "epfl-elements-react-si-extra";
 import {AlertDialog} from "../components/global/AlertDialog";
 import {deleteHazardChild} from "../utils/graphql/PostingTools";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -299,7 +298,7 @@ export const HazardsControl = ({
 					style={{minWidth: '10%', padding: '10px', marginLeft: '10px'}}
 					onClick={() => onExport()}
 					label={t(`generic.export`)}
-					iconName={`${featherIcons}#download`}
+					iconName={`#download`}
 					primary/>
 			</div>
 				{search && isTableReady &&

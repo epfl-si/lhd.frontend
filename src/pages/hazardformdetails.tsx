@@ -2,13 +2,11 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {hazardFormType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
-import {FormBuilder} from "@formio/react";
 import {Box, TextField, Typography} from "@material-ui/core";
 import {fetchConnectedUser, fetchHazardFormDetails} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {Button} from "epfl-elements-react-si-extra";
 import {createNewHazardCategory, updateFormHazard} from "../utils/graphql/PostingTools";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
@@ -166,7 +164,7 @@ export default function HazardFormDetails() {
 						<Button
 							onClick={handleSubmit}
 							label={t(`generic.saveButton`)}
-							iconName={`${featherIcons}#save`}
+							iconName={`#save`}
 							primary/>
 					</div>
 				</div>

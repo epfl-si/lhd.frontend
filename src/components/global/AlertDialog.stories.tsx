@@ -1,8 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type {Meta, StoryObj} from '@storybook/react';
 
-import { AlertDialog } from './AlertDialog';
-import React, {useState} from "react";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {AlertDialog} from './AlertDialog';
 
 const meta: Meta<typeof AlertDialog> = {
   title: 'AlertDialog',

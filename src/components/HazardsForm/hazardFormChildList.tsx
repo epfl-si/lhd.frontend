@@ -3,9 +3,8 @@ import React, {useState} from "react";
 import {columnType, hazardFormChildType} from "../../utils/ressources/types";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../../components/Table/EntriesTableCategory";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {useHistory} from "react-router-dom";
+import { Button } from "epfl-elements-react-si-extra";
 
 interface HazardFormChildListProps {
 	hazardFormChildList: hazardFormChildType[];
@@ -39,7 +38,7 @@ export const HazardFormChildList = ({
 				<Button
 					onClick={() => history.push(`/hazardFormChildDetails?name=NewHazardFormChild&category=${category}`)}
 					label={t(`generic.addNew`)}
-					iconName={`${featherIcons}#plus-circle`}
+					iconName={`#plus-circle`}
 					primary/>
 			</div>
 		</Box>;

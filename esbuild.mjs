@@ -28,17 +28,8 @@ const commonBuildConfig = {
                                      // the css
   plugins: [
     inlineImage(),
-    sassPlugin(
-        // TEMPORARY: allows to build against an unreleased copy of epfl-elements-react.
-        // Should be removed (along with the reference to `file:../epfl-elements-react` in
-        // package.json) after the first release of epfl-elements-react.
-        { importMapper: (path) => {
-            const newPath = path.replace(/^\//, 'epfl-elements-react/');
-            console.log(`${path} → ${newPath}`);
-            return newPath;
-          }
-        }
-  )]
+    sassPlugin()
+  ]
 };
 
 if (cmd === "build") {

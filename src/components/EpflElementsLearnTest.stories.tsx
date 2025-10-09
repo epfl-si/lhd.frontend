@@ -25,11 +25,12 @@
  *
  *   must be (temporarily) rewritten to
  *
- *      import { Button } from 'epfl-elements-react/src/stories/Button';
+ *      import { Button } from 'epfl-elements-react-si-extra';
  */
 
 import React from "react";
 import type { Meta, StoryObj } from '@storybook/react';
+import {Button} from "epfl-elements-react-si-extra";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -60,9 +61,6 @@ export const Primary: Story = {
 
 // This is the *development* version; it will only work if
 // the conditions described at the top of this file are met.
-/* eslint-disable */
-import { Button } from 'epfl-elements-react/src/stories/molecules/Button.tsx';
-/* eslint-enable */
 // In production, the following will have to be made to work instead:
 // import { Button } from 'epfl-elements-react';
 

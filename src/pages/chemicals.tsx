@@ -6,11 +6,10 @@ import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {chemicalsType, columnType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
 import "../../css/styles.scss";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {Button} from "epfl-elements-react-si-extra";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
@@ -220,7 +219,7 @@ export const ChemicalsControl = ({
 						setSelectedChemical(undefined);
 					}}
 					label={t(`generic.addNew`)}
-					iconName={`${featherIcons}#plus-circle`}
+					iconName={`#plus-circle`}
 					primary/>}
 			</div>
 			<EntriesTableCategory

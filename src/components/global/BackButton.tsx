@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {Button} from "epfl-elements-react-si-extra";
 
 interface BackButtonProps {
 	onClickButton: () => void;

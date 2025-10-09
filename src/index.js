@@ -7,6 +7,7 @@ import { OIDCContext } from '@epfl-si/react-appauth';
 import { env } from './utils/env';
 
 import "epfl-elements/dist/css/elements.css";
+import "epfl-elements-react-si-extra/index.css"
 
 if (! window.IS_PRODUCTION) {
 	new EventSource('/esbuild').addEventListener('change', () => window.location.reload())
