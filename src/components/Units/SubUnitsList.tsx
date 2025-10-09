@@ -1,8 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
-import {Text} from "epfl-elements-react/src/stories/molecules/inputFields/Text.tsx";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import React, {useEffect, useState} from 'react';
+import {Button, FormCard, Text} from "epfl-elements-react-si-extra";
 import {useTranslation} from "react-i18next";
 import {lhdUnitsType} from "../../utils/ressources/types";
 import "../../../css/styles.scss";

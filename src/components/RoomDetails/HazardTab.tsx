@@ -4,8 +4,8 @@ import {fetchHazardForms, fetchOrganism, fetchRoomsForDropDownComponent} from ".
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardFormVBox} from "./HazardFormVBox";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
 import {NewHazardChoise} from "./NewHazardChoise";
+import {Button} from "epfl-elements-react-si-extra";
 
 interface HazardTabProps {
   room: roomDetailsType;

@@ -1,6 +1,6 @@
 import React from 'react';
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
+import {Button} from "epfl-elements-react-si-extra";
+import {FormCard} from "epfl-elements-react-si-extra";
 import {getHazardImage} from "./HazardProperties";
 import {useTranslation} from "react-i18next";
 

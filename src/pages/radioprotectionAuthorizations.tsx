@@ -13,8 +13,7 @@ import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {fetchRadioprotectionAuthorizations} from "../utils/graphql/FetchingTools";
 import Notifications from "../components/Table/Notifications";
 import {AddNewRadioprotectionDialog} from "../components/radioprotection/AddNewRadioprotectionDialog";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {Button} from "epfl-elements-react-si-extra";
 import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteRadioprotectionDialog";
 
 interface RadioprotectionsAuthorizationControlProps {
@@ -292,7 +291,7 @@ export const RadioprotectionsAuthorizationControl = ({
 						setSelected(undefined);
 					}}
 					label={t(`generic.addNew`)}
-					iconName={`${featherIcons}#plus-circle`}
+					iconName={`#plus-circle`}
 					primary/>
 			</div>
 			<EntriesTableCategory

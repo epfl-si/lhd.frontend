@@ -6,8 +6,7 @@ import {fetchHazardForms} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {Button} from "epfl-elements-react-si-extra";
 import {useHistory} from "react-router-dom";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
@@ -88,7 +87,7 @@ export const HazardFormControl = ({
 				history.push(`/formdetails?cat=NewCategory`);
 			}}
 			label={t(`hazardFormControl.addNewCategory`)}
-			iconName={`${featherIcons}#save`}
+			iconName={`#save`}
 			primary/>
 	</div></> : <b>You are not authorized for this page</b>}
 		<Notifications

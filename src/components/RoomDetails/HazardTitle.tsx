@@ -5,10 +5,9 @@ import {hazardAdditionalInfoType, roomDetailsType} from "../../utils/ressources/
 import {sprintf} from "sprintf-js";
 import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {TextArea} from "epfl-elements-react/src/stories/molecules/inputFields/TextArea.tsx";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
+import {Button, TextArea} from "epfl-elements-react-si-extra";
 
 interface HazardTitleProps {
   hazardAdditionalInfo?: hazardAdditionalInfoType | undefined;

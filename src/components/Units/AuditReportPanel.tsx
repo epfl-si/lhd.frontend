@@ -4,7 +4,7 @@ import {lhdUnitsType, reportFile} from "../../utils/ressources/types";
 import {fetchReportFiles} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
+import {FormCard} from "epfl-elements-react-si-extra";
 import {handleClickFileLink} from "../../utils/ressources/file";
 import {Style} from "node:util";
 import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography} from "@material-ui/core";

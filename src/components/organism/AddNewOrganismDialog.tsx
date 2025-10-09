@@ -7,14 +7,10 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {notificationType, organismType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {deleteOrganism, deleteUnit, saveNewOrganism, updateOrganism} from "../../utils/graphql/PostingTools";
+import {saveNewOrganism, updateOrganism} from "../../utils/graphql/PostingTools";
 import {TextField} from "@material-ui/core";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
-import {Numeric} from "epfl-elements-react/src/stories/molecules/inputFields/Numeric.tsx";
-import {fetchHazards} from "../../utils/graphql/FetchingTools";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import {Redirect} from "react-router-dom";
+import {Numeric} from "epfl-elements-react-si-extra";
 
 interface AddNewOrganismDialogProps {
 	openDialog: boolean;

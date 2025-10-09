@@ -3,11 +3,9 @@ import {kindType, lhdUnitsType, notificationType, roomDetailsType} from "../../u
 import {fetchRoomTypes, fetchunitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {Autocomplete, Checkbox, FormControlLabel, Stack, Switch} from "@mui/material";
+import {Autocomplete, Stack} from "@mui/material";
 import {TextField, useMediaQuery} from "@material-ui/core";
 import {MultipleSelection} from "../global/MultipleSelection";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
 import Notifications from "../Table/Notifications";
 import {updateRoom} from "../../utils/graphql/PostingTools";
 import {notificationsVariants} from "../../utils/ressources/variants";
@@ -18,6 +16,7 @@ import {DoorPlug} from "./DoorPlug";
 import {DeleteRoomDialog} from "./DeleteRoomDialog";
 import {Redirect} from "react-router-dom";
 import {AuthorizationPanel} from "./AuthorizationPanel";
+import {Button} from "epfl-elements-react-si-extra";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -203,16 +202,16 @@ export const DetailsTab = ({
                            getCardTitle={getUnitTitle}
                            fetchData={fetchUnitsList}/>
 
-        <div style={{marginTop: '50px'}}>
+        <div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
           <Button
             onClick={() => setOpenDialog(true)}
             label={t(`generic.deleteButton`)}
-            iconName={`${featherIcons}#trash`}
+            iconName={`#trash`}
             primary/>
           <Button
             onClick={() => saveRoomDetails()}
             label="Save"
-            iconName={`${featherIcons}#save`}
+            iconName={`#save`}
             primary/>
         </div>
         <DeleteRoomDialog room={room}

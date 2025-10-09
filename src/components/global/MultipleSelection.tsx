@@ -1,8 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
-import {DebounceInput} from "epfl-elements-react/src/stories/molecules/inputFields/DebounceInput.tsx";
-import "epfl-elements-react/src/stories/molecules/button.css";
-import "epfl-elements-react/src/stories/molecules/inputFields/autocomplete.css";
+import {DebounceInput, FormCard} from "epfl-elements-react-si-extra";
 import {useTranslation} from "react-i18next";
 import "./multipleSelection.css"
 import "../../../css/styles.scss";

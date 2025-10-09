@@ -6,8 +6,7 @@ import {Box, TextField, Typography} from "@material-ui/core";
 import {fetchConnectedUser, fetchHazardFormChild} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {Button} from "epfl-elements-react-si-extra";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {useHistory} from "react-router-dom";
@@ -163,7 +162,7 @@ export default function HazardFormChildDetails() {
 				<Button
 					onClick={handleSubmit}
 					label={t(`generic.saveButton`)}
-					iconName={`${featherIcons}#save`}
+					iconName={`#save`}
 					primary/>
 			</div>
 			<Notifications

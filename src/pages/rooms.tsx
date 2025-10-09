@@ -7,17 +7,15 @@ import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {columnType, notificationType, personType, roomDetailsType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {Button} from "epfl-elements-react/src/stories/molecules/Button.tsx";
-import featherIcons from "epfl-elements/dist/icons/feather-sprite.svg";
+import {Button, FormCard} from "epfl-elements-react-si-extra";
 import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {useHistory, useLocation} from "react-router-dom";
-import {convertToTable, readOrEditHazard, splitCamelCase} from "../utils/ressources/jsonUtils";
+import {convertToTable, readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
-import {FormCard} from "epfl-elements-react/src/stories/molecules/FormCard.tsx";
-import {exportToExcel, getHazardExportFileName, handleClickFileLink} from "../utils/ressources/file";
+import {exportToExcel, getHazardExportFileName} from "../utils/ressources/file";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -422,14 +420,14 @@ export const RoomControl = ({
 					style={{minWidth: '10%', padding: '10px'}}
 					onClick={() => setOpenDialog(true)}
 					label={t(`generic.addNew`)}
-					iconName={`${featherIcons}#plus-circle`}
+					iconName={`#plus-circle`}
 					primary/>
 				<Button
 					isDisabled={tableData.length == 0}
 					style={{minWidth: '10%', padding: '10px'}}
 					onClick={onExport}
 					label={t(`generic.export`)}
-					iconName={`${featherIcons}#download`}
+					iconName={`#download`}
 					primary/>
 			</div>
 			<EntriesTableCategory

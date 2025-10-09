@@ -4,9 +4,8 @@ import {fetchRoomDetails} from '../utils/graphql/FetchingTools';
 import {env} from '../utils/env.js';
 import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
 import {roomDetailsType} from '../utils/ressources/types';
-import {Tabs} from 'epfl-elements-react/src/stories/molecules/Tabs.tsx';
+import {Tabs} from 'epfl-elements-react-si-extra';
 import '../../css/styles.scss'
-import "epfl-elements-react/src/stories/molecules/formCard.css";
 import {useTranslation} from "react-i18next";
 import "formiojs/dist/formio.full.min.css";
 import {HazardTab} from "../components/RoomDetails/HazardTab";
