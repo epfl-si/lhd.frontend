@@ -1,12 +1,11 @@
 # pull official base image
-FROM node:20-alpine
+FROM node:20
 
 # Enable and activate Corepack (ships with Node 20)
 RUN corepack enable
-RUN corepack prepare yarn@4.0.2 --activate
 
-# Install serve globally (use npm, since Yarn 4 doesn't support global installs)
-RUN npm install -g serve
+# Install serve
+RUN yarn global add serve
 
 # set working directory
 WORKDIR /app
