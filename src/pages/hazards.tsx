@@ -233,7 +233,19 @@ export const HazardsControl = ({
 		columns.current = [{field: "lab_display", headerName: t('room.name'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
 				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
-			)}];
+			)},
+			{
+				field: "modified_by", headerName: t('organism.updated_by'), width: 100,
+				renderCell: (params: GridRenderCellParams<any, any>) => (
+					params.row.modified_by
+				)
+			},
+			{
+				field: "modified_on", headerName: t('organism.updated_on'), width: 100,
+				renderCell: (params: GridRenderCellParams<any, any>) => (
+					(new Date(params.row.modified_on)).toLocaleDateString("en-GB")
+				)
+			}];
 		history.push(`/hazardscontrol?Category=${(event.target.value)}`);
 	};
 
