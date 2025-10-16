@@ -288,7 +288,7 @@ export const HazardsControl = ({
 									newObj[key] = (new Date(obj[key])).toLocaleDateString("en-GB");
 									break;
 								case 'global_comment':
-									newObj[key] = decodeURIComponent(obj[key]);
+									newObj[key] = obj[key] ? decodeURIComponent(obj[key]) : '';
 									break;
 								default:
 									newObj[key] = obj[key];
