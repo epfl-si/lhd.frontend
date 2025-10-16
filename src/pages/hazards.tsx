@@ -41,12 +41,25 @@ export const HazardsControl = ({
 	const [queryString, setQueryString] = React.useState<string>('');
 	const [categoryList, setCategoryList] = React.useState<hazardCategory[]>([]);
 	const [isTableReady, setIsTableReady] = React.useState<boolean>(false);
-	const columns = React.useRef([{
-		field: "lab_display", headerName: t('room.name'), width: 150,
-		renderCell: (params: GridRenderCellParams<any, any>) => (
-			<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
-		)
-	}]);
+	const columns = React.useRef([
+		{
+			field: "lab_display", headerName: t('room.name'), width: 150,
+			renderCell: (params: GridRenderCellParams<any, any>) => (
+				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
+			)
+		},
+		{
+			field: "modified_by", headerName: t('organism.updated_by'), width: 100,
+			renderCell: (params: GridRenderCellParams<any, any>) => (
+				params.row.modified_by
+			)
+		},
+		{
+			field: "modified_on", headerName: t('organism.updated_on'), width: 100,
+			renderCell: (params: GridRenderCellParams<any, any>) => (
+				(new Date(params.row.modified_on)).toLocaleDateString("en-GB")
+			)
+		}]);
 	const [keys, setKeys] = React.useState<string[]>([]);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [selectedHazard, setSelectedHazard] = useState<string>();
@@ -137,7 +150,10 @@ export const HazardsControl = ({
 				id_lab_has_hazards_child: h.id_lab_has_hazards_child,
 				id_lab_has_hazards: h.id_lab_has_hazards,
 				child_submission: h.child_submission ? JSON.parse(h.child_submission).data : {},
-				parent_submission: JSON.parse(h.parent_submission).data
+				parent_submission: JSON.parse(h.parent_submission).data,
+				global_comment: h.global_comment,
+				modified_by: h.modified_by,
+				modified_on: h.modified_on
 			};
 		});
 		const allKeys = new Set<string>();
@@ -154,23 +170,23 @@ export const HazardsControl = ({
 				lab_display: item.lab_display,
 				id_lab_has_hazards_child: item.id_lab_has_hazards_child,
 				id_lab_has_hazards: item.id_lab_has_hazards,
+				global_comment: item.global_comment,
+				modified_by: item.modified_by,
+				modified_on: item.modified_on
 			};
 
 			// Add all keys with null by default
 			for (const key of allKeys) {
 				flat[key] = null;
 				if(key !== 'status' && key !== 'delete') {
-					if (key == 'fileLink') {
-						columns.current.push({field: key, headerName: splitCamelCase(key), width: 200,
+						columns.current.push({field: key, headerName: splitCamelCase(key), width: key == 'comment' ? 300 : 200,
 							renderCell: (params: GridRenderCellParams<any, any>) => (
-								params.row.fileLink ?
+								key == 'fileLink' && params.row.fileLink ?
 									<a href={params.row.fileLink}
-										 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.fileLink)}>{params.row.fileLink.split('/').pop()}</a> : <></>
+										 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.fileLink)}>{params.row.fileLink.split('/').pop()}</a> :
+									<>{params.row[key]}</>
 							)
 						});
-					} else {
-						columns.current.push({field: key, headerName: splitCamelCase(key), width: key == 'comment' ? 300 : 200});
-					}
 				}
 			}
 			if (search == 'Biological') {
@@ -255,7 +271,18 @@ export const HazardsControl = ({
 					const newObj = {};
 					for (let key in obj) {
 						if (!['id_lab_has_hazards_child', 'id_lab_has_hazards', 'delete', 'status'].includes(key)) {
-							newObj[key] = obj[key];
+							switch (key) {
+								case 'modified_on':
+									newObj[key] = (new Date(obj[key])).toLocaleDateString("en-GB");
+									break;
+								case 'global_comment':
+									newObj[key] = decodeURIComponent(obj[key]);
+									break;
+								default:
+									newObj[key] = obj[key];
+									break;
+							}
+
 						}
 					}
 					filteredData.push(newObj);

@@ -953,6 +953,9 @@ export const fetchHazards = async (
 						child_submission
 						id_lab_has_hazards_child
 						id_lab_has_hazards
+						global_comment
+						modified_by
+						modified_on
 					}
 					totalCount
 				},
