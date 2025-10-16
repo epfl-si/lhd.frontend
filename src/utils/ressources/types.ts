@@ -122,6 +122,9 @@ export type hazardDetailsType = {
 	child_submission: string,
 	id_lab_has_hazards_child: string,
 	id_lab_has_hazards: number
+	global_comment?: string,
+	modified_by?: string,
+	modified_on?: Date
 }
 
 export type roomDetailsType = {
