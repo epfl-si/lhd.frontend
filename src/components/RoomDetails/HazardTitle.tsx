@@ -18,6 +18,7 @@ interface HazardTitleProps {
   comment?: string | undefined;
   isReadonly: boolean;
   onChangeAction?: (hazardName: string) => void;
+  user: any;
 }
 
 export const HazardTitle = ({
@@ -28,7 +29,8 @@ export const HazardTitle = ({
                               setComment,
                               comment,
                               isReadonly,
-                              onChangeAction
+                              onChangeAction,
+                              user
   }: HazardTitleProps) => {
   const oidc = useOpenIDConnectContext();
   const { t } = useTranslation();
@@ -73,7 +75,7 @@ export const HazardTitle = ({
           }))})</label>}
         {isReadonly && <label className="hazardTitle" style={{marginBottom:'0px'}}>{decodeURIComponent(comment || '')}</label>}
       </div>
-      {isReadonly && <Button size="icon"
+      {isReadonly && user.canEditHazards && <Button size="icon"
               iconName={"#edit-3"}
               onClick={() => {if(onChangeAction) onChangeAction(selectedHazardCategory)}}/>
       }

@@ -13,12 +13,12 @@ import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 
 interface ChemicalsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const ChemicalsAuthorizationControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: ChemicalsAuthorizationControlProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -195,10 +195,10 @@ export const ChemicalsAuthorizationControl = ({
 	];
 
 	useEffect(() => {
-		if (isUserAuthorized) {
+		if (user.canListChemicals) {
 			loadFetch();
 		}
-	}, [search, page, isUserAuthorized]);
+	}, [search, page, user]);
 
 	useEffect(() => {
 		handleCurrentPage("chemicalauthorizationscontrol");
@@ -228,7 +228,7 @@ export const ChemicalsAuthorizationControl = ({
 
 	return (
 		<Box>
-			{isUserAuthorized ? <>
+			{user.canListChemicals ? <>
 			<Typography gutterBottom>
 				{t(`chemical.chemicalAuthorizationList`)}
 			</Typography>

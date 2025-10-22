@@ -671,7 +671,6 @@ export const updateRadioprotection = async (
               }
             }`;
 
-	console.log(query)
 	return makeQuery(query, {}, address, authToken);
 };
 

@@ -229,6 +229,7 @@ export const AddNewRadioprotectionDialog = ({
 							value={name}
 							onChange={(event) => setName(event.target.value)}
 							style={{flex: '1', margin: "5px"}}
+							disabled={selectedRadioprotection != undefined}
 						/>
 						<TextField
 							label={t('authorization.authority')}

@@ -18,12 +18,12 @@ import {deleteChemical} from "../utils/graphql/PostingTools";
 
 interface ChemicalsControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const ChemicalsControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: ChemicalsControlProps) => {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -80,13 +80,13 @@ export const ChemicalsControl = ({
 		// },
 		{field: "id", headerName: t('chemical.actions'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				<><Button size="icon"
+				user.canEditChemicals ? <><Button size="icon"
 								iconName={"#edit-3"}
 								onClick={() => modify(params.row)}/>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></>
+									onClick={() => handleDelete(params.row)}/></> : <></>
 			)
 		},
 	];
@@ -108,13 +108,13 @@ export const ChemicalsControl = ({
 			}},
 		{field: "id", headerName: t('chemical.actions'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				<><Button size="icon"
+				user.canEditChemicals ? <><Button size="icon"
 									iconName={"#edit-3"}
 									onClick={() => modify(params.row)}/>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></>
+									onClick={() => handleDelete(params.row)}/></> : <></>
 			)
 		},
 	];
@@ -132,11 +132,11 @@ export const ChemicalsControl = ({
 	];
 
 	useEffect(() => {
-		if (isUserAuthorized) {
+		if (user.canListChemicals) {
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, deleted, page, isUserAuthorized]);
+	}, [search, deleted, page, user]);
 
 	useEffect(() => {
 		handleCurrentPage("chemicalscontrol");
@@ -203,7 +203,7 @@ export const ChemicalsControl = ({
 
 	return (
 		<Box>
-			{isUserAuthorized ? <>
+			{user.canListChemicals ? <>
 			<Typography gutterBottom>
 				{t(`chemical.chemicalList`)}
 			</Typography>
@@ -213,7 +213,7 @@ export const ChemicalsControl = ({
 					setSearch={setSearch}
 					parent="chemicalscontrol"
 				/>
-				{isUserAuthorized && <Button
+				{user.canEditChemicals && <Button
 					onClick={() => {
 						setOpenDialog(true);
 						setSelectedChemical(undefined);

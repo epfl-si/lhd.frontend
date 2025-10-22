@@ -21,11 +21,13 @@ import {Button} from "epfl-elements-react-si-extra";
 interface DetailsTabProps {
   roomData: roomDetailsType;
   onSaveRoom: () => void;
+  user: any;
 }
 
 export const DetailsTab = ({
   roomData,
-  onSaveRoom
+  onSaveRoom,
+  user
   }: DetailsTabProps) => {
   const { t } = useTranslation();
   const oidc = useOpenIDConnectContext();
@@ -44,18 +46,20 @@ export const DetailsTab = ({
   const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 
   useEffect(() => {
-    const loadFetch = async () => {
-      const resultsRoomTypes = await fetchRoomTypes(
-        env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-        oidc.accessToken
-      );
+    if (user.canListRooms) {
+      const loadFetch = async () => {
+        const resultsRoomTypes = await fetchRoomTypes(
+          env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+          oidc.accessToken
+        );
 
-      if (resultsRoomTypes.status === 200 && resultsRoomTypes.data && typeof resultsRoomTypes.data !== 'string') {
-        setRoomKind(resultsRoomTypes.data);
+        if ( resultsRoomTypes.status === 200 && resultsRoomTypes.data && typeof resultsRoomTypes.data !== 'string' ) {
+          setRoomKind(resultsRoomTypes.data);
+        }
       }
+      loadFetch();
     }
-    loadFetch();
-  }, [oidc.accessToken]);
+  }, [oidc.accessToken, user]);
 
   useEffect(() => {
     setRoom(roomData);
@@ -131,104 +135,104 @@ export const DetailsTab = ({
   }
 
   return <div style={{display: "flex", flexDirection: "row"}}>
-    <div style={{width: (isExtraLargeDevice || isLargeDevice) ? '50%' : '100%'}}>
-      <Stack spacing={2} className="roomDetailsDiv"
-             style={{width: (isExtraLargeDevice || isLargeDevice) ? '80%' : '100%'}}>
-        <div className="displayFlexColumn">
-          <div><label className='labelDetails'>{t(`room_details.site`)}: </label><label
-            className='valueDetails'>{room.site}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`room_details.building`)}: </label><label
-            className='valueDetails'>{room.building}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`room_details.sector`)}: </label><label
-            className='valueDetails'>{room.sector}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
-            className='valueDetails'>{room.floor}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
-            className='valueDetails'>{room.vol}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`unit.name`)}: </label><label
-            className='valueDetails'>{room.assignedTo}</label>
-          </div>
-          <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
-            className='valueDetails'>{room.adminuse}</label>
-          </div>
-          <div style={{display: "flex", flexDirection: "column"}}>
-            <div style={{display: "flex", flexDirection: "row", alignItems: "baseline"}}>
-              <label className='labelDetails'>{t(`room_details.facultyuse`)}: </label>
-              <label
-                className='valueDetails'>{room.facultyuse}</label>
-
-              <Button
-                style={{marginLeft: '10px'}}
-                onClick={() => {
-                  room.lab_type_is_different = !room.lab_type_is_different;
-                  if ( !room.lab_type_is_different ) {
-                    room.kind = roomKind.find(k => k.name == room.facultyuse?.trim());
-                  }
-                  setRoom({...room});
-                }}
-                size="icon"
-                iconName={room.lab_type_is_different ? "#delete" : "#edit-2"}/>
-
+    {user.canListRooms ? (<><div style={{width: (isExtraLargeDevice || isLargeDevice) ? '50%' : '100%'}}>
+        <Stack spacing={2} className="roomDetailsDiv"
+               style={{width: (isExtraLargeDevice || isLargeDevice) ? '80%' : '100%'}}>
+          <div className="displayFlexColumn">
+            <div><label className='labelDetails'>{t(`room_details.site`)}: </label><label
+              className='valueDetails'>{room.site}</label>
             </div>
-            <Autocomplete
-              style={{visibility: room.lab_type_is_different ? "visible" : "hidden"}}
-              value={room.kind?.name}
-              onChange={(event: any, newValue: string | null) => {
-                if ( newValue ) {
-                  room.kind = {name: newValue};
-                  setRoom({...room});
-                }
-              }}
-              id="designation"
-              key={room.kind?.name}
-              options={roomKind.flatMap(k => k.name)}
-              renderInput={(params) => <TextField {...params} />}
-            />
+            <div><label className='labelDetails'>{t(`room_details.building`)}: </label><label
+              className='valueDetails'>{room.building}</label>
+            </div>
+            <div><label className='labelDetails'>{t(`room_details.sector`)}: </label><label
+              className='valueDetails'>{room.sector}</label>
+            </div>
+            <div><label className='labelDetails'>{t(`room_details.floor`)}: </label><label
+              className='valueDetails'>{room.floor}</label>
+            </div>
+            <div><label className='labelDetails'>{t(`room_details.volume`)}: </label><label
+              className='valueDetails'>{room.vol}</label>
+            </div>
+            <div><label className='labelDetails'>{t(`unit.name`)}: </label><label
+              className='valueDetails'>{room.assignedTo}</label>
+            </div>
+            <div><label className='labelDetails'>{t(`room_details.adminuse`)}: </label><label
+              className='valueDetails'>{room.adminuse}</label>
+            </div>
+            <div style={{display: "flex", flexDirection: "column"}}>
+              <div style={{display: "flex", flexDirection: "row", alignItems: "baseline"}}>
+                <label className='labelDetails'>{t(`room_details.facultyuse`)}: </label>
+                <label
+                  className='valueDetails'>{room.facultyuse}</label>
+
+                <Button
+                  style={{marginLeft: '10px'}}
+                  onClick={() => {
+                    room.lab_type_is_different = !room.lab_type_is_different;
+                    if ( !room.lab_type_is_different ) {
+                      room.kind = roomKind.find(k => k.name == room.facultyuse?.trim());
+                    }
+                    setRoom({...room});
+                  }}
+                  size="icon"
+                  iconName={room.lab_type_is_different ? "#delete" : "#edit-2"}/>
+
+              </div>
+              <Autocomplete
+                style={{visibility: room.lab_type_is_different ? "visible" : "hidden"}}
+                value={room.kind?.name}
+                onChange={(event: any, newValue: string | null) => {
+                  if ( newValue ) {
+                    room.kind = {name: newValue};
+                    setRoom({...room});
+                  }
+                }}
+                id="designation"
+                key={room.kind?.name}
+                options={roomKind.flatMap(k => k.name)}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </div>
           </div>
-        </div>
 
-        <DoorPlug roomName={roomData.name}/>
+          <DoorPlug roomName={roomData.name}/>
 
-        {(!isExtraLargeDevice && !isLargeDevice) ?
-          <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}
-        <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
-        <MultipleSelection selected={savedUnits} objectName="Unit"
-                           onChangeSelection={onChangeUnits}
-                           getCardTitle={getUnitTitle}
-                           fetchData={fetchUnitsList}/>
+          {(!isExtraLargeDevice && !isLargeDevice) ?
+            <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}
+          <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
+          <MultipleSelection selected={savedUnits} objectName="Unit"
+                             onChangeSelection={onChangeUnits}
+                             getCardTitle={getUnitTitle}
+                             fetchData={fetchUnitsList}/>
 
-        <div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
-          <Button
-            onClick={() => setOpenDialog(true)}
-            label={t(`generic.deleteButton`)}
-            iconName={`#trash`}
-            primary/>
-          <Button
-            onClick={() => saveRoomDetails()}
-            label="Save"
-            iconName={`#save`}
-            primary/>
-        </div>
-        <DeleteRoomDialog room={room}
-                          openDialog={openDialog}
-                          setOpenDialog={setOpenDialog}
-                          setDeleted={setDeleted}
-        />
-        <Notifications
-          open={openNotification}
-          notification={notificationType}
-          close={handleClose}
-        />
-      </Stack>
-      {deleted ? <Redirect to="/roomcontrol"/> : <></>}
-    </div>
+          {user.canEditRooms && <div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
+            <Button
+              onClick={() => setOpenDialog(true)}
+              label={t(`generic.deleteButton`)}
+              iconName={`#trash`}
+              primary/>
+            <Button
+              onClick={() => saveRoomDetails()}
+              label="Save"
+              iconName={`#save`}
+              primary/>
+          </div>}
+          <DeleteRoomDialog room={room}
+                            openDialog={openDialog}
+                            setOpenDialog={setOpenDialog}
+                            setDeleted={setDeleted}
+          />
+          <Notifications
+            open={openNotification}
+            notification={notificationType}
+            close={handleClose}
+          />
+        </Stack>
+        {deleted ? <Redirect to="/roomcontrol"/> : <></>}
+      </div>
       {
-        (isExtraLargeDevice || isLargeDevice) ?
+      (isExtraLargeDevice || isLargeDevice) ?
         <div style={{width: '50%'}}>
           <a target="_blank" href={getSNOWLinkForRoom()} rel="noreferrer">{t(`room_details.linkSnow`)}</a>
           <div>
@@ -242,6 +246,6 @@ export const DetailsTab = ({
           </div>
         </div>
         : <></>
-      }
+    }</>) : <b>You are not authorized for this page</b>}
   </div>
 };

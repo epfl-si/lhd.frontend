@@ -19,12 +19,12 @@ import {exportToExcel, getHazardExportFileName} from "../utils/ressources/file";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const RoomControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: RoomControlProps) => {
 	const location = useLocation();
 	const PAGE_SIZE = 100;
@@ -239,10 +239,10 @@ export const RoomControl = ({
 	];
 
 	useEffect(() => {
-		if (isUserAuthorized) {
+		if (user.canListRooms) {
 			loadFetch();
 		}
-	}, [search, page, isUserAuthorized, location]);
+	}, [search, page, user, location]);
 
 	useEffect(() => {
 		handleCurrentPage("rooms");
@@ -398,7 +398,7 @@ export const RoomControl = ({
 	};
 	return (
 		<Box>
-			{isUserAuthorized ? <>
+			{user.canListRooms ? <>
 			<Typography gutterBottom>
 				{t(`room.roomList`)}
 			</Typography>
@@ -422,13 +422,13 @@ export const RoomControl = ({
 					label={t(`generic.addNew`)}
 					iconName={`#plus-circle`}
 					primary/>
-				<Button
+				{user.canEditRooms && <Button
 					isDisabled={tableData.length == 0}
 					style={{minWidth: '10%', padding: '10px'}}
 					onClick={onExport}
 					label={t(`generic.export`)}
 					iconName={`#download`}
-					primary/>
+					primary/>}
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
@@ -441,11 +441,11 @@ export const RoomControl = ({
 				pageSize={PAGE_SIZE}
 			/>
 				<AddNewRoomDialog openDialog={openDialog} close={() => setOpenDialog(false)}
-												save={(searchVal: string) => {
-													setOpenDialog(false);
-													setSearch(`Room=${encodeURIComponent(searchVal)}`);
-													history.push(`/roomcontrol?Room=${encodeURIComponent(searchVal)}`);
-												}}/>
+													 save={(searchVal: string) => {
+														 setOpenDialog(false);
+														 setSearch(`Room=${encodeURIComponent(searchVal)}`);
+														 history.push(`/roomcontrol?Room=${encodeURIComponent(searchVal)}`);
+													 }}/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

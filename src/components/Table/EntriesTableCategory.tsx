@@ -63,6 +63,7 @@ export function EntriesTableCategory({
 					pageToOpen == 'unit' ||
 					pageToOpen == 'hazards' ||
 					pageToOpen == 'chemicals' ||
+					pageToOpen == 'organism' ||
 					pageToOpen == 'chemicalauthorizations' ||
 					pageToOpen == 'radioprotectionauthorization'
 				) ?
@@ -98,6 +99,7 @@ export function EntriesTableCategory({
 								case "room":
 									return row.id;
 								case "chemicals":
+								case "organism":
 									return row.id;
 								case "chemicalauthorizations":
 								case "radioprotectionauthorization":
@@ -139,8 +141,6 @@ export function EntriesTableCategory({
 								return row.hazard_category.hazard_category_name;
 							case "hazardFormsChild":
 								return row.hazard_form_child_name;
-							case "organism":
-								return row.id;
 							case "chemicalauthorizationsByRoom":
 								return row.authorization;
 						}
