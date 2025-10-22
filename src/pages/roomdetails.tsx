@@ -1,6 +1,6 @@
 import {Box, Typography} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
-import {fetchRoomDetails} from '../utils/graphql/FetchingTools';
+import {fetchConnectedUser, fetchRoomDetails} from '../utils/graphql/FetchingTools';
 import {env} from '../utils/env.js';
 import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
 import {roomDetailsType} from '../utils/ressources/types';
@@ -19,12 +19,21 @@ export default function RoomDetails() {
 	const oidc = useOpenIDConnectContext();
 	const [data, setData] = useState<roomDetailsType | null>(null);
 	const [listSavedCategories, setListSavedCategories] = useState<string[]>([]);
+	const [user, setUser] = useState<any>();
 
 	useEffect(() => {
 		loadFetch();
 	}, [oidc.accessToken, window.location.search]);
 
 	const loadFetch = async () => {
+		const userResult = await fetchConnectedUser(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken
+		);
+		if (userResult.status === 200 && userResult.data) {
+			setUser(userResult.data);
+		}
+
 		const urlParams = new URLSearchParams(window.location.search);
 
 		const results = await fetchRoomDetails(
@@ -53,7 +62,7 @@ export default function RoomDetails() {
 						<span className="tab-text-title">{t(`room_details.details`)}</span>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <DetailsTab roomData={data} onSaveRoom={loadFetch}/>}
+						{data && <DetailsTab roomData={data} onSaveRoom={loadFetch} user={user}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 				<Tabs.Tab id="hazards">
@@ -68,7 +77,7 @@ export default function RoomDetails() {
 						</div>
 					</Tabs.Tab.Title>
 					<Tabs.Tab.Content>
-						{data && <HazardTab room={data} onSaveRoom={loadFetch}/>}
+						{data && <HazardTab room={data} onSaveRoom={loadFetch} user={user}/>}
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 			</Tabs>

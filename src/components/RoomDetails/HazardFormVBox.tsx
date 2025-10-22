@@ -7,6 +7,7 @@ import {readOrEditHazard} from "../../utils/ressources/jsonUtils";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
+  user: any;
   selectedHazardCategory: string;
   lastVersionForm: hazardFormType | undefined;
   action: 'Add' | 'Edit' | 'Read';
@@ -18,6 +19,7 @@ interface HazardFormVBoxProps {
 
 export const HazardFormVBox = ({
   room,
+  user,
   selectedHazardCategory,
   lastVersionForm,
   action,
@@ -38,7 +40,7 @@ export const HazardFormVBox = ({
 
   return <div>
     <HazardList submissionsList={submissionsList}
-                onChangeAction={onChangeAction} inRoomDetails={true}/>
+                onChangeAction={onChangeAction} inRoomDetails={true} user={user}/>
 
     <HazardEditForm room={room}
                     selectedHazardCategory={selectedHazardCategory}

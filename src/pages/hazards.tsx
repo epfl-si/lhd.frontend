@@ -20,12 +20,12 @@ import {notificationsVariants} from "../utils/ressources/variants";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const HazardsControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: HazardsControlProps) => {
 	const location = useLocation();
 	const PAGE_SIZE = 100;
@@ -78,11 +78,11 @@ export const HazardsControl = ({
 	}, [location]);
 
 	useEffect(() => {
-		if (isUserAuthorized && search != '') {
+		if (user.canListHazards && search != '') {
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, queryString, page, isUserAuthorized, deleted]);
+	}, [search, queryString, page, user, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("hazards");
@@ -192,14 +192,14 @@ export const HazardsControl = ({
 			if (search == 'Biological') {
 				columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
 					renderCell: (params: GridRenderCellParams<any, any>) => (
-							<Button size="icon"
+							user.canEditOrganisms ? <Button size="icon"
 											style={{visibility: params.row.id_lab_has_hazards_child ? "visible" : "hidden"}}
 											iconName={`#trash`}
 											onClick={() => {
 												console.log(params.row)
 												setOpenDialog(true);
 												setSelectedHazard(params.row.id_lab_has_hazards_child);
-											}}/>
+											}}/> : <></>
 					)
 				});
 			}
@@ -265,7 +265,7 @@ export const HazardsControl = ({
 	}
 
 	const onExport = async () => {
-		if ( isUserAuthorized && search != '' ) {
+		if ( user.canListHazards && search != '' ) {
 			setLoading(true);
 			const results = await fetchHazards(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -309,7 +309,7 @@ export const HazardsControl = ({
 
 	return (
 		<Box>
-			{isUserAuthorized ? <>
+			{user.canListHazards ? <>
 			<Typography gutterBottom>
 				{t(`hazard.hazardList`)}
 			</Typography>

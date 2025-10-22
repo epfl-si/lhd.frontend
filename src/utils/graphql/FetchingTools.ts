@@ -749,13 +749,32 @@ export const fetchConnectedUser = async (
 	authToken: string | undefined
 ): Promise<any> => {
 	const query = `query connection {
-            connectedUserInfo {
-              groups
-             	preferred_username
-             	given_name
-             	family_name
-            }
-          }`;
+						connectedUserInfo {
+							groups
+							userName
+							given_name
+							family_name
+							canEditHazards
+							canEditRooms
+							canListUnits
+							canListHazards
+							canListRooms
+							isAdmin
+							canEditUnits
+							canListOrganisms
+							canEditOrganisms
+							canListChemicals
+							canEditChemicals
+							canListAuthorizations
+							canEditAuthorizations
+							canListPersons
+							canCallAPIToGetChemicals
+							canCallAPIToPostChemicals
+							canCallAPIToPostAuthorization
+							canCallAPIToRenewAuthorization
+							canCallAPIToCheckAuthorization
+						}
+					}`;
 
 	const result = await makeQuery(query, {}, address, authToken);
 	return {
@@ -899,16 +918,21 @@ export const fetchHazardFormChild = async (
 export const fetchOrganismsFromFullText = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	search: string
-): Promise<fetchOrganismsTypeWithPagination> => {
+	search: string,
+	take: number,
+	skip: number
+): Promise<any> => {
 	const query: string = `query OrganismFetchFromFullText {
-						organismsFromFullText(search: "${search}") {
-							id
-							organism
-							risk_group
-							filePath
-							updated_on
-							updated_by
+						organismsFromFullText(take: ${take}, skip: ${skip}, search: "${search}") {
+							bios {
+								id
+								organism
+								risk_group
+								filePath
+								updated_on
+								updated_by
+							}
+							totalCount
 						}
 					}`;
 

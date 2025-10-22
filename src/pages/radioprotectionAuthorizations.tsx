@@ -18,12 +18,12 @@ import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteR
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const RadioprotectionsAuthorizationControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: RadioprotectionsAuthorizationControlProps) => {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -116,7 +116,7 @@ export const RadioprotectionsAuthorizationControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
-				<>
+				user.canEditAuthorizations ? <>
 					<Button size="icon"
 								iconName={"#edit-3"}
 								onClick={() => modify(params.row)}/>
@@ -127,7 +127,7 @@ export const RadioprotectionsAuthorizationControl = ({
 									setOpenDialogDelete(true);
 									setSelected(params.row);
 								}}/>
-				</>
+				</> : <></>
 			)
 		}
 	];
@@ -225,12 +225,12 @@ export const RadioprotectionsAuthorizationControl = ({
 	];
 
 	useEffect(() => {
-		if (isUserAuthorized) {
+		if (user.canListAuthorizations) {
 			loadFetch();
 			setDeleted(false);
 			setSelected(undefined);
 		}
-	}, [search, page, isUserAuthorized, deleted]);
+	}, [search, page, user, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("radioprotectionauthorizationscontrol");
@@ -275,7 +275,7 @@ export const RadioprotectionsAuthorizationControl = ({
 
 	return (
 		<Box>
-			{isUserAuthorized ? <>
+			{user.canListAuthorizations ? <>
 			<Typography gutterBottom>
 				{t(`menu.radioprotection`)}
 			</Typography>
@@ -285,14 +285,14 @@ export const RadioprotectionsAuthorizationControl = ({
 					setSearch={setSearch}
 					parent="radioprotectionauthorizationscontrol"
 				/>
-				<Button
+				{user.canEditAuthorizations && <Button
 					onClick={() => {
 						setOpenDialog(true);
 						setSelected(undefined);
 					}}
 					label={t(`generic.addNew`)}
 					iconName={`#plus-circle`}
-					primary/>
+					primary/>}
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
@@ -304,21 +304,21 @@ export const RadioprotectionsAuthorizationControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
-				<AddNewRadioprotectionDialog openDialog={openDialog}
-															close={() => {
-																setOpenDialog(false);
-																setSearch('');
-															}}
-															save={(searchVal: string) => {
-																setOpenDialog(false);
-																onChangeInput(searchVal);
-															}}
-															selectedRadioprotection={selected}/>
-				<DeleteRadioprotectionDialog auth={selected}
-													openDialog={openDialogDelete}
-													setOpenDialog={setOpenDialogDelete}
-													setDeleted={setDeleted}
-				/>
+				{user.canEditAuthorizations && <><AddNewRadioprotectionDialog openDialog={openDialog}
+																			close={() => {
+																				setOpenDialog(false);
+																				setSearch('');
+																			}}
+																			save={(searchVal: string) => {
+																				setOpenDialog(false);
+																				onChangeInput(searchVal);
+																			}}
+																			selectedRadioprotection={selected}/>
+					<DeleteRadioprotectionDialog auth={selected}
+				openDialog={openDialogDelete}
+				setOpenDialog={setOpenDialogDelete}
+				setDeleted={setDeleted}
+			/></>}
 				<Notifications
 					open={openNotification}
 					notification={notificationType}

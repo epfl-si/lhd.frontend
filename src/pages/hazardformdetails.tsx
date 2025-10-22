@@ -29,7 +29,7 @@ export default function HazardFormDetails() {
 	});
 	const urlParams = new URLSearchParams(window.location.search);
 	const [originalForm, setOriginalForm] = useState<string>();
-	const [isUserAuthorized, setIsUserAuthorized] = useState<boolean>(false);
+	const [user, setUser] = useState<any>();
 
 	useEffect(() => {
 		loadFetchUser();
@@ -41,8 +41,8 @@ export default function HazardFormDetails() {
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data) {
-			setIsUserAuthorized(results.data.groups.includes('LHD_acces_admin'));
-			if (results.data.groups.includes('LHD_acces_admin')) {
+			setUser(results.data);
+			if (results.data.isAdmin) {
 				setCategory(urlParams.get('cat') ?? '');
 				if (urlParams.get('cat') != 'NewCategory') {
 					loadFetch(urlParams.get('cat') ?? '');
@@ -134,7 +134,7 @@ export default function HazardFormDetails() {
 	};
 
 	return <Box>
-			{isUserAuthorized ? <><Typography
+			{user.isAdmin ? <><Typography
 									gutterBottom>{urlParams.get('cat') == 'NewCategory' ?
 				t(`hazardFormControl.Create`) :
 				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormDetails?.version}</strong>)

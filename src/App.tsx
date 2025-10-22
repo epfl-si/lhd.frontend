@@ -26,7 +26,29 @@ function App() {
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
-	const [connectedUser, setConnectedUser] = useState<object>({userName: '', groups: []});
+	const [connectedUser, setConnectedUser] = useState<object>({
+		groups: [],
+		userName: '',
+		canEditHazards: false,
+		canEditRooms: false,
+		canListUnits: false,
+		canListHazards: false,
+		canListRooms: false,
+		isAdmin: false,
+		canEditUnits : false,
+		canListOrganisms: false,
+		canEditOrganisms: false,
+		canListChemicals: false,
+		canEditChemicals: false,
+		canListAuthorizations: false,
+		canEditAuthorizations: false,
+		canListPersons: false,
+		canCallAPIToGetChemicals: false,
+		canCallAPIToPostChemicals: false,
+		canCallAPIToPostAuthorization: false,
+		canCallAPIToRenewAuthorization: false,
+		canCallAPIToCheckAuthorization: false
+	});
 
 	useEffect(() => {
 		if (isLoggedIn) {
@@ -41,7 +63,7 @@ function App() {
 		);
 		if (results.status === 200 && results.data) {
 			console.log('ConnectedUser',results.data);
-			setConnectedUser({userName: results.data.preferred_username, groups: results.data.groups});
+			setConnectedUser(results.data);
 		}
 	};
 
@@ -73,45 +95,46 @@ function App() {
 			<Base>
 				<Base.AsideMenu>
 					<ul>
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListRooms) &&
 						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? '#FFCECE' : ''}`}}>
 							<Link to="/roomcontrol">{t(`menu.rooms`)}</Link>
 						</li>
 						}
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListHazards) &&
 						<li style={{backgroundColor: `${selectedMenu == 'hazards' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardscontrol">{t(`menu.hazards`)}</Link>
 						</li>
 						}
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListUnits) &&
 						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
-						}
+						}{(connectedUser.canListOrganisms) &&
 						<li style={{backgroundColor: `${selectedMenu == 'organisms' ? '#FFCECE' : ''}`}}>
 							<Link to="/organismscontrol">{t(`menu.organisms`)}</Link>
 						</li>
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						}
+						{(connectedUser.canListChemicals) &&
 						<li style={{backgroundColor: `${selectedMenu == 'chemicalscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/chemicalscontrol">{t(`menu.chemicals`)}</Link>
 						</li>
 						}
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListAuthorizations) &&
 						<li style={{backgroundColor: `${selectedMenu == 'chemicalauthorizationscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/chemicalauthorizationscontrol">{t(`menu.authChem`)}</Link>
 						</li>
 						}
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListAuthorizations) &&
 						<li style={{backgroundColor: `${selectedMenu == 'radioprotectionauthorizationscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/radioprotectionauthorizationscontrol">{t(`menu.radioprotection`)}</Link>
 						</li>
 						}
-						{connectedUser.groups.includes('LHD_acces_admin') &&
+						{connectedUser.isAdmin &&
 						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
 						</li>
 						}
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListRooms) &&
 				<>
 					<li><a href={env().LHDv2_BASE_URL + "auth_DSPS/lhd_auth_dsps.php"}>Dispensations</a></li>
 					<li><a href={env().LHDv2_BASE_URL + "cut/lhd_cut.php"}>Supplies interruptions</a></li>
@@ -130,7 +153,7 @@ function App() {
 						}
 						<li><a href={env().LHDv2_BASE_URL + "lhd_cosecs/barcodes/"}>LHD Barcode</a>
 						</li>
-						{(connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')) &&
+						{(connectedUser.canListRooms) &&
 				<>
 					<li><a href={env().LHDv2_BASE_URL + "aa/aa_validation/lhd_aa_validation.php"}>Accred/Archibus</a>
 					</li>
@@ -171,18 +194,18 @@ function App() {
 					<Switch>
 						<Route path="/unitcontrol">
 							<UnitControl handleCurrentPage={handleCurrentPage}
-													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+													 user={connectedUser}/>
 						</Route>
 						<Route path="/organismscontrol">
 							<OrganismsControl handleCurrentPage={handleCurrentPage}
-																isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+																user={connectedUser}/>
 						</Route>
 						<Route path="/unitdetails">
 							<UnitDetails/>
 						</Route>
 						<Route path="/hazardformcontrol">
 							<HazardFormControl handleCurrentPage={handleCurrentPage}
-																 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin')}/>
+																 user={connectedUser}/>
 						</Route>
 						<Route path="/roomdetails">
 							<RoomDetails />
@@ -195,23 +218,23 @@ function App() {
 						</Route>
 						<Route path="/roomcontrol">
 							<RoomControl handleCurrentPage={handleCurrentPage}
-													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+													 user={connectedUser}/>
 						</Route>
 						<Route path="/hazardscontrol">
 							<HazardsControl handleCurrentPage={handleCurrentPage}
-													 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+													 user={connectedUser}/>
 						</Route>
 						<Route path="/chemicalscontrol">
 							<ChemicalsControl handleCurrentPage={handleCurrentPage}
-															isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+															user={connectedUser}/>
 						</Route>
 						<Route path="/chemicalauthorizationscontrol">
 							<ChemicalsAuthorizationControl handleCurrentPage={handleCurrentPage}
-																isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+																user={connectedUser}/>
 						</Route>
 						<Route path="/radioprotectionauthorizationscontrol">
 							<RadioprotectionsAuthorizationControl handleCurrentPage={handleCurrentPage}
-																						 isUserAuthorized={connectedUser.groups.includes('LHD_acces_admin') || connectedUser.groups.includes('LHD_acces_lecture')}/>
+																						 user={connectedUser}/>
 						</Route>
 					</Switch>
 				</div>

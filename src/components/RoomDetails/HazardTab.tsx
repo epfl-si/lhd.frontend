@@ -10,11 +10,13 @@ import {Button} from "epfl-elements-react-si-extra";
 interface HazardTabProps {
   room: roomDetailsType;
   onSaveRoom: () => void;
+  user: any;
 }
 
 export const HazardTab = ({
   room,
-  onSaveRoom
+  onSaveRoom,
+  user
   }: HazardTabProps) => {
   const oidc = useOpenIDConnectContext();
   const [availableHazardsInDB, setAvailableHazardsInDB] = useState<hazardFormType[]>([]);
@@ -28,26 +30,28 @@ export const HazardTab = ({
   const [isNewHazardListVisible, setNewHazardListVisible] = useState(false);
 
   useEffect(() => {
-    const loadFetch = async () => {
-      const resultsHazardCategory = await fetchHazardForms(
-        env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-        oidc.accessToken
-      );
+    if (user.canListHazards) {
+      const loadFetch = async () => {
+        const resultsHazardCategory = await fetchHazardForms(
+          env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+          oidc.accessToken
+        );
 
-      if (resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string') {
-        const sortedHazardCategories = resultsHazardCategory.data.sort((a:hazardFormType,b: hazardFormType) =>
-          a.hazard_category.hazard_category_name ?
-            a.hazard_category.hazard_category_name.localeCompare(b.hazard_category.hazard_category_name) :
-            0
-        )
-        setAvailableHazardsInDB([...sortedHazardCategories]);
-      }
+        if ( resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string' ) {
+          const sortedHazardCategories = resultsHazardCategory.data.sort((a: hazardFormType, b: hazardFormType) =>
+            a.hazard_category.hazard_category_name ?
+              a.hazard_category.hazard_category_name.localeCompare(b.hazard_category.hazard_category_name) :
+              0
+          )
+          setAvailableHazardsInDB([...sortedHazardCategories]);
+        }
 
-    };
-    loadFetch();
-    fetchRoomList();
-    fetchOrganismList();
-  }, [oidc.accessToken]);
+      };
+      loadFetch();
+      fetchRoomList();
+      fetchOrganismList();
+    }
+  }, [oidc.accessToken, user]);
 
   function uniqueFilter(value: string, index: number, self: string[]) {
     return self.indexOf(value) === index;
@@ -110,19 +114,20 @@ export const HazardTab = ({
   };
 
   return <div>
-    <div>
+    {user.canEditHazards && <div>
       <Button size="icon"
-              iconName={"#plus-circle"}
-              onClick={handleClickForNewHazardVisibility}
-              style={{visibility: isNewHazardListVisible ? 'hidden' : 'visible'}}/>
+               iconName={"#plus-circle"}
+               onClick={handleClickForNewHazardVisibility}
+               style={{visibility: isNewHazardListVisible ? 'hidden' : 'visible'}}/>
       <NewHazardChoise
         openDialog={isNewHazardListVisible}
         onAddHazard={onAddHazard}
         onCancelClick={setNewHazardListVisible}
         availableHazardsInDB={availableHazardsInDB}
         listSavedCategories={listSavedCategories}/>
-    </div>
+    </div>}
     <HazardFormVBox room={room}
+                    user={user}
                     action={action}
                     onChangeAction={onEditHazard}
                     onReadAction={onReadHazard}

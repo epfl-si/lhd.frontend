@@ -14,12 +14,12 @@ import {notificationsVariants} from "../utils/ressources/variants";
 
 interface HazardFormControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const HazardFormControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: HazardFormControlProps) => {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -42,11 +42,11 @@ export const HazardFormControl = ({
 	];
 
 	useEffect(() => {
-		if (isUserAuthorized) {
+		if (user.isAdmin) {
 			loadFetch();
 		}
 		handleCurrentPage("hazardForms");
-	}, [oidc.accessToken]);
+	}, [oidc.accessToken, user]);
 
 	const loadFetch = async () => {
 		setLoading(true);
@@ -72,7 +72,7 @@ export const HazardFormControl = ({
 	};
 
 	return <Box>
-		{isUserAuthorized ? <><Typography gutterBottom>
+		{user.isAdmin ? <><Typography gutterBottom>
 				{t(`hazardFormControl.title`)}
 			</Typography>
 			<EntriesTableCategory

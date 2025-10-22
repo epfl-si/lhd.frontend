@@ -17,12 +17,12 @@ import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const UnitControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: UnitControlProps) => {
 	const location = useLocation();
 	const PAGE_SIZE = 100;
@@ -106,7 +106,7 @@ export const UnitControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
-				<><Button size="icon"
+				user.canEditUnits ? <><Button size="icon"
 									iconName={"#edit-3"}
 									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
 					<Button size="icon"
@@ -115,7 +115,7 @@ export const UnitControl = ({
 									onClick={() => {
 										setOpenDialogDelete(true);
 										setSelectedUnit(params.row);
-									}}/></>
+									}}/></> : <></>
 			)
 		},
 	];
@@ -163,7 +163,7 @@ export const UnitControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
-				<><Button size="icon"
+				user.canEditUnits ? <><Button size="icon"
 									iconName={"#edit-3"}
 									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
 					<Button size="icon"
@@ -172,7 +172,7 @@ export const UnitControl = ({
 									onClick={() => {
 										setOpenDialogDelete(true);
 										setSelectedUnit(params.row);
-									}}/></>
+									}}/></> : <></>
 			)
 		},
 	];
@@ -216,7 +216,7 @@ export const UnitControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
-				<><Button size="icon"
+				user.canEditUnits ? <><Button size="icon"
 									iconName={"#edit-3"}
 									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
 					<Button size="icon"
@@ -225,17 +225,17 @@ export const UnitControl = ({
 									onClick={() => {
 										setOpenDialogDelete(true);
 										setSelectedUnit(params.row);
-									}}/></>
+									}}/></> : <></>
 			)
 		},
 	];
 
 	useEffect(() => {
-		if (isUserAuthorized) {
+		if (user.canListUnits) {
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, page, isUserAuthorized, deleted]);
+	}, [search, page, user, deleted]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(location.search);
@@ -280,7 +280,7 @@ export const UnitControl = ({
 
 	return (
 		<Box>
-			{isUserAuthorized ? <>
+			{user.canListUnits ? <>
 			<Typography gutterBottom>
 				{t(`unit.unitList`)}
 			</Typography>
@@ -293,11 +293,11 @@ export const UnitControl = ({
 					placeholder={t(`unit.search`)}
 					className="debounce-input"
 				/>
-				<Button
+				{user.canEditUnits && <Button
 					onClick={() => setOpenDialog(true)}
 					label={t(`generic.addNew`)}
 					iconName={`#plus-circle`}
-					primary/>
+					primary/>}
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
@@ -309,16 +309,16 @@ export const UnitControl = ({
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
 			/>
-			<AddNewUnitDialog openDialog={openDialog} close={() => setOpenDialog(false)}
-												save={(searchVal: string) => {
-													setOpenDialog(false);
-													onChangeInput(searchVal);
-												}}/>
-				<DeleteUnitDialog unit={selectedUnit}
-													openDialog={openDialogDelete}
-													setOpenDialog={setOpenDialogDelete}
-													setDeleted={setDeleted}
-				/>
+				{user.canEditUnits && <><AddNewUnitDialog openDialog={openDialog} close={() => setOpenDialog(false)}
+													 save={(searchVal: string) => {
+														 setOpenDialog(false);
+														 onChangeInput(searchVal);
+													 }}/>
+					<DeleteUnitDialog unit={selectedUnit}
+				openDialog={openDialogDelete}
+				setOpenDialog={setOpenDialogDelete}
+				setDeleted={setDeleted}
+			/></>}
 			<Notifications
 				open={openNotification}
 				notification={notificationType}

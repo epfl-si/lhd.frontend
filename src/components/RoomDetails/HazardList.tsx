@@ -12,12 +12,14 @@ interface HazardListProps {
 	submissionsList: submissionForm[];
 	onChangeAction?: (hazardName: string) => void;
 	inRoomDetails: boolean;
+	user: any;
 }
 
 export const HazardList = ({
 														 submissionsList,
 														 onChangeAction,
-														 inRoomDetails
+														 inRoomDetails,
+														 user
 													 }: HazardListProps) => {
 	const oidc = useOpenIDConnectContext();
 	const fields = useRef<string[]>([]);
@@ -96,7 +98,7 @@ export const HazardList = ({
 			return <div style={{marginTop: '10px'}}>
 				{inRoomDetails && <HazardTitle selectedHazardCategory={cat}
 														isReadonly={true} comment={submissionsList.filter(sub => sub.category == cat)[0].comment}
-														onChangeAction={onChangeAction}/>}
+														onChangeAction={onChangeAction} user={user}/>}
 				<TableContainer component={Paper} style={{marginBottom: '5px'}}>
 					<Table size="small" aria-label="a dense table">
 						<TableHead>

@@ -19,12 +19,12 @@ import {AlertDialog} from "../components/global/AlertDialog";
 
 interface OrganismsControlProps {
 	handleCurrentPage: (page: string) => void;
-	isUserAuthorized: boolean;
+	user: any;
 }
 
 export const OrganismsControl = ({
 	handleCurrentPage,
-	isUserAuthorized
+	user
 }: OrganismsControlProps) => {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -45,6 +45,9 @@ export const OrganismsControl = ({
 	const [loadingDelete, setLoadingDelete] = useState(false);
 	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
 	const [deleted, setDeleted] = useState(false);
+	const PAGE_SIZE = 100;
+	const [page, setPage] = useState<number>(0);
+	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const columnsLarge: columnType[] = [
 		{field: "organism", headerName: t('organism.name'), width: 200,
@@ -79,7 +82,7 @@ export const OrganismsControl = ({
 			)},
 		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				isUserAuthorized ? <><Button size="icon"
+				user.canEditOrganisms ? <><Button size="icon"
 								iconName={"#edit-3"}
 								onClick={() => modifyOrganism(params.row)}/>
 					<Button size="icon"
@@ -120,13 +123,13 @@ export const OrganismsControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				<><Button size="icon"
+				user.canEditOrganisms ? <><Button size="icon"
 									iconName={"#edit-3"}
 									onClick={() => modifyOrganism(params.row)}/>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></>
+									onClick={() => handleDelete(params.row)}/></> : <></>
 			)
 		},
 	];
@@ -155,9 +158,11 @@ export const OrganismsControl = ({
 	const location = useLocation();
 
 	useEffect(() => {
-		loadFetch();
-		setDeleted(false);
-	}, [search, deleted]);
+		if (user.canListOrganisms) {
+			loadFetch();
+			setDeleted(false);
+		}
+	}, [search, deleted, user, page]);
 
 	useEffect(() => {
 		const urlParams = new URLSearchParams(location.search);
@@ -167,6 +172,7 @@ export const OrganismsControl = ({
 			setSearch('');
 		}
 		handleCurrentPage("organisms");
+		setPage(0);
 	}, [oidc.accessToken, location]);
 
 	const loadFetch = async () => {
@@ -174,10 +180,13 @@ export const OrganismsControl = ({
 		const results = await fetchOrganismsFromFullText(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			search
+			search,
+			PAGE_SIZE,
+			PAGE_SIZE * page,
 		);
 		if (results.status === 200 && results.data){
-			setTableData(results.data);
+			setTableData(results.data.bios);
+			setTotalCount(results.data.totalCount);
 		} else {
 			console.error('Bad GraphQL results', results);
 
@@ -190,6 +199,7 @@ export const OrganismsControl = ({
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
 		setSearch(val);
+		setPage(0);
 		history.push(`/organismscontrol?search=${encodeURIComponent(val)}`);
 	}
 
@@ -252,7 +262,7 @@ export const OrganismsControl = ({
 					placeholder={t(`organism.search`)}
 					className="debounce-input"
 				/>
-				{isUserAuthorized && <Button
+				{user.canEditOrganisms && <Button
 					onClick={() => {
 						setOpenDialog(true);
 						setSelectedOrganism(undefined);
@@ -266,6 +276,10 @@ export const OrganismsControl = ({
 				columns={(isExtraLargeDevice || isLargeDevice) ? columnsLarge : (isMediumDevice ? columnsMedium : columnsSmall)}
 				loading={loading}
 				pageToOpen={"organism"}
+				loadServerRows={setPage}
+				page={page}
+				totalCount={totalCount}
+				pageSize={PAGE_SIZE}
 			/>
 			<AddNewOrganismDialog openDialog={openDialog}
 														close={() => {
