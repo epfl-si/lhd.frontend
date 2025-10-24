@@ -89,8 +89,9 @@ export const AddNewOrganismDialog = ({
 
 	const handleOpen = (res: any, saveNew: boolean) => {
 		if (saveNew ? res.data?.addOrganism?.errors : res.data?.updateOrganism?.errors ) {
+			const message = saveNew ? res.data?.addOrganism?.errors[0].message : res.data?.updateOrganism?.errors[0].message;
 			const notif: notificationType = {
-				text: saveNew ? res.data?.addOrganism?.errors[0].message : res.data?.updateOrganism?.errors[0].message,
+				text: message.indexOf('Unique constraint') > -1 ? t('organism.errorUnique') : message,
 				type: 'error'
 			};
 			setNotificationType(notif);
