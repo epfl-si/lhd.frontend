@@ -30,7 +30,7 @@ export default function HazardFormChildDetails() {
 	});
 	const urlParams = new URLSearchParams(window.location.search);
 	const [originalForm, setOriginalForm] = useState<string>();
-	const [user, setUser] = useState<any>();
+	const [user, setUser] = useState<any>({isAdmin: false});
 
 	useEffect(() => {
 		loadFetchUser();
