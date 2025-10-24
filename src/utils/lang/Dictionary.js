@@ -241,7 +241,8 @@ i18next.use(initReactI18next).init({
 					Temperature: 'Temperature',
 					modification_info: 'Modified by %s on %s',
 					otherRooms: ' due to magnet located in room ',
-					deleteHazardConfirmationMessageTitle: 'Are you sure you want to delete this hazard?'
+					deleteHazardConfirmationMessageTitle: 'Are you sure you want to delete this hazard?',
+					global_comment: 'Global comment'
 				},
 				hazardFormControl: {
 					title: 'Hazard Forms',
@@ -502,6 +503,7 @@ i18next.use(initReactI18next).init({
 					modification_info: 'Modifié par %s le %s',
 					otherRooms: ' dû à l\'aimant situé dans la salle ',
 					deleteHazardConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer ce danger?',
+					global_comment: 'Commentaire globale'
 				},
 				hazardFormControl: {
 					title: 'Formulaires des dangers',
