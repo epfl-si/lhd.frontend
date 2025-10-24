@@ -73,8 +73,9 @@ export const AddNewChemicalDialog = ({
 
 	const handleOpen = (res: any, saveNew: boolean) => {
 		if (saveNew ? res.data?.addChemical?.errors : res.data?.updateChemical?.errors ) {
+			const message = saveNew ? res.data?.addChemical?.errors[0].message : res.data?.updateChemical?.errors[0].message;
 			const notif: notificationType = {
-				text: saveNew ? res.data?.addChemical?.errors[0].message : res.data?.updateChemical?.errors[0].message,
+				text: message.indexOf('Unique constraint') > -1 ? t('chemical.errorUnique') : message,
 				type: 'error'
 			};
 			setNotificationType(notif);

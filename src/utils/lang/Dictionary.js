@@ -181,7 +181,8 @@ i18next.use(initReactI18next).init({
 					addChemical: 'Add a new chemical',
 					fastway: 'Fastway',
 					auth_code: 'Auth code',
-					chemicalAuthorizationList: 'Chemical authorizations'
+					chemicalAuthorizationList: 'Chemical authorizations',
+					errorUnique: 'Un chemical already exists with this name'
 				},
 				authorization: {
 					room: 'Rooms',
@@ -221,7 +222,8 @@ i18next.use(initReactI18next).init({
 					deleteOrganismMessageEnd: ' and delete them before deleting the organism',
 					link: 'this link',
 					retry: 'Retry',
-					actions: 'Actions'
+					actions: 'Actions',
+					errorUnique: 'An organism already exists with this name and risk'
 				},
 				hazards: {
 					Biological: 'Biological',
@@ -439,7 +441,8 @@ i18next.use(initReactI18next).init({
 					addChemical: 'Ajouter un nouveau chimique',
 					fastway: 'Fastway',
 					auth_code: 'Auth code',
-					chemicalAuthorizationList: 'Autorisations chimiques'
+					chemicalAuthorizationList: 'Autorisations chimiques',
+					errorUnique: 'Un produit chimique existe déjà avec ce nom'
 				},
 				authorization: {
 					room: 'Rooms',
@@ -479,7 +482,8 @@ i18next.use(initReactI18next).init({
 					deleteOrganismMessageEnd: ' et les supprimer avant de supprimer l\'organisme.',
 					link: 'ce lien',
 					retry: 'Réessayer',
-					actions: 'Actions'
+					actions: 'Actions',
+					errorUnique: 'Un organisme existe déjà avec ce nom et risque'
 				},
 				hazards: {
 					Biological: 'Biologique',
