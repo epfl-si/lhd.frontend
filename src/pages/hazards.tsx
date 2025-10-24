@@ -49,6 +49,12 @@ export const HazardsControl = ({
 			)
 		},
 		{
+			field: "global_comment", headerName: t('hazards.global_comment'), width: 200, hide: true,
+			renderCell: (params: GridRenderCellParams<any, any>) => (
+				decodeURIComponent(params.row.global_comment)
+			)
+		},
+		{
 			field: "modified_by", headerName: t('organism.updated_by'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
 				params.row.modified_by
@@ -234,6 +240,12 @@ export const HazardsControl = ({
 			renderCell: (params: GridRenderCellParams<any, any>) => (
 				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
 			)},
+			{
+				field: "global_comment", headerName: t('hazards.global_comment'), width: 200, hide: true,
+				renderCell: (params: GridRenderCellParams<any, any>) => (
+					decodeURIComponent(params.row.global_comment)
+				)
+			},
 			{
 				field: "modified_by", headerName: t('organism.updated_by'), width: 100,
 				renderCell: (params: GridRenderCellParams<any, any>) => (
