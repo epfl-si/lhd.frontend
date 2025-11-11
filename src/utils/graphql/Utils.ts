@@ -1,5 +1,5 @@
 
-export async function makeQuery(
+export async function doGraphQL(
 	query: string,
 	variables: Object,
 	address: string | undefined,

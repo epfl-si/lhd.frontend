@@ -8,7 +8,7 @@ import {
 	personType,
 	roomDetailsType
 } from '../ressources/types';
-import {makeQuery} from "./Utils";
+import {doGraphQL} from "./Utils";
 
 export const createDispensation = async (
 	address: string | undefined,
@@ -203,7 +203,7 @@ export const updateRoom = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const updateUnit = async (
@@ -247,7 +247,7 @@ export const updateUnit = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const deleteUnit = async (
@@ -265,7 +265,7 @@ export const deleteUnit = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const deleteRoom = async (
@@ -283,7 +283,7 @@ export const deleteRoom = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const deleteOrganism = async (
@@ -301,7 +301,7 @@ export const deleteOrganism = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const deleteHazardChild = async (
@@ -320,7 +320,7 @@ export const deleteHazardChild = async (
             }`;
 
 	console.log(query)
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 
@@ -349,7 +349,7 @@ export const addHazard = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const updateFormHazard = async (
@@ -370,7 +370,7 @@ export const updateFormHazard = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const createNewHazardCategory = async (
@@ -391,7 +391,7 @@ export const createNewHazardCategory = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const saveNewUnitsFromAPI = async (
@@ -419,7 +419,7 @@ export const saveNewUnitsFromAPI = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const saveNewRoomsFromAPI = async (
@@ -448,7 +448,7 @@ export const saveNewRoomsFromAPI = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const createNewHazardFormChild = async (
@@ -470,7 +470,7 @@ export const createNewHazardFormChild = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const updateHazardFormChild = async (
@@ -491,7 +491,7 @@ export const updateHazardFormChild = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const saveNewOrganism = async (
@@ -513,7 +513,7 @@ export const saveNewOrganism = async (
                 isSuccess
               }
             }`;
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const updateOrganism = async (
@@ -537,7 +537,7 @@ export const updateOrganism = async (
                 isSuccess
               }
             }`;
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const saveNewChemical = async (
@@ -559,7 +559,7 @@ export const saveNewChemical = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const updateChemical = async (
@@ -583,7 +583,7 @@ export const updateChemical = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const deleteChemical = async (
@@ -601,7 +601,7 @@ export const deleteChemical = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const saveNewRadioprotection = async (
@@ -637,7 +637,7 @@ export const saveNewRadioprotection = async (
             }`;
 
 	console.log(query)
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const updateRadioprotection = async (
@@ -671,7 +671,7 @@ export const updateRadioprotection = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
 
 export const deleteAuthorization = async (
@@ -689,5 +689,5 @@ export const deleteAuthorization = async (
               }
             }`;
 
-	return makeQuery(query, {}, address, authToken);
+	return doGraphQL(query, {}, address, authToken);
 };
