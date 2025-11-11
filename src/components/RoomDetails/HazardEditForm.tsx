@@ -19,6 +19,7 @@ import {useTranslation} from "react-i18next";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardTitle} from "./HazardTitle";
 import {Button} from "epfl-elements-react-si-extra";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface HazardEditFormProps {
 	room: roomDetailsType;
@@ -207,13 +208,11 @@ export const HazardEditForm = ({
 	};
 
 	const handleOpen = async (res: any) => {
-		if ( res.data?.addHazardToRoom?.errors ) {
-			const notif: notificationType = {
-				text: res.data?.addHazardToRoom?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
-		} else if ( res.status === 200 ) {
+		const errors = getErrorMessage(res, 'addHazardToRoom');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
+		}
+		else if ( res.status === 200 ) {
 			if ( onChangeAction ) {
 				onChangeAction(selectedHazardCategory);
 			}

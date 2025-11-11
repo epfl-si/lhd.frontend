@@ -14,6 +14,7 @@ import {useHistory} from "react-router-dom";
 import {HazardFormChildList} from "../components/HazardsForm/hazardFormChildList";
 import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
 import {LHDv3FormBuilder} from "../components/formio/LHDv3Forms";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 export default function HazardFormDetails() {
 	const history = useHistory();
@@ -110,12 +111,9 @@ export default function HazardFormDetails() {
 	}
 
 	const handleOpen = async (res: any) => {
-		if ( res.data?.updateForm?.errors ) {
-			const notif: notificationType = {
-				text: res.data?.updateForm?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'updateForm');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if ( res.status === 200 ) {
 			if (urlParams.get('cat') == 'NewCategory') {
 				history.push(`/formdetails?cat=${category}`);

@@ -10,6 +10,7 @@ import {useState} from "react";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {saveNewUnitsFromAPI} from "../../utils/graphql/PostingTools";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewUnitDialogProps {
 	openDialog: boolean;
@@ -73,12 +74,9 @@ export const AddNewUnitDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		if ( res.data?.unitsFromAPI?.errors ) {
-			const notif: notificationType = {
-				text: res.data?.unitsFromAPI?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'unitsFromAPI');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['save-new-unit-error']);
 			save(searchValForNewUnit);

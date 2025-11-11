@@ -10,6 +10,7 @@ import Notifications from "../Table/Notifications";
 import {MenuItem, Select, TextField} from "@material-ui/core";
 import {saveNewChemical, updateChemical} from "../../utils/graphql/PostingTools";
 import {SelectChangeEvent} from "@mui/material";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewChemicalDialogProps {
 	openDialog: boolean;
@@ -72,13 +73,9 @@ export const AddNewChemicalDialog = ({
 	}
 
 	const handleOpen = (res: any, saveNew: boolean) => {
-		if (saveNew ? res.data?.addChemical?.errors : res.data?.updateChemical?.errors ) {
-			const message = saveNew ? res.data?.addChemical?.errors[0].message : res.data?.updateChemical?.errors[0].message;
-			const notif: notificationType = {
-				text: message.indexOf('Unique constraint') > -1 ? t('chemical.errorUnique') : message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, saveNew ? 'addChemical' : 'updateChemical');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else {
 			setNotificationType(notificationsVariants['save-new-chemical-success']);
 			save(cas);

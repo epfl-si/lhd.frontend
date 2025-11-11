@@ -20,6 +20,7 @@ import {fetchPeopleFromFullText, fetchRooms, fetchunitsFromFullText} from "../..
 import {MultipleSelection} from "../global/MultipleSelection";
 import {SubUnits} from "../Units/SubUnitsList";
 import {Source} from "./SourceList";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewRadioprotectionDialogProps {
 	openDialog: boolean;
@@ -129,12 +130,9 @@ export const AddNewRadioprotectionDialog = ({
 	}
 
 	const handleOpen = (res: any, saveNew: boolean) => {
-		if (saveNew ? res.data?.addRadioprotection?.errors : res.data?.updateRadioprotection?.errors ) {
-			const notif: notificationType = {
-				text: saveNew ? res.data?.addRadioprotection?.errors[0].message : res.data?.updateRadioprotection?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, saveNew ? 'addRadioprotection' : 'updateRadioprotection');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else {
 			setNotificationType(notificationsVariants['save-new-radioprotection-success']);
 			save(name);

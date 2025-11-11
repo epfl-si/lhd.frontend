@@ -18,6 +18,7 @@ import {UnitTabTitle} from "../components/Units/UnitTabTitle";
 import {BackButton} from "../components/global/BackButton";
 import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 import {AuditReportPanel} from "../components/Units/AuditReportPanel";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -115,15 +116,9 @@ export default function UnitDetails() {
 	}
 
 	const handleOpen = (res: any) => {
-		if (res.data?.updateUnit?.errors || res.data?.deleteUnit?.errors) {
-			const n = notificationsVariants['unit-update-error'];
-			const notif: notificationType = {
-				text: n.text.concat(' \n').concat(res.data?.updateUnit?.errors ?
-					res.data?.updateUnit?.errors[0].message :
-					res.data?.deleteUnit?.errors[0].message),
-				type: n.type
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'updateUnit');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['unit-update-success']);
 		} else {

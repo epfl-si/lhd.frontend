@@ -10,6 +10,7 @@ import {notificationType, roomDetailsType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {saveNewRoomsFromAPI, saveNewUnitsFromAPI} from "../../utils/graphql/PostingTools";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewRoomDialogProps {
 	openDialog: boolean;
@@ -73,13 +74,11 @@ export const AddNewRoomDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		if ( res.data?.RoomsFromAPI?.errors ) {
-			const notif: notificationType = {
-				text: res.data?.RoomsFromAPI?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
-		} else if (res.status === 200) {
+		const errors = getErrorMessage(res, 'RoomsFromAPI');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
+		}
+		else if (res.status === 200) {
 			setNotificationType(notificationsVariants['room-update-success']);
 			save(searchValForNewRoom);
 		} else {

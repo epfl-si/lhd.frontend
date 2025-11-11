@@ -8,6 +8,7 @@ import {authorizationType, notificationType} from "../../utils/ressources/types"
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {deleteAuthorization} from "../../utils/graphql/PostingTools";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface DeleteRadioprotectionDialogProps {
 	auth?: authorizationType;
@@ -47,13 +48,9 @@ export const DeleteRadioprotectionDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		if (res.data?.deleteAuthorization?.errors) {
-			const n = notificationsVariants['update_error'];
-			const notif: notificationType = {
-				text: n.text.concat(' \n').concat(res.data?.deleteAuthorization?.errors[0].message),
-				type: n.type
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'deleteAuthorization');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['update_success']);
 		} else {

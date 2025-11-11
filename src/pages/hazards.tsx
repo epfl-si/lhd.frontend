@@ -17,6 +17,7 @@ import {AlertDialog} from "../components/global/AlertDialog";
 import {deleteHazardChild} from "../utils/graphql/PostingTools";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -131,12 +132,9 @@ export const HazardsControl = ({
 	};
 
 	const handleOpen = (res: any) => {
-		if (res.data?.deleteHazardChild?.errors || res.data?.deleteHazardChild?.errors) {
-			const notif: notificationType = {
-				text: res.data?.deleteHazardChild?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'deleteHazardChild');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['update_success']);
 		} else {
