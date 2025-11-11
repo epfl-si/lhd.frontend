@@ -768,11 +768,6 @@ export const fetchConnectedUser = async (
 							canListAuthorizations
 							canEditAuthorizations
 							canListPersons
-							canCallAPIToGetChemicals
-							canCallAPIToPostChemicals
-							canCallAPIToPostAuthorization
-							canCallAPIToRenewAuthorization
-							canCallAPIToCheckAuthorization
 						}
 					}`;
 

@@ -42,12 +42,7 @@ function App() {
 		canEditChemicals: false,
 		canListAuthorizations: false,
 		canEditAuthorizations: false,
-		canListPersons: false,
-		canCallAPIToGetChemicals: false,
-		canCallAPIToPostChemicals: false,
-		canCallAPIToPostAuthorization: false,
-		canCallAPIToRenewAuthorization: false,
-		canCallAPIToCheckAuthorization: false
+		canListPersons: false
 	});
 
 	useEffect(() => {
