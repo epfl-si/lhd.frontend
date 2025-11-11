@@ -8,6 +8,7 @@ import {lhdUnitsType, notificationType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {deleteUnit} from "../../utils/graphql/PostingTools";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface DeleteUnitDialogProps {
 	unit?: lhdUnitsType;
@@ -47,13 +48,9 @@ export const DeleteUnitDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		if (res.data?.deleteUnit?.errors) {
-			const n = notificationsVariants['unit-update-error'];
-			const notif: notificationType = {
-				text: n.text.concat(' \n').concat(res.data?.deleteUnit?.errors[0].message),
-				type: n.type
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'deleteUnit');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['unit-update-success']);
 		} else {

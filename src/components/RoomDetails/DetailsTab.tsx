@@ -17,6 +17,7 @@ import {DeleteRoomDialog} from "./DeleteRoomDialog";
 import {Redirect} from "react-router-dom";
 import {AuthorizationPanel} from "./AuthorizationPanel";
 import {Button} from "epfl-elements-react-si-extra";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -90,12 +91,9 @@ export const DetailsTab = ({
   }
 
   const handleOpen = (res: any) => {
-    if ( res.data?.updateRoom?.errors ) {
-      const notif: notificationType = {
-        text: res.data?.updateRoom?.errors[0].message,
-        type: 'error'
-      };
-      setNotificationType(notif);
+    const errors = getErrorMessage(res, 'updateRoom');
+    if (errors.errorCount > 0) {
+      setNotificationType(errors.notif);
     } else if (res.status === 200) {
       onSaveRoom();
       setSavedUnits(selectedUnits.filter(u => u.status !== 'Deleted'));

@@ -14,6 +14,7 @@ import {createNewHazardFormChild, updateHazardFormChild} from "../utils/graphql/
 import {BackButton} from "../components/global/BackButton";
 import {compareVersions, findAllKeysForSubmission} from "../utils/ressources/jsonUtils";
 import {LHDv3FormBuilder} from "../components/formio/LHDv3Forms";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 export default function HazardFormChildDetails() {
 	const history = useHistory();
@@ -114,12 +115,9 @@ export default function HazardFormChildDetails() {
 	}
 
 	const handleOpen = async (res: any) => {
-		if ( res.data?.createNewHazardFormChild?.errors ) {
-			const notif: notificationType = {
-				text: res.data?.createNewHazardFormChild?.errors[0].message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'createNewHazardFormChild');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if ( res.status === 200 ) {
 			if ( urlParams.get('cat') == 'NewHazardFormChild' ) {
 				history.push(`/hazardFormChildDetails?name=${name}`);

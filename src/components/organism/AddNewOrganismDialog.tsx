@@ -11,6 +11,7 @@ import {saveNewOrganism, updateOrganism} from "../../utils/graphql/PostingTools"
 import {TextField} from "@material-ui/core";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
 import {Numeric} from "epfl-elements-react-si-extra";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewOrganismDialogProps {
 	openDialog: boolean;
@@ -88,13 +89,9 @@ export const AddNewOrganismDialog = ({
 	}
 
 	const handleOpen = (res: any, saveNew: boolean) => {
-		if (saveNew ? res.data?.addOrganism?.errors : res.data?.updateOrganism?.errors ) {
-			const message = saveNew ? res.data?.addOrganism?.errors[0].message : res.data?.updateOrganism?.errors[0].message;
-			const notif: notificationType = {
-				text: message.indexOf('Unique constraint') > -1 ? t('organism.errorUnique') : message,
-				type: 'error'
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, saveNew ? 'addOrganism' : 'updateOrganism');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else {
 			setNotificationType(notificationsVariants['save-new-organism-success']);
 			save(textInput);

@@ -148,7 +148,8 @@ i18next.use(initReactI18next).init({
 					comment: 'Comment',
 					export: 'Export',
 					from: 'From',
-					to: 'To'
+					to: 'To',
+					unicErrorMessage: 'An element with this name appears to already exist'
 				},
 				datagrid: {
 					columns: 'Columns',
@@ -409,7 +410,8 @@ i18next.use(initReactI18next).init({
 					comment: 'Commentaire',
 					export: 'Exporter',
 					from: 'Du',
-					to: 'Au'
+					to: 'Au',
+					unicErrorMessage: 'Un élément portant ce nom semble déjà exister'
 				},
 				datagrid: {
 					columns: 'Colonnes',

@@ -8,6 +8,7 @@ import {notificationType, roomDetailsType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import {deleteRoom} from "../../utils/graphql/PostingTools";
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface DeleteRoomDialogProps {
 	room?: roomDetailsType;
@@ -47,13 +48,9 @@ export const DeleteRoomDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		if (res.data?.deleteRoom?.errors) {
-			const n = notificationsVariants['room-update-error'];
-			const notif: notificationType = {
-				text: n.text.concat(' \n').concat(res.data?.deleteRoom?.errors[0].message),
-				type: n.type
-			};
-			setNotificationType(notif);
+		const errors = getErrorMessage(res, 'deleteRoom');
+		if (errors.errorCount > 0) {
+			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
 			setNotificationType(notificationsVariants['room-update-success']);
 		} else {
