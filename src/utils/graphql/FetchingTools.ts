@@ -8,7 +8,7 @@ import {
 	roomType
 } from '../ressources/types';
 import {formatDataToColumns} from './ParsingTools';
-import {makeQuery} from "./Utils";
+import {doGraphQL} from "./Utils";
 
 type fetchResultsType = {
 	status?: number;
@@ -200,7 +200,7 @@ export const fetchRoomDetails = async (
 				},
 			}`;
 
-	const result = await makeQuery(query, variables, address, authToken);
+	const result = await doGraphQL(query, variables, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.rooms,
@@ -232,7 +232,7 @@ export const fetchHazardsInRoom = async (
 				},
 			}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.rooms,
@@ -278,7 +278,7 @@ export const fetchUnitDetails = async (
 						},
 					}`;
 
-	const result = await makeQuery(query, variables, address, authToken);
+	const result = await doGraphQL(query, variables, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.units,
@@ -295,7 +295,7 @@ export const fetchRoomTypes = async (
 						}
 					}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.roomKinds,
@@ -328,7 +328,7 @@ export const fetchUnits = async (
 						}
 					}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.units,
@@ -397,7 +397,7 @@ export const fetchRooms = async (
 				},
 			}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.roomsWithPagination,
@@ -470,7 +470,7 @@ export const fetchRoomsWithHazards = async (
 				},
 			}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.roomsWithPagination,
@@ -487,7 +487,7 @@ export const fetchRoomsForDropDownComponent = async (
 				}
 			}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.rooms,
@@ -520,7 +520,7 @@ export const fetchOtherRoomsForStaticMagneticField = async (
 				}
 			}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.rooms,
@@ -559,7 +559,7 @@ export const fetchunitsFromFullTextAndPagination = async (
 						}
 					}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.unitsFromFullTextAndPagination,
@@ -593,7 +593,7 @@ export const fetchunitsFromFullText = async (
 						}
 					}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.unitsFromFullText,
@@ -611,7 +611,7 @@ export const fetchSlugs = async (
 							}
 						}`;
 
-	const result = await makeQuery(query, variables, address, authToken);
+	const result = await doGraphQL(query, variables, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.dispensations,
@@ -632,7 +632,7 @@ export const fetchDispFormDetails = async (
 								sciper
 							}
 						}`;
-	const result = await makeQuery(query, variables, address, authToken);
+	const result = await doGraphQL(query, variables, address, authToken);
 	return result;
 };
 
@@ -661,7 +661,7 @@ export const fetchSingleDispensation = async (
 								},
 							}`;
 
-	const result = await makeQuery(query, variables, address, authToken);
+	const result = await doGraphQL(query, variables, address, authToken);
 	const version = result.data?.dispensations[0]?.versions;
 
 	return {
@@ -682,7 +682,7 @@ export const fetchPeopleFromFullText = async (
         }
       }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.personFullText
@@ -710,7 +710,7 @@ export const fetchHazardForms = async (
 				}
       }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.hazardForms
@@ -737,7 +737,7 @@ export const fetchHazardFormDetails = async (
 				}
       }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.hazardForms
@@ -776,7 +776,7 @@ export const fetchConnectedUser = async (
 						}
 					}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.connectedUserInfo
@@ -800,7 +800,7 @@ export const fetchUnitsFromAPI = async (
 		}
 	}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.unitsFromAPI
@@ -825,7 +825,7 @@ export const fetchRoomsFromAPI = async (
 		}
 	}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.roomsFromAPI
@@ -844,7 +844,7 @@ export const fetchOrganism = async (
   }
 }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.bioOrgs
@@ -864,7 +864,7 @@ export const fetchReportFiles = async (
   }
 }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.unitReportFiles
@@ -882,7 +882,7 @@ export const fetchDoorPlug = async (
   }
 }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data
@@ -908,7 +908,7 @@ export const fetchHazardFormChild = async (
 				}
       }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.hazardFormChildren
@@ -936,7 +936,7 @@ export const fetchOrganismsFromFullText = async (
 						}
 					}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.organismsFromFullText,
@@ -953,7 +953,7 @@ export const fetchHazardCategories = async (
               }
             }`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.hazardCategories,
@@ -985,7 +985,7 @@ export const fetchHazards = async (
 				},
 			}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.hazardsWithPagination,
@@ -1015,7 +1015,7 @@ export const fetchChemicals = async (
 	}`;
 
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.chemicalsWithPagination
@@ -1060,7 +1060,7 @@ export const fetchChemicalAuthorizations = async (
 		}
 	}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.authorizationsWithPagination
@@ -1105,7 +1105,7 @@ export const fetchRadioprotectionAuthorizations = async (
 		}
 	}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.authorizationsWithPagination
@@ -1146,7 +1146,7 @@ export const fetchChemicalAuthorizationsByRoom = async (
 		}
 	}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.authorizationsByRoom
@@ -1185,7 +1185,7 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 		}
 	}`;
 
-	const result = await makeQuery(query, {}, address, authToken);
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.authorizationsByRoom
