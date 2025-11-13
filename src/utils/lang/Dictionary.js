@@ -149,7 +149,8 @@ i18next.use(initReactI18next).init({
 					export: 'Export',
 					from: 'From',
 					to: 'To',
-					unicErrorMessage: 'An element with this name appears to already exist'
+					unicErrorMessage: 'An element with this name appears to already exist',
+					userError: 'User not fetched'
 				},
 				datagrid: {
 					columns: 'Columns',
@@ -411,7 +412,8 @@ i18next.use(initReactI18next).init({
 					export: 'Exporter',
 					from: 'Du',
 					to: 'Au',
-					unicErrorMessage: 'Un élément portant ce nom semble déjà exister'
+					unicErrorMessage: 'Un élément portant ce nom semble déjà exister',
+					userError: 'User non récupéré'
 				},
 				datagrid: {
 					columns: 'Colonnes',

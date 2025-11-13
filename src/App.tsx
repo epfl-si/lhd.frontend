@@ -20,12 +20,19 @@ import {ChemicalsControl} from "./pages/chemicals";
 import {ChemicalsAuthorizationControl} from "./pages/chemicalAuthorizations";
 import {RadioprotectionsAuthorizationControl} from "./pages/radioprotectionAuthorizations";
 import {Base} from "./components/global/Base";
+import {notificationType} from "./utils/ressources/types";
+import Notifications from "./components/Table/Notifications";
 
 function App() {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [connectedUser, setConnectedUser] = useState<object>({
 		groups: [],
 		userName: '',
@@ -59,7 +66,17 @@ function App() {
 		if (results.status === 200 && results.data) {
 			console.log('ConnectedUser',results.data);
 			setConnectedUser(results.data);
+		} else {
+			setNotificationType({
+				text: t('generic.userError'),
+				type: 'error'
+			});
+			setOpenNotification(true);
 		}
+	};
+
+	const handleClose = () => {
+		setOpenNotification(false);
 	};
 
 	const handleCurrentPage = (page: string) => {
@@ -86,7 +103,7 @@ function App() {
 		);
 	}
 	return (
-		<BrowserRouter>
+		<><BrowserRouter>
 			<Base>
 				<Base.AsideMenu>
 					<ul>
@@ -235,6 +252,11 @@ function App() {
 				</div>
 			</Base>
 		</BrowserRouter>
+		<Notifications
+			open={openNotification}
+			notification={notificationType}
+			close={handleClose}
+		/></>
 	);
 }
 
