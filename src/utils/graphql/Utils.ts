@@ -33,36 +33,25 @@ export async function doGraphQL(
 	const graphQLResponse = await results.json();
 
 	return {
-		status: graphQLResponse.errors && graphQLResponse.errors.length > 0 ? 500 : results.status,
+		status: results.status,
 		data: graphQLResponse.data,
 		errors: graphQLResponse.errors
 	};
 }
 
 export function getErrorMessage (response: any, method: string) {
-	const errorList: string[] = response.errors ? response.errors.map((err: { message: string; }) => err.message) : [];
+	const errorList: string[] = response.errors ? response.errors.map((err) => typeof err === 'string' ? err : err.message) : [];
 	const methodErrors = response.data && response.data[method] && response.data[method].errors ?
 		response.data[method].errors.map((err: { message: string; }) => err.message) : [];
 	errorList.push(...methodErrors);
-
+	if(typeof response.data === 'string' && response.data.indexOf("errors") > -1) {
+		errorList.push(...JSON.parse(response.data).errors);
+	}
 	const errorMessage = errorList.join('\n');
-
-	const errorsMap = [
-		{
-			key: "Unique constraint failed",
-			message: 'An element with this name appears to already exist'
-		},
-		{
-			key: "Foreign key constraint failed",
-			message: 'Relationship not updated'
-		},
-	]
-
-	const parsedMessage = errorsMap.find(err => errorMessage.indexOf(err.key) > -1);
 
 	return {
 		notif: {
-			text: parsedMessage ? parsedMessage.message : errorMessage,
+			text: errorMessage,
 			type: 'error'
 		},
 		errorCount: errorList.length
