@@ -11,7 +11,7 @@
 const _env_development = {
   REACT_APP_AUTH_SERVER_URL: "http://localhost:8080/realms/LHD",
   REACT_APP_HOMEPAGE_URL: "http://localhost:3000/",
-  REACT_APP_GRAPHQL_ENDPOINT_URL: "//localhost:3001",
+  REACT_APP_GRAPHQL_ENDPOINT_URL: "//localhost:3001/graphql",
   REACT_APP_ENDPOINT_URL: "//localhost:3001",
   REACT_APP_OPENID_SCOPE: "openid",
   REACT_CLIENT_ID: "LHDv3",
