@@ -8,8 +8,8 @@ import {authorizationType, columnType, notificationType} from "../utils/ressourc
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import "../../css/styles.scss";
-import {notificationsVariants} from "../utils/ressources/variants";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface ChemicalsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -219,8 +219,8 @@ export const ChemicalsAuthorizationControl = ({
 			setTableData(results.data.authorizations);
 			setTotalCount(results.data.totalCount);
 		} else {
-			console.error('Bad GraphQL results', results);
-			setNotificationType(notificationsVariants['bad_graphql_query']);
+			const errors = getErrorMessage(results, 'authorizationsWithPagination');
+			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
 		setLoading(false);

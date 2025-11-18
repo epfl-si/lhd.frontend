@@ -105,7 +105,9 @@ export const HazardsControl = ({
 		if ( categories.status && categories.status === 200 && categories.data ) {
 			setCategoryList(categories.data);
 		} else {
-			console.error('Bad GraphQL results', categories);
+			const errors = getErrorMessage(categories, 'hazardCategories');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
 		}
 	}
 
@@ -125,7 +127,9 @@ export const HazardsControl = ({
 				setTableData(parseAndFlatResult(results.data.hazards));
 				setTotalCount(results.data.totalCount);
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'hazardsWithPagination');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 			setLoading(false);
 		}
@@ -311,7 +315,9 @@ export const HazardsControl = ({
 				}
 				exportToExcel(filteredData, getHazardExportFileName(search));
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'hazardsWithPagination');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 			setLoading(false);
 		}

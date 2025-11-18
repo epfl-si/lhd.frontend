@@ -64,7 +64,9 @@ export default function HazardFormDetails() {
 			setOriginalForm(results.data[0].form);
 			setCategory(results.data[0].hazard_category.hazard_category_name);
 		} else {
-			console.error('Bad GraphQL results', results);
+			const errors = getErrorMessage(results, 'hazardForms');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
 		}
 	}
 

@@ -56,23 +56,21 @@ export default function UnitDetails() {
 			{}
 		);
 
-		if (results.status === 200) {
-			if (results.data) {
-				if (typeof results.data !== 'string') {
-					setData(results.data);
-					if (results.data[0]) {
-						setSavedProfs(results.data[0]?.professors);
-						setSavedCosecs(results.data[0]?.cosecs);
-						setSavedSubUnits(results.data[0].subUnits);
-						setSelectedCosecs(results.data[0]?.cosecs);
-						setSelectedProfs(results.data[0]?.professors);
-						setSelectedSubUnits(results.data[0].subUnits);
-						setInputValueForEdit(results.data[0].name.substring(results.data[0].name.indexOf('(') + 1, results.data[0].name.indexOf(')')));
-					}
-				}
-			} else {
-				console.error('Bad GraphQL results', results);
+		if (results.status === 200 && results.data && typeof results.data !== 'string') {
+			setData(results.data);
+			if (results.data[0]) {
+				setSavedProfs(results.data[0]?.professors);
+				setSavedCosecs(results.data[0]?.cosecs);
+				setSavedSubUnits(results.data[0].subUnits);
+				setSelectedCosecs(results.data[0]?.cosecs);
+				setSelectedProfs(results.data[0]?.professors);
+				setSelectedSubUnits(results.data[0].subUnits);
+				setInputValueForEdit(results.data[0].name.substring(results.data[0].name.indexOf('(') + 1, results.data[0].name.indexOf(')')));
 			}
+		} else {
+			const errors = getErrorMessage(results, 'units');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
 		}
 	}
 
@@ -145,7 +143,9 @@ export default function UnitDetails() {
 			if (results.data) {
 				return results.data;
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'personFullText');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		}
 		return [];

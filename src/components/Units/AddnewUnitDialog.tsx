@@ -44,7 +44,9 @@ export const AddNewUnitDialog = ({
 			if ( results.status === 200 && results.data ) {
 				return results.data;
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'unitsFromAPI');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		}
 		return [];

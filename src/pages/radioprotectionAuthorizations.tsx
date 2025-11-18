@@ -8,13 +8,13 @@ import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
 import "../../css/styles.scss";
-import {notificationsVariants} from "../utils/ressources/variants";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {fetchRadioprotectionAuthorizations} from "../utils/graphql/FetchingTools";
 import Notifications from "../components/Table/Notifications";
 import {AddNewRadioprotectionDialog} from "../components/radioprotection/AddNewRadioprotectionDialog";
 import {Button} from "epfl-elements-react-si-extra";
 import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteRadioprotectionDialog";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -251,8 +251,8 @@ export const RadioprotectionsAuthorizationControl = ({
 			setTableData(results.data.authorizations);
 			setTotalCount(results.data.totalCount);
 		} else {
-			console.error('Bad GraphQL results', results);
-			setNotificationType(notificationsVariants['bad_graphql_query']);
+			const errors = getErrorMessage(results, 'authorizationsWithPagination');
+			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
 		setLoading(false);

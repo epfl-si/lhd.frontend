@@ -16,6 +16,7 @@ import {useHistory, useLocation} from "react-router-dom";
 import {convertToTable, readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
 import {exportToExcel, getHazardExportFileName} from "../utils/ressources/file";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -288,9 +289,8 @@ export const RoomControl = ({
 				setTableData(roomsList);
 				setTotalCount(results.data.totalCount);
 			} else {
-				console.error('Bad GraphQL results', results);
-
-				setNotificationType(notificationsVariants['bad_graphql_query']);
+				const errors = getErrorMessage(results, 'roomsWithPagination');
+				setNotificationType(errors.notif);
 				setOpenNotification(true);
 			}
 			setLoading(false);
@@ -389,9 +389,8 @@ export const RoomControl = ({
 					setOpenNotification(true);
 				}
 			} else {
-				console.error('Bad GraphQL results', results);
-
-				setNotificationType(notificationsVariants['bad_graphql_query']);
+				const errors = getErrorMessage(results, 'roomsWithPagination');
+				setNotificationType(errors.notif);
 				setOpenNotification(true);
 			}
 			setLoading(false);

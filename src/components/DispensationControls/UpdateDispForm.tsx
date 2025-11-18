@@ -1,5 +1,5 @@
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import Textarea from '@mui/joy/Textarea';
 import {
 	Box,
@@ -16,27 +16,18 @@ import {
 	Select,
 	TextField,
 } from '@material-ui/core';
-import { Autocomplete, Stack } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
-import { State, useOpenIDConnectContext } from '@epfl-si/react-appauth';
-import {
-	deleteDispensation,
-	updateDispensation,
-} from '../../utils/graphql/PostingTools';
-import {
-	dispensationRequestType,
-	notificationType,
-} from '../../utils/ressources/types';
-import { env } from '../../utils/env';
-import { useEffect, useState } from 'react';
+import {Autocomplete, Stack} from '@mui/material';
+import {Controller, useForm} from 'react-hook-form';
+import {State, useOpenIDConnectContext} from '@epfl-si/react-appauth';
+import {deleteDispensation, updateDispensation,} from '../../utils/graphql/PostingTools';
+import {dispensationRequestType, notificationType,} from '../../utils/ressources/types';
+import {env} from '../../utils/env';
+import {useEffect, useState} from 'react';
 import Notifications from '../Table/Notifications';
-import { notificationsVariants } from '../../utils/ressources/variants';
-import {
-	fetchDispFormDetails,
-	fetchSingleDispensation,
-	fetchSlugs,
-} from '../../utils/graphql/FetchingTools';
-import dayjs, { Dayjs } from 'dayjs';
+import {notificationsVariants} from '../../utils/ressources/variants';
+import {fetchDispFormDetails, fetchSingleDispensation, fetchSlugs,} from '../../utils/graphql/FetchingTools';
+import dayjs from 'dayjs';
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 export default function UpdateDispForm() {
 	const [roomData, setRoomData] = useState<any>([]);
@@ -67,36 +58,33 @@ export default function UpdateDispForm() {
 				oidc.accessToken,
 				{}
 			);
-			if (results.status === 200) {
-				if (results.data) {
-					if (typeof results.data !== 'string') {
-						setData(
-							results.data.map((d: any) => ({
-								label: d.slug,
-								value: d.slug,
-							}))
-						);
-						setHolderData(
-							resultsDetails.data.people.map((d: any) => ({
-								label: d.name ? d.name : '',
-								value: `${d.sciper}`,
-							}))
-						);
-						setRoomData(
-							resultsDetails.data.rooms.map((d: any) => ({
-								label: d.name ? d.name : '',
-								value: d.name,
-							}))
-						);
-						if (urlParams.get('slug')) {
-							setSlug(urlParams.get('slug') as string);
-						}
-					}
-					console.error('Bad GraphQL results', results);
-				} else {
+			if (results.status === 200 && results.data && typeof results.data !== 'string') {
+				setData(
+					results.data.map((d: any) => ({
+						label: d.slug,
+						value: d.slug,
+					}))
+				);
+				setHolderData(
+					resultsDetails.data.people.map((d: any) => ({
+						label: d.name ? d.name : '',
+						value: `${d.sciper}`,
+					}))
+				);
+				setRoomData(
+					resultsDetails.data.rooms.map((d: any) => ({
+						label: d.name ? d.name : '',
+						value: d.name,
+					}))
+				);
+				if (urlParams.get('slug')) {
+					setSlug(urlParams.get('slug') as string);
 				}
+			}else {
+				const errors = getErrorMessage(results, 'rooms');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
-			console.log(results);
 		};
 		loadFetch();
 	}, [oidc.accessToken]);

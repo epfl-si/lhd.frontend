@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import Notifications from '../Table/Notifications';
 import { notificationsVariants } from '../../utils/ressources/variants';
 import { fetchDispFormDetails, fetchRooms } from '../../utils/graphql/FetchingTools';
+import {getErrorMessage} from "../../utils/graphql/Utils";
 
 export default function NewDispForm() {
 	const [roomData, setRoomData] = useState<any>([]);
@@ -48,27 +49,24 @@ export default function NewDispForm() {
 				oidc.accessToken,
 				{}
 			);
-			if (results.status === 200) {
-				if (results.data) {
-					if (typeof results.data !== 'string') {
-						setHolderData(
-							results.data.people.map((d: any) => ({
-								label: d.name ? d.name : '',
-								value: d.sciper,
-							}))
-						);
-						setRoomData(
-							results.data.rooms.map((d: any) => ({
-								label: d.name ? d.name : '',
-								value: d.name,
-							}))
-						);
-					}
-					console.error('Bad GraphQL results', results);
-				} else {
-				}
+			if (results.status === 200 && results.data && typeof results.data !== 'string') {
+				setHolderData(
+					results.data.people.map((d: any) => ({
+						label: d.name ? d.name : '',
+						value: d.sciper,
+					}))
+				);
+				setRoomData(
+					results.data.rooms.map((d: any) => ({
+						label: d.name ? d.name : '',
+						value: d.name,
+					}))
+				);
+			} else {
+				const errors = getErrorMessage(results, 'rooms');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
-			console.log(results);
 		};
 		loadFetch();
 	}, [oidc.accessToken]);

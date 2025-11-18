@@ -15,6 +15,7 @@ import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {AddNewChemicalDialog} from "../components/chemical/AddNewChemicalDialog";
 import {deleteChemical} from "../utils/graphql/PostingTools";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface ChemicalsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -156,8 +157,8 @@ export const ChemicalsControl = ({
 			setTableData(results.data.chemicals);
 			setTotalCount(results.data.totalCount);
 		} else {
-			console.error('Bad GraphQL results', results);
-			setNotificationType(notificationsVariants['bad_graphql_query']);
+			const errors = getErrorMessage(results, 'chemicalsWithPagination');
+			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
 		setLoading(false);

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import "../../../css/styles.scss";
-import {authorizationType, columnType} from "../../utils/ressources/types";
+import {authorizationType, columnType, notificationType} from "../../utils/ressources/types";
 import {
 	fetchChemicalAuthorizationsByRoom,
 	fetchRadioprotectionAuthorizationsByRoom
@@ -11,6 +11,8 @@ import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography
 import {useTranslation} from "react-i18next";
 import {EntriesTableCategory} from "../Table/EntriesTableCategory";
 import {GridRenderCellParams} from "@mui/x-data-grid";
+import {getErrorMessage} from "../../utils/graphql/Utils";
+import Notifications from "../Table/Notifications";
 
 interface AuthorizationPanelProps {
 	room: string;
@@ -25,6 +27,11 @@ export const AuthorizationPanel = ({
 	const oidc = useOpenIDConnectContext();
 	const [authorizations, setAuthorizations] = React.useState<authorizationType[]>([]);
 	const [loading, setLoading] = useState(false);
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	const columnsLarge: columnType[] = [
 		{field: "authorization", headerName: t('authorization.authorization'), flex: 0.2,
@@ -105,10 +112,16 @@ export const AuthorizationPanel = ({
 		if (results.status === 200 && results.data){
 			setAuthorizations(results.data);
 		} else {
-			console.error('Bad GraphQL results', results);
+			const errors = getErrorMessage(results, 'authorizationsByRoom');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
 		}
 		setLoading(false);
 	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
 
 	return <div className="form-card-div">
 		<ExpansionPanel style={{width: '100%'}}>
@@ -125,5 +138,10 @@ export const AuthorizationPanel = ({
 				/>
 			</ExpansionPanelDetails>
 		</ExpansionPanel>
+		<Notifications
+			open={openNotification}
+			notification={notificationType}
+			close={handleClose}
+		/>
 	</div>
 };

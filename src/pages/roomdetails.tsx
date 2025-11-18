@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {fetchConnectedUser, fetchRoomDetails} from '../utils/graphql/FetchingTools';
 import {env} from '../utils/env.js';
 import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
-import {roomDetailsType} from '../utils/ressources/types';
+import {roomDetailsType, notificationType} from '../utils/ressources/types';
 import {Tabs} from 'epfl-elements-react-si-extra';
 import '../../css/styles.scss'
 import {useTranslation} from "react-i18next";
@@ -12,6 +12,8 @@ import {HazardTab} from "../components/RoomDetails/HazardTab";
 import {DetailsTab} from "../components/RoomDetails/DetailsTab";
 import {BackButton} from "../components/global/BackButton";
 import {useHistory} from "react-router-dom";
+import {getErrorMessage} from "../utils/graphql/Utils";
+import Notifications from "../components/Table/Notifications";
 
 export default function RoomDetails() {
 	const { t } = useTranslation();
@@ -20,6 +22,11 @@ export default function RoomDetails() {
 	const [data, setData] = useState<roomDetailsType | null>(null);
 	const [listSavedCategories, setListSavedCategories] = useState<string[]>([]);
 	const [user, setUser] = useState<any>();
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	useEffect(() => {
 		loadFetch();
@@ -48,9 +55,15 @@ export default function RoomDetails() {
 			const listCatFiltered = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
 			setListSavedCategories(listCatFiltered)
 		} else {
-			console.error('Bad GraphQL results', results);
+			const errors = getErrorMessage(results, 'rooms');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
 		}
 	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
 
 	return (
 		data ?
@@ -82,6 +95,11 @@ export default function RoomDetails() {
 					</Tabs.Tab.Content>
 				</Tabs.Tab>
 			</Tabs>
+			<Notifications
+				open={openNotification}
+				notification={notificationType}
+				close={handleClose}
+			/>
 		</Box>
 		: <b>This room has been deleted</b>
 	);

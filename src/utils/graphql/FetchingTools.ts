@@ -18,16 +18,19 @@ type fetchResultsType = {
 type fetchRoomResultsType = {
 	status?: number;
 	data?: roomDetailsType[] | string;
+	errors?: any;
 };
 
 type fetchRoomResultsTypeWithPagination = {
 	status?: number;
 	data?: roomsWithPaginationType;
+	errors?: any;
 };
 
 type fetchHazardsResultsTypeWithPagination = {
 	status?: number;
 	data?: hazardsWithPaginationType;
+	errors?: any;
 };
 
 type hazardsWithPaginationType = {
@@ -43,16 +46,19 @@ type roomsWithPaginationType = {
 type fetchKindRoomType = {
 	status?: number;
 	data?: kindType[] | string;
+	errors?: any;
 };
 
 type fetchUnitsType = {
 	status?: number;
 	data?: lhdUnitsType[] | string;
+	errors?: any;
 };
 
 type fetchUnitsTypeWithPagination = {
 	status?: number;
 	data?: unitsWithPaginationType;
+	errors?: any;
 };
 
 type fetchOrganismsTypeWithPagination = {
@@ -63,6 +69,7 @@ type fetchOrganismsTypeWithPagination = {
 type fetchReportFiles = {
 	status?: number;
 	data?: reportFile[];
+	errors?: any;
 };
 
 type unitsWithPaginationType = {
@@ -204,6 +211,7 @@ export const fetchRoomDetails = async (
 	return {
 		status: result.status,
 		data: result.data?.rooms,
+		errors: result.errors
 	};
 };
 
@@ -236,6 +244,7 @@ export const fetchHazardsInRoom = async (
 	return {
 		status: result.status,
 		data: result.data?.rooms,
+		errors: result.errors
 	};
 };
 
@@ -282,6 +291,7 @@ export const fetchUnitDetails = async (
 	return {
 		status: result.status,
 		data: result.data?.units,
+		errors: result.errors
 	};
 };
 
@@ -299,6 +309,7 @@ export const fetchRoomTypes = async (
 	return {
 		status: result.status,
 		data: result.data?.roomKinds,
+		errors: result.errors
 	};
 };
 
@@ -332,6 +343,7 @@ export const fetchUnits = async (
 	return {
 		status: result.status,
 		data: result.data?.units,
+		errors: result.errors
 	};
 };
 
@@ -401,6 +413,7 @@ export const fetchRooms = async (
 	return {
 		status: result.status,
 		data: result.data?.roomsWithPagination,
+		errors: result.errors
 	};
 };
 
@@ -474,6 +487,7 @@ export const fetchRoomsWithHazards = async (
 	return {
 		status: result.status,
 		data: result.data?.roomsWithPagination,
+		errors: result.errors
 	};
 };
 
@@ -491,6 +505,7 @@ export const fetchRoomsForDropDownComponent = async (
 	return {
 		status: result.status,
 		data: result.data?.rooms,
+		errors: result.errors
 	};
 };
 
@@ -524,6 +539,7 @@ export const fetchOtherRoomsForStaticMagneticField = async (
 	return {
 		status: result.status,
 		data: result.data?.rooms,
+		errors: result.errors
 	};
 };
 
@@ -563,6 +579,7 @@ export const fetchunitsFromFullTextAndPagination = async (
 	return {
 		status: result.status,
 		data: result.data?.unitsFromFullTextAndPagination,
+		errors: result.errors
 	};
 };
 
@@ -597,6 +614,7 @@ export const fetchunitsFromFullText = async (
 	return {
 		status: result.status,
 		data: result.data?.unitsFromFullText,
+		errors: result.errors
 	};
 };
 
@@ -615,6 +633,7 @@ export const fetchSlugs = async (
 	return {
 		status: result.status,
 		data: result.data?.dispensations,
+		errors: result.errors
 	};
 };
 
@@ -632,8 +651,7 @@ export const fetchDispFormDetails = async (
 								sciper
 							}
 						}`;
-	const result = await doGraphQL(query, variables, address, authToken);
-	return result;
+	return await doGraphQL(query, variables, address, authToken);
 };
 
 export const fetchSingleDispensation = async (
@@ -667,6 +685,7 @@ export const fetchSingleDispensation = async (
 	return {
 		status: result.status,
 		data: version[version.length-1],
+		errors: result.errors
 	};
 };
 
@@ -685,7 +704,8 @@ export const fetchPeopleFromFullText = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.personFullText
+		data: result.data?.personFullText,
+		errors: result.errors
 	};
 };
 
@@ -713,7 +733,8 @@ export const fetchHazardForms = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.hazardForms
+		data: result.data?.hazardForms,
+		errors: result.errors
 	};
 };
 
@@ -740,7 +761,8 @@ export const fetchHazardFormDetails = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.hazardForms
+		data: result.data?.hazardForms,
+		errors: result.errors
 	};
 };
 
@@ -774,7 +796,8 @@ export const fetchConnectedUser = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.connectedUserInfo
+		data: result.data?.connectedUserInfo,
+		errors: result.errors
 	};
 };
 
@@ -798,7 +821,8 @@ export const fetchUnitsFromAPI = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.unitsFromAPI
+		data: result.data?.unitsFromAPI,
+		errors: result.errors
 	};
 };
 
@@ -823,7 +847,8 @@ export const fetchRoomsFromAPI = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.roomsFromAPI
+		data: result.data?.roomsFromAPI,
+		errors: result.errors
 	};
 };
 
@@ -842,7 +867,8 @@ export const fetchOrganism = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.bioOrgs
+		data: result.data?.bioOrgs,
+		errors: result.errors
 	};
 };
 
@@ -862,7 +888,8 @@ export const fetchReportFiles = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.unitReportFiles
+		data: result.data?.unitReportFiles,
+		errors: result.errors
 	};
 };
 
@@ -880,7 +907,8 @@ export const fetchDoorPlug = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data
+		data: result.data,
+		errors: result.errors
 	};
 };
 
@@ -906,7 +934,8 @@ export const fetchHazardFormChild = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.hazardFormChildren
+		data: result.data?.hazardFormChildren,
+		errors: result.errors
 	};
 };
 
@@ -935,6 +964,7 @@ export const fetchOrganismsFromFullText = async (
 	return {
 		status: result.status,
 		data: result.data?.organismsFromFullText,
+		errors: result.errors
 	};
 };
 
@@ -952,6 +982,7 @@ export const fetchHazardCategories = async (
 	return {
 		status: result.status,
 		data: result.data?.hazardCategories,
+		errors: result.errors
 	};
 };
 
@@ -984,6 +1015,7 @@ export const fetchHazards = async (
 	return {
 		status: result.status,
 		data: result.data?.hazardsWithPagination,
+		errors: result.errors
 	};
 };
 
@@ -1013,7 +1045,8 @@ export const fetchChemicals = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.chemicalsWithPagination
+		data: result.data?.chemicalsWithPagination,
+		errors: result.errors
 	};
 };
 
@@ -1058,7 +1091,8 @@ export const fetchChemicalAuthorizations = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.authorizationsWithPagination
+		data: result.data?.authorizationsWithPagination,
+		errors: result.errors
 	};
 };
 
@@ -1104,7 +1138,8 @@ export const fetchRadioprotectionAuthorizations = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.authorizationsWithPagination
+		data: result.data?.authorizationsWithPagination,
+		errors: result.errors
 	};
 };
 
@@ -1145,7 +1180,8 @@ export const fetchChemicalAuthorizationsByRoom = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.authorizationsByRoom
+		data: result.data?.authorizationsByRoom,
+		errors: result.errors
 	};
 };
 
@@ -1184,6 +1220,7 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.authorizationsByRoom
+		data: result.data?.authorizationsByRoom,
+		errors: result.errors
 	};
 };
