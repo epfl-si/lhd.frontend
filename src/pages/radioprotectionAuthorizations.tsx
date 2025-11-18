@@ -155,7 +155,7 @@ export const RadioprotectionsAuthorizationControl = ({
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.authorization_rooms.map(item => {
 							return (
-								<span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+								item.isDeleted ? <span style={{color: "red"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 							)
 						}
 					)}
@@ -195,7 +195,7 @@ export const RadioprotectionsAuthorizationControl = ({
 			const dateExp = new Date(params.row.expiration_date);
 			const rooms = params.row.authorization_rooms.map(item => {
 					return (
-						<span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+						item.isDeleted ? <span style={{color: "red"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 					)
 				}
 			);

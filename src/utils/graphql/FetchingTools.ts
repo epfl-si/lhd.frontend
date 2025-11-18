@@ -1071,6 +1071,7 @@ export const fetchChemicalAuthorizations = async (
       }
       authorization_rooms {
         name
+        isDeleted
       }
       authorization_holders {
         surname
