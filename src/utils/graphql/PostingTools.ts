@@ -319,7 +319,6 @@ export const deleteHazardChild = async (
               }
             }`;
 
-	console.log(query)
 	return doGraphQL(query, {}, address, authToken);
 };
 
@@ -636,7 +635,6 @@ export const saveNewRadioprotection = async (
               }
             }`;
 
-	console.log(query)
 	return doGraphQL(query, {}, address, authToken);
 };
 

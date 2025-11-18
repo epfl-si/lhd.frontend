@@ -1,11 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {hazardFormType, roomDetailsType} from "../../utils/ressources/types";
+import {hazardFormType, notificationType, roomDetailsType} from "../../utils/ressources/types";
 import {fetchHazardForms, fetchOrganism, fetchRoomsForDropDownComponent} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardFormVBox} from "./HazardFormVBox";
 import {NewHazardChoise} from "./NewHazardChoise";
 import {Button} from "epfl-elements-react-si-extra";
+import {getErrorMessage} from "../../utils/graphql/Utils";
+import Notifications from "../Table/Notifications";
 
 interface HazardTabProps {
   room: roomDetailsType;
@@ -28,6 +30,11 @@ export const HazardTab = ({
   const roomList = useRef<string[]>([]);
   const organismList = useRef<object[]>([]);
   const [isNewHazardListVisible, setNewHazardListVisible] = useState(false);
+  const [notificationType, setNotificationType] = useState<notificationType>({
+    type: "info",
+    text: '',
+  });
+  const [openNotification, setOpenNotification] = useState<boolean>(false);
 
   useEffect(() => {
     if (user.canListHazards) {
@@ -65,10 +72,16 @@ export const HazardTab = ({
     if (results.status === 200 && results.data && typeof results.data !== 'string') {
       roomList.current = results.data.map(r => r.name).sort((a,b) => a ? a.localeCompare(b) : 0);
     } else {
-      console.error('Bad GraphQL results', results);
+      const errors = getErrorMessage(results, 'rooms');
+      setNotificationType(errors.notif);
+      setOpenNotification(true);
     }
     return [];
   }
+
+  const handleClose = () => {
+    setOpenNotification(false);
+  };
 
   const fetchOrganismList = async () => {
     const results = await fetchOrganism(
@@ -79,7 +92,9 @@ export const HazardTab = ({
       organismList.current = results.data;
       organismList.current.push({filePath: null, organism: "Other", risk_group: 1});
     } else {
-      console.error('Bad GraphQL results', results);
+      const errors = getErrorMessage(results, 'bioOrgs');
+      setNotificationType(errors.notif);
+      setOpenNotification(true);
     }
     return [];
   }
@@ -135,5 +150,10 @@ export const HazardTab = ({
                     lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
                     organismList={organismList.current}
                     roomList={roomList.current}/>
+    <Notifications
+      open={openNotification}
+      notification={notificationType}
+      close={handleClose}
+    />
   </div>
 };

@@ -9,7 +9,8 @@ import {
 	lhdUnitsType,
 	notificationType,
 	personType,
-	roomDetailsType, sourceType
+	roomDetailsType,
+	sourceType
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
@@ -18,7 +19,6 @@ import {Autocomplete, SelectChangeEvent} from "@mui/material";
 import {saveNewRadioprotection, updateRadioprotection} from '../../utils/graphql/PostingTools';
 import {fetchPeopleFromFullText, fetchRooms, fetchunitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
-import {SubUnits} from "../Units/SubUnitsList";
 import {Source} from "./SourceList";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 
@@ -88,7 +88,9 @@ export const AddNewRadioprotectionDialog = ({
 			if (results.data) {
 				setUnitList(results.data);
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'unitsFromFullText');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		}
 	};
@@ -171,7 +173,9 @@ export const AddNewRadioprotectionDialog = ({
 			if (results.data) {
 				return results.data.rooms;
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'roomsWithPagination');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		}
 		return [];
@@ -187,7 +191,9 @@ export const AddNewRadioprotectionDialog = ({
 			if (results.data) {
 				return results.data;
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'personFullText');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		}
 		return [];

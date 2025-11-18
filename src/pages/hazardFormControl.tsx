@@ -9,7 +9,7 @@ import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {Button} from "epfl-elements-react-si-extra";
 import {useHistory} from "react-router-dom";
 import Notifications from "../components/Table/Notifications";
-import {notificationsVariants} from "../utils/ressources/variants";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 
 interface HazardFormControlProps {
@@ -59,9 +59,8 @@ export const HazardFormControl = ({
 			console.log(resultsHazardCategory.data)
 			setTableData(resultsHazardCategory.data);
 		} else {
-			console.error('Bad GraphQL results', resultsHazardCategory);
-
-			setNotificationType(notificationsVariants['bad_graphql_query']);
+			const errors = getErrorMessage(resultsHazardCategory, 'hazardForms');
+			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
 		setLoading(false);

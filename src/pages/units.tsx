@@ -11,9 +11,9 @@ import {Button, DebounceInput} from "epfl-elements-react-si-extra";
 import {useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
 import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
-import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -260,9 +260,8 @@ export const UnitControl = ({
 			setTableData(results.data.units);
 			setTotalCount(results.data.totalCount);
 		} else {
-			console.error('Bad GraphQL results', results);
-
-			setNotificationType(notificationsVariants['bad_graphql_query']);
+			const errors = getErrorMessage(results, 'unitsFromFullTextAndPagination');
+			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
 		setLoading(false);

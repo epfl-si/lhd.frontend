@@ -32,6 +32,7 @@ export async function doGraphQL(
 
 	const graphQLResponse = await results.json();
 
+	console.log(graphQLResponse);
 	return {
 		status: results.status,
 		data: graphQLResponse.data,

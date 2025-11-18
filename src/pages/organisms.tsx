@@ -10,12 +10,12 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button, DebounceInput} from "epfl-elements-react-si-extra";
 import {Redirect, useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
-import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {handleClickFileLink} from "../utils/ressources/file";
 import {AddNewOrganismDialog} from "../components/organism/AddNewOrganismDialog";
 import {deleteOrganism} from "../utils/graphql/PostingTools";
 import {AlertDialog} from "../components/global/AlertDialog";
+import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface OrganismsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -188,9 +188,8 @@ export const OrganismsControl = ({
 			setTableData(results.data.bios);
 			setTotalCount(results.data.totalCount);
 		} else {
-			console.error('Bad GraphQL results', results);
-
-			setNotificationType(notificationsVariants['bad_graphql_query']);
+			const errors = getErrorMessage(results, 'organismsFromFullText');
+			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
 		setLoading(false);

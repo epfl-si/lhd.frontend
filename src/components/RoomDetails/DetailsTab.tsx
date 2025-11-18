@@ -122,7 +122,9 @@ export const DetailsTab = ({
       if (results.data) {
         return results.data;
       } else {
-        console.error('Bad GraphQL results', results);
+        const errors = getErrorMessage(results, 'unitsFromFullText');
+        setNotificationType(errors.notif);
+        setOpenNotification(true);
       }
     }
     return [];

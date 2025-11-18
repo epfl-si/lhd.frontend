@@ -9,7 +9,7 @@ import {MultipleSelection} from "../global/MultipleSelection";
 import {notificationType, roomDetailsType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {saveNewRoomsFromAPI, saveNewUnitsFromAPI} from "../../utils/graphql/PostingTools";
+import {saveNewRoomsFromAPI} from "../../utils/graphql/PostingTools";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewRoomDialogProps {
@@ -44,7 +44,9 @@ export const AddNewRoomDialog = ({
 			if ( results.status === 200 && results.data ) {
 				return results.data;
 			} else {
-				console.error('Bad GraphQL results', results);
+				const errors = getErrorMessage(results, 'roomsFromAPI');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		}
 		return [];

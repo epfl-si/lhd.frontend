@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {getHazardImage} from "./HazardProperties";
 import {useTranslation} from "react-i18next";
-import {hazardAdditionalInfoType, roomDetailsType} from "../../utils/ressources/types";
+import {hazardAdditionalInfoType, roomDetailsType, notificationType} from "../../utils/ressources/types";
 import {sprintf} from "sprintf-js";
 import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {Button, TextArea} from "epfl-elements-react-si-extra";
+import { getErrorMessage } from '../../utils/graphql/Utils';
+import Notifications from "../Table/Notifications";
 
 interface HazardTitleProps {
   hazardAdditionalInfo?: hazardAdditionalInfoType | undefined;
@@ -35,6 +37,11 @@ export const HazardTitle = ({
   const oidc = useOpenIDConnectContext();
   const { t } = useTranslation();
   const [otherRoom, setOtherRoom] = useState<roomDetailsType | null>(null);
+  const [notificationType, setNotificationType] = useState<notificationType>({
+    type: "info",
+    text: '',
+  });
+  const [openNotification, setOpenNotification] = useState<boolean>(false);
 
   useEffect(() => {
     if(selectedHazardCategory == 'StaticMagneticField' && room) {
@@ -52,9 +59,15 @@ export const HazardTitle = ({
       setOtherRoom(results.data[0])
       console.log(results.data[0])
     } else {
-      console.error('Bad GraphQL results', results);
+      const errors = getErrorMessage(results, 'rooms');
+      setNotificationType(errors.notif);
+      setOpenNotification(true);
     }
   }
+
+  const handleClose = () => {
+    setOpenNotification(false);
+  };
 
   return <div style={{marginTop: '10px'}}>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
@@ -114,5 +127,10 @@ export const HazardTitle = ({
          href={hazardAdditionalInfo.filePath}>
         {hazardAdditionalInfo.filePath.split('/').pop()}
       </a>}
+    <Notifications
+      open={openNotification}
+      notification={notificationType}
+      close={handleClose}
+    />
   </div>
 };
