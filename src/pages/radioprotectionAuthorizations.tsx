@@ -83,7 +83,7 @@ export const RadioprotectionsAuthorizationControl = ({
 					<div className="form-card-div">
 						{params.row.authorization_rooms.map(item => {
 								return (
-									<span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+									item.isDeleted ? <span style={{color: "red"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 								)
 							}
 						)}

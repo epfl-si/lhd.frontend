@@ -125,7 +125,7 @@ export const fetchRoomDetails = async (
 	variables: Object
 ): Promise<fetchRoomResultsType> => {
 	const query: string = `query SingleRoomFetch { 
-				rooms (where: { name: { equals: "${room}"} }) {
+				rooms (where: { name: { equals: "${room}"}, isDeleted: { equals: false } }) {
 				id
 					name
 					building
@@ -1085,6 +1085,7 @@ export const fetchRadioprotectionAuthorizations = async (
       }
       authorization_rooms {
         name
+        isDeleted
       }
       authorization_holders {
         surname
