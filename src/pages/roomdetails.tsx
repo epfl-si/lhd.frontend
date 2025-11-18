@@ -53,6 +53,7 @@ export default function RoomDetails() {
 	}
 
 	return (
+		data ?
 		<Box>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/roomcontrol")}} alwaysPresent={false}/>
 			<Typography gutterBottom>{t(`room_details.title`).concat(data?.name)}</Typography>
@@ -82,5 +83,6 @@ export default function RoomDetails() {
 				</Tabs.Tab>
 			</Tabs>
 		</Box>
+		: <b>This room has been deleted</b>
 	);
 }

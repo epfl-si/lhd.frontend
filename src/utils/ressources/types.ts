@@ -150,6 +150,7 @@ export type roomDetailsType = {
 	submissionList?: submissionForm[];
 	status?: 'New' | 'Deleted' | 'Default';
 	assignedTo?: string;
+	isDeleted?: boolean
 };
 
 export type hazardReferencesType = {

@@ -158,7 +158,7 @@ export const AddNewRadioprotectionDialog = ({
 	};
 
 	function getRoomTitle(room: roomDetailsType) {
-		return room.name;
+		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
 	}
 
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
