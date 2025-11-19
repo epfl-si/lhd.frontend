@@ -139,7 +139,6 @@ export const fetchRoomDetails = async (
 					sector
 					floor
 					vol
-					vent
 					adminuse
 					facultyuse
 					lab_type_is_different
@@ -363,7 +362,6 @@ export const fetchRooms = async (
 						sector
 						floor
 						vol
-						vent
 						site
 						kind {
 							name
@@ -433,7 +431,6 @@ export const fetchRoomsWithHazards = async (
 						sector
 						floor
 						vol
-						vent
 						site
 						kind {
 							name
