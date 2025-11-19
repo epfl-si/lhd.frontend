@@ -341,7 +341,6 @@ export const RoomControl = ({
 							sector: item.sector,
 							floor: item.floor,
 							vol: item.vol,
-							vent: item.vent,
 							site: item.site,
 							kind: item.kind,
 							unit: item.unit,
