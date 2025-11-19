@@ -57,76 +57,30 @@ export function EntriesTableCategory({
 
 	return (
 		<Box width="100%" height="500px">
-			{tableData !== null ? (
-				(
-					pageToOpen == 'room' ||
-					pageToOpen == 'unit' ||
-					pageToOpen == 'hazards' ||
-					pageToOpen == 'chemicals' ||
-					pageToOpen == 'organism' ||
-					pageToOpen == 'chemicalauthorizations' ||
-					pageToOpen == 'radioprotectionauthorization'
-				) ?
-					<StyledDataGrid
-						style={{fontSize:`${pageToOpen == 'room' ? 'x-small' : 'small'}`}}
-						loading={loading}
-						disableSelectionOnClick={true}
-						rows={tableData}
-						columns={columns}
-						localeText={{
-							toolbarColumns: t('datagrid.columns'),
-							toolbarFilters: t('datagrid.filters'),
-							toolbarDensity: t('datagrid.density'),
-							toolbarExport: t('datagrid.export'),
-							toolbarExportCSV: t('datagrid.exportCSV'),
-							toolbarExportPrint: t('datagrid.print')
-						}}
-						disableVirtualization
-						components={{
-							Toolbar: TableToolbar,
-						}}
-						onRowClick={e => {
-							switch ( pageToOpen ) {
-								case "room":
-									history.push(`/roomdetails?room=${encodeURIComponent(e.row['name'])}`);
-									break;
-							}
-						}}
-						getRowId={(row: any) =>  {
-							switch ( pageToOpen ) {
-								case "unit":
-									return row.name;
-								case "room":
-									return row.id;
-								case "chemicals":
-								case "organism":
-									return row.id;
-								case "chemicalauthorizations":
-								case "radioprotectionauthorization":
-									return row.authorization;
-								case "hazards":
-									return row.id_lab_has_hazards_child ?? row.id_lab_has_hazards;
-							}
-						}}
-						pagination
-						pageSize={pageSize}
-						rowsPerPageOptions={[pageSize]}
-						rowCount={totalCount}
-						paginationMode="server"
-						onPageChange={handlePageChange}
-						page={page}
-					/> :
+			{tableData !== null ?
 				<StyledDataGrid
-					style={{fontSize: 'small'}}
+					style={{fontSize:`${pageToOpen == 'room' ? 'x-small' : 'small'}`}}
 					loading={loading}
 					disableSelectionOnClick={true}
 					rows={tableData}
 					columns={columns}
+					localeText={{
+						toolbarColumns: t('datagrid.columns'),
+						toolbarFilters: t('datagrid.filters'),
+						toolbarDensity: t('datagrid.density'),
+						toolbarExport: t('datagrid.export'),
+						toolbarExportCSV: t('datagrid.exportCSV'),
+						toolbarExportPrint: t('datagrid.print')
+					}}
+					disableVirtualization
 					components={{
 						Toolbar: TableToolbar,
 					}}
 					onRowClick={e => {
 						switch ( pageToOpen ) {
+							case "room":
+								history.push(`/roomdetails?room=${encodeURIComponent(e.row['name'])}`);
+								break;
 							case "hazardForms":
 								history.push(`/formdetails?cat=${e.row['hazard_category']['hazard_category_name']}`);
 								break;
@@ -137,6 +91,18 @@ export function EntriesTableCategory({
 					}}
 					getRowId={(row: any) =>  {
 						switch ( pageToOpen ) {
+							case "unit":
+								return row.name;
+							case "room":
+								return row.id;
+							case "chemicals":
+							case "organism":
+								return row.id;
+							case "chemicalauthorizations":
+							case "radioprotectionauthorization":
+								return row.authorization;
+							case "hazards":
+								return row.id_lab_has_hazards_child ?? row.id_lab_has_hazards;
 							case "hazardForms":
 								return row.hazard_category.hazard_category_name;
 							case "hazardFormsChild":
@@ -145,9 +111,16 @@ export function EntriesTableCategory({
 								return row.authorization;
 						}
 					}}
+					pagination
+					pageSize={pageSize ?? tableData.length}
+					rowsPerPageOptions={[pageSize ?? tableData.length]}
+					rowCount={totalCount ?? tableData.length}
+					paginationMode="server"
+					onPageChange={handlePageChange}
+					page={page ?? 0}
 				/>
-			) : (
-				<p>This space unintentionnally left unblank</p>
+			: (
+				<p>This space unintentionally left unblank</p>
 			)}
 		</Box>
 	);
