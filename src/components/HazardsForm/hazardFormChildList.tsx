@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import React, {useState} from "react";
 import {columnType, hazardFormChildType} from "../../utils/ressources/types";
 import {Box, Typography} from "@material-ui/core";
-import {EntriesTableCategory} from "../../components/Table/EntriesTableCategory";
+import {EntriesTableCategory} from "../Table/EntriesTableCategory";
 import {useHistory} from "react-router-dom";
 import { Button } from "epfl-elements-react-si-extra";
 
