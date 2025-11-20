@@ -90,9 +90,6 @@ export default function UnitDetails() {
 			oidc.accessToken,
 			{id: JSON.stringify(data[0]?.id), unit: newName, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
 		).then(res => {
-			if(res.status == 200 && !res.data?.updateUnit?.errors) {
-				fetchData();
-			}
 			setOpenDialogEdit(false);
 			handleOpen(res);
 			if (!data[0]?.unitId && newName != data[0]?.name) {
@@ -118,6 +115,7 @@ export default function UnitDetails() {
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
+			fetchData();
 			setNotificationType(notificationsVariants['unit-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['unit-update-error']);

@@ -140,6 +140,7 @@ export const HazardsControl = ({
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
+			setDeleted(true);
 			setNotificationType(notificationsVariants['update_success']);
 		} else {
 			setNotificationType(notificationsVariants['update_error']);
@@ -269,9 +270,6 @@ export const HazardsControl = ({
 			oidc.accessToken,
 			JSON.stringify(selectedHazard),
 		).then(res => {
-			if(res.status == 200 && !res.data?.deleteHazardChild?.errors) {
-				setDeleted(true);
-			}
 			handleOpen(res);
 			setOpenDialog(false);
 			setSelectedHazard('');

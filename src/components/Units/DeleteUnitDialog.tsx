@@ -38,10 +38,6 @@ export const DeleteUnitDialog = ({
 				oidc.accessToken,
 				JSON.stringify(unit.id),
 			).then(res => {
-				if(res.status == 200 && !res.data?.deleteUnit?.errors) {
-					setDeleted(true);
-					setOpenDialog(false);
-				}
 				handleOpen(res);
 			});
 		}
@@ -52,6 +48,8 @@ export const DeleteUnitDialog = ({
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
+			setDeleted(true);
+			setOpenDialog(false);
 			setNotificationType(notificationsVariants['unit-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['unit-update-error']);

@@ -191,12 +191,13 @@ export const ChemicalsControl = ({
 			oidc.accessToken,
 			JSON.stringify(data?.id),
 		).then(res => {
-			if(res.status == 200 && !res.data?.deleteChemical?.errors) {
+			const errors = getErrorMessage(res, 'deleteChemical');
+			if(errors.errorCount == 0) {
 				setDeleted(true);
 				setSelectedChemical(undefined);
 				setSearch('');
 			} else {
-				setNotificationType(notificationsVariants['chemical-deletion-error']);
+				setNotificationType(errors.notif);
 				setOpenNotification(true);
 			}
 		});

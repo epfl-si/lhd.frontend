@@ -38,10 +38,6 @@ export const DeleteRadioprotectionDialog = ({
 				oidc.accessToken,
 				JSON.stringify(auth.id)
 			).then(res => {
-				if(res.status == 200 && !res.data?.deleteAuth?.errors) {
-					setDeleted(true);
-					setOpenDialog(false);
-				}
 				handleOpen(res);
 			});
 		}
@@ -52,6 +48,8 @@ export const DeleteRadioprotectionDialog = ({
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
+			setDeleted(true);
+			setOpenDialog(false);
 			setNotificationType(notificationsVariants['update_success']);
 		} else {
 			setNotificationType(notificationsVariants['update_error']);
