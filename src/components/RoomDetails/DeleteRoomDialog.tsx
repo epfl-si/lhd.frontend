@@ -38,10 +38,6 @@ export const DeleteRoomDialog = ({
 				oidc.accessToken,
 				JSON.stringify(room.id),
 			).then(res => {
-				if(res.status == 200 && !res.data?.deleteRoom?.errors) {
-					setDeleted(true);
-					setOpenDialog(false);
-				}
 				handleOpen(res);
 			});
 		}
@@ -52,6 +48,8 @@ export const DeleteRoomDialog = ({
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
+			setDeleted(true);
+			setOpenDialog(false);
 			setNotificationType(notificationsVariants['room-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['room-update-error']);

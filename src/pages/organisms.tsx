@@ -238,11 +238,15 @@ export const OrganismsControl = ({
 			oidc.accessToken,
 			JSON.stringify(dataOrganism?.id),
 		).then(res => {
-			if(res.status == 200 && !res.data?.deleteOrganism?.errors) {
+			const errors = getErrorMessage(res, 'deleteOrganism');
+			if(errors.errorCount == 0) {
 				setOpenDialogDelete(false);
 				setDeleted(true);
 				setSelectedOrganism(undefined);
 				setSearch('');
+			} else {
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
 			}
 		});
 	}
