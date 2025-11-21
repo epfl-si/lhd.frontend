@@ -69,7 +69,7 @@ export const ChemicalsAuthorizationControl = ({
 					<div className="form-card-div">
 						{params.row.authorization_rooms.map(item => {
 								return (
-									item.isDeleted ? <span style={{color: "red"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+									item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 								)
 							}
 						)}
@@ -125,7 +125,7 @@ export const ChemicalsAuthorizationControl = ({
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.authorization_rooms.map(item => {
 							return (
-								item.isDeleted ? <span style={{color: "red"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+								item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 							)
 						}
 					)}
@@ -165,7 +165,7 @@ export const ChemicalsAuthorizationControl = ({
 			const dateExp = new Date(params.row.expiration_date);
 			const rooms = params.row.authorization_rooms.map(item => {
 					return (
-						item.isDeleted ? <span style={{color: "red"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+						item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 					)
 				}
 			);
