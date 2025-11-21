@@ -50,7 +50,7 @@ export const DeleteUnitDialog = ({
 		} else if (res.status === 200) {
 			setDeleted(true);
 			setOpenDialog(false);
-			setNotificationType(notificationsVariants['unit-update-success']);
+			setNotificationType(notificationsVariants['unit-delete-success']);
 		} else {
 			setNotificationType(notificationsVariants['unit-update-error']);
 		}

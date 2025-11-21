@@ -84,6 +84,10 @@ export const notificationsVariants = {
 		type: 'success',
 		text: 'Unit has successfully been updated',
 	},
+	'unit-delete-success': {
+		type: 'success',
+		text: 'Unit has successfully been deleted',
+	},
 	'unit-update-error': {
 		type: 'error',
 		text: 'Unit update failed',
