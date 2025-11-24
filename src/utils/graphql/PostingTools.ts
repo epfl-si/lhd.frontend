@@ -31,7 +31,7 @@ export const createDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-              createDispensation(subject: "${
+							createDispensation(subject: "${
 								dispensation.subject
 							}", author: "${'TEST'}", sciper_author: 312067, description: "${
 							escapeGraphQL(dispensation.requirements)
@@ -40,19 +40,19 @@ export const createDispensation = async (
 						}", date_end: "${dispensation.endDate}", rooms: ${
 							dispensation.rooms
 						}, holders: ${dispensation.holders}) {
-                errors {
-                  message
-                }
-                isSuccess
-                slug
-              }
-            }`,
+								errors {
+									message
+								}
+								isSuccess
+								slug
+							}
+						}`,
 						variables,
 					}),
 					method: 'POST',
 					mode: 'cors',
 					credentials: 'omit',
-			  })
+				})
 			: null;
 
 	if (results?.status !== 200) {
@@ -94,7 +94,7 @@ export const deleteDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-              				deleteDispensation(slug: "${slug}") {
+							deleteDispensation(slug: "${slug}") {
 								errors {
 									message
 									extensions {
@@ -109,7 +109,7 @@ export const deleteDispensation = async (
 					method: 'POST',
 					mode: 'cors',
 					credentials: 'omit',
-			  })
+				})
 			: null;
 
 	if (results?.status !== 200) {
@@ -146,25 +146,25 @@ export const updateDispensation = async (
 					referrerPolicy: 'no-referrer-when-downgrade',
 					body: JSON.stringify({
 						query: `mutation ${operationName} {
-               editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
+							 editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
 							dispensation.subject
 						}", description: "${escapeGraphQL(dispensation.requirements)}", comment: "${
 							escapeGraphQL(dispensation.comment)
 						}", date_start: "${dispensation.startDate}", date_end: "${
 							dispensation.endDate
 						}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`,
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`,
 						variables,
 					}),
 					method: 'POST',
 					mode: 'cors',
 					credentials: 'omit',
-			  })
+				})
 			: null;
 
 	if (results?.status !== 200) {
@@ -185,10 +185,10 @@ export const updateRoom = async (
 	room: roomDetailsType
 ): Promise<any> => {
 	const query = `mutation updateRoom {
-               updateRoom(
-               id: ${room.id},
-               name: "${room.name}",
-               kind: "${room.kind?.name}",
+							 updateRoom(
+							 id: ${room.id},
+							 name: "${room.name}",
+							 kind: "${room.kind?.name}",
 							 vent: "${room.vent ?? 'n'}",
 							 lab_type_is_different: ${room.lab_type_is_different}
 							 units: [${room.lhd_units.map(u =>
@@ -196,12 +196,12 @@ export const updateRoom = async (
 									name: "${u.name}",
 									status: "${u.status}"
 								}`)}] ) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -212,9 +212,9 @@ export const updateUnit = async (
 	details: {id: string, unit: string, profs: personType[], cosecs: personType[], subUnits: lhdUnitsType[]},
 ): Promise<any> => {
 	const query = `mutation updateUnit {
-               updateUnit (
-               id: ${details.id}
-               unit: "${details.unit}"
+							 updateUnit (
+							 id: ${details.id}
+							 unit: "${details.unit}"
 							 profs: [${details.profs.map(prof => 
 								`{
 									status: "${prof.status}",
@@ -240,12 +240,12 @@ export const updateUnit = async (
 									name: "${u.name}",
 									status: "${u.status}"
 								}`)}]) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -256,14 +256,14 @@ export const deleteUnit = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteUnit {
-               deleteUnit(id: ${id} )
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 deleteUnit(id: ${id} )
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -274,14 +274,14 @@ export const deleteRoom = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteRoom {
-               deleteRoom(id: ${id} )
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 deleteRoom(id: ${id} )
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -292,14 +292,14 @@ export const deleteOrganism = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteOrganism {
-               deleteOrganism(id: ${id} )
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 deleteOrganism(id: ${id} )
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -310,14 +310,14 @@ export const deleteHazardChild = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteHazardChild {
-               deleteHazardChild(id: ${id} )
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 deleteHazardChild(id: ${id} )
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -332,21 +332,21 @@ export const addHazard = async (
 	additionalInfo: hazardAdditionalInfoType
 ): Promise<any> => {
 	const query = `mutation addHazard {
-               addHazardToRoom(room: "${room}",
-               submission: ${JSON.stringify(JSON.stringify(submission))}, 
-               additionalInfo: {
-               	comment: "${additionalInfo.comment}",
-               	file: "${additionalInfo.file ?? ''}",
-               	fileName: "${additionalInfo.fileName ?? ''}"
-               }
-               category: "${lastVersionForm.hazard_category.hazard_category_name}")
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 addHazardToRoom(room: "${room}",
+							 submission: ${JSON.stringify(JSON.stringify(submission))}, 
+							 additionalInfo: {
+							 	comment: "${additionalInfo.comment}",
+							 	file: "${additionalInfo.file ?? ''}",
+							 	fileName: "${additionalInfo.fileName ?? ''}"
+							 }
+							 category: "${lastVersionForm.hazard_category.hazard_category_name}")
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -357,17 +357,17 @@ export const updateFormHazard = async (
 	hazardForm: hazardFormType,
 ): Promise<any> => {
 	const query = `mutation updateFormHazard {
-               updateForm (
-               id: ${hazardForm.id},
-               form: ${hazardForm.form},
+							 updateForm (
+							 id: ${hazardForm.id},
+							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -378,17 +378,17 @@ export const createNewHazardCategory = async (
 	hazardForm: hazardFormType,
 ): Promise<any> => {
 	const query = `mutation createNewHazardCategory {
-               createNewHazardCategory (
-               id: ${hazardForm.id},
-               form: ${hazardForm.form},
+							 createNewHazardCategory (
+							 id: ${hazardForm.id},
+							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -399,8 +399,8 @@ export const saveNewUnitsFromAPI = async (
 	selectedUnits: lhdUnitsFromAPIType[],
 ): Promise<any> => {
 	const query = `mutation saveNewUnitsFromAPI {
-               createUnit (
-               units: [${selectedUnits.map(u =>
+							 createUnit (
+							 units: [${selectedUnits.map(u =>
 								`{
 									name: "${u.name}",
 									status: "${u.status}",
@@ -411,12 +411,12 @@ export const saveNewUnitsFromAPI = async (
 									responsibleLastName: "${u.responsibleLastName}",
 									responsibleEmail: "${u.responsibleEmail}",
 								}`)}]) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -427,8 +427,8 @@ export const saveNewRoomsFromAPI = async (
 	selectedRooms: roomDetailsType[],
 ): Promise<any> => {
 	const query = `mutation saveNewRoomsFromAPI {
-               createRoom (
-               rooms: [${selectedRooms.map(u =>
+							 createRoom (
+							 rooms: [${selectedRooms.map(u =>
 		`{
 									name: "${u.name}",
 									status: "${u.status}",
@@ -440,12 +440,12 @@ export const saveNewRoomsFromAPI = async (
 									vol: ${u.vol},
 									facultyuse: "${u.facultyuse}"
 								}`)}]) {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -456,18 +456,18 @@ export const createNewHazardFormChild = async (
 	hazardForm: hazardFormChildType,
 ): Promise<any> => {
 	const query = `mutation createNewHazardFormChild {
-               createNewHazardFormChild (
-               id: ${hazardForm.id},
-               form: ${hazardForm.form},
+							 createNewHazardFormChild (
+							 id: ${hazardForm.id},
+							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}",
 							 category: "${hazardForm.category}") {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -478,17 +478,17 @@ export const updateHazardFormChild = async (
 	hazardForm: hazardFormChildType,
 ): Promise<any> => {
 	const query = `mutation updateHazardFormChild {
-               updateHazardFormChild (
-               id: ${hazardForm.id},
-               form: ${hazardForm.form},
+							 updateHazardFormChild (
+							 id: ${hazardForm.id},
+							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}") {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -501,17 +501,17 @@ export const saveNewOrganism = async (
 	file: {name?: string, content?: string}
 ): Promise<any> => {
 	const query = `mutation addOrganism {
-               addOrganism(organismName: "${organismName}",
-                risk: ${risk},
-                fileContent: "${file.content ?? ''}",
-                fileName: "${file.name ?? ''}")
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 addOrganism(organismName: "${organismName}",
+								risk: ${risk},
+								fileContent: "${file.content ?? ''}",
+								fileName: "${file.name ?? ''}")
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 	return doGraphQL(query, {}, address, authToken);
 };
 
@@ -524,18 +524,18 @@ export const updateOrganism = async (
 	file: {name?: string, content?: string}
 ): Promise<any> => {
 	const query = `mutation updateOrganism {
-               updateOrganism(id: ${id},
-                organismName: "${organismName}",
-                risk: ${risk},
-                fileContent: "${file.content ?? ''}",
-                fileName: "${file.name ?? ''}")
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 updateOrganism(id: ${id},
+								organismName: "${organismName}",
+								risk: ${risk},
+								fileContent: "${file.content ?? ''}",
+								fileName: "${file.name ?? ''}")
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 	return doGraphQL(query, {}, address, authToken);
 };
 
@@ -547,16 +547,16 @@ export const saveNewChemical = async (
 	status: boolean
 ): Promise<any> => {
 	const query = `mutation addChemical {
-                addChemical(auth_chem_en: "${name}",
-                cas_auth_chem: "${cas}",
-                flag_auth_chem: ${status})
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								addChemical(auth_chem_en: "${name}",
+								cas_auth_chem: "${cas}",
+								flag_auth_chem: ${status})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -570,17 +570,17 @@ export const updateChemical = async (
 	status: boolean
 ): Promise<any> => {
 	const query = `mutation updateChemical {
-               updateChemical(id: ${id},
-                auth_chem_en: "${name}",
-                cas_auth_chem: "${cas}",
-                flag_auth_chem: ${status})
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 updateChemical(id: ${id},
+								auth_chem_en: "${name}",
+								cas_auth_chem: "${cas}",
+								flag_auth_chem: ${status})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -591,14 +591,14 @@ export const deleteChemical = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteChemical {
-               deleteChemical(id: ${id})
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 deleteChemical(id: ${id})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -609,31 +609,31 @@ export const saveNewRadioprotection = async (
 	radioprotection: any
 ): Promise<any> => {
 	const query = `mutation addRadioprotection {
-                addAuthorization(
-                  id_unit: ${JSON.stringify(radioprotection.unit.id)},
-                  authorization: "${radioprotection.name}",
-                  creation_date: "${(new Date(radioprotection.creationDate)).toLocaleDateString("en-GB")}",
-                  expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
-                  status: "${radioprotection.status}",
-                  authority: "${radioprotection.authority}",
-                  type: "IonisingRadiation",
-                  radiations: [
-                    ${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
-                  ],
-                  holders: [
-                    ${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
-                  ],
-                  rooms: [
-                    ${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
-                  ],
-                )
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								addAuthorization(
+									id_unit: ${JSON.stringify(radioprotection.unit.id)},
+									authorization: "${radioprotection.name}",
+									creation_date: "${(new Date(radioprotection.creationDate)).toLocaleDateString("en-GB")}",
+									expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
+									status: "${radioprotection.status}",
+									authority: "${radioprotection.authority}",
+									type: "IonisingRadiation",
+									radiations: [
+										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+									],
+									holders: [
+										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
+									],
+									rooms: [
+										${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+									],
+								)
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -645,29 +645,29 @@ export const updateRadioprotection = async (
 	radioprotection: any
 ): Promise<any> => {
 	const query = `mutation updateRadioprotection {
-                updateAuthorization(
-                  id: ${id},
-                  id_unit: ${JSON.stringify(radioprotection.unit.id)},
-                  expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
-                  status: "${radioprotection.status}",
-                  authority: "${radioprotection.authority}",
-                  radiations: [
-                    ${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
-                  ],
-                  holders: [
-                    ${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
-                  ],
-                  rooms: [
-                    ${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
-                  ],
-                )
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+								updateAuthorization(
+									id: ${id},
+									id_unit: ${JSON.stringify(radioprotection.unit.id)},
+									expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
+									status: "${radioprotection.status}",
+									authority: "${radioprotection.authority}",
+									radiations: [
+										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+									],
+									holders: [
+										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
+									],
+									rooms: [
+										${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+									],
+								)
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -678,14 +678,14 @@ export const deleteAuthorization = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteAuthorization {
-               deleteAuthorization(id: ${id})
-               {
-                errors {
-                  message
-                }
-                isSuccess
-              }
-            }`;
+							 deleteAuthorization(id: ${id})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
