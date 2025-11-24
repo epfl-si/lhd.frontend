@@ -93,7 +93,7 @@ export const HazardTitle = ({
               onClick={() => {if(onChangeAction) onChangeAction(selectedHazardCategory)}}/>
       }
     </div>
-    {otherRoom && otherRoom.hazardReferences.map(ref => {
+    {otherRoom && otherRoom.hazardReferences && otherRoom.hazardReferences.map(ref => {
       if ( ref.hazards.room?.name ) {
         const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
         const url = `/roomdetails?room=${encodeURIComponent(ref.hazards.room?.name)}`;
