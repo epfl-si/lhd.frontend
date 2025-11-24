@@ -184,6 +184,13 @@ export const fetchRoomDetails = async (
 						hazard_category {
 							hazard_category_name
 						}
+						hazardsAdditionalInfoHasTag {
+							id
+							comment
+							tag {
+								tag_name
+							}
+						}
 					}
 					lhd_units {
 						id
@@ -1221,6 +1228,24 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 	return {
 		status: result.status,
 		data: result.data?.authorizationsByRoom,
+		errors: result.errors
+	};
+};
+
+export const fetchTags = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query = `query fetchTags {
+		tags {
+			tag_name
+		}
+	}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.tags,
 		errors: result.errors
 	};
 };

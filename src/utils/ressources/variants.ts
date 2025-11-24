@@ -48,6 +48,10 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'No unit has been chosen',
 	},
+	'no-tag-chosen': {
+		type: 'error',
+		text: 'No tag has been chosen',
+	},
 	'no-radioprotection-chosen': {
 		type: 'error',
 		text: 'No radiation has been chosen',

@@ -1,15 +1,24 @@
 import React, {useEffect, useState} from 'react';
 import {getHazardImage} from "./HazardProperties";
 import {useTranslation} from "react-i18next";
-import {hazardAdditionalInfoType, roomDetailsType, notificationType} from "../../utils/ressources/types";
+import {
+  hazardAdditionalInfoType,
+  hazardsAdditionalInfoHasTagType,
+  notificationType,
+  roomDetailsType
+} from "../../utils/ressources/types";
 import {sprintf} from "sprintf-js";
 import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {Button, TextArea} from "epfl-elements-react-si-extra";
-import { getErrorMessage } from '../../utils/graphql/Utils';
+import {getErrorMessage} from '../../utils/graphql/Utils';
 import Notifications from "../Table/Notifications";
+import {Chip} from "@material-ui/core";
+import {TagDialog} from "./TagDialog";
+import {Tooltip} from "@mui/joy";
+import {DeleteTagDialog} from "./DeleteTagDialog";
 
 interface HazardTitleProps {
   hazardAdditionalInfo?: hazardAdditionalInfoType | undefined;
@@ -21,18 +30,22 @@ interface HazardTitleProps {
   isReadonly: boolean;
   onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
   user: any;
+  refreshView?: () => void;
+  tags?: hazardsAdditionalInfoHasTagType[];
 }
 
 export const HazardTitle = ({
-                              hazardAdditionalInfo,
-                              selectedHazardCategory,
-                              room,
-                              handleFileChange,
-                              setComment,
-                              comment,
-                              isReadonly,
-                              onChangeAction,
-                              user
+  hazardAdditionalInfo,
+  selectedHazardCategory,
+  room,
+  handleFileChange,
+  setComment,
+  comment,
+  isReadonly,
+  onChangeAction,
+  user,
+  refreshView,
+  tags
   }: HazardTitleProps) => {
   const oidc = useOpenIDConnectContext();
   const { t } = useTranslation();
@@ -42,6 +55,9 @@ export const HazardTitle = ({
     text: '',
   });
   const [openNotification, setOpenNotification] = useState<boolean>(false);
+  const [openTagDialog, setOpenTagDialog] = useState<boolean>(false);
+  const [openDeleteTagDialog, setOpenDeleteTagDialog] = useState<boolean>(false);
+  const [selectedTag, setSelectedTag] = useState<hazardsAdditionalInfoHasTagType>();
 
   useEffect(() => {
     if(selectedHazardCategory == 'StaticMagneticField' && room) {
@@ -69,6 +85,11 @@ export const HazardTitle = ({
     setOpenNotification(false);
   };
 
+  const closeTagDialog = () => {
+    setOpenTagDialog(false);
+    setSelectedTag(undefined);
+  }
+
   return <div style={{marginTop: '10px'}}>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
       <div style={{display: 'flex', flexDirection: 'row'}}>
@@ -86,13 +107,48 @@ export const HazardTitle = ({
             minute: 'numeric',
             hour12: false
           }))})</label>}
-        {isReadonly && <label className="hazardTitle" style={{marginBottom:'0px'}}>{decodeURIComponent(comment || '')}</label>}
+        {isReadonly && <>
+          <label className="hazardTitle" style={{marginBottom:'0px', marginRight: '5px'}}>{decodeURIComponent(comment || '')}</label>
+          {tags && tags.map(t =>
+            <Tooltip title={t.comment}>
+              <Chip
+                style={{backgroundColor: 'red', marginRight: '5px', color: 'white'}}
+                label={t.tag.tag_name}
+              />
+            </Tooltip>)}
+        </>}
       </div>
       {isReadonly && user.canEditHazards && <Button size="icon"
               iconName={"#edit-3"}
               onClick={() => {if(onChangeAction) onChangeAction(selectedHazardCategory, false)}}/>
       }
     </div>
+    {hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag &&
+      hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo =>
+        <Tooltip title={addInfo.comment}>
+          <Chip
+            style={{backgroundColor: 'red', marginRight: '5px', color: 'white'}}
+            label={addInfo.tag.tag_name}
+            onClick={() => {
+              setOpenTagDialog(true);
+              setSelectedTag(addInfo);
+            }}
+            onDelete={() => {
+              setSelectedTag(addInfo);
+              setOpenDeleteTagDialog(true);
+            }}
+          />
+        </Tooltip>)
+    }
+    {selectedTag && user.canEditHazards && <DeleteTagDialog tag={selectedTag} refreshView={refreshView} openDialog={openDeleteTagDialog}
+                                     setOpenDialog={setOpenDeleteTagDialog} />}
+    {!isReadonly && user.canEditHazards && <Chip
+      label={t(`hazard.addNewTag`)}
+      onClick={() => {
+        setOpenTagDialog(true);
+        setSelectedTag(undefined);
+      }}
+    />}
     {otherRoom && otherRoom.hazardReferences && otherRoom.hazardReferences.map(ref => {
       if ( ref.hazards.room?.name ) {
         const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
@@ -132,5 +188,18 @@ export const HazardTitle = ({
       notification={notificationType}
       close={handleClose}
     />
+    {hazardAdditionalInfo && hazardAdditionalInfo.id && user.canEditHazards &&
+      <TagDialog
+        openDialog={openTagDialog}
+        additionalInfo={hazardAdditionalInfo.id}
+        selectedTag={selectedTag}
+        close={closeTagDialog}
+        save={() => {
+          closeTagDialog();
+          if ( refreshView ) {
+            refreshView();
+          }
+        }}/>
+    }
   </div>
 };
