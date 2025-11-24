@@ -160,6 +160,7 @@ export type hazardReferencesType = {
 }
 
 export type hazardAdditionalInfoType = {
+	id?: string;
 	comment?: string;
 	modified_by?: string;
 	modified_on?: string;
@@ -167,6 +168,7 @@ export type hazardAdditionalInfoType = {
 	file?: string;
 	fileName?: string;
 	filePath?: string;
+	hazardsAdditionalInfoHasTag?: hazardsAdditionalInfoHasTagType[];
 	id?: string;
 }
 
@@ -222,6 +224,7 @@ export type submissionForm = {
 	room?: roomDetailsType;
 	category?: string;
 	comment?: string;
+	tags?: hazardsAdditionalInfoHasTagType[];
 }
 
 export type hazLevelsType = {
@@ -253,3 +256,13 @@ export type dispensationRequestType = {
 	rooms: dispensationRequestRoomType[];
 	holders: dispensationRequestHolderType[];
 };
+
+export type tag = {
+	tag_name: string;
+}
+
+export type hazardsAdditionalInfoHasTagType = {
+	id: string;
+	comment?: string;
+	tag: tag;
+}

@@ -37,6 +37,9 @@ i18next.use(initReactI18next).init({
 				hazard: {
 					hazardList: 'Hazards',
 					category: 'Category',
+					addNewTag: 'Add tag',
+					modifyTag: 'Modify tag comment',
+					deleteTag: 'Are you sure to delete this tag: '
 				},
 				unit_details: {
 					personPlaceholder: 'Select a person',
@@ -301,6 +304,9 @@ i18next.use(initReactI18next).init({
 				hazard: {
 					hazardList: 'Dangers',
 					category: 'Catégorie',
+					addNewTag: 'Ajouter un tag',
+					modifyTag: 'Modifier le commentaire du tag',
+					deleteTag: 'Êtes-vous sûrs de vouloir supprimer ce tag: '
 				},
 				unit_details: {
 					personPlaceholder: 'Sélectionner une personne',
