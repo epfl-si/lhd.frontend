@@ -108,7 +108,7 @@ export const fetchResults = async (
 					method: 'POST',
 					mode: 'cors',
 					credentials: 'omit',
-			  })
+				})
 			: null;
 
 	if (results?.status !== 200) {
@@ -147,46 +147,46 @@ export const fetchRoomDetails = async (
 					kind {
 						name
 					}
-          hazards {
-            id
-            submission
-            children {
-              submission
-              hazard_form_child_history {
-                form
-                version
-                hazard_form_child {
-                	id
-                  form
-                  version
-                  hazard_form_child_name
-                }
-              }
-              id
-            }
-            hazard_form_history {
-              form
-              hazard_form {
-                form
-              	version
-                hazard_category {
-                  hazard_category_name
-                }
-              }
-            }
-          }
-          hazardAdditionalInfo {
-            comment
-            filePath
-            modified_by
-            modified_on
-            hazard_category {
-              hazard_category_name
-            }
-          }
+					hazards {
+						id
+						submission
+						children {
+							submission
+							hazard_form_child_history {
+								form
+								version
+								hazard_form_child {
+									id
+									form
+									version
+									hazard_form_child_name
+								}
+							}
+							id
+						}
+						hazard_form_history {
+							form
+							hazard_form {
+								form
+								version
+								hazard_category {
+									hazard_category_name
+								}
+							}
+						}
+					}
+					hazardAdditionalInfo {
+						comment
+						filePath
+						modified_by
+						modified_on
+						hazard_category {
+							hazard_category_name
+						}
+					}
 					lhd_units {
-            id
-            unitId
+						id
+						unitId
 						name
 						institute {
 							name
@@ -222,20 +222,20 @@ export const fetchHazardsInRoom = async (
 	const query: string = `query fetchHazardsInRoom { 
 				rooms (where: { name: { equals: "${room}"} }) {
 					name
-          hazards {
-            id
-            submission
-            hazard_form_history {
-              form
-              hazard_form {
-                form
-              	version
-                hazard_category {
-                  hazard_category_name
-                }
-              }
-            }
-          }
+					hazards {
+						id
+						submission
+						hazard_form_history {
+							form
+							hazard_form {
+								form
+								version
+								hazard_category {
+									hazard_category_name
+								}
+							}
+						}
+					}
 				},
 			}`;
 
@@ -402,8 +402,8 @@ export const fetchRooms = async (
 								email
 							}
 						}
-    			}
-    			totalCount
+					}
+					totalCount
 				},
 			}`;
 
@@ -475,8 +475,8 @@ export const fetchRoomsWithHazards = async (
 								email
 							}
 						}
-    			}
-    			totalCount
+					}
+					totalCount
 				},
 			}`;
 
@@ -514,21 +514,21 @@ export const fetchOtherRoomsForStaticMagneticField = async (
 	const query: string = `query OtherRoomsFetch { 
 			rooms (where: {name: {equals: "${roomName}"}}) {
 					name
-          hazardReferences {
-          submission
-            hazards {
-              room {
-                name
-              }
-              hazard_form_history {
-                hazard_form {
-                  hazard_category {
-                    hazard_category_name
-                  }
-                }
-              }
-            }
-          }
+					hazardReferences {
+					submission
+						hazards {
+							room {
+								name
+							}
+							hazard_form_history {
+								hazard_form {
+									hazard_category {
+										hazard_category_name
+									}
+								}
+							}
+						}
+					}
 				}
 			}`;
 
@@ -692,11 +692,11 @@ export const fetchPeopleFromFullText = async (
 	fullText: string | null
 ): Promise<any> => {
 	const query = `query FullTextTest {
-        personFullText(search:"${fullText}") {
-          ... on DirectoryPerson { name surname email sciper type}
-          ... on Person { name surname email sciper type}
-        }
-      }`;
+				personFullText(search:"${fullText}") {
+					... on DirectoryPerson { name surname email sciper type}
+					... on Person { name surname email sciper type}
+				}
+			}`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
@@ -711,9 +711,9 @@ export const fetchHazardForms = async (
 	authToken: string | undefined,
 ): Promise<any> => {
 	const query = `query fetchHazardForms {
-        hazardForms {
-        	id
-        	form
+				hazardForms {
+					id
+					form
 					version
 					hazard_category {
 						hazard_category_name
@@ -725,7 +725,7 @@ export const fetchHazardForms = async (
 						hazard_form_child_name
 					}
 				}
-      }`;
+			}`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
@@ -741,19 +741,19 @@ export const fetchHazardFormDetails = async (
 	categoryName: string
 ): Promise<any> => {
 	const query = `query fetchHazardFormDetails {
-        hazardForms (where: { hazard_category: {hazard_category_name:  { contains: "${categoryName}" }}}) {
-        	id
-        	form
+				hazardForms (where: { hazard_category: {hazard_category_name:	{ contains: "${categoryName}" }}}) {
+					id
+					form
 					version
 					hazard_category {
 						hazard_category_name
 					}
 					children {
-            version
-            hazard_form_child_name
-          }
+						version
+						hazard_form_child_name
+					}
 				}
-      }`;
+			}`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
@@ -854,11 +854,11 @@ export const fetchOrganism = async (
 	authToken: string | undefined
 ): Promise<any> => {
 	const query = `query org {
-  bioOrgs {
-    organism
-    risk_group
-    filePath
-  }
+	bioOrgs {
+		organism
+		risk_group
+		filePath
+	}
 }`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
@@ -875,11 +875,11 @@ export const fetchReportFiles = async (
 	unitId: string[]
 ): Promise<fetchReportFiles> => {
 	const query = `query reportfiles {
-  unitReportFiles (id: "[${unitId.map(u => u.replaceAll('\"','\\"')).join(',')}]") {
+	unitReportFiles (id: "[${unitId.map(u => u.replaceAll('\"','\\"')).join(',')}]") {
 			name
 			path
 			unitName
-  }
+	}
 }`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
@@ -896,9 +896,9 @@ export const fetchDoorPlug = async (
 	roomName: string
 ): Promise<any> => {
 	const query = `query fetchDoorPlug {
-  fetchDoorPlug (roomName: "${roomName}") {
+	fetchDoorPlug (roomName: "${roomName}") {
 			fileUrl
-  }
+	}
 }`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
@@ -915,9 +915,9 @@ export const fetchHazardFormChild = async (
 	name: string
 ): Promise<any> => {
 	const query = `query fetchHazardFormChild {
-        hazardFormChildren (where: { hazard_form_child_name: {equals: "${name}"}}) {
-        	id
-        	form
+				hazardFormChildren (where: { hazard_form_child_name: {equals: "${name}"}}) {
+					id
+					form
 					version
 					hazard_form_child_name
 					parentForm {
@@ -926,7 +926,7 @@ export const fetchHazardFormChild = async (
 						}
 					}
 				}
-      }`;
+			}`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
@@ -970,10 +970,10 @@ export const fetchHazardCategories = async (
 	authToken: string | undefined
 ): Promise<any> => {
 	const query: string = `query categorylist {
-              hazardCategories {
-                hazard_category_name
-              }
-            }`;
+							hazardCategories {
+								hazard_category_name
+							}
+						}`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
@@ -1027,14 +1027,14 @@ export const fetchChemicals = async (
 	const query = `query fetchChemicals {
 		chemicalsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
 			chemicals {
-        id
-        cas_auth_chem
-        auth_chem_en
-        flag_auth_chem
-        fastway
-        auth_code
-      }
-      totalCount
+				id
+				cas_auth_chem
+				auth_chem_en
+				flag_auth_chem
+				fastway
+				auth_code
+			}
+			totalCount
 		}
 	}`;
 
@@ -1058,31 +1058,31 @@ export const fetchChemicalAuthorizations = async (
 	const query = `query fetchChemicalAuthorizations {
 		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
 			authorizations{
-      id
-      authorization
-      creation_date
-      expiration_date
-      renewals
-      unit {
-        name
-      }
-      authorization_rooms {
-        name
-        isDeleted
-      }
-      authorization_holders {
-        surname
-        name
-        sciper
-      }
-      status
-      authorization_chemicals {
-        cas_auth_chem
-        auth_chem_en
-        flag_auth_chem
-      }
-    }
-      totalCount
+			id
+			authorization
+			creation_date
+			expiration_date
+			renewals
+			unit {
+				name
+			}
+			authorization_rooms {
+				name
+				isDeleted
+			}
+			authorization_holders {
+				surname
+				name
+				sciper
+			}
+			status
+			authorization_chemicals {
+				cas_auth_chem
+				auth_chem_en
+				flag_auth_chem
+			}
+		}
+			totalCount
 		}
 	}`;
 
@@ -1105,31 +1105,31 @@ export const fetchRadioprotectionAuthorizations = async (
 	const query = `query fetchRadioprotectionAuthorizations {
 		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
 			authorizations{
-      id
-      authorization
-      creation_date
-      expiration_date
-      renewals
-      authority
-      unit {
-        id
-        name
-      }
-      authorization_rooms {
-        name
-        isDeleted
-      }
-      authorization_holders {
-        surname
-        name
-        sciper
-      }
-      status
-      authorization_radiations {
-        source
-      }
-    }
-      totalCount
+			id
+			authorization
+			creation_date
+			expiration_date
+			renewals
+			authority
+			unit {
+				id
+				name
+			}
+			authorization_rooms {
+				name
+				isDeleted
+			}
+			authorization_holders {
+				surname
+				name
+				sciper
+			}
+			status
+			authorization_radiations {
+				source
+			}
+		}
+			totalCount
 		}
 	}`;
 
@@ -1149,29 +1149,29 @@ export const fetchChemicalAuthorizationsByRoom = async (
 ): Promise<any> => {
 	const query = `query fetchChemicalAuthorizationsByRoom {
 		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
-      id
-      authorization
-      creation_date
-      expiration_date
-      renewals
-      type
-      unit {
-        name
-      }
-      authorization_rooms {
-        name
-      }
-      authorization_holders {
-        surname
-        name
-        sciper
-      }
-      status
-      authorization_chemicals {
-        cas_auth_chem
-        auth_chem_en
-        flag_auth_chem
-      }
+			id
+			authorization
+			creation_date
+			expiration_date
+			renewals
+			type
+			unit {
+				name
+			}
+			authorization_rooms {
+				name
+			}
+			authorization_holders {
+				surname
+				name
+				sciper
+			}
+			status
+			authorization_chemicals {
+				cas_auth_chem
+				auth_chem_en
+				flag_auth_chem
+			}
 		}
 	}`;
 
@@ -1191,27 +1191,27 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 ): Promise<any> => {
 	const query = `query fetchRadioprotectionAuthorizationsByRoom {
 		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
-      id
-      authorization
-      creation_date
-      expiration_date
-      renewals
-      authority
-      unit {
-        name
-      }
-      authorization_rooms {
-        name
-      }
-      authorization_holders {
-        surname
-        name
-        sciper
-      }
-      status
-      authorization_radiations {
-        source
-      }
+			id
+			authorization
+			creation_date
+			expiration_date
+			renewals
+			authority
+			unit {
+				name
+			}
+			authorization_rooms {
+				name
+			}
+			authorization_holders {
+				surname
+				name
+				sciper
+			}
+			status
+			authorization_radiations {
+				source
+			}
 		}
 	}`;
 
