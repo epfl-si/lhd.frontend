@@ -52,6 +52,7 @@ export const HazardFormVBox = ({
                     organismList={organismList}
                     initialSubmissionsList={submissionsList.filter(s => s.category == selectedHazardCategory)}
                     hazardAdditionalInfo={hazardAdditionalInfo}
+                    user={user}
       />
   </div>
 };
