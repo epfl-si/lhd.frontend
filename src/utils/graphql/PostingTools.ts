@@ -689,3 +689,62 @@ export const deleteAuthorization = async (
 
 	return doGraphQL(query, {}, address, authToken);
 };
+
+export const saveTag = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	tag: string,
+	comment: string,
+	additionalInfoId: string
+): Promise<any> => {
+	const query = `mutation addTag {
+								addTag(id: ${JSON.stringify(id)}, tag: "${tag}",
+								comment: "${comment}", additionalInfoId: ${JSON.stringify(additionalInfoId)})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const updateTag = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	comment: string,
+): Promise<any> => {
+	const query = `mutation updateTag {
+								updateTag(id: ${id}, comment: "${comment}")
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const deleteTag = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string
+): Promise<any> => {
+	const query = `mutation deleteTag {
+								deleteTag(id: ${id})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};

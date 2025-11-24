@@ -215,15 +215,19 @@ export const HazardEditForm = ({
 			setNotificationType(errors.notif);
 		}
 		else if ( res.status === 200 ) {
-			if ( onChangeAction ) {
-				onChangeAction(selectedHazardCategory, true);
-			}
+			refreshViewAfterTag();
 			setNotificationType(notificationsVariants['room-update-success']);
 		} else {
 			setNotificationType(notificationsVariants['room-update-error']);
 		}
 		setOpenNotification(true);
 	};
+
+	const refreshViewAfterTag = () => {
+		if ( onChangeAction ) {
+			onChangeAction(selectedHazardCategory, true);
+		}
+	}
 
 	const handleClose = () => {
 		setOpenNotification(false);
@@ -247,6 +251,7 @@ export const HazardEditForm = ({
 									 isReadonly={false}
 									 room={room}
 									 user={user}
+									 refreshView={refreshViewAfterTag}
 			/>
 			<Button size="icon"
 							iconName={"#plus-circle"}

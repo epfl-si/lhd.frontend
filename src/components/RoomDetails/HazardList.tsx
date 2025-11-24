@@ -98,6 +98,7 @@ export const HazardList = ({
 			return <div style={{marginTop: '10px'}}>
 				{inRoomDetails && <HazardTitle selectedHazardCategory={cat}
 														isReadonly={true} comment={submissionsList.filter(sub => sub.category == cat)[0] ? submissionsList.filter(sub => sub.category == cat)[0].comment : ''}
+														tags={submissionsList.filter(sub => sub.category == cat)[0] ? submissionsList.filter(sub => sub.category == cat)[0].tags : []}
 														onChangeAction={onChangeAction} user={user}/>}
 				<TableContainer component={Paper} style={{marginBottom: '5px'}}>
 					<Table size="small" aria-label="a dense table">
