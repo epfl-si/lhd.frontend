@@ -56,7 +56,6 @@ export const HazardFormControl = ({
 		);
 
 		if (resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string') {
-			console.log(resultsHazardCategory.data)
 			setTableData(resultsHazardCategory.data);
 		} else {
 			const errors = getErrorMessage(resultsHazardCategory, 'hazardForms');

@@ -1018,6 +1018,7 @@ export const fetchHazards = async (
 				},
 			}`;
 
+	console.log(query);
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
@@ -1243,6 +1244,7 @@ export const fetchTags = async (
 		}
 	}`;
 
+	console.log(query)
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
