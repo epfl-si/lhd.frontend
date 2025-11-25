@@ -315,3 +315,24 @@ button {
         display: none;
     }
 }
+
+.MuiChip-deleteIcon {
+    color: white !important;
+}
+
+.chip {
+    background-color: red !important;
+    margin-right: 5px !important;
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.smallChip {
+    background-color: red !important;
+    margin-right: 5px !important;
+    color: white !important;
+    font-weight: bold !important;
+    font-size: xx-small !important;
+    height: 15px !important;
+    margin-bottom: 2px;
+}
