@@ -23,7 +23,6 @@ export const DoorPlug = ({
 	async function checkIfPDFExists(url: string) {
 		try {
 			const response = await fetch(url, { method: "HEAD" });
-			console.log(response)
 			setExists(response.ok);
 		} catch (error) {
 			setExists(false);
