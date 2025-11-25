@@ -2,7 +2,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
 import {fetchHazardCategories, fetchHazards} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
-import {Box, MenuItem, Select, Typography} from "@material-ui/core";
+import {Box, Chip, MenuItem, Select, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {hazardCategory, hazardDetailsType, notificationType} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
@@ -18,6 +18,7 @@ import {deleteHazardChild} from "../utils/graphql/PostingTools";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {Tooltip} from "@mui/joy";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -66,6 +67,22 @@ export const HazardsControl = ({
 			renderCell: (params: GridRenderCellParams<any, any>) => (
 				(new Date(params.row.modified_on)).toLocaleDateString("en-GB")
 			)
+		},
+		{
+			field: "tags", headerName: 'Tags', width: 100,
+			renderCell: (params: GridRenderCellParams<any, any>) => {
+				if (!params.row.tags) return '';
+				const tags = params.row.tags.split('&&');
+				return <div style={{display: "flex", flexDirection: 'column'}}>{tags.map(tag => {
+					const keyValue = tag.split('=');
+					return <Tooltip title={keyValue[1]}>
+						<Chip
+							className="smallChip"
+							label={keyValue[0]}
+						/>
+					</Tooltip>
+				})}</div>
+			}
 		}]);
 	const [keys, setKeys] = React.useState<string[]>([]);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -162,7 +179,8 @@ export const HazardsControl = ({
 				parent_submission: JSON.parse(h.parent_submission).data,
 				global_comment: h.global_comment,
 				modified_by: h.modified_by,
-				modified_on: h.modified_on
+				modified_on: h.modified_on,
+				tags: h.tags
 			};
 		});
 		const allKeys = new Set<string>();
@@ -181,7 +199,8 @@ export const HazardsControl = ({
 				id_lab_has_hazards: item.id_lab_has_hazards,
 				global_comment: item.global_comment,
 				modified_by: item.modified_by,
-				modified_on: item.modified_on
+				modified_on: item.modified_on,
+				tags: item.tags
 			};
 
 			// Add all keys with null by default
@@ -206,7 +225,6 @@ export const HazardsControl = ({
 											style={{visibility: params.row.id_lab_has_hazards_child ? "visible" : "hidden"}}
 											iconName={`#trash`}
 											onClick={() => {
-												console.log(params.row)
 												setOpenDialog(true);
 												setSelectedHazard(params.row.id_lab_has_hazards_child);
 											}}/> : <></>
@@ -261,6 +279,22 @@ export const HazardsControl = ({
 				renderCell: (params: GridRenderCellParams<any, any>) => (
 					(new Date(params.row.modified_on)).toLocaleDateString("en-GB")
 				)
+			},
+			{
+				field: "tags", headerName: 'Tags', width: 100,
+				renderCell: (params: GridRenderCellParams<any, any>) => {
+					if (!params.row.tags) return '';
+					const tags = params.row.tags.split('&&');
+					return <div style={{display: "flex", flexDirection: 'column'}}>{tags.map(tag => {
+						const keyValue = tag.split('=');
+						return <Tooltip title={keyValue[1]}>
+							<Chip
+								className="smallChip"
+								label={keyValue[0]}
+							/>
+						</Tooltip>
+					})}</div>
+				}
 			}];
 		history.push(`/hazardscontrol?Category=${(event.target.value)}`);
 	};
@@ -302,6 +336,13 @@ export const HazardsControl = ({
 									break;
 								case 'global_comment':
 									newObj[key] = obj[key] ? decodeURIComponent(obj[key]) : '';
+									break;
+								case 'tags':
+									newObj[key] = '';
+									if (obj[key]) {
+										const keys = [...obj[key].matchAll(/(\w+)=/g)].map(m => m[1]);
+										newObj[key] = keys.join(', ')
+									}
 									break;
 								default:
 									newObj[key] = obj[key];

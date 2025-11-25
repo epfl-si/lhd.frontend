@@ -1012,6 +1012,7 @@ export const fetchHazards = async (
 						global_comment
 						modified_by
 						modified_on
+						tags
 					}
 					totalCount
 				},
@@ -1235,10 +1236,11 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 
 export const fetchTags = async (
 	address: string | undefined,
-	authToken: string | undefined
+	authToken: string | undefined,
+	savedTags: string[]
 ): Promise<any> => {
 	const query = `query fetchTags {
-		tags {
+		tags (where: {tag_name: {notIn: ${JSON.stringify(savedTags)}}}) {
 			tag_name
 		}
 	}`;
