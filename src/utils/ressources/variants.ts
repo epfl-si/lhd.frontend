@@ -50,7 +50,7 @@ export const notificationsVariants = {
 	},
 	'no-tag-chosen': {
 		type: 'error',
-		text: 'No tag has been chosen',
+		text: 'Tag and comment are mandatory',
 	},
 	'no-radioprotection-chosen': {
 		type: 'error',

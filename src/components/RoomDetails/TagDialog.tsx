@@ -11,7 +11,6 @@ import {TextField} from "@material-ui/core";
 import {saveTag, updateTag} from "../../utils/graphql/PostingTools";
 import {Autocomplete} from "@mui/material";
 import {getErrorMessage} from "../../utils/graphql/Utils";
-import {fetchTags} from "../../utils/graphql/FetchingTools";
 import {TextArea} from "epfl-elements-react-si-extra";
 import {createKey} from "../../utils/ressources/keyGenerator";
 
@@ -21,6 +20,7 @@ interface TagDialogProps {
 	close: () => void;
 	selectedTag?: hazardsAdditionalInfoHasTagType;
 	additionalInfo: string;
+	availableTags: tag[];
 }
 
 export const TagDialog = ({
@@ -28,7 +28,8 @@ export const TagDialog = ({
 	close,
 	save,
 	selectedTag,
-	additionalInfo
+	additionalInfo,
+	availableTags
 }: TagDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -39,30 +40,14 @@ export const TagDialog = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [comment, setComment] = useState<string>("");
 	const [tag, setTag] = useState<string>();
-	const [tags, setTags] = useState<tag[]>([]);
 
 	useEffect(() => {
-		loadTags();
 		setTag(selectedTag?.tag.tag_name);
 		setComment(selectedTag?.comment ?? '');
 	}, [openDialog, selectedTag]);
 
-	const loadTags = async () => {
-		const results = await fetchTags(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-		);
-		if ( results.status === 200 && results.data ) {
-			setTags(results.data);
-		} else {
-			const errors = getErrorMessage(results, 'tags');
-			setNotificationType(errors.notif);
-			setOpenNotification(true);
-		}
-	};
-
 	async function onAddTag() {
-		if (tag) {
+		if (tag && comment) {
 			if (selectedTag) {
 				updateTag(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -125,7 +110,7 @@ export const TagDialog = ({
 					}}
 					id="tag"
 					key={tag}
-					options={tags.map(k => k.tag_name)}
+					options={availableTags.map(k => k.tag_name)}
 					renderInput={(params) => <TextField {...params} />}
 				/>
 				<TextArea

@@ -5,12 +5,12 @@ import {
   hazardAdditionalInfoType,
   hazardsAdditionalInfoHasTagType,
   notificationType,
-  roomDetailsType
+  roomDetailsType, tag
 } from "../../utils/ressources/types";
 import {sprintf} from "sprintf-js";
 import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {fetchOtherRoomsForStaticMagneticField} from "../../utils/graphql/FetchingTools";
+import {fetchOtherRoomsForStaticMagneticField, fetchTags} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {Button, TextArea} from "epfl-elements-react-si-extra";
 import {getErrorMessage} from '../../utils/graphql/Utils';
@@ -58,12 +58,14 @@ export const HazardTitle = ({
   const [openTagDialog, setOpenTagDialog] = useState<boolean>(false);
   const [openDeleteTagDialog, setOpenDeleteTagDialog] = useState<boolean>(false);
   const [selectedTag, setSelectedTag] = useState<hazardsAdditionalInfoHasTagType>();
+  const [availableTags, setAvailableTags] = useState<tag[]>([]);
 
   useEffect(() => {
     if(selectedHazardCategory == 'StaticMagneticField' && room) {
       loadOtherRoomsForStaticMagneticField();
     }
-  }, [oidc.accessToken, selectedHazardCategory, room]);
+    loadTags();
+  }, [oidc.accessToken, selectedHazardCategory, room, tags]);
 
   const loadOtherRoomsForStaticMagneticField = async () => {
     const results = await fetchOtherRoomsForStaticMagneticField(
@@ -73,7 +75,6 @@ export const HazardTitle = ({
     );
     if (results.status === 200 && results.data && typeof results.data !== 'string') {
       setOtherRoom(results.data[0])
-      console.log(results.data[0])
     } else {
       const errors = getErrorMessage(results, 'rooms');
       setNotificationType(errors.notif);
@@ -89,6 +90,25 @@ export const HazardTitle = ({
     setOpenTagDialog(false);
     setSelectedTag(undefined);
   }
+
+  const loadTags = async () => {
+    let savedTags: string[] = [];
+    if (hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag)
+      savedTags = hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo => addInfo.tag.tag_name);
+    console.log(savedTags);
+    const results = await fetchTags(
+      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      oidc.accessToken,
+      savedTags
+    );
+    if ( results.status === 200 && results.data ) {
+      setAvailableTags(results.data);
+    } else {
+      const errors = getErrorMessage(results, 'tags');
+      setNotificationType(errors.notif);
+      setOpenNotification(true);
+    }
+  };
 
   return <div style={{marginTop: '10px'}}>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
@@ -112,7 +132,7 @@ export const HazardTitle = ({
           {tags && tags.map(t =>
             <Tooltip title={t.comment}>
               <Chip
-                style={{backgroundColor: 'red', marginRight: '5px', color: 'white'}}
+                className="chip"
                 label={t.tag.tag_name}
               />
             </Tooltip>)}
@@ -127,7 +147,7 @@ export const HazardTitle = ({
       hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo =>
         <Tooltip title={addInfo.comment}>
           <Chip
-            style={{backgroundColor: 'red', marginRight: '5px', color: 'white'}}
+            className="chip"
             label={addInfo.tag.tag_name}
             onClick={() => {
               setOpenTagDialog(true);
@@ -140,15 +160,16 @@ export const HazardTitle = ({
           />
         </Tooltip>)
     }
-    {selectedTag && user.canEditHazards && <DeleteTagDialog tag={selectedTag} refreshView={refreshView} openDialog={openDeleteTagDialog}
-                                     setOpenDialog={setOpenDeleteTagDialog} />}
-    {!isReadonly && user.canEditHazards && <Chip
+    {!isReadonly && user.canEditHazards && availableTags.length > 0 && <Chip
       label={t(`hazard.addNewTag`)}
       onClick={() => {
+        loadTags();
         setOpenTagDialog(true);
         setSelectedTag(undefined);
       }}
     />}
+    {selectedTag && user.canEditHazards && <DeleteTagDialog tag={selectedTag} refreshView={refreshView} openDialog={openDeleteTagDialog}
+                                                            setOpenDialog={setOpenDeleteTagDialog} />}
     {otherRoom && otherRoom.hazardReferences && otherRoom.hazardReferences.map(ref => {
       if ( ref.hazards.room?.name ) {
         const submission = (ref && ref.submission) ? JSON.parse(ref.submission) : null;
@@ -190,6 +211,7 @@ export const HazardTitle = ({
     />
     {hazardAdditionalInfo && hazardAdditionalInfo.id && user.canEditHazards &&
       <TagDialog
+        availableTags={availableTags}
         openDialog={openTagDialog}
         additionalInfo={hazardAdditionalInfo.id}
         selectedTag={selectedTag}
