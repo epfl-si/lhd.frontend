@@ -89,7 +89,7 @@ export const MultipleAutocomplete = ({
 
 	const getOptionsAsync = (query: string): Promise<OptionType[]> => {
 		return new Promise((resolve) => {
-			if (parent == 'hazardscontrol') {
+			if (parent === 'hazardscontrol') {
 				const filterArray: OptionType[] = [
 					{ title: "Room=" + query, encodedTitle: "Room=" + encodeURIComponent(query)},
 					{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
@@ -100,7 +100,7 @@ export const MultipleAutocomplete = ({
 					filterArray.push({ title: splitCamelCase(col) + "=" + query, encodedTitle: col + "=" + encodeURIComponent(query)})
 				})
 				resolve(filterArray);
-			} else if (parent == 'chemicalscontrol') {
+			} else if (parent === 'chemicalscontrol') {
 				resolve(
 					[
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
@@ -108,7 +108,7 @@ export const MultipleAutocomplete = ({
 						{ title: "Status(Active/Archived)="+query, encodedTitle: "Status="+ encodeURIComponent(query) }
 					]
 				);
-			} else if (parent == 'chemicalauthorizationscontrol') {
+			} else if (parent === 'chemicalauthorizationscontrol') {
 				resolve(
 					[
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
@@ -119,7 +119,7 @@ export const MultipleAutocomplete = ({
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
 					]
 				);
-			}  else if (parent == 'radioprotectionauthorizationscontrol') {
+			}  else if (parent === 'radioprotectionauthorizationscontrol') {
 				resolve(
 					[
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },

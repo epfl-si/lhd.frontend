@@ -75,7 +75,7 @@ export default function HazardFormChildDetails() {
 
 	const handleSubmit = () => {
 		if (name != '' && newForm && newForm != '') {
-			if (urlParams.get('name') == 'NewHazardFormChild') {
+			if (urlParams.get('name') === 'NewHazardFormChild') {
 				createNewHazardFormChild (
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
@@ -121,7 +121,7 @@ export default function HazardFormChildDetails() {
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if ( res.status === 200 ) {
-			if ( urlParams.get('cat') == 'NewHazardFormChild' ) {
+			if ( urlParams.get('cat') === 'NewHazardFormChild' ) {
 				history.push(`/hazardFormChildDetails?name=${name}`);
 			} else {
 				loadFetch(name);
@@ -142,10 +142,10 @@ export default function HazardFormChildDetails() {
 			{hazardFormChildDetails && <Typography
 				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormChildDetails?.version}</strong>)
 			</Typography>}
-			{urlParams.get('name') == 'NewHazardFormChild' && <TextField
+			{urlParams.get('name') === 'NewHazardFormChild' && <TextField
 		  onChange={(event => {setName(event.target.value)})}
 		  autoFocus
-		  required={urlParams.get('name') == 'NewHazardFormChild'}
+		  required={urlParams.get('name') === 'NewHazardFormChild'}
 		  margin="dense"
 		  id="name"
 		  name="name"
@@ -153,7 +153,7 @@ export default function HazardFormChildDetails() {
 		  fullWidth
 		  variant="standard"
 	  />}
-			{(newForm || hazardFormChildDetails?.form || urlParams.get('name') == 'NewHazardFormChild') &&
+			{(newForm || hazardFormChildDetails?.form || urlParams.get('name') === 'NewHazardFormChild') &&
 					<LHDv3FormBuilder
 						form={(newForm || hazardFormChildDetails?.form) ? JSON.parse(newForm ?? hazardFormChildDetails!.form) : {}}
 						onChange={(schema) => {setNewForm(JSON.stringify(schema))}}

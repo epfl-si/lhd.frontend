@@ -77,13 +77,13 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				onChangeSelection([...currentlySelected, newValue]);
 			}
 			const filtered = filteredSuggestions.filter((suggestion) => {
-				if (objectName == 'Unit') {
+				if (objectName === 'Unit') {
 					return suggestion.id != newValue.id;
-				} else if (objectName == 'Person') {
+				} else if (objectName === 'Person') {
 					return suggestion.sciper != newValue.sciper;
-				} else if (objectName == 'NewUnit') {
+				} else if (objectName === 'NewUnit') {
 					return suggestion.unitId != newValue.unitId;
-				} else if (objectName == 'NewRoom') {
+				} else if (objectName === 'NewRoom') {
 					return suggestion.id != newValue.id;
 				}
 			});
@@ -105,13 +105,13 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			setInputValue(newValue);
 			fetchData(newValue).then(r => {
 				let filtered: Member[] =  r.filter((suggestion) => {
-					if (objectName == 'Unit') {
+					if (objectName === 'Unit') {
 						return !currentlySelected.find(s => s.id == suggestion.id);
-					} else if (objectName == 'Person') {
+					} else if (objectName === 'Person') {
 						return !currentlySelected.find(s => s.sciper == suggestion.sciper);
-					} else if (objectName == 'NewUnit') {
+					} else if (objectName === 'NewUnit') {
 						return !currentlySelected.find(s => s.unitId == suggestion.unitId);
-					} else if (objectName == 'NewRoom') {
+					} else if (objectName === 'NewRoom') {
 						return !currentlySelected.find(s => s.id == suggestion.id);
 					}
 				}) || [];

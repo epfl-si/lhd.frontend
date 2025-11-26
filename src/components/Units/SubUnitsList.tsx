@@ -42,7 +42,7 @@ export const SubUnits = ({
 
 	function onDelete(item: lhdUnitsType) {
 		const itemStatus = item.status;
-		if (item.status == 'New' && onChangeSelection ) {
+		if (item.status === 'New' && onChangeSelection ) {
 			const filtered = currentlySelected.filter(s => s.name != item.name || s.status != 'New');
 			setCurrentlySelected(filtered);
 			if ( onChangeSelection ) {
