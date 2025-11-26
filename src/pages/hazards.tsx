@@ -78,7 +78,7 @@ export const HazardsControl = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (location.search == '') {
+		if (location.search === '') {
 			setSearch('');
 			setQueryString('');
 		}
@@ -188,9 +188,9 @@ export const HazardsControl = ({
 			for (const key of allKeys) {
 				flat[key] = null;
 				if(key !== 'status' && key !== 'delete') {
-						columns.current.push({field: key, headerName: splitCamelCase(key), width: key == 'comment' ? 300 : 200,
+						columns.current.push({field: key, headerName: splitCamelCase(key), width: key === 'comment' ? 300 : 200,
 							renderCell: (params: GridRenderCellParams<any, any>) => (
-								key == 'fileLink' && params.row.fileLink ?
+								key === 'fileLink' && params.row.fileLink ?
 									<a href={params.row.fileLink}
 										 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.fileLink)}>{params.row.fileLink.split('/').pop()}</a> :
 									<>{params.row[key]}</>
@@ -198,7 +198,7 @@ export const HazardsControl = ({
 						});
 				}
 			}
-			if (search == 'Biological') {
+			if (search === 'Biological') {
 				columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
 					renderCell: (params: GridRenderCellParams<any, any>) => (
 							user.canEditOrganisms ? <Button size="icon"
@@ -218,11 +218,11 @@ export const HazardsControl = ({
 			for ( const key of ['child_submission', 'parent_submission']) {
 				if (item[key]) {
 					Object.entries(item[key]).forEach(([k, v]) => {
-						if (k == 'chemical')
+						if (k === 'chemical')
 							flat[k] = v['haz_en'];
-						else if (k == 'organism')
+						else if (k === 'organism')
 							flat[k] = v['organism'];
-						else if (k == 'container')
+						else if (k === 'container')
 							flat[k] = v['name'];
 						else
 							flat[k] = v;

@@ -368,11 +368,11 @@ export const RoomControl = ({
 						for ( const key of ['child_submission', 'parent_submission']) {
 							if (item[key]) {
 								Object.entries(item[key]).forEach(([k, v]) => {
-									if (k == 'chemical')
+									if (k === 'chemical')
 										flat[k] = v['haz_en'];
-									else if (k == 'organism')
+									else if (k === 'organism')
 										flat[k] = v['organism'];
-									else if (k == 'container')
+									else if (k === 'container')
 										flat[k] = v['name'];
 									else if (k !== 'status' && k !== 'delete' && k != 'fileLink')
 										flat[k] = v;

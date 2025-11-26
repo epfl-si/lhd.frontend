@@ -72,7 +72,7 @@ export default function HazardFormDetails() {
 
 	const handleSubmit = () => {
 		if (category != '' && newForm && newForm != '') {
-			if (urlParams.get('cat') == 'NewCategory') {
+			if (urlParams.get('cat') === 'NewCategory') {
 				createNewHazardCategory (
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
@@ -117,7 +117,7 @@ export default function HazardFormDetails() {
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if ( res.status === 200 ) {
-			if (urlParams.get('cat') == 'NewCategory') {
+			if (urlParams.get('cat') === 'NewCategory') {
 				history.push(`/formdetails?cat=${category}`);
 			} else {
 				loadFetch(category);
@@ -135,16 +135,16 @@ export default function HazardFormDetails() {
 
 	return <Box>
 			{user.isAdmin ? <><Typography
-									gutterBottom>{urlParams.get('cat') == 'NewCategory' ?
+									gutterBottom>{urlParams.get('cat') === 'NewCategory' ?
 				t(`hazardFormControl.Create`) :
 				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormDetails?.version}</strong>)
 			</Typography>
 			<div style={{display: "flex", flexDirection: 'row'}}>
 				<div className="col-9">
-					{urlParams.get('cat') == 'NewCategory' && <TextField
+					{urlParams.get('cat') === 'NewCategory' && <TextField
 			  onChange={(event => {setCategory(event.target.value)})}
 			  autoFocus
-			  required={urlParams.get('cat') == 'NewCategory'}
+			  required={urlParams.get('cat') === 'NewCategory'}
 			  margin="dense"
 			  id="category"
 			  name="category"
@@ -155,7 +155,7 @@ export default function HazardFormDetails() {
 
 					{urlParams.get('cat') != 'NewCategory'  && <div style={{marginBottom: '5px'}}></div>}
 
-					{(newForm || hazardFormDetails?.form || urlParams.get('cat') == 'NewCategory') &&
+					{(newForm || hazardFormDetails?.form || urlParams.get('cat') === 'NewCategory') &&
 							<LHDv3FormBuilder
 								form={(newForm || hazardFormDetails?.form) ? JSON.parse(newForm ?? hazardFormDetails!.form) : {}}
 								onChange={(schema) => {setNewForm(JSON.stringify(schema))}}

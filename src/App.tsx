@@ -108,41 +108,41 @@ function App() {
 				<Base.AsideMenu>
 					<ul>
 						{(connectedUser.canListRooms) &&
-						<li style={{backgroundColor: `${selectedMenu == 'rooms' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'rooms' ? '#FFCECE' : ''}`}}>
 							<Link to="/roomcontrol">{t(`menu.rooms`)}</Link>
 						</li>
 						}
 						{(connectedUser.canListHazards) &&
-						<li style={{backgroundColor: `${selectedMenu == 'hazards' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'hazards' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardscontrol">{t(`menu.hazards`)}</Link>
 						</li>
 						}
 						{(connectedUser.canListUnits) &&
-						<li style={{backgroundColor: `${selectedMenu == 'units' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'units' ? '#FFCECE' : ''}`}}>
 							<Link to="/unitcontrol">{t(`menu.units`)}</Link>
 						</li>
 						}{(connectedUser.canListOrganisms) &&
-						<li style={{backgroundColor: `${selectedMenu == 'organisms' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'organisms' ? '#FFCECE' : ''}`}}>
 							<Link to="/organismscontrol">{t(`menu.organisms`)}</Link>
 						</li>
 						}
 						{(connectedUser.canListChemicals) &&
-						<li style={{backgroundColor: `${selectedMenu == 'chemicalscontrol' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'chemicalscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/chemicalscontrol">{t(`menu.chemicals`)}</Link>
 						</li>
 						}
 						{(connectedUser.canListAuthorizations) &&
-						<li style={{backgroundColor: `${selectedMenu == 'chemicalauthorizationscontrol' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'chemicalauthorizationscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/chemicalauthorizationscontrol">{t(`menu.authChem`)}</Link>
 						</li>
 						}
 						{(connectedUser.canListAuthorizations) &&
-						<li style={{backgroundColor: `${selectedMenu == 'radioprotectionauthorizationscontrol' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'radioprotectionauthorizationscontrol' ? '#FFCECE' : ''}`}}>
 							<Link to="/radioprotectionauthorizationscontrol">{t(`menu.radioprotection`)}</Link>
 						</li>
 						}
 						{connectedUser.isAdmin &&
-						<li style={{backgroundColor: `${selectedMenu == 'hazardForms' ? '#FFCECE' : ''}`}}>
+						<li style={{backgroundColor: `${selectedMenu === 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
 						</li>
 						}
