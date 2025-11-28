@@ -101,6 +101,7 @@ type schoolType = {
 }
 
 export type reportFile = {
+	id: string;
 	name: string;
 	path: string;
 	unitName: string;
@@ -166,6 +167,7 @@ export type hazardAdditionalInfoType = {
 	file?: string;
 	fileName?: string;
 	filePath?: string;
+	id?: string;
 }
 
 export type hazardType = {

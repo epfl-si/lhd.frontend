@@ -176,6 +176,7 @@ export const fetchRoomDetails = async (
 						}
 					}
 					hazardAdditionalInfo {
+						id
 						comment
 						filePath
 						modified_by
@@ -876,6 +877,7 @@ export const fetchReportFiles = async (
 ): Promise<fetchReportFiles> => {
 	const query = `query reportfiles {
 	unitReportFiles (id: "[${unitId.map(u => u.replaceAll('\"','\\"')).join(',')}]") {
+			id
 			name
 			path
 			unitName

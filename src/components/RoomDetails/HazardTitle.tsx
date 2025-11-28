@@ -123,7 +123,7 @@ export const HazardTitle = ({
     </div>}
     {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
       <a style={{fontSize: 'small'}}
-         onClick={e => handleClickFileLink(e, oidc.accessToken, hazardAdditionalInfo!.filePath!)}
+         onClick={async e => await handleClickFileLink(e, oidc.accessToken, hazardAdditionalInfo!.id!, 'hazardAdditionalInfo')}
          href={hazardAdditionalInfo.filePath}>
         {hazardAdditionalInfo.filePath.split('/').pop()}
       </a>}

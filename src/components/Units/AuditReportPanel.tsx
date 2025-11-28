@@ -80,7 +80,7 @@ export const AuditReportPanel = ({
 							{report.reports.map(file => {
 								if(file && file.path) {
 									return <a style={{fontSize: 'small'}}
-														onClick={e => handleClickFileLink(e, oidc.accessToken, file.path)}
+														onClick={async e => await handleClickFileLink(e, oidc.accessToken, file.id, 'reportFile', file.name)}
 														href={file.path}>
 										{extractDateAndStatus(file.name)}
 									</a>

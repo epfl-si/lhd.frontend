@@ -24,9 +24,11 @@ export async function readFileAsBase64(file: File | undefined): Promise<string> 
 	});
 }
 
-export const fetchFile = async (
+const fetchFile = async (
 	authToken: string | undefined,
-	path: string
+	id: string,
+	model: string,
+	fileName: string
 ): Promise<any> => {
 	const response =
 		await fetch(`${env().REACT_APP_ENDPOINT_URL}/files/`, {
@@ -35,9 +37,7 @@ export const fetchFile = async (
 				'content-type': 'application/json',
 				authorization: `Bearer ${authToken}`,
 			},
-			body: JSON.stringify({
-				filePath: path
-			}),
+			body: JSON.stringify({ id, model, fileName }),
 			method: 'POST',
 			mode: 'cors',
 			credentials: 'omit',
@@ -62,12 +62,14 @@ export const fetchFile = async (
 	return { status: response?.status, data: {} };
 }
 
-export const handleClickFileLink = async (event: any, token: string | undefined, filePath: string) => {
+export const handleClickFileLink = async (event: any, token: string | undefined, id: string, model: string, fileName: string = '') => {
 	if (!event.defaultPrevented) {
 		event.preventDefault();
 		await fetchFile(
 			token,
-			filePath
+			id,
+			model,
+			fileName
 		);
 	}
 };

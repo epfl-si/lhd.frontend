@@ -47,7 +47,8 @@ export const HazardForm = ({
 	}, []);
 
 	const handleClick = async (event: any) => {
-		handleClickFileLink(event, oidc.accessToken, decodeURIComponent(event.target.href.substring(event.target.href.indexOf('d_bio/'))))
+		const path = event.target.href.substring(event.target.href.indexOf('d_bio/')).split('/');
+		await handleClickFileLink(event, oidc.accessToken, path[1], 'organismByFormIO');
 	};
 
 	const handleRender = useCallback(() => {

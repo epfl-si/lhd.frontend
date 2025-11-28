@@ -132,7 +132,7 @@ export const AddNewOrganismDialog = ({
 				/>
 				{selectedOrganism && selectedOrganism.filePath &&
 			<div><a href={selectedOrganism.filePath}
-					onClick={e => handleClickFileLink(e, oidc.accessToken, selectedOrganism.filePath)}>
+					onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedOrganism.id, 'organism')}>
 							{selectedOrganism.filePath.split('/').pop()}
 			</a></div>
 				}
