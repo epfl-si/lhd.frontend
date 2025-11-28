@@ -61,7 +61,7 @@ export const OrganismsControl = ({
 		{field: "filePath", headerName: t('organism.file'), width: 200, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
-																 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
+																 onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>
 			)
 		},
@@ -107,7 +107,7 @@ export const OrganismsControl = ({
 		{field: "filePath", headerName: t('organism.file'), width: 150, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
-																																onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
+																																onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>
 			)
 		},
@@ -143,7 +143,7 @@ export const OrganismsControl = ({
 						<b>{params.row.organism}</b>{` (${t('organism.risk')} : ${params.row.risk_group})`}
 					</span>
 					{params.row.filePath && params.row.filePath != 'NA' ?
-					<a href={params.row.filePath} onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.filePath)}>{params.row.filePath.split('/').pop()}</a> :
+					<a onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>}
 					<div style={{display: "flex", flexDirection: 'row'}}>
 						<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>

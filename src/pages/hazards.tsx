@@ -192,7 +192,8 @@ export const HazardsControl = ({
 							renderCell: (params: GridRenderCellParams<any, any>) => (
 								key === 'fileLink' && params.row.fileLink ?
 									<a href={params.row.fileLink}
-										 onClick={e => handleClickFileLink(e, oidc.accessToken, params.row.fileLink)}>{params.row.fileLink.split('/').pop()}</a> :
+										 onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id_lab_has_hazards_child, 'labHasHazardsChild')
+										 }>{params.row.fileLink.split('/').pop()}</a> :
 									<>{params.row[key]}</>
 							)
 						});
