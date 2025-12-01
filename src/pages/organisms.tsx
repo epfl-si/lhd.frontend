@@ -143,7 +143,7 @@ export const OrganismsControl = ({
 						<b>{params.row.organism}</b>{` (${t('organism.risk')} : ${params.row.risk_group})`}
 					</span>
 					{params.row.filePath && params.row.filePath != 'NA' ?
-					<a onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
+					<a href={params.row.filePath} onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>}
 					<div style={{display: "flex", flexDirection: 'row'}}>
 						<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>
