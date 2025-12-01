@@ -27,6 +27,7 @@ export default function RoomDetails() {
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
+	const [loadingRoom, setLoadingRoom] = useState(false);
 
 	useEffect(() => {
 		loadFetch();
@@ -43,6 +44,7 @@ export default function RoomDetails() {
 
 		const urlParams = new URLSearchParams(window.location.search);
 
+		setLoadingRoom(true);
 		const results = await fetchRoomDetails(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
@@ -59,6 +61,7 @@ export default function RoomDetails() {
 			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
+		setLoadingRoom(false);
 	}
 
 	const handleClose = () => {
@@ -101,6 +104,6 @@ export default function RoomDetails() {
 				close={handleClose}
 			/>
 		</Box>
-		: <b>This room has been deleted</b>
+		: (loadingRoom ? <b>Loading data...</b> : <b>This room has been deleted</b>)
 	);
 }

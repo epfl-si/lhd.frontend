@@ -10,7 +10,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 
 interface HazardListProps {
 	submissionsList: submissionForm[];
-	onChangeAction?: (hazardName: string) => void;
+	onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
 	inRoomDetails: boolean;
 	user: any;
 }
