@@ -104,9 +104,11 @@ export const HazardTab = ({
     setAction('Read');
   }
 
-  function onEditHazard(hazard: string) {
+  function onEditHazard(hazard: string, reloadRoom: boolean) {
     onChangeHazard(hazard);
-    onSaveRoom();
+    if (reloadRoom) {
+      onSaveRoom();
+    }
     setAction('Edit');
   }
 

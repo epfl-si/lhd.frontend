@@ -19,7 +19,7 @@ interface HazardTitleProps {
   setComment?: (newValue: string) => void;
   comment?: string | undefined;
   isReadonly: boolean;
-  onChangeAction?: (hazardName: string) => void;
+  onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
   user: any;
 }
 
@@ -90,7 +90,7 @@ export const HazardTitle = ({
       </div>
       {isReadonly && user.canEditHazards && <Button size="icon"
               iconName={"#edit-3"}
-              onClick={() => {if(onChangeAction) onChangeAction(selectedHazardCategory)}}/>
+              onClick={() => {if(onChangeAction) onChangeAction(selectedHazardCategory, false)}}/>
       }
     </div>
     {otherRoom && otherRoom.hazardReferences && otherRoom.hazardReferences.map(ref => {

@@ -11,7 +11,7 @@ interface HazardFormVBoxProps {
   selectedHazardCategory: string;
   lastVersionForm: hazardFormType | undefined;
   action: 'Add' | 'Edit' | 'Read';
-  onChangeAction?: (hazardName: string) => void;
+  onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
   onReadAction?: (hazardName: string) => void;
   roomList: string[];
   organismList: object[];

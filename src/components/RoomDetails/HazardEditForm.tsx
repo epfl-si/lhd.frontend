@@ -26,7 +26,7 @@ interface HazardEditFormProps {
 	selectedHazardCategory: string;
 	lastVersionForm: hazardFormType | undefined;
 	action: 'Add' | 'Edit' | 'Read';
-	onChangeAction?: (hazardName: string) => void;
+	onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
 	onReadAction?: (hazardName: string) => void;
 	roomList: string[];
 	organismList: object[];
@@ -216,7 +216,7 @@ export const HazardEditForm = ({
 		}
 		else if ( res.status === 200 ) {
 			if ( onChangeAction ) {
-				onChangeAction(selectedHazardCategory);
+				onChangeAction(selectedHazardCategory, true);
 			}
 			setNotificationType(notificationsVariants['room-update-success']);
 		} else {
