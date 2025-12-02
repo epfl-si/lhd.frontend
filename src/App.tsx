@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {BrowserRouter, Link, Route, Switch} from 'react-router-dom';
-import {LoginButton, StateEnum, useOpenIDConnectContext,} from '@epfl-si/react-appauth';
+import {LoginButton, StateEnum, useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {Box, Dialog, DialogActions, DialogContent, DialogTitle,} from '@material-ui/core';
 import {Alert} from '@mui/material';
 import {useTranslation} from 'react-i18next';
@@ -26,7 +26,7 @@ import Notifications from "./components/Table/Notifications";
 function App() {
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
-	const isLoggedIn = oidc.state === StateEnum.LoggedIn;
+	let loggedIn = false;
 	const [selectedMenu, setSelectedMenu] = useState<string>('rooms');
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
@@ -54,19 +54,20 @@ function App() {
 	});
 
 	useEffect(() => {
-		if (isLoggedIn) {
+		if (!loggedIn && oidc.state == StateEnum.LoggedIn) {
 			loadFetch();
+			loggedIn = true;
 		}
-	}, [oidc.accessToken, isLoggedIn, selectedMenu]);
+	}, [oidc.accessToken, oidc.state, selectedMenu]);
 
 	const loadFetch = async () => {
 		const results = await fetchConnectedUser(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken
 		);
-		if (results.status === 200 && results.data) {
-			console.log('ConnectedUser',results.data);
-			setConnectedUser(results.data);
+		if (results.status === 200 && results.data && results.data.user) {
+			console.log('ConnectedUser',results.data.user);
+			setConnectedUser(results.data.user);
 		} else {
 			setNotificationType({
 				text: t('generic.userError'),
@@ -84,11 +85,15 @@ function App() {
 		setSelectedMenu(page);
 	}
 
+	const [openAuthorisations, setOpenAuthorisations] = useState(false);
 	const [openAudit, setOpenAudit] = useState(false);
 	const [openUpdates, setOpenUpdates] = useState(false);
 	const [openLinks, setOpenLinks] = useState(false);
 
-	if (!isLoggedIn) {
+	if (oidc.state == StateEnum.InProgress) {
+		return <div></div>
+	}
+	if (oidc.state != StateEnum.LoggedIn) {
 		return (
 			<Dialog open={true}>
 				<Alert severity="warning">
