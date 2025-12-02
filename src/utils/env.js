@@ -9,14 +9,14 @@
  */
 
 const _env_development = {
-  REACT_APP_AUTH_SERVER_URL: "http://localhost:8080/realms/LHD",
+  REACT_APP_AUTH_SERVER_URL: "https://login.microsoftonline.com/f6c2556a-c4fb-4ab1-a2c7-9e220df11c43/v2.0",
   REACT_APP_HOMEPAGE_URL: "http://localhost:3000/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "//localhost:3001/graphql",
   REACT_APP_ENDPOINT_URL: "//localhost:3001",
-  REACT_APP_OPENID_SCOPE: "openid",
-  REACT_CLIENT_ID: "LHDv3",
   LHDv2_BASE_URL:"https://lhd-127-0-0-1.nip.io/",
-  CRISTAL_URL:"cristal-test.epfl.ch"
+  CRISTAL_URL:"cristal-test.epfl.ch",
+  OIDC_SCOPE: "openid 14f7c97f-8cae-4df0-8f3a-151e721cd86f/.default",
+  OIDC_CLIENT_ID: "14f7c97f-8cae-4df0-8f3a-151e721cd86f"
 };
 
 const _env_production = {
@@ -24,10 +24,10 @@ const _env_production = {
   REACT_APP_HOMEPAGE_URL: "https://lhd.epfl.ch/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "https://lhd.epfl.ch/graphql",
   REACT_APP_ENDPOINT_URL: "https://lhd.epfl.ch",
-  REACT_APP_OPENID_SCOPE: "openid profile tequila",
-  REACT_CLIENT_ID: "LHDv3_prod",
   LHDv2_BASE_URL:"/",
-  CRISTAL_URL:"cristal.epfl.ch"
+  CRISTAL_URL:"cristal.epfl.ch",
+  OIDC_SCOPE: "openid profile tequila",
+  OIDC_CLIENT_ID: "LHDv3_prod",
 };
 
 export function env() {
