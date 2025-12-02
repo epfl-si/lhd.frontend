@@ -781,6 +781,7 @@ export const fetchConnectedUser = async (
 							canListRooms
 							isAdmin
 							canEditUnits
+							canListReportFiles
 							canListOrganisms
 							canEditOrganisms
 							canListChemicals
