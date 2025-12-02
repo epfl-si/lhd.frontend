@@ -32,6 +32,7 @@ ReactDOM.render(
 		authServerUrl={environmentVariables.REACT_APP_AUTH_SERVER_URL}
 		client={context}
 		storage={store}
+		onLogout={() => window.location.href=environmentVariables.REACT_APP_HOMEPAGE_URL}
 	>
 		<App />
 	</OIDCContext>,
