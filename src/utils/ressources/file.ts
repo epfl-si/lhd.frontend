@@ -30,15 +30,19 @@ const fetchFile = async (
 	model: string,
 	fileName: string
 ): Promise<any> => {
+	const keys: any = JSON.parse(id);
+	let url = `${env().REACT_APP_ENDPOINT_URL}/files/${model}/${encodeURIComponent(keys.eph_id)}?salt=${keys.salt}&fileName=${fileName}`;
+	if (model === 'organismByFormIO') {
+		url = `${env().REACT_APP_ENDPOINT_URL}/files/${model}/${id}`;
+	}
 	const response =
-		await fetch(`${env().REACT_APP_ENDPOINT_URL}/files/`, {
+		await fetch(url, {
 			headers: {
 				accept: '*/*',
 				'content-type': 'application/json',
 				authorization: `Bearer ${authToken}`,
 			},
-			body: JSON.stringify({ id, model, fileName }),
-			method: 'POST',
+			method: 'GET',
 			mode: 'cors',
 			credentials: 'omit',
 		})
