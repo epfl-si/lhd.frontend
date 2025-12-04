@@ -10,6 +10,7 @@ import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
 import {tag} from "../../utils/ressources/types";
+import {Chip} from "@material-ui/core";
 
 interface SplitButtonProps {
 	options: tag[];
@@ -42,7 +43,8 @@ export const SplitButton = ({
 	};
 
 	return (
-		<>
+		options.length > 1 ?
+			<>
 				<ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button">
 					<Button onClick={() => handleClick(options[selectedIndex])}>{options[selectedIndex]?.tag_name}</Button>
 					<Button color="primary"
@@ -82,6 +84,11 @@ export const SplitButton = ({
 						</Grow>
 					)}
 				</Popper>
-		</>
+			</> :
+			<Chip
+				className="grayChip"
+				label={options[selectedIndex]?.tag_name?.toUpperCase()}
+				onClick={() => handleClick(options[0])}
+			/>
 	);
 }
