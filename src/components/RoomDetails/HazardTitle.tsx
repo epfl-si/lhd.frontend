@@ -19,6 +19,7 @@ import {Chip} from "@material-ui/core";
 import {TagDialog} from "./TagDialog";
 import {Tooltip} from "@mui/joy";
 import {DeleteTagDialog} from "./DeleteTagDialog";
+import {SplitButton} from "../global/SplitButton";
 
 interface HazardTitleProps {
   hazardAdditionalInfo?: hazardAdditionalInfoType | undefined;
@@ -95,7 +96,6 @@ export const HazardTitle = ({
     let savedTags: string[] = [];
     if (hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag)
       savedTags = hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo => addInfo.tag.tag_name);
-    console.log(savedTags);
     const results = await fetchTags(
       env().REACT_APP_GRAPHQL_ENDPOINT_URL,
       oidc.accessToken,
@@ -109,6 +109,12 @@ export const HazardTitle = ({
       setOpenNotification(true);
     }
   };
+
+  function handleTagClick (selectedTag: tag) {
+    loadTags();
+    setSelectedTag({tag: selectedTag} as hazardsAdditionalInfoHasTagType);
+    setOpenTagDialog(true);
+  }
 
   return <div style={{marginTop: '10px'}}>
     <div style={{display: 'flex', flexDirection: 'row', justifyContent: "space-between"}}>
@@ -143,31 +149,26 @@ export const HazardTitle = ({
               onClick={() => {if(onChangeAction) onChangeAction(selectedHazardCategory, false)}}/>
       }
     </div>
-    {hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag &&
-      hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo =>
-        <Tooltip title={addInfo.comment}>
-          <Chip
-            className="chip"
-            label={addInfo.tag.tag_name}
-            onClick={() => {
-              setOpenTagDialog(true);
-              setSelectedTag(addInfo);
-            }}
-            onDelete={() => {
-              setSelectedTag(addInfo);
-              setOpenDeleteTagDialog(true);
-            }}
-          />
-        </Tooltip>)
-    }
-    {!isReadonly && user.canEditHazards && availableTags.length > 0 && <Chip
-      label={t(`hazard.addNewTag`)}
-      onClick={() => {
-        loadTags();
-        setOpenTagDialog(true);
-        setSelectedTag(undefined);
-      }}
-    />}
+    <div style={{display: "flex", flexDirection: "row"}}>
+      {hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag &&
+        hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo =>
+          <Tooltip title={addInfo.comment}>
+            <Chip
+              className="chip"
+              label={addInfo.tag.tag_name}
+              onClick={() => {
+                setOpenTagDialog(true);
+                setSelectedTag(addInfo);
+              }}
+              onDelete={() => {
+                setSelectedTag(addInfo);
+                setOpenDeleteTagDialog(true);
+              }}
+            />
+          </Tooltip>)
+      }
+      {!isReadonly && user.canEditHazards && availableTags.length > 0 && <SplitButton handleClick={handleTagClick} options={availableTags} />}
+    </div>
     {selectedTag && user.canEditHazards && <DeleteTagDialog tag={selectedTag} refreshView={refreshView} openDialog={openDeleteTagDialog}
                                                             setOpenDialog={setOpenDeleteTagDialog} />}
     {otherRoom && otherRoom.hazardReferences && otherRoom.hazardReferences.map(ref => {
