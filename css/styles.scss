@@ -336,3 +336,23 @@ button {
     height: 15px !important;
     margin-bottom: 2px;
 }
+
+.MuiButton-containedPrimary {
+    background-color: lightslategray !important;
+    border-right-color: white !important;
+    margin: 0 !important;
+    padding: 1px 1px 1px 5px !important;
+    font-weight: bold !important;
+    font-size: x-small !important;
+    border-radius: 16px 0 0 16px !important;
+}
+
+.MuiButton-containedSizeSmall {
+    margin: 0 !important;
+    padding: 1px !important;
+    border-radius: 0 16px 16px 0 !important;
+}
+
+.MuiButtonGroup-contained {
+    box-shadow: none !important;
+}

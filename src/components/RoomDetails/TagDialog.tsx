@@ -48,7 +48,7 @@ export const TagDialog = ({
 
 	async function onAddTag() {
 		if (tag && comment) {
-			if (selectedTag) {
+			if (selectedTag?.id) {
 				updateTag(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
@@ -102,7 +102,6 @@ export const TagDialog = ({
 									 type='selection'>
 				<Autocomplete
 					value={tag}
-					disabled={selectedTag !== undefined}
 					onChange={(event: any, newValue: string | null) => {
 						if ( newValue ) {
 							setTag(newValue);
