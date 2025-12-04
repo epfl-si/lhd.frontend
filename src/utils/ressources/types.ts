@@ -170,7 +170,6 @@ export type hazardAdditionalInfoType = {
 	fileName?: string;
 	filePath?: string;
 	hazardsAdditionalInfoHasTag?: hazardsAdditionalInfoHasTagType[];
-	id?: string;
 }
 
 export type hazardType = {
