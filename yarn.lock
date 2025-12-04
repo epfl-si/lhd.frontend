@@ -4136,6 +4136,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@material-ui/icons@npm:^4.11.3":
+  version: 4.11.3
+  resolution: "@material-ui/icons@npm:4.11.3"
+  dependencies:
+    "@babel/runtime": "npm:^7.4.4"
+  peerDependencies:
+    "@material-ui/core": ^4.0.0
+    "@types/react": ^16.8.6 || ^17.0.0
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: be9bf988a8b23e0885ca0c1dc5a4960f6c28f401079dbc13f840f4bd738ef95965cb4f751d609cb6acc819e1c2f8a7293d0a6f26b3685a711506679e4834ab35
+  languageName: node
+  linkType: hard
+
 "@material-ui/styles@npm:^4.11.5":
   version: 4.11.5
   resolution: "@material-ui/styles@npm:4.11.5"
@@ -12956,6 +12973,7 @@ __metadata:
     "@formio/contrib": "npm:^2.0.0"
     "@formio/react": "npm:5.3.0-rc.3"
     "@material-ui/core": "npm:^4.12.3"
+    "@material-ui/icons": "npm:^4.11.3"
     "@mui/base": "npm:^5.0.0-beta.26"
     "@mui/icons-material": "npm:^5.1.0"
     "@mui/joy": "npm:^5.0.0-alpha.80"
