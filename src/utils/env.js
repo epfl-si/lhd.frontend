@@ -15,8 +15,8 @@ const _env_development = {
   REACT_APP_ENDPOINT_URL: "//localhost:3001",
   LHDv2_BASE_URL:"https://lhd-127-0-0-1.nip.io/",
   CRISTAL_URL:"cristal-test.epfl.ch",
-  OIDC_SCOPE: "openid 14f7c97f-8cae-4df0-8f3a-151e721cd86f/.default",
-  OIDC_CLIENT_ID: "14f7c97f-8cae-4df0-8f3a-151e721cd86f"
+  OIDC_SCOPE: "openid 2c822adc-1365-4b59-931f-64cde59e7d20/.default",
+  OIDC_CLIENT_ID: "2c822adc-1365-4b59-931f-64cde59e7d20"
 };
 
 const _env_production = {
