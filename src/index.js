@@ -9,10 +9,9 @@ import { env } from './utils/env';
 
 import "epfl-elements/dist/css/elements.css";
 import "epfl-elements-react-si-extra/index.css"
-import { Auth2Store } from '@epfl-si/appauth/src/OpenIDConnect.js';
 
 const environmentVariables = env();
-const store = new LocalStorageBackend(new Auth2Store());
+const store = new LocalStorageBackend();
 
 if (! window.IS_PRODUCTION) {
 	new EventSource('/esbuild').addEventListener('change', () => window.location.reload())
@@ -20,7 +19,8 @@ if (! window.IS_PRODUCTION) {
 
 const context = {
 	clientId: environmentVariables.OIDC_CLIENT_ID,
-	scope: environmentVariables.OIDC_SCOPE
+	scope: environmentVariables.OIDC_SCOPE,
+	redirectUri: window.location
 }
 
 ReactDOM.render(

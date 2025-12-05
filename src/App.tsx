@@ -68,12 +68,14 @@ function App() {
 		if (results.status === 200 && results.data && results.data.user) {
 			console.log('ConnectedUser',results.data.user);
 			setConnectedUser(results.data.user);
-		} else {
+		} else if (results.status === 200) {
 			setNotificationType({
 				text: t('generic.userError'),
 				type: 'error'
 			});
 			setOpenNotification(true);
+		} else {
+			oidc.logout();
 		}
 	};
 
