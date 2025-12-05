@@ -23,10 +23,6 @@ const context = {
 	scope: environmentVariables.OIDC_SCOPE
 }
 
-if (Object.keys(environmentVariables).indexOf("REACT_CLIENT_SECRET") > -1) {
-	context.clientSecret = environmentVariables.REACT_CLIENT_SECRET
-}
-
 ReactDOM.render(
 	<OIDCContext
 		authServerUrl={environmentVariables.REACT_APP_AUTH_SERVER_URL}
