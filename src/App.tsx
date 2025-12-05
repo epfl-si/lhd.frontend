@@ -85,7 +85,6 @@ function App() {
 		setSelectedMenu(page);
 	}
 
-	const [openAuthorisations, setOpenAuthorisations] = useState(false);
 	const [openAudit, setOpenAudit] = useState(false);
 	const [openUpdates, setOpenUpdates] = useState(false);
 	const [openLinks, setOpenLinks] = useState(false);
