@@ -65,9 +65,9 @@ function App() {
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken
 		);
-		if (results.status === 200 && results.data && results.data.user) {
-			console.log('ConnectedUser',results.data.user);
-			setConnectedUser(results.data.user);
+		if (results.status === 200 && results.data) {
+			console.log('ConnectedUser', results.data);
+			setConnectedUser(results.data);
 		} else if (results.status === 200) {
 			setNotificationType({
 				text: t('generic.userError'),
