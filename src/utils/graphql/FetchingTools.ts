@@ -772,8 +772,6 @@ export const fetchConnectedUser = async (
 						connectedUserInfo {
 							groups
 							userName
-							given_name
-							family_name
 							canEditHazards
 							canEditRooms
 							canListUnits
