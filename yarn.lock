@@ -3158,15 +3158,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@epfl-si/react-appauth@npm:^0.8.0":
-  version: 0.8.2
-  resolution: "@epfl-si/react-appauth@npm:0.8.2"
+"@epfl-si/appauth@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "@epfl-si/appauth@npm:0.13.0"
   dependencies:
     "@openid/appauth": "npm:^1.3.1"
     core-js: "npm:^3.25.5"
     resolvable-promise: "npm:^2.0.3"
+  checksum: d3c477626db239fe7b1b14dc362e847c8c88d6c2aa80e12f04bb34268b49994e67f86fad5edd2459c3e63f58b3915d89eba087132aad763ce7e2eb0f108cbc6f
+  languageName: node
+  linkType: hard
+
+"@epfl-si/react-appauth@npm:^0.15.0":
+  version: 0.15.0
+  resolution: "@epfl-si/react-appauth@npm:0.15.0"
+  dependencies:
+    "@epfl-si/appauth": "npm:^0.13.0"
+    "@openid/appauth": "npm:^1.3.1"
+    core-js: "npm:^3.25.5"
+    resolvable-promise: "npm:^2.0.3"
     use-async-effect: "npm:^2.2.7"
-  checksum: 97a0b1b0890ccd0f3978634ca38b413ab0d518b9e4406825f03d9525c2068d8aa9c03f82a2d08314a585cde4949d477f985b83fb76bc11e1eaf7105abc957e83
+  peerDependencies:
+    react: 17 - 19
+  checksum: fd7492267ef74b9372cb3d9dbdc79c0dca9d05ce37a77659e52f3f62c84a74c102a054893e948524bbc1b236e87e498eb01ab0700068736ad6acee862cf261b7
   languageName: node
   linkType: hard
 
@@ -12938,7 +12952,7 @@ __metadata:
   dependencies:
     "@emotion/react": "npm:^11.5.0"
     "@emotion/styled": "npm:^11.3.0"
-    "@epfl-si/react-appauth": "npm:^0.8.0"
+    "@epfl-si/react-appauth": "npm:^0.15.0"
     "@formio/contrib": "npm:^2.0.0"
     "@formio/react": "npm:5.3.0-rc.3"
     "@material-ui/core": "npm:^4.12.3"
