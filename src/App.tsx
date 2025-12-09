@@ -75,7 +75,7 @@ function App() {
 				type: 'error'
 			});
 			setOpenNotification(true);
-		} else {
+		} else if (results.status === 403) {
 			oidc.logout();
 		}
 	};
