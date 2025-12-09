@@ -396,7 +396,7 @@ export const HazardsControl = ({
 					iconName={`#download`}
 					primary/>
 			</div>
-				{search && isTableReady &&
+				{search && isTableReady ?
 			<EntriesTableCategory
 				tableData={tableData}
 				columns={columns.current}
@@ -406,7 +406,7 @@ export const HazardsControl = ({
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
-			/>}
+			/> : <Box width="100%" height="500px"/>}
 				<AlertDialog openDialog={openDialog}
 											onOkClick={handleHazardDelete}
 											onCancelClick={() => {
