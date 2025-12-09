@@ -22,6 +22,7 @@ import {RadioprotectionsAuthorizationControl} from "./pages/radioprotectionAutho
 import {Base} from "./components/global/Base";
 import {notificationType} from "./utils/ressources/types";
 import Notifications from "./components/Table/Notifications";
+import packageJson from '../package.json';
 
 function App() {
 	const { t } = useTranslation();
@@ -257,6 +258,7 @@ function App() {
 																						 user={connectedUser}/>
 						</Route>
 					</Switch>
+					<p style={{display: 'flex',justifyContent: 'end',fontSize: 'smaller',margin: '10px'}}>Version: {packageJson.version}</p>
 				</div>
 			</Base>
 		</BrowserRouter>
@@ -264,7 +266,8 @@ function App() {
 			open={openNotification}
 			notification={notificationType}
 			close={handleClose}
-		/></>
+		/>
+			</>
 	);
 }
 
