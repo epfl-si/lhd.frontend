@@ -50,7 +50,8 @@ function App() {
 		canEditChemicals: false,
 		canListAuthorizations: false,
 		canEditAuthorizations: false,
-		canListPersons: false
+		canListPersons: false,
+		canListForms: false
 	});
 
 	useEffect(() => {

@@ -787,6 +787,7 @@ export const fetchConnectedUser = async (
 							canListAuthorizations
 							canEditAuthorizations
 							canListPersons
+							canListForms
 						}
 					}`;
 
