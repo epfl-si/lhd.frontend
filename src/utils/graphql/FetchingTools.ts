@@ -793,6 +793,8 @@ export const fetchConnectedUser = async (
 							canEditChemicals
 							canListAuthorizations
 							canEditAuthorizations
+							canListDispensations
+							canEditDispensations
 							canListPersons
 							canListForms
 						}
