@@ -13,7 +13,7 @@ type EntriesTableCategoryProps = {
 	columns: columnType[];
 	loading: boolean;
 	pageToOpen:  'room' | 'unit' | 'hazardForms' | 'hazardFormsChild' | 'organism' | 'hazards' | 'chemicals' |
-		'chemicalauthorizations' | 'chemicalauthorizationsByRoom' | 'radioprotectionauthorization';
+		'chemicalauthorizations' | 'chemicalauthorizationsByRoom' | 'radioprotectionauthorization' | 'dispensation';
 	page?: number;
 	pageSize?: number;
 	totalCount?: number;
@@ -99,6 +99,7 @@ export function EntriesTableCategory({
 							case "organism":
 								return row.id;
 							case "chemicalauthorizations":
+							case "chemicalauthorizationsByRoom":
 							case "radioprotectionauthorization":
 								return row.authorization;
 							case "hazards":
@@ -107,8 +108,8 @@ export function EntriesTableCategory({
 								return row.hazard_category.hazard_category_name;
 							case "hazardFormsChild":
 								return row.hazard_form_child_name;
-							case "chemicalauthorizationsByRoom":
-								return row.authorization;
+							case "dispensation":
+								return row.dispensation;
 						}
 					}}
 					pagination

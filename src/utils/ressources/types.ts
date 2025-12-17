@@ -65,8 +65,29 @@ export type authorizationType = {
 	authorization_rooms: roomDetailsType[];
 	authorization_holders: personType[];
 	authorization_chemicals: chemicalsType[];
-	authorization_radiations: sourceType[];
+	authorization_radiations: genericType[];
 	authority?: string;
+}
+
+export type dispensationType = {
+	id: string;
+	dispensation: string;
+	renewals: number;
+	other_subject: string;
+	requires: string;
+	comment: string;
+	status: string;
+	date_start: Date;
+	date_end: Date;
+	file_path: string;
+	created_by: string;
+	created_on: Date;
+	modified_by: string;
+	modified_on: Date;
+	subject: string;
+	dispensation_rooms: roomDetailsType[];
+	dispensation_holders: personType[];
+	dispensation_tickets: genericType[];
 }
 
 export type lhdUnitsType = {
@@ -82,8 +103,8 @@ export type lhdUnitsType = {
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
-export type sourceType = {
-	source: string;
+export type genericType = {
+	name: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 

@@ -1154,6 +1154,72 @@ export const fetchRadioprotectionAuthorizations = async (
 	};
 };
 
+export const fetchDispensations = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string
+): Promise<any> => {
+	const query = `query fetchDispensations {
+		dispensationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
+			dispensations {
+				id
+				dispensation
+				date_start
+				date_end
+				renewals
+				subject
+				other_subject
+				requires
+				comment
+				file_path
+				created_by
+				created_on
+				modified_by
+				modified_on
+				dispensation_rooms {
+					name
+					isDeleted
+				}
+				dispensation_holders {
+					surname
+					name
+					sciper
+				}
+				status
+				dispensation_tickets
+			}
+			totalCount
+		}
+	}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.dispensationsWithPagination,
+		errors: result.errors
+	};
+};
+
+export const fetchDispensationSubjects = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query = `query fetchDispensationSubjects {
+		dispensationSubjects {
+			subject
+		}
+	}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.dispensationSubjects,
+		errors: result.errors
+	};
+};
+
 export const fetchChemicalAuthorizationsByRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,

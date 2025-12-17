@@ -23,6 +23,7 @@ import {Base} from "./components/global/Base";
 import {notificationType} from "./utils/ressources/types";
 import Notifications from "./components/Table/Notifications";
 import packageJson from '../package.json';
+import {DispensationControl} from "./pages/dispensations";
 
 function App() {
 	const { t } = useTranslation();
@@ -150,6 +151,11 @@ function App() {
 							<Link to="/radioprotectionauthorizationscontrol">{t(`menu.radioprotection`)}</Link>
 						</li>
 						}
+						{(connectedUser.canListDispensations) &&
+						<li style={{backgroundColor: `${selectedMenu === 'dispensationscontrol' ? '#FFCECE' : ''}`}}>
+							<Link to="/dispensationscontrol">{t(`menu.dispensation`)}</Link>
+						</li>
+						}
 						{connectedUser.isAdmin &&
 						<li style={{backgroundColor: `${selectedMenu === 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
@@ -157,7 +163,6 @@ function App() {
 						}
 						{(connectedUser.canListRooms) &&
 				<>
-					<li><a href={env().LHDv2_BASE_URL + "auth_DSPS/lhd_auth_dsps.php"}>Dispensations</a></li>
 					<li><a href={env().LHDv2_BASE_URL + "cut/lhd_cut.php"}>Supplies interruptions</a></li>
 					<li><a onClick={() => setOpenAudit(!openAudit)}>Audit</a>
 						<ul style={{display: openAudit ? 'block' : 'none'}}>
@@ -177,13 +182,6 @@ function App() {
 						{(connectedUser.canListRooms) &&
 				<>
 					<li><a href={env().LHDv2_BASE_URL + "aa/aa_validation/lhd_aa_validation.php"}>Accred/Archibus</a>
-					</li>
-					<li><a onClick={() => setOpenUpdates(!openUpdates)}>Updates</a>
-						<ul style={{display: openUpdates ? 'block' : 'none'}}>
-							<li><a
-								href={env().LHDv2_BASE_URL + "updates/update_auth_dsps/lhd_update_auth_dsps.php"}>Dispensations</a>
-							</li>
-						</ul>
 					</li>
 					<li><a onClick={() => setOpenLinks(!openLinks)}>Links</a>
 						<ul style={{display: openLinks ? 'block' : 'none'}}>
@@ -256,6 +254,10 @@ function App() {
 						<Route path="/radioprotectionauthorizationscontrol">
 							<RadioprotectionsAuthorizationControl handleCurrentPage={handleCurrentPage}
 																						 user={connectedUser}/>
+						</Route>
+						<Route path="/dispensationscontrol">
+							<DispensationControl handleCurrentPage={handleCurrentPage}
+																										user={connectedUser}/>
 						</Route>
 					</Switch>
 					<p style={{display: 'flex',justifyContent: 'end',fontSize: 'smaller',margin: '10px'}}>Version: {packageJson.version}</p>
