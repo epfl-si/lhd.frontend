@@ -72,6 +72,14 @@ export const notificationsVariants = {
 		type: 'success',
 		text: 'New chemical has been saved',
 	},
+	'save-new-dispensation-success': {
+		type: 'success',
+		text: 'New dispensation has been saved',
+	},
+	'no-dispensation-chosen': {
+		type: 'error',
+		text: 'Dispensation name and subject are mandatory',
+	},
 	'no-organism-chosen': {
 		type: 'error',
 		text: 'Organism name and risk are mandatory',

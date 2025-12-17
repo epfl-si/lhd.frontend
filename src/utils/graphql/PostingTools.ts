@@ -124,61 +124,6 @@ export const deleteDispensation = async (
 	};
 };
 
-export const updateDispensation = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	slug: string | null,
-	dispensation: dispensationRequestType,
-	variables: Object
-): Promise<any> => {
-	const operationName = 'updateDispensation';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `mutation ${operationName} {
-							 editDraftDispensation(slug: "${slug}", author: "${'TEST'}", sciper_author: 312067, subject: "${
-							dispensation.subject
-						}", description: "${escapeGraphQL(dispensation.requirements)}", comment: "${
-							escapeGraphQL(dispensation.comment)
-						}", date_start: "${dispensation.startDate}", date_end: "${
-							dispensation.endDate
-						}", rooms: ${dispensation.rooms}, holders: ${dispensation.holders}) {
-								errors {
-									message
-								}
-								isSuccess
-							}
-						}`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-				})
-			: null;
-
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-
-	return {
-		status: results.status,
-		data: graphQLResponse.data,
-	};
-};
-
 export const updateRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -618,7 +563,7 @@ export const saveNewRadioprotection = async (
 									authority: "${radioprotection.authority}",
 									type: "IonisingRadiation",
 									radiations: [
-										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+										${radioprotection.selectedSources.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
 									],
 									holders: [
 										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
@@ -652,7 +597,7 @@ export const updateRadioprotection = async (
 									status: "${radioprotection.status}",
 									authority: "${radioprotection.authority}",
 									radiations: [
-										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+										${radioprotection.selectedSources.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
 									],
 									holders: [
 										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
@@ -679,6 +624,76 @@ export const deleteAuthorization = async (
 ): Promise<any> => {
 	const query = `mutation deleteAuthorization {
 							 deleteAuthorization(id: ${id})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const saveNewDispensation = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	dispensation: any
+): Promise<any> => {
+	const query = `mutation addDispensation {
+								addDispensation(
+									dispensation: "${dispensation.name}",
+									subject: "${dispensation.subject}",
+									other_subject: "${dispensation.other_subject}",
+									requires: "${dispensation.requires}",
+									comment: "${dispensation.comment}",
+									date_start: "${(new Date(dispensation.creationDate)).toLocaleDateString("en-GB")}",
+									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
+									status: "${dispensation.status}",
+									tickets: [
+										${dispensation.selectedTickets.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+									holders: [
+										${dispensation.selectedHolders.map(disp => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
+									],
+									rooms: [
+										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+								)
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	console.log(query);
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const updateDispensation = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	dispensation: any
+): Promise<any> => {
+	const query = `mutation updateDispensation {
+								updateDispensation(
+									id: ${id},
+									date_end: "${(new Date(dispensation.date_end)).toLocaleDateString("en-GB")}",
+									status: "${dispensation.status}",
+									subject: "${dispensation.subject}",
+									tickets: [
+										${dispensation.selectedTickets.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+									holders: [
+										${dispensation.selectedHolders.map(disp => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
+									],
+									rooms: [
+										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+								)
 							 {
 								errors {
 									message
