@@ -10,7 +10,7 @@ import {
 	notificationType,
 	personType,
 	roomDetailsType,
-	sourceType
+	genericType
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
@@ -55,8 +55,8 @@ export const AddNewRadioprotectionDialog = ({
 	const [selectedRooms, setSelectedRooms] = useState<roomDetailsType[]>([]);
 	const [savedHolders, setSavedHolders] = useState<personType[]>([]);
 	const [selectedHolders, setSelectedHolders] = useState<personType[]>([]);
-	const [savedSources, setSavedSources] = useState<sourceType[]>([]);
-	const [selectedSources, setSelectedSources] = useState<sourceType[]>([]);
+	const [savedSources, setSavedSources] = useState<genericType[]>([]);
+	const [selectedSources, setSelectedSources] = useState<genericType[]>([]);
 
 	useEffect(() => {
 		setUnit(selectedRadioprotection?.unit);
@@ -203,7 +203,7 @@ export const AddNewRadioprotectionDialog = ({
 		return person.name + ' ' + person.surname;
 	}
 
-	function onChangeSources(changedSources: sourceType[]) {
+	function onChangeSources(changedSources: genericType[]) {
 		setSelectedSources(changedSources);
 	}
 

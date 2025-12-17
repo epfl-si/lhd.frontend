@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {Button, FormCard, Text} from "epfl-elements-react-si-extra";
 import {useTranslation} from "react-i18next";
-import {sourceType} from "../../utils/ressources/types";
+import {genericType} from "../../utils/ressources/types";
 import "../../../css/styles.scss";
 
 interface SourceProps {
 	/**
 	 * the list of initially selected members
 	 */
-	selected: sourceType[];
+	selected: genericType[];
 	/**
 	 * Action to be done at change selection
 	 */
-	onChangeSelection?: (currentlySelected: sourceType[]) => void;
+	onChangeSelection?: (currentlySelected: genericType[]) => void;
 }
 
 export const Source = ({
@@ -20,12 +20,12 @@ export const Source = ({
 	onChangeSelection
 }: SourceProps) => {
 	const { t } = useTranslation();
-	const [currentlySelected, setCurrentlySelected] = React.useState<sourceType[]>(selected);
+	const [currentlySelected, setCurrentlySelected] = React.useState<genericType[]>(selected);
 	const [inputValue, setInputValue] = React.useState('');
 	const [forceRender, setForceRender] = useState(false);
 
 	useEffect(() => {
-		const arr: sourceType[] = []
+		const arr: genericType[] = []
 		selected.forEach(s => {
 			s.status = 'Default';
 			arr.push(s)
@@ -38,10 +38,10 @@ export const Source = ({
 			setForceRender(false);
 	}, [forceRender, currentlySelected]);
 
-	function onDelete(item: sourceType) {
+	function onDelete(item: genericType) {
 		const itemStatus = item.status;
 		if (item.status == 'New' && onChangeSelection ) {
-			const filtered = currentlySelected.filter(s => s.source != item.source || s.status != 'New');
+			const filtered = currentlySelected.filter(s => s.name != item.name || s.status != 'New');
 			setCurrentlySelected(filtered);
 			if ( onChangeSelection ) {
 				onChangeSelection(filtered);
@@ -57,7 +57,7 @@ export const Source = ({
 
 	function onAdd() {
 		if (inputValue) {
-			const newsourceType: sourceType = {status: 'New', source: inputValue};
+			const newsourceType: genericType = {status: 'New', name: inputValue};
 			setCurrentlySelected([...currentlySelected, newsourceType]);
 			setInputValue('');
 			if ( onChangeSelection ) {
@@ -93,15 +93,15 @@ export const Source = ({
 						<ul className="nested">
 							{currentlySelected.map(item => {
 									return (<li><FormCard
-										key={item.source}
-										keyValue={item.source}
+										key={item.name}
+										keyValue={item.name}
 										icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
 										onClickIcon={() => onDelete(item)}
 										className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
 									>
 										<div>
 											<small className="text-muted">
-												{item.source}
+												{item.name}
 											</small>
 										</div>
 									</FormCard></li>)
