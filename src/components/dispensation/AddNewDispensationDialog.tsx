@@ -221,12 +221,12 @@ export const AddNewDispensationDialog = ({
 							disabled={selectedDispensation != undefined}
 						/>
 						<Select
-							value={status}
+							value={subject}
 							style={{flex: '1', margin: "5px"}}
 							onChange={(event: SelectChangeEvent) => {
-								setStatus(event.target.value)
+								setSubject(event.target.value)
 							}}
-							label={t("dispensation.status")}
+							label={t("dispensation.subject")}
 						>
 							{availableSubjects.map(as =>
 								<MenuItem value={as}>{as}</MenuItem>
@@ -236,7 +236,7 @@ export const AddNewDispensationDialog = ({
 					</div>
 					<div style={{display: "flex", flexDirection: "row", marginBottom: '10px'}}>
 						<TextField
-							label={t('dispensation.created')}
+							label={t('dispensation.date_start')}
 							type="date"
 							disabled={!!selectedDispensation}
 							value={formatDate(creationDate)}
@@ -244,7 +244,7 @@ export const AddNewDispensationDialog = ({
 							style={{flex: '1', margin: "5px"}}
 						/>
 						<TextField
-							label={t('dispensation.expires')}
+							label={t('dispensation.date_end')}
 							type="date"
 							value={formatDate(expDate)}
 							onChange={(e) => setExpDate(new Date(e.target.value))}
@@ -279,7 +279,7 @@ export const AddNewDispensationDialog = ({
 																 fetchData={fetchRoomList}/>
 						</div>
 						<div className="dispensation-panel">
-							<label className='labelDetails'>{t(`dispensation.rpe`)}</label>
+							<label className='labelDetails'>{t(`dispensation.holders`)}</label>
 							<MultipleSelection selected={savedHolders}
 																 onChangeSelection={onChangeHolder}
 																 objectName="Person"
@@ -287,7 +287,7 @@ export const AddNewDispensationDialog = ({
 																 fetchData={fetchPeople}/>
 						</div>
 						<div className="dispensation-panel">
-							<label className='labelDetails'>{t(`dispensation.source`)}</label>
+							<label className='labelDetails'>{t(`dispensation.tickets`)}</label>
 							<Source selected={savedTickets} onChangeSelection={onChangeTickets}/>
 						</div>
 					</div>
