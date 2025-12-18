@@ -153,7 +153,7 @@ function App() {
 						}
 						{(connectedUser.canListDispensations) &&
 						<li style={{backgroundColor: `${selectedMenu === 'dispensationscontrol' ? '#FFCECE' : ''}`}}>
-							<Link to="/dispensationscontrol">{t(`menu.dispensation`)}</Link>
+							<Link to="/dispensationscontrol">{t(`menu.dispensations`)}</Link>
 						</li>
 						}
 						{connectedUser.isAdmin &&

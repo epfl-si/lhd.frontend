@@ -269,6 +269,24 @@ i18next.use(initReactI18next).init({
 				hazard_details: {
 					unsavedChangesMessageTitle: 'Unsaved changes',
 					unsavedChangesMessageDescription: 'You have unsaved changes. Are you sure you want to continue? All unsaved changes will be lost.'
+				},
+				dispensation: {
+					subject: 'Subject',
+					status: 'Status',
+					statusDraft: 'Draft',
+					statusActive: 'Active',
+					statusExpired: 'Expired',
+					statusCancelled: 'Cancelled',
+					dispensation: 'Dispensation',
+					renewals: 'Renewals',
+					date_start: 'Start date',
+					date_end: 'Expires',
+					room: 'Rooms',
+					holders: 'Holders',
+					tickets: 'Tickets',
+					created: 'Period',
+					modifyDispensation: 'Modify dispensation',
+					addDispensation: 'Add a new dispensation'
 				}
 			},
 		},
@@ -435,7 +453,7 @@ i18next.use(initReactI18next).init({
 					rooms: 'Locaux',
 					units: 'Unités',
 					organisms: 'Organismes',
-					dispensations: 'Dispensations',
+					dispensations: 'Dérogations',
 					hazardFormControl: 'Contrôle des formulaires de dangers',
 					hazards: 'Dangers',
 					authChem: 'Autorisations chimiques',
@@ -536,6 +554,24 @@ i18next.use(initReactI18next).init({
 				hazard_details: {
 					unsavedChangesMessageTitle: 'Changements non enregistrés',
 					unsavedChangesMessageDescription: 'Vous avez des changements qui ne sont pas enregistrés. Êtes-vous sûr de vouloir continuer? Tous les changements non sauvegardés seront perdus.'
+				},
+				dispensation: {
+					subject: 'Sujet',
+					status: 'Statut',
+					statusDraft: 'Brouillon',
+					statusActive: 'Actif',
+					statusExpired: 'Expiré',
+					statusCancelled: 'Annulé',
+					dispensation: 'Dérogation',
+					renewals: 'Renouvellements',
+					date_start: 'Date de début',
+					date_end: 'Expire',
+					room: 'Locaux',
+					holders: 'Titulaires',
+					tickets: 'Tickets',
+					created: 'Période',
+					modifyDispensation: 'Modifier la dérogation',
+					addDispensation: 'Ajouter une nouvelle dérogation'
 				}
 			},
 		},

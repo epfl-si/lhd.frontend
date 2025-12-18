@@ -269,7 +269,7 @@ export const DispensationControl = ({
 		<Box>
 			{user.canListDispensations ? <>
 			<Typography gutterBottom>
-				{t(`menu.dispensation`)}
+				{t(`menu.dispensations`)}
 			</Typography>
 			<div className="utilsBar">
 				<MultipleAutocomplete
