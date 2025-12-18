@@ -681,9 +681,12 @@ export const updateDispensation = async (
 	const query = `mutation updateDispensation {
 								updateDispensation(
 									id: ${id},
-									date_end: "${(new Date(dispensation.date_end)).toLocaleDateString("en-GB")}",
+									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
 									status: "${dispensation.status}",
 									subject: "${dispensation.subject}",
+									other_subject: "${dispensation.other_subject}",
+									requires: "${dispensation.requires}",
+									comment: "${dispensation.comment}",
 									tickets: [
 										${dispensation.selectedTickets.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
