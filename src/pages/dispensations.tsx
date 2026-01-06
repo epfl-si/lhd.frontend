@@ -47,13 +47,13 @@ export const DispensationControl = ({
 	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
 
 	const columnsLarge: columnType[] = [
-		{field: "subject", headerName: t('dispensation.subject'), flex: 0.1,
-			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.subject} ({params.row.other_subject})</>
-			}},
 		{field: "dispensation", headerName: t('dispensation.dispensation'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
 				return <>{params.row.dispensation}</>
+			}},
+		{field: "subject", headerName: t('dispensation.subject'), flex: 0.1,
+			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
+				return <>{params.row.other_subject ? `${params.row.subject} (${params.row.other_subject})` : params.row.subject}</>
 			}},
 		{field: "renewals", headerName: t('dispensation.renewals'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
