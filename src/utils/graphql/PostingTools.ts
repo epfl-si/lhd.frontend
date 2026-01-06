@@ -563,7 +563,7 @@ export const saveNewRadioprotection = async (
 									authority: "${radioprotection.authority}",
 									type: "IonisingRadiation",
 									radiations: [
-										${radioprotection.selectedSources.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
 									],
 									holders: [
 										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
@@ -597,7 +597,7 @@ export const updateRadioprotection = async (
 									status: "${radioprotection.status}",
 									authority: "${radioprotection.authority}",
 									radiations: [
-										${radioprotection.selectedSources.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
 									],
 									holders: [
 										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
@@ -651,7 +651,7 @@ export const saveNewDispensation = async (
 									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
 									status: "${dispensation.status}",
 									tickets: [
-										${dispensation.selectedTickets.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
 									],
 									holders: [
 										${dispensation.selectedHolders.map(disp => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
@@ -688,7 +688,7 @@ export const updateDispensation = async (
 									requires: "${dispensation.requires}",
 									comment: "${dispensation.comment}",
 									tickets: [
-										${dispensation.selectedTickets.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
 									],
 									holders: [
 										${dispensation.selectedHolders.map(disp => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}

@@ -13,11 +13,13 @@ interface SourceProps {
 	 * Action to be done at change selection
 	 */
 	onChangeSelection?: (currentlySelected: genericType[]) => void;
+	type: 'source' | 'ticket_number';
 }
 
 export const Source = ({
 	selected,
-	onChangeSelection
+	onChangeSelection,
+	type
 }: SourceProps) => {
 	const { t } = useTranslation();
 	const [currentlySelected, setCurrentlySelected] = React.useState<genericType[]>(selected);
@@ -41,7 +43,7 @@ export const Source = ({
 	function onDelete(item: genericType) {
 		const itemStatus = item.status;
 		if (item.status == 'New' && onChangeSelection ) {
-			const filtered = currentlySelected.filter(s => s.name != item.name || s.status != 'New');
+			const filtered = currentlySelected.filter(s => s[type] != item[type] || s.status != 'New');
 			setCurrentlySelected(filtered);
 			if ( onChangeSelection ) {
 				onChangeSelection(filtered);
@@ -57,7 +59,8 @@ export const Source = ({
 
 	function onAdd() {
 		if (inputValue) {
-			const newsourceType: genericType = {status: 'New', name: inputValue};
+			const newsourceType: genericType = {status: 'New'};
+			newsourceType[type] = inputValue;
 			setCurrentlySelected([...currentlySelected, newsourceType]);
 			setInputValue('');
 			if ( onChangeSelection ) {
@@ -91,17 +94,17 @@ export const Source = ({
 				<ul>
 					<li>
 						<ul className="nested">
-							{currentlySelected.map(item => {
+							{type && currentlySelected.map(item => {
 									return (<li><FormCard
-										key={item.name}
-										keyValue={item.name}
+										key={item[type]}
+										keyValue={item[type] ?? ''}
 										icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
 										onClickIcon={() => onDelete(item)}
 										className={item.status === 'Deleted' ? 'form-card form-text-through' : (item.status === 'New' ? 'form-card form-card-dashed' : '')}
 									>
 										<div>
 											<small className="text-muted">
-												{item.name}
+												{item[type]}
 											</small>
 										</div>
 									</FormCard></li>)

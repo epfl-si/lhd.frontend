@@ -295,7 +295,7 @@ export const AddNewRadioprotectionDialog = ({
 						</div>
 						<div className="authorization-panel">
 							<label className='labelDetails'>{t(`authorization.source`)}</label>
-							<Source selected={savedSources} onChangeSelection={onChangeSources}/>
+							<Source selected={savedSources} onChangeSelection={onChangeSources} type='source'/>
 						</div>
 					</div>
 				</div>

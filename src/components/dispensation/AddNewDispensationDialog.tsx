@@ -288,7 +288,7 @@ export const AddNewDispensationDialog = ({
 						</div>
 						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`dispensation.tickets`)}</label>
-							<Source selected={savedTickets} onChangeSelection={onChangeTickets}/>
+							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number'/>
 						</div>
 					</div>
 				</div>
