@@ -1188,7 +1188,9 @@ export const fetchDispensations = async (
 					sciper
 				}
 				status
-				dispensation_tickets
+				dispensation_tickets {
+					ticket_number
+				}
 			}
 			totalCount
 		}
