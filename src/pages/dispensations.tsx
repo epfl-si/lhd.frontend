@@ -102,7 +102,7 @@ export const DispensationControl = ({
 				<div className="form-card-div">
 					{params.row.dispensation_tickets.map(item => {
 							return (
-								<span>• {item.name}<br/></span>
+								<span>• {item.ticket_number}<br/></span>
 							)
 						}
 					)}
@@ -173,7 +173,7 @@ export const DispensationControl = ({
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.dispensation_tickets.map(item => {
 							return (
-								<span>• {item.name}<br/></span>
+								<span>• {item.ticket_number}<br/></span>
 							)
 						}
 					)}
@@ -199,9 +199,9 @@ export const DispensationControl = ({
 					)
 				}
 			);
-			const radiations = params.row.dispensation_tickets.map(item => {
+			const tickets = params.row.dispensation_tickets.map(item => {
 					return (
-						<span>• {item.name}<br/></span>
+						<span>• {item.ticket_number}<br/></span>
 					)
 				}
 			);
@@ -212,7 +212,7 @@ export const DispensationControl = ({
 				<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
 				{rooms}
 				{holders}
-				{radiations}
+				{tickets}
 			</div>
 		}}
 	];

@@ -104,7 +104,8 @@ export type lhdUnitsType = {
 };
 
 export type genericType = {
-	name: string;
+	source?: string;
+	ticket_number?: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
