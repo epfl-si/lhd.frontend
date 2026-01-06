@@ -41,7 +41,6 @@ export const AddNewDispensationDialog = ({
 	});
 	const now = new Date();
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [name, setName] = useState<string>(selectedDispensation ? selectedDispensation.dispensation : "");
 	const [expDate, setExpDate] = useState<Date>(selectedDispensation ? selectedDispensation.date_end : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
 	const [creationDate, setCreationDate] = useState<Date>(selectedDispensation ? selectedDispensation.date_start : new Date());
 	const [renewals, setRenewals] = useState<number>(selectedDispensation ? selectedDispensation.renewals : 0);
@@ -57,7 +56,6 @@ export const AddNewDispensationDialog = ({
 
 	useEffect(() => {
 		loadSubjects();
-		setName(selectedDispensation ? selectedDispensation.dispensation : "");
 		setExpDate(selectedDispensation ? selectedDispensation.date_end : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
 		setCreationDate(selectedDispensation ? selectedDispensation.date_start : new Date());
 		setRenewals(selectedDispensation ? selectedDispensation.renewals : 0);
@@ -89,8 +87,8 @@ export const AddNewDispensationDialog = ({
 	};
 
 	async function onAddDispensation() {
-		if ( name != '' && creationDate != expDate) {
-			const dispensation = {name,expDate,creationDate,renewals,status,
+		if (creationDate != expDate) {
+			const dispensation = {expDate,creationDate,renewals,status,
 				subject,selectedTickets,selectedHolders,selectedRooms};
 			if (selectedDispensation) {
 				updateDispensation(
@@ -130,7 +128,7 @@ export const AddNewDispensationDialog = ({
 			setNotificationType(errors.notif);
 		} else {
 			setNotificationType(notificationsVariants['save-new-dispensation-success']);
-			save(name);
+			save(selectedDispensation ? selectedDispensation.dispensation : '');
 		}
 		setOpenNotification(true);
 	};
@@ -207,19 +205,10 @@ export const AddNewDispensationDialog = ({
 									 onCancelClick={close}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
-									 title={selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')}
+									 title={(selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')) + " " + (selectedDispensation ? selectedDispensation.dispensation : '')}
 									 type='selection'>
 				<div style={{display: "flex", flexDirection: "column"}}>
 					<div style={{display: "flex", flexDirection: "row"}}>
-						<TextField
-							label={t('dispensation.dispensation')}
-							fullWidth
-							required
-							value={name}
-							onChange={(event) => setName(event.target.value)}
-							style={{flex: '1', margin: "5px"}}
-							disabled={selectedDispensation != undefined}
-						/>
 						<Select
 							value={subject}
 							style={{flex: '1', margin: "5px"}}

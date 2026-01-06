@@ -253,7 +253,11 @@ export const DispensationControl = ({
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
 		setSearch(val);
-		history.push(`/dispensationscontrol?Dispensation=${encodeURIComponent(val)}`);
+		if (val === '') {
+			loadFetch();
+		} else {
+			history.push(`/dispensationscontrol?Dispensation=${encodeURIComponent(val)}`);
+		}
 	}
 
 	const handleClose = () => {
