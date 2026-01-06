@@ -102,7 +102,7 @@ export const DispensationControl = ({
 				<div className="form-card-div">
 					{params.row.dispensation_tickets.map(item => {
 							return (
-								<span>• {item.ticket_number}<br/></span>
+								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
 							)
 						}
 					)}
@@ -173,7 +173,7 @@ export const DispensationControl = ({
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.dispensation_tickets.map(item => {
 							return (
-								<span>• {item.ticket_number}<br/></span>
+								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
 							)
 						}
 					)}
@@ -201,7 +201,7 @@ export const DispensationControl = ({
 			);
 			const tickets = params.row.dispensation_tickets.map(item => {
 					return (
-						<span>• {item.ticket_number}<br/></span>
+						<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
 					)
 				}
 			);

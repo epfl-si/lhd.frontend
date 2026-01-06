@@ -44,7 +44,7 @@ export const ChemicalsAuthorizationControl = ({
 			}},
 		{field: "authorization", headerName: t('authorization.authorization'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
-				return <>{params.row.authorization}</>
+				return <a href={`https://go.epfl.ch/${(params.row.authorization).split("-")[1]}`} target="_blank">{params.row.authorization}</a>
 			}},
 		{field: "renewals", headerName: t('authorization.renewals'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
@@ -107,7 +107,7 @@ export const ChemicalsAuthorizationControl = ({
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.unit ? params.row.unit.name : ''}</span>
-					<span>{params.row.authorization}-{params.row.renewals}</span>
+					<span><a href={`https://go.epfl.ch/${(params.row.authorization).split("-")[1]}`} target="_blank">{params.row.authorization}-{params.row.renewals}</a></span>
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
 				</div>
 			}},
@@ -183,7 +183,7 @@ export const ChemicalsAuthorizationControl = ({
 			);
 			return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 				<span>{params.row.unit ? params.row.unit.name : ''}</span>
-				<span>{params.row.authorization}-{params.row.renewals}</span>
+				<span><a href={`https://go.epfl.ch/${(params.row.authorization).split("-")[1]}`} target="_blank">{params.row.authorization}-{params.row.renewals}</a></span>
 				<b style={{fontSize: "smaller"}}>{params.row.status}</b>
 				<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
 				<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
