@@ -119,7 +119,7 @@ export const MultipleAutocomplete = ({
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
 					]
 				);
-			}  else if (parent === 'radioprotectionauthorizationscontrol') {
+			} else if (parent === 'radioprotectionauthorizationscontrol') {
 				resolve(
 					[
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
@@ -128,6 +128,18 @@ export const MultipleAutocomplete = ({
 						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
 						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
 						{ title: "Source="+query, encodedTitle: "Source="+ encodeURIComponent(query)},
+					]
+				);
+			} else if (parent === 'dispensationscontrol') {
+				resolve(
+					[
+						{ title: "Dispensation="+query, encodedTitle: "Dispensation="+ encodeURIComponent(query) },
+						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
+						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
+						{ title: "Status="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Subject="+query, encodedTitle: "Subject="+ encodeURIComponent(query) },
+						{ title: "Ticket="+query, encodedTitle: "Ticket="+ encodeURIComponent(query)},
+						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
 					]
 				);
 			} else {
