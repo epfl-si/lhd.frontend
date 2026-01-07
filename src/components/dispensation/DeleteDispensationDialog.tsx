@@ -4,21 +4,21 @@ import {useTranslation} from "react-i18next";
 import {AlertDialog} from "../global/AlertDialog";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {authorizationType, notificationType} from "../../utils/ressources/types";
+import {dispensationType, notificationType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {deleteAuthorization} from "../../utils/graphql/PostingTools";
+import {deleteDispensation} from "../../utils/graphql/PostingTools";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface DeleteRadioprotectionDialogProps {
-	auth?: authorizationType;
+	disp?: dispensationType;
 	openDialog: boolean;
 	setOpenDialog: (open: boolean) => void;
 	setDeleted: (open: boolean) => void;
 }
 
 export const DeleteDispensationDialog = ({
-	auth,
+	disp,
 	openDialog,
 	setOpenDialog,
 	setDeleted,
@@ -32,11 +32,11 @@ export const DeleteDispensationDialog = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	function deleteDetails() {
-		if (auth) {
-			deleteAuthorization(
+		if (disp) {
+			deleteDispensation(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(auth.id)
+				JSON.stringify(disp.id)
 			).then(res => {
 				handleOpen(res);
 			});
@@ -44,7 +44,7 @@ export const DeleteDispensationDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		const errors = getErrorMessage(res, 'deleteAuthorization');
+		const errors = getErrorMessage(res, 'deleteDispensation');
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
@@ -63,13 +63,13 @@ export const DeleteDispensationDialog = ({
 
 	return (
 		<>
-			{auth && <AlertDialog openDialog={openDialog}
+			{disp && disp.status === 'Draft' && <AlertDialog openDialog={openDialog}
 									 onOkClick={deleteDetails}
 									 onCancelClick={() => setOpenDialog(false)}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.deleteButton')}
-									 title={t('authorization.deleteAuthConfirmationMessageTitle') + auth.authorization + "?"}>
-				{t('authorization.deleteAuthConfirmationMessageDescription')}
+									 title={t('dispensation.deleteDispConfirmationMessageTitle') + disp.dispensation + "?"}>
+				{t('dispensation.deleteDispConfirmationMessageDescription')}
 			</AlertDialog>}
 
 			<Notifications

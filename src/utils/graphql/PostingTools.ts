@@ -73,57 +73,6 @@ const escapeGraphQL = (unquotedString: string): string => {
 		.replaceAll(/\n/g, '\\n')
 }
 
-export const deleteDispensation = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	slug: string | null,
-	variables: Object
-): Promise<any> => {
-	const operationName = 'deleteDispensation';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `mutation ${operationName} {
-							deleteDispensation(slug: "${slug}") {
-								errors {
-									message
-									extensions {
-										code
-									}
-								}
-								isSuccess
-							}
-						}`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-				})
-			: null;
-
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-
-	return {
-		status: results.status,
-		data: graphQLResponse.data,
-	};
-};
-
 export const updateRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -697,6 +646,24 @@ export const updateDispensation = async (
 										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
 								)
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const deleteDispensation = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteDispensation {
+							 deleteDispensation(id: ${id})
 							 {
 								errors {
 									message

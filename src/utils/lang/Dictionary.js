@@ -288,7 +288,9 @@ i18next.use(initReactI18next).init({
 					modifyDispensation: 'Modify dispensation',
 					addDispensation: 'Add a new dispensation',
 					requires: 'Requirements',
-					other: 'Other subject'
+					other: 'Other subject',
+					deleteDispConfirmationMessageTitle: 'Are you sure you want to delete this dispensation : ',
+					deleteDispConfirmationMessageDescription: 'All relationships with holders, rooms and tickets will be deleted.'
 				}
 			},
 		},
@@ -575,7 +577,9 @@ i18next.use(initReactI18next).init({
 					modifyDispensation: 'Modifier la dérogation',
 					addDispensation: 'Ajouter une nouvelle dérogation',
 					requires: 'Exigences',
-					other: 'Autre sujet'
+					other: 'Autre sujet',
+					deleteDispConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette dispensation : ',
+					deleteDispConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les locaux et les tickets seront aussi supprimées.'
 				}
 			},
 		},
