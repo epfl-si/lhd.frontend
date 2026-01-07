@@ -365,3 +365,14 @@ button {
 .MuiButtonGroup-contained {
     box-shadow: none !important;
 }
+
+.rowDiv {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.dispensation-panel {
+    width: 33%;
+}

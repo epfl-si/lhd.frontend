@@ -19,6 +19,7 @@ import {fetchDispensationSubjects, fetchDispensations, fetchPeopleFromFullText, 
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
+import {TextArea} from "epfl-elements-react-si-extra";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -46,6 +47,9 @@ export const AddNewDispensationDialog = ({
 	const [renewals, setRenewals] = useState<number>(selectedDispensation ? selectedDispensation.renewals : 0);
 	const [status, setStatus] = useState<string>(selectedDispensation ? selectedDispensation.status : 'Active');
 	const [subject, setSubject] = useState<string | undefined>(selectedDispensation?.subject);
+	const [other, setOther] = useState<string | undefined>(selectedDispensation?.other_subject);
+	const [comment, setComment] = useState<string | undefined>(selectedDispensation?.comment);
+	const [requires, setRequires] = useState<string | undefined>(selectedDispensation?.requires);
 	const [savedRooms, setSavedRooms] = useState<roomDetailsType[]>([]);
 	const [selectedRooms, setSelectedRooms] = useState<roomDetailsType[]>([]);
 	const [savedHolders, setSavedHolders] = useState<personType[]>([]);
@@ -61,6 +65,9 @@ export const AddNewDispensationDialog = ({
 		setRenewals(selectedDispensation ? selectedDispensation.renewals : 0);
 		setStatus(selectedDispensation ? selectedDispensation.status : 'Draft');
 		setSubject(selectedDispensation?.subject);
+		setComment(selectedDispensation ? selectedDispensation.comment : '');
+		setRequires(selectedDispensation ? selectedDispensation.requires : '');
+		setOther(selectedDispensation ? selectedDispensation.other_subject : '')
 
 		setSavedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
 		setSelectedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
@@ -87,9 +94,9 @@ export const AddNewDispensationDialog = ({
 	};
 
 	async function onAddDispensation() {
-		if (creationDate != expDate) {
+		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))) {
 			const dispensation = {expDate,creationDate,renewals,status,
-				subject,selectedTickets,selectedHolders,selectedRooms};
+				subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms};
 			if (selectedDispensation) {
 				updateDispensation(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -208,7 +215,7 @@ export const AddNewDispensationDialog = ({
 									 title={(selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')) + " " + (selectedDispensation ? selectedDispensation.dispensation : '')}
 									 type='selection'>
 				<div style={{display: "flex", flexDirection: "column"}}>
-					<div style={{display: "flex", flexDirection: "row"}}>
+					<div className="rowDiv">
 						<Select
 							value={subject}
 							style={{flex: '1', margin: "5px"}}
@@ -220,13 +227,22 @@ export const AddNewDispensationDialog = ({
 							{availableSubjects.map(as =>
 								<MenuItem value={as}>{as}</MenuItem>
 							)}
-
 						</Select>
+						<TextField
+							label={t('dispensation.other')}
+							fullWidth
+							required={subject === 'Other'}
+							hidden={subject !== 'Other'}
+							value={other}
+							onChange={(event) => setOther(event.target.value)}
+							style={{flex: '1', margin: "5px"}}
+						/>
 					</div>
-					<div style={{display: "flex", flexDirection: "row", marginBottom: '10px'}}>
+					<div className="rowDiv">
 						<TextField
 							label={t('dispensation.date_start')}
 							type="date"
+							required={true}
 							disabled={!!selectedDispensation}
 							value={formatDate(creationDate)}
 							onChange={(e) => setCreationDate(new Date(e.target.value))}
@@ -235,6 +251,7 @@ export const AddNewDispensationDialog = ({
 						<TextField
 							label={t('dispensation.date_end')}
 							type="date"
+							required={true}
 							value={formatDate(expDate)}
 							onChange={(e) => setExpDate(new Date(e.target.value))}
 							style={{flex: '1', margin: "5px"}}
@@ -259,7 +276,26 @@ export const AddNewDispensationDialog = ({
 							<MenuItem value={t("dispensation.statusCancelled")}>{t("dispensation.statusCancelled")}</MenuItem>
 						</Select>
 					</div>
-					<div style={{display: "flex", flexDirection: "row", justifyContent: "space-between", marginBottom: '10px'}}>
+					<div className="rowDiv">
+						<div style={{width: '50%'}}>
+							<TextArea
+								id={"requirement"}
+								name="requirement"
+								isRequired={true}
+								label={t('dispensation.requires')}
+								onChange={(event) => setRequires(event)}
+								value={requires}
+							/></div>
+						<div style={{width: '50%', marginLeft: '5px'}}>
+						<TextArea
+							id={"comment"}
+							name="comment"
+							label={t('generic.comment')}
+							onChange={(event) => setComment(event)}
+							value={comment}
+						/></div>
+					</div>
+					<div className="rowDiv">
 						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`dispensation.room`)}</label>
 							<MultipleSelection selected={savedRooms} objectName="NewRoom"
