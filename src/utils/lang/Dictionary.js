@@ -286,7 +286,9 @@ i18next.use(initReactI18next).init({
 					tickets: 'Tickets',
 					created: 'Period',
 					modifyDispensation: 'Modify dispensation',
-					addDispensation: 'Add a new dispensation'
+					addDispensation: 'Add a new dispensation',
+					requires: 'Requirements',
+					other: 'Other subject'
 				}
 			},
 		},
@@ -571,7 +573,9 @@ i18next.use(initReactI18next).init({
 					tickets: 'Tickets',
 					created: 'Période',
 					modifyDispensation: 'Modifier la dérogation',
-					addDispensation: 'Ajouter une nouvelle dérogation'
+					addDispensation: 'Ajouter une nouvelle dérogation',
+					requires: 'Exigences',
+					other: 'Autre sujet'
 				}
 			},
 		},

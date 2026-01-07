@@ -78,7 +78,7 @@ export const notificationsVariants = {
 	},
 	'no-dispensation-chosen': {
 		type: 'error',
-		text: 'Dispensation name and subject are mandatory',
+		text: 'Dispensation subject and requirements are mandatory',
 	},
 	'no-organism-chosen': {
 		type: 'error',
