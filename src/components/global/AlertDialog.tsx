@@ -16,6 +16,7 @@ interface AlertDialogProps {
 	openDialog: boolean;
 	type?: 'alert' | 'selection';
 	isOkDisabled?: boolean;
+	audit?: string;
 }
 
 export const AlertDialog = ({
@@ -27,7 +28,8 @@ export const AlertDialog = ({
 	cancelLabel,
 	openDialog,
 	type,
-	isOkDisabled
+	isOkDisabled,
+	audit
 }: AlertDialogProps) => {
 	const [open, setOpen] = React.useState(false);
 
@@ -45,7 +47,10 @@ export const AlertDialog = ({
 				maxWidth={"lg"}
 			>
 				{title && <DialogTitle id="alert-dialog-title">
-					{title}
+					<div style={{display: "flex", flexDirection: "row"}}>{title}
+						{audit && <label
+				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
+				className="hazardTitle">{audit}</label>}</div>
 				</DialogTitle>}
 				<DialogContent
 				style={type == 'selection' ? {minWidth:'300px', minHeight: '400px'} : {}}>
