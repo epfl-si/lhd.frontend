@@ -20,6 +20,7 @@ import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
 import {TextArea} from "epfl-elements-react-si-extra";
+import {sprintf} from "sprintf-js";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -215,6 +216,28 @@ export const AddNewDispensationDialog = ({
 									 title={(selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')) + " " + (selectedDispensation ? selectedDispensation.dispensation : '')}
 									 type='selection'>
 				<div style={{display: "flex", flexDirection: "column"}}>
+					{selectedDispensation && <><label
+			  style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
+			  className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedDispensation.created_by,
+						(new Date(selectedDispensation.created_on)).toLocaleString('fr-CH', {
+							year: 'numeric',
+							month: 'numeric',
+							day: 'numeric',
+							hour: 'numeric',
+							minute: 'numeric',
+							hour12: false
+						}))}</label>
+						<label
+						style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
+					className="hazardTitle">{sprintf(t(`hazards.modification_info`), selectedDispensation.modified_by,
+						(new Date(selectedDispensation.modified_on)).toLocaleString('fr-CH', {
+						year: 'numeric',
+						month: 'numeric',
+						day: 'numeric',
+						hour: 'numeric',
+						minute: 'numeric',
+						hour12: false
+					}))}</label></>}
 					<div className="rowDiv">
 						<Select
 							value={subject}
