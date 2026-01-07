@@ -14,6 +14,7 @@ import {Button} from "epfl-elements-react-si-extra";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {fetchDispensations} from "../utils/graphql/FetchingTools";
 import {AddNewDispensationDialog} from "../components/dispensation/AddNewDispensationDialog";
+import {DeleteDispensationDialog} from "../components/dispensation/DeleteDispensationDialog";
 
 interface DispensationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -116,7 +117,7 @@ export const DispensationControl = ({
 								iconName={"#edit-3"}
 								onClick={() => modify(params.row)}/>
 					<Button size="icon"
-								style={{marginLeft: '10px'}}
+								style={{marginLeft: '10px', visibility: params.row.status === 'Draft' ? 'visible' : 'hidden'}}
 								iconName={`#trash`}
 								onClick={() => {
 									setOpenDialogDelete(true);
@@ -310,11 +311,11 @@ export const DispensationControl = ({
 																				onChangeInput(searchVal);
 																			}}
 																			selectedDispensation={selected}/>
-					{/*<DeleteDispensationDialog disp={selected}
+					<DeleteDispensationDialog disp={selected}
 				openDialog={openDialogDelete}
 				setOpenDialog={setOpenDialogDelete}
 				setDeleted={setDeleted}
-			/>*/}</>}
+			/></>}
 				<Notifications
 					open={openNotification}
 					notification={notificationType}
