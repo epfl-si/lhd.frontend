@@ -15,12 +15,13 @@ import Notifications from "../Table/Notifications";
 import {MenuItem, Select, TextField} from "@material-ui/core";
 import {SelectChangeEvent} from "@mui/material";
 import {saveNewDispensation, updateDispensation} from '../../utils/graphql/PostingTools';
-import {fetchDispensationSubjects, fetchDispensations, fetchPeopleFromFullText, fetchRooms} from "../../utils/graphql/FetchingTools";
+import {fetchDispensationHistory, fetchDispensationSubjects, fetchDispensations, fetchPeopleFromFullText, fetchRooms} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
 import {TextArea} from "epfl-elements-react-si-extra";
 import {sprintf} from "sprintf-js";
+import {MutationLogsTable} from "../global/MutationLogsTable";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -58,9 +59,11 @@ export const AddNewDispensationDialog = ({
 	const [savedTickets, setSavedTickets] = useState<genericType[]>([]);
 	const [selectedTickets, setSelectedTickets] = useState<genericType[]>([]);
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
+	const [history, setHistory] = useState<any[]>([]);
 
 	useEffect(() => {
 		loadSubjects();
+		loadHistory();
 		setExpDate(selectedDispensation ? selectedDispensation.date_end : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
 		setCreationDate(selectedDispensation ? selectedDispensation.date_start : new Date());
 		setRenewals(selectedDispensation ? selectedDispensation.renewals : 0);
@@ -91,6 +94,20 @@ export const AddNewDispensationDialog = ({
 			const errors = getErrorMessage(results, 'dispensationsWithPagination');
 			setNotificationType(errors.notif);
 			setOpenNotification(true);
+		}
+	};
+
+	const loadHistory = async () => {
+		setHistory([]);
+		if (selectedDispensation && openDialog) {
+			const results = await fetchDispensationHistory(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				selectedDispensation.id
+			);
+			if (results.status === 200 && results.data){
+				setHistory(results.data);
+			}
 		}
 	};
 
@@ -339,6 +356,7 @@ export const AddNewDispensationDialog = ({
 							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number'/>
 						</div>
 					</div>
+					<MutationLogsTable history={history} />
 				</div>
 			</AlertDialog>
 			<Notifications
