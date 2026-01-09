@@ -1222,6 +1222,44 @@ export const fetchDispensationSubjects = async (
 	};
 };
 
+export const fetchDispensationHistory = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	dispensationId: string
+): Promise<any> => {
+	const data = [];
+	const errors = [];
+
+	const tables = ["dispensation"];
+	for (const table of tables) {
+		const query = `query fetchDispensationHistory {
+		mutationLogsByTable (tableName: "dispensation,dispensation_has_ticket,dispensation_has_room,dispensation_has_holder", tableIdentifier: ${JSON.stringify(dispensationId)}, 
+		excludedField: "modified_on,id_dispensation") {
+			modified_by
+			modified_on
+			diffs {
+				field
+				before
+				after
+			}
+		}
+	}`;
+
+		const resultTable = await doGraphQL(query, {}, address, authToken);
+		debugger;
+		data.push(...resultTable.data?.mutationLogsByTable);
+		if (resultTable.errors) {
+			errors.push(...resultTable.errors);
+		}
+	}
+
+	return {
+		status: 200,
+		data: data,
+		errors: errors
+	};
+};
+
 export const fetchChemicalAuthorizationsByRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
