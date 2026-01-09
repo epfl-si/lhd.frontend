@@ -594,8 +594,8 @@ export const saveNewDispensation = async (
 									dispensation: "${dispensation.name}",
 									subject: "${dispensation.subject}",
 									other_subject: "${dispensation.other}",
-									requires: "${dispensation.requires}",
-									comment: "${dispensation.comment}",
+									requires: "${encodeURIComponent(dispensation.requires)}",
+									comment: "${encodeURIComponent(dispensation.comment)}",
 									date_start: "${(new Date(dispensation.creationDate)).toLocaleDateString("en-GB")}",
 									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
 									status: "${dispensation.status}",
@@ -634,8 +634,8 @@ export const updateDispensation = async (
 									status: "${dispensation.status}",
 									subject: "${dispensation.subject}",
 									other_subject: "${dispensation.other}",
-									requires: "${dispensation.requires}",
-									comment: "${dispensation.comment}",
+									requires: "${encodeURIComponent(dispensation.requires)}",
+									comment: "${encodeURIComponent(dispensation.comment)}",
 									tickets: [
 										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
 									],
