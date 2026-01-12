@@ -15,6 +15,7 @@ import {getErrorMessage} from "../utils/graphql/Utils";
 import {fetchDispensations} from "../utils/graphql/FetchingTools";
 import {AddNewDispensationDialog} from "../components/dispensation/AddNewDispensationDialog";
 import {DeleteDispensationDialog} from "../components/dispensation/DeleteDispensationDialog";
+import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 
 interface DispensationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -270,6 +271,28 @@ export const DispensationControl = ({
 		setSelected(data);
 	}
 
+	const onExport = async () => {
+		setLoading(true);
+		const results = await fetchDispensations(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			0, 0,
+			search
+		);
+
+		if ( results.status === 200 && results.data ) {
+			const fileName = search.split('&')
+				.map(part => part.split('=')[1])
+				.join('_');
+			exportToExcel(results.data.dispensations, getExportFileName(search !== '' ? `dispensations_${fileName}` : 'dispensations'));
+		} else {
+			const errors = getErrorMessage(results, 'dispensationsWithPagination');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
+		}
+		setLoading(false);
+	};
+
 	return (
 		<Box>
 			{user.canListDispensations ? <>
@@ -283,12 +306,20 @@ export const DispensationControl = ({
 					parent="dispensationscontrol"
 				/>
 				{user.canEditDispensations && <Button
+					style={{minWidth: '10%', padding: '10px'}}
 					onClick={() => {
 						setOpenDialog(true);
 						setSelected(undefined);
 					}}
 					label={t(`generic.addNew`)}
 					iconName={`#plus-circle`}
+					primary/>}
+				{user.canListDispensations && <Button
+					isDisabled={tableData.length == 0}
+					style={{minWidth: '10%', padding: '10px'}}
+					onClick={onExport}
+					label={t(`generic.export`)}
+					iconName={`#download`}
 					primary/>}
 			</div>
 			<EntriesTableCategory
