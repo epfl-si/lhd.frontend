@@ -15,7 +15,7 @@ import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {useHistory, useLocation} from "react-router-dom";
 import {convertToTable, readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
-import {exportToExcel, getHazardExportFileName} from "../utils/ressources/file";
+import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface RoomControlProps {
@@ -382,7 +382,7 @@ export const RoomControl = ({
 
 						return flat;
 					});
-					exportToExcel(result, getHazardExportFileName(hazardName));
+					exportToExcel(result, getExportFileName(hazardName));
 				} else {
 					setNotificationType(notificationsVariants['no_data_for_export']);
 					setOpenNotification(true);
@@ -420,7 +420,7 @@ export const RoomControl = ({
 					label={t(`generic.addNew`)}
 					iconName={`#plus-circle`}
 					primary/>
-				{user.canEditRooms && <Button
+				{user.canListRooms && <Button
 					isDisabled={tableData.length == 0}
 					style={{minWidth: '10%', padding: '10px'}}
 					onClick={onExport}

@@ -10,7 +10,7 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";
 import {Redirect, useHistory, useLocation} from "react-router-dom";
 import {splitCamelCase} from "../utils/ressources/jsonUtils";
-import {exportToExcel, getHazardExportFileName, handleClickFileLink} from "../utils/ressources/file";
+import {exportToExcel, getExportFileName, handleClickFileLink} from "../utils/ressources/file";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {Button} from "epfl-elements-react-si-extra";
 import {AlertDialog} from "../components/global/AlertDialog";
@@ -353,7 +353,7 @@ export const HazardsControl = ({
 					}
 					filteredData.push(newObj);
 				}
-				exportToExcel(filteredData, getHazardExportFileName(search));
+				exportToExcel(filteredData, getExportFileName(search));
 			} else {
 				const errors = getErrorMessage(results, 'hazardsWithPagination');
 				setNotificationType(errors.notif);
