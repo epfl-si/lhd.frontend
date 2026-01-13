@@ -2,6 +2,7 @@ import {env} from "../env";
 import { saveAs } from 'file-saver';
 import {splitCamelCase} from "./jsonUtils";
 import * as XLSX from 'xlsx-js-style';
+import {formatDate} from "./parser";
 
 export async function readFileAsBase64(file: File | undefined): Promise<string> {
 	return new Promise((resolve, reject) => {
@@ -140,19 +141,7 @@ export function exportToExcel(data: any, fileName = 'export.xlsx') {
 }
 
 export function getExportFileName (objectName: string) {
-	const parts = new Intl.DateTimeFormat('en-GB', {
-		year: 'numeric',
-		month: '2-digit',
-		day: '2-digit',
-		hour: '2-digit',
-		minute: '2-digit',
-		hour12: false
-	}).formatToParts(new Date());
-	const map = Object.fromEntries(
-		parts.map(p => [p.type, p.value])
-	);
-	const now = `${map.year}-${map.month}-${map.day}_${map.hour}-${map.minute}`;
-	return `lhd_${objectName}_${now}.xlsx`;
+	return `lhd_${objectName}_${formatDate(new Date())}.xlsx`;
 }
 
 function checkType(value: any) {
