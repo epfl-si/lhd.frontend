@@ -16,6 +16,7 @@ import {fetchDispensations} from "../utils/graphql/FetchingTools";
 import {AddNewDispensationDialog} from "../components/dispensation/AddNewDispensationDialog";
 import {DeleteDispensationDialog} from "../components/dispensation/DeleteDispensationDialog";
 import {exportToExcel, getExportFileName} from "../utils/ressources/file";
+import {formatDate} from "../utils/ressources/parser";
 
 interface DispensationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -284,7 +285,28 @@ export const DispensationControl = ({
 			const fileName = search.split('&')
 				.map(part => part.split('=')[1])
 				.join('_');
-			exportToExcel(results.data.dispensations, getExportFileName(search !== '' ? `dispensations_${fileName}` : 'dispensations'));
+			const parsedResults = results.data.dispensations.map(disp => {
+				return {
+					dispensation: disp.dispensation,
+					date_start: formatDate(new Date(disp.date_start), true),
+					date_end: formatDate(new Date(disp.date_end), true),
+					renewals: disp.renewals,
+					subject: disp.subject,
+					other_subject: disp.other_subject ?? '',
+					requires: disp.requires,
+					comment: disp.comment ?? '',
+					file_path: disp.file_path ? disp.file_path.split('/').pop() : '',
+					created_by: disp.created_by,
+					created_on: formatDate(new Date(disp.created_on), true),
+					modified_by: disp.modified_by,
+					modified_on: formatDate(new Date(disp.modified_on), true),
+					rooms: disp.dispensation_rooms.map(room => room.name),
+					holders: disp.dispensation_holders.map(holder => `${holder.name} ${holder.surname} (${holder.sciper})`),
+					status: disp.status,
+					tickets: disp.dispensation_tickets.map(ticket => ticket.ticket_number)
+				}
+			});
+			exportToExcel(parsedResults, getExportFileName(search !== '' ? `dispensations_${fileName}` : 'dispensations'));
 		} else {
 			const errors = getErrorMessage(results, 'dispensationsWithPagination');
 			setNotificationType(errors.notif);
