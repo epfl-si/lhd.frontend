@@ -22,6 +22,7 @@ import {Source} from '../radioprotection/SourceList';
 import {TextArea} from "epfl-elements-react-si-extra";
 import {sprintf} from "sprintf-js";
 import {MutationLogsTable} from "../global/MutationLogsTable";
+import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -60,6 +61,7 @@ export const AddNewDispensationDialog = ({
 	const [selectedTickets, setSelectedTickets] = useState<genericType[]>([]);
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 	const [history, setHistory] = useState<any[]>([]);
+	const [file, setFile] = useState<File | undefined>();
 
 	useEffect(() => {
 		loadSubjects();
@@ -115,12 +117,18 @@ export const AddNewDispensationDialog = ({
 		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))) {
 			const dispensation = {expDate,creationDate,renewals,status,
 				subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms};
+			let fileBase64 = await readFileAsBase64(file);
+			const fileToSend = {
+				file: fileBase64,
+				fileName: file?.name
+			};
 			if (selectedDispensation) {
 				updateDispensation(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					JSON.stringify(selectedDispensation.id),
-					dispensation
+					dispensation,
+					fileToSend
 				).then(res => {
 					handleOpen(res, false);
 				});
@@ -128,7 +136,8 @@ export const AddNewDispensationDialog = ({
 				saveNewDispensation(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
-					dispensation
+					dispensation,
+					fileToSend
 				).then(res => {
 					handleOpen(res, true);
 				});
@@ -223,6 +232,12 @@ export const AddNewDispensationDialog = ({
 		setSelectedTickets(changedTickets);
 	}
 
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) {
+			setFile(e.target.files[0]);
+		}
+	};
+
 	return (
 		<>
 			<AlertDialog openDialog={openDialog}
@@ -233,28 +248,40 @@ export const AddNewDispensationDialog = ({
 									 title={(selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')) + " " + (selectedDispensation ? selectedDispensation.dispensation : '')}
 									 type='selection'>
 				<div style={{display: "flex", flexDirection: "column"}}>
-					{selectedDispensation && <><label
-			  style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
-			  className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedDispensation.created_by,
-						(new Date(selectedDispensation.created_on)).toLocaleString('fr-CH', {
-							year: 'numeric',
-							month: 'numeric',
-							day: 'numeric',
-							hour: 'numeric',
-							minute: 'numeric',
-							hour12: false
-						}))}</label>
-						<label
-						style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
+					<div style={{display: "flex", flexDirection: "row"}}>
+						<div style={{display: "flex", flexDirection: "column"}}>
+							<div>
+								<input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'/>
+							</div>
+							{selectedDispensation && selectedDispensation.file_path &&
+								<a style={{fontSize: 'small'}}
+								 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedDispensation?.id, 'dispensation')}
+								 href={selectedDispensation.file_path}>{selectedDispensation.file_path.split('/').pop()}
+								</a>}
+						</div>
+						{selectedDispensation && <div style={{display: "flex", flexDirection: "column"}}><label
+				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
+				className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedDispensation.created_by,
+							(new Date(selectedDispensation.created_on)).toLocaleString('fr-CH', {
+								year: 'numeric',
+								month: 'numeric',
+								day: 'numeric',
+								hour: 'numeric',
+								minute: 'numeric',
+								hour12: false
+							}))}</label>
+				<label
+					style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
 					className="hazardTitle">{sprintf(t(`hazards.modification_info`), selectedDispensation.modified_by,
-						(new Date(selectedDispensation.modified_on)).toLocaleString('fr-CH', {
-						year: 'numeric',
-						month: 'numeric',
-						day: 'numeric',
-						hour: 'numeric',
-						minute: 'numeric',
-						hour12: false
-					}))}</label></>}
+									(new Date(selectedDispensation.modified_on)).toLocaleString('fr-CH', {
+										year: 'numeric',
+										month: 'numeric',
+										day: 'numeric',
+										hour: 'numeric',
+										minute: 'numeric',
+										hour12: false
+									}))}</label></div>}
+					</div>
 					<div className="rowDiv">
 						<Select
 							value={subject}

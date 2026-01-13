@@ -8,9 +8,7 @@ interface MutationLogsTableProps {
 export const MutationLogsTable = ({
 	history
 }: MutationLogsTableProps) => {
-	console.log(history)
-
-	return (history && history.length > 0 && <table style={{ borderCollapse: "collapse", width: "100%" }}>
+	return (history && history.length > 0 ? <table style={{ borderCollapse: "collapse", width: "100%" }}>
 		<thead>
 		<tr>
 			<th>Modified On</th>
@@ -45,5 +43,5 @@ export const MutationLogsTable = ({
 			))
 		)}
 		</tbody>
-	</table>)
+	</table> : <></>)
 }

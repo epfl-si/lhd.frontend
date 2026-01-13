@@ -587,7 +587,8 @@ export const deleteAuthorization = async (
 export const saveNewDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	dispensation: any
+	dispensation: any,
+	fileToSend: { file: string; fileName: string | undefined; }
 ): Promise<any> => {
 	const query = `mutation addDispensation {
 								addDispensation(
@@ -596,6 +597,8 @@ export const saveNewDispensation = async (
 									other_subject: "${dispensation.other}",
 									requires: "${encodeURIComponent(dispensation.requires)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
+									file: "${fileToSend.file ?? ''}",
+									file_name: "${fileToSend.fileName ?? ''}",
 									date_start: "${(new Date(dispensation.creationDate)).toLocaleDateString("en-GB")}",
 									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
 									status: "${dispensation.status}",
@@ -617,7 +620,6 @@ export const saveNewDispensation = async (
 							}
 						}`;
 
-	console.log(query);
 	return doGraphQL(query, {}, address, authToken);
 };
 
@@ -625,7 +627,8 @@ export const updateDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
 	id: string,
-	dispensation: any
+	dispensation: any,
+	fileToSend: { file: string; fileName: string | undefined; }
 ): Promise<any> => {
 	const query = `mutation updateDispensation {
 								updateDispensation(
@@ -636,6 +639,8 @@ export const updateDispensation = async (
 									other_subject: "${dispensation.other}",
 									requires: "${encodeURIComponent(dispensation.requires)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
+									file: "${fileToSend.file ?? ''}",
+									file_name: "${fileToSend.fileName ?? ''}",
 									tickets: [
 										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
 									],
