@@ -79,7 +79,8 @@ export function EntriesTableCategory({
 					onRowClick={e => {
 						switch ( pageToOpen ) {
 							case "room":
-								history.push(`/roomdetails?room=${encodeURIComponent(e.row['name'])}`);
+								const url = `/roomdetails?room=${encodeURIComponent(e.row['name'])}`;
+								window.open(url, '_blank', 'noopener,noreferrer');
 								break;
 							case "hazardForms":
 								history.push(`/formdetails?cat=${e.row['hazard_category']['hazard_category_name']}`);
