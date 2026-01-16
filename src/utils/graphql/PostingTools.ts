@@ -216,6 +216,24 @@ export const deleteHazardChild = async (
 	return doGraphQL(query, {}, address, authToken);
 };
 
+export const deleteHazard = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteHazard {
+							 deleteHazard(id: ${id} )
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
 
 export const addHazard = async (
 	address: string | undefined,
