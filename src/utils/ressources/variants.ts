@@ -128,4 +128,8 @@ export const notificationsVariants = {
 		type: 'success',
 		text: 'Update success',
 	},
+	'ticket_format_error': {
+		type: 'error',
+		text: 'The ticket format is not correct (ex. \"SCCTI0123456\")',
+	},
 };

@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button, FormCard, Text} from "epfl-elements-react-si-extra";
 import {useTranslation} from "react-i18next";
-import {genericType} from "../../utils/ressources/types";
+import {genericType,notificationType} from "../../utils/ressources/types";
 import "../../../css/styles.scss";
+import Notifications from "../Table/Notifications";
+import {notificationsVariants} from "../../utils/ressources/variants";
 
 interface SourceProps {
 	/**
@@ -25,6 +27,11 @@ export const Source = ({
 	const [currentlySelected, setCurrentlySelected] = React.useState<genericType[]>(selected);
 	const [inputValue, setInputValue] = React.useState('');
 	const [forceRender, setForceRender] = useState(false);
+	const [notificationType, setNotificationType] = useState<notificationType>({
+		type: "info",
+		text: '',
+	});
+	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	useEffect(() => {
 		const arr: genericType[] = []
@@ -58,7 +65,8 @@ export const Source = ({
 	}
 
 	function onAdd() {
-		if (inputValue) {
+		const regex = /^SCCTI\d{7}$/;
+		if (inputValue && (type === 'source' || regex.test(inputValue))) {
 			const newsourceType: genericType = {status: 'New'};
 			newsourceType[type] = inputValue;
 			setCurrentlySelected([...currentlySelected, newsourceType]);
@@ -66,12 +74,19 @@ export const Source = ({
 			if ( onChangeSelection ) {
 				onChangeSelection([...currentlySelected, newsourceType]);
 			}
+		} else {
+			setNotificationType(notificationsVariants['ticket_format_error']);
+			setOpenNotification(true);
 		}
 	}
 
 	function onChangeInput(newValue: string) {
 		setInputValue(newValue);
 	}
+
+	const handleClose = () => {
+		setOpenNotification(false);
+	};
 
 	return (
 		<div>
@@ -82,6 +97,7 @@ export const Source = ({
 					type="text"
 					value={inputValue}
 					style={{flex: 'auto'}}
+					name=''
 				/>
 				<Button
 					iconName="#plus-circle"
@@ -104,7 +120,7 @@ export const Source = ({
 									>
 										<div>
 											<small className="text-muted">
-												{item[type]}
+												{type === 'ticket_number' ? <a href={`https://go.epfl.ch/${item[type]}`} target="_blank">{item[type]}</a> : item[type]}
 											</small>
 										</div>
 									</FormCard></li>)
@@ -114,6 +130,11 @@ export const Source = ({
 					</li>
 				</ul>
 			</div>
+			<Notifications
+				open={openNotification}
+				notification={notificationType}
+				close={handleClose}
+			/>
 		</div>
 	);
 };
