@@ -18,6 +18,7 @@ import {Redirect} from "react-router-dom";
 import {AuthorizationPanel} from "./AuthorizationPanel";
 import {Button} from "epfl-elements-react-si-extra";
 import {getErrorMessage} from "../../utils/graphql/Utils";
+import {DispensationPanel} from "./DispensationPanel";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -243,6 +244,9 @@ export const DetailsTab = ({
           </div>
           <div>
             <AuthorizationPanel room={roomData.id} type='IonisingRadiation'/>
+          </div>
+          <div>
+            <DispensationPanel room={roomData.name}/>
           </div>
         </div>
         : <></>

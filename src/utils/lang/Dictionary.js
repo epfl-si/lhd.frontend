@@ -291,7 +291,8 @@ i18next.use(initReactI18next).init({
 					requires: 'Requirements',
 					other: 'Other subject',
 					deleteDispConfirmationMessageTitle: 'Are you sure you want to delete this dispensation : ',
-					deleteDispConfirmationMessageDescription: 'All relationships with holders, rooms and tickets will be deleted.'
+					deleteDispConfirmationMessageDescription: 'All relationships with holders, rooms and tickets will be deleted.',
+					history: 'History'
 				}
 			},
 		},
@@ -581,7 +582,8 @@ i18next.use(initReactI18next).init({
 					requires: 'Exigences',
 					other: 'Autre sujet',
 					deleteDispConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette dispensation : ',
-					deleteDispConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les locaux et les tickets seront aussi supprimées.'
+					deleteDispConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les locaux et les tickets seront aussi supprimées.',
+					history: 'Changements'
 				}
 			},
 		},
