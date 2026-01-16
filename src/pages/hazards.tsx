@@ -14,7 +14,7 @@ import {exportToExcel, getExportFileName, handleClickFileLink} from "../utils/re
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {Button} from "epfl-elements-react-si-extra";
 import {AlertDialog} from "../components/global/AlertDialog";
-import {deleteHazardChild} from "../utils/graphql/PostingTools";
+import {deleteHazard, deleteHazardChild} from "../utils/graphql/PostingTools";
 import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
 import {getErrorMessage} from "../utils/graphql/Utils";
@@ -87,6 +87,7 @@ export const HazardsControl = ({
 	const [keys, setKeys] = React.useState<string[]>([]);
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [selectedHazard, setSelectedHazard] = useState<string>();
+	const [selectedParentHazard, setSelectedParentHazard] = useState<string>();
 	const [deleted, setDeleted] = useState(false);
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
@@ -222,11 +223,11 @@ export const HazardsControl = ({
 				columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
 					renderCell: (params: GridRenderCellParams<any, any>) => (
 							user.canEditOrganisms ? <Button size="icon"
-											style={{visibility: params.row.id_lab_has_hazards_child ? "visible" : "hidden"}}
 											iconName={`#trash`}
 											onClick={() => {
 												setOpenDialog(true);
 												setSelectedHazard(params.row.id_lab_has_hazards_child);
+												setSelectedParentHazard(params.row.id_lab_has_hazards);
 											}}/> : <></>
 					)
 				});
@@ -300,15 +301,25 @@ export const HazardsControl = ({
 	};
 
 	function handleHazardDelete() {
-		deleteHazardChild(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			JSON.stringify(selectedHazard),
-		).then(res => {
-			handleOpen(res);
-			setOpenDialog(false);
-			setSelectedHazard('');
-		});
+		if (selectedHazard) {
+			deleteHazardChild(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				JSON.stringify(selectedHazard),
+			).then(res => {
+				handleOpen(res);
+				resetHazard();
+			});
+		} else if (selectedParentHazard) {
+			deleteHazard(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				JSON.stringify(selectedParentHazard),
+			).then(res => {
+				handleOpen(res);
+				resetHazard();
+			});
+		}
 	}
 
 	const onExport = async () => {
@@ -363,6 +374,12 @@ export const HazardsControl = ({
 		}
 	}
 
+	function resetHazard () {
+		setOpenDialog(false);
+		setSelectedHazard('');
+		setSelectedParentHazard('');
+	}
+
 	return (
 		<Box>
 			{user.canListHazards ? <>
@@ -409,10 +426,7 @@ export const HazardsControl = ({
 			/> : <Box width="100%" height="500px"/>}
 				<AlertDialog openDialog={openDialog}
 											onOkClick={handleHazardDelete}
-											onCancelClick={() => {
-												setOpenDialog(false);
-												setSelectedHazard('');
-											}}
+											onCancelClick={resetHazard}
 											cancelLabel={t('generic.cancelButton')}
 											okLabel={t('generic.deleteButton')}
 											title={t('hazards.deleteHazardConfirmationMessageTitle')}>
