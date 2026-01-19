@@ -292,6 +292,8 @@ i18next.use(initReactI18next).init({
 					other: 'Other subject',
 					deleteDispConfirmationMessageTitle: 'Are you sure you want to delete this dispensation : ',
 					deleteDispConfirmationMessageDescription: 'All relationships with holders, rooms and tickets will be deleted.',
+					confirmationMessageTitle: 'Are you sure you want to save this dispensation?',
+					confirmationMessageBody: 'As its status is not "Draft", an email will be sent to inform all the parties about modifications.',
 					history: 'History'
 				}
 			},
@@ -583,6 +585,9 @@ i18next.use(initReactI18next).init({
 					other: 'Autre sujet',
 					deleteDispConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette dispensation : ',
 					deleteDispConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les locaux et les tickets seront aussi supprimées.',
+					confirmationMessage: 'Êtes-vous sûrs de vouloir sauvegarder cette dispensation?',
+					confirmationMessageTitle: 'Are you sure you want to save this dispensation?',
+					confirmationMessageBody: 'Comme le statut n\'est pas "Brouillon", un email sera aussi envoyé afin de notifier les différentes parties prenantes sur les modifications.',
 					history: 'Changements'
 				}
 			},

@@ -12,7 +12,7 @@ import {
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {MenuItem, Select, TextField} from "@material-ui/core";
+import {Box, MenuItem, Select, TextField} from "@material-ui/core";
 import {SelectChangeEvent} from "@mui/material";
 import {saveNewDispensation, updateDispensation} from '../../utils/graphql/PostingTools';
 import {fetchDispensationHistory, fetchDispensationSubjects, fetchDispensations, fetchPeopleFromFullText, fetchRooms} from "../../utils/graphql/FetchingTools";
@@ -23,6 +23,8 @@ import {TextArea} from "epfl-elements-react-si-extra";
 import {sprintf} from "sprintf-js";
 import {MutationLogsTable} from "../global/MutationLogsTable";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
+import {ConfirmSavingDispensationDialog} from "./ConfirmSavingDispensationDialog";
+import {CircularProgress} from "@mui/joy";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -62,6 +64,8 @@ export const AddNewDispensationDialog = ({
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 	const [history, setHistory] = useState<any[]>([]);
 	const [file, setFile] = useState<File | undefined>();
+	const [openDialogConfirm, setOpenDialogConfirm] = useState<boolean>(false);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		loadSubjects();
@@ -114,33 +118,43 @@ export const AddNewDispensationDialog = ({
 	};
 
 	async function onAddDispensation() {
+		setLoading(true);
+		setOpenDialogConfirm(false);
+		const dispensation = {expDate,creationDate,renewals,status,
+			subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms};
+		let fileBase64 = await readFileAsBase64(file);
+		const fileToSend = {
+			file: fileBase64,
+			fileName: file?.name
+		};
+		if (selectedDispensation) {
+			updateDispensation(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				JSON.stringify(selectedDispensation.id),
+				dispensation,
+				fileToSend
+			).then(res => {
+				handleOpen(res, false);
+			});
+		} else {
+			saveNewDispensation(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				dispensation,
+				fileToSend
+			).then(res => {
+				handleOpen(res, true);
+			});
+		}
+	}
+
+	async function askForConfirmation () {
 		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))) {
-			const dispensation = {expDate,creationDate,renewals,status,
-				subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms};
-			let fileBase64 = await readFileAsBase64(file);
-			const fileToSend = {
-				file: fileBase64,
-				fileName: file?.name
-			};
-			if (selectedDispensation) {
-				updateDispensation(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-					oidc.accessToken,
-					JSON.stringify(selectedDispensation.id),
-					dispensation,
-					fileToSend
-				).then(res => {
-					handleOpen(res, false);
-				});
+			if (status !== 'Draft') {
+				setOpenDialogConfirm(true);
 			} else {
-				saveNewDispensation(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-					oidc.accessToken,
-					dispensation,
-					fileToSend
-				).then(res => {
-					handleOpen(res, true);
-				});
+				await onAddDispensation();
 			}
 		} else {
 			setNotificationType(notificationsVariants['no-dispensation-chosen']);
@@ -164,6 +178,7 @@ export const AddNewDispensationDialog = ({
 			setNotificationType(notificationsVariants['save-new-dispensation-success']);
 			save(selectedDispensation ? selectedDispensation.dispensation : '');
 		}
+		setLoading(false);
 		setOpenNotification(true);
 	};
 
@@ -241,12 +256,27 @@ export const AddNewDispensationDialog = ({
 	return (
 		<>
 			<AlertDialog openDialog={openDialog}
-									 onOkClick={onAddDispensation}
+									 onOkClick={askForConfirmation}
 									 onCancelClick={close}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
 									 title={(selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')) + " " + (selectedDispensation ? selectedDispensation.dispensation : '')}
 									 type='selection'>
+				{loading && <Box
+					sx={{
+						position: 'fixed',
+						top: 0,
+						left: 0,
+						right: 0,
+						bottom: 0,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						zIndex: 9999
+					}}
+				>
+					<CircularProgress />
+				</Box>}
 				<div style={{display: "flex", flexDirection: "column"}}>
 					<div style={{display: "flex", flexDirection: "row"}}>
 						<div style={{display: "flex", flexDirection: "column"}}>
@@ -386,6 +416,11 @@ export const AddNewDispensationDialog = ({
 					<MutationLogsTable history={history} />
 				</div>
 			</AlertDialog>
+			<ConfirmSavingDispensationDialog
+				openDialog={openDialogConfirm}
+				setOpenDialog={setOpenDialogConfirm}
+				onAddDispensation={onAddDispensation}
+			/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}
