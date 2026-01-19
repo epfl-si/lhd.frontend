@@ -156,7 +156,8 @@ export const AddNewDispensationDialog = ({
 	}
 
 	async function askForConfirmation () {
-		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))) {
+		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))
+			&& (status === 'Draft' || (selectedRooms.length > 0 && selectedHolders.length > 0))) {
 			if (status !== 'Draft') {
 				setOpenDialogConfirm(true);
 			} else {
