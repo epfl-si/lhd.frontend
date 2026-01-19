@@ -6,16 +6,22 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {
 	dispensationType,
+	genericType,
 	notificationType,
 	personType,
-	roomDetailsType, genericType
+	roomDetailsType
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {Box, MenuItem, Select, TextField} from "@material-ui/core";
-import {SelectChangeEvent} from "@mui/material";
+import Select, {SelectChangeEvent} from '@mui/material/Select';
+import {Box, InputLabel, MenuItem, TextField} from "@material-ui/core";
 import {saveNewDispensation, updateDispensation} from '../../utils/graphql/PostingTools';
-import {fetchDispensationHistory, fetchDispensationSubjects, fetchDispensations, fetchPeopleFromFullText, fetchRooms} from "../../utils/graphql/FetchingTools";
+import {
+	fetchDispensationHistory,
+	fetchDispensationSubjects,
+	fetchPeopleFromFullText,
+	fetchRooms
+} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
@@ -313,18 +319,21 @@ export const AddNewDispensationDialog = ({
 									}))}</label></div>}
 					</div>
 					<div className="rowDiv">
-						<Select
-							value={subject}
-							style={{flex: '1', margin: "5px"}}
-							onChange={(event: SelectChangeEvent) => {
-								setSubject(event.target.value)
-							}}
-							label={t("dispensation.subject")}
-						>
-							{availableSubjects.map(as =>
-								<MenuItem value={as}>{as}</MenuItem>
-							)}
-						</Select>
+						<div style={{flex: '1', margin: "5px", display: "flex", flexDirection: "column"}}>
+							<InputLabel id="subject_label" style={{fontSize: "small", fontWeight: "bold"}}>{t("dispensation.subject")}</InputLabel>
+							<Select
+								labelId="subject_label"
+								value={subject}
+								onChange={(event: SelectChangeEvent) => {
+									setSubject(event.target.value)
+								}}
+								label={t("dispensation.subject")}
+							>
+								{availableSubjects.map(as =>
+									<MenuItem value={as}>{as}</MenuItem>
+								)}
+							</Select>
+						</div>
 						<TextField
 							label={t('dispensation.other')}
 							fullWidth
@@ -359,19 +368,22 @@ export const AddNewDispensationDialog = ({
 							disabled
 							style={{flex: '1', margin: "5px"}}
 						/>
-						<Select
-							value={status}
-							style={{flex: '1', margin: "5px"}}
-							onChange={(event: SelectChangeEvent) => {
-								setStatus(event.target.value)
-							}}
-							label={t("dispensation.status")}
-						>
-							<MenuItem value={t("dispensation.statusDraft")}>{t("dispensation.statusDraft")}</MenuItem>
-							<MenuItem value={t("dispensation.statusActive")}>{t("dispensation.statusActive")}</MenuItem>
-							<MenuItem value={t("dispensation.statusExpired")}>{t("dispensation.statusExpired")}</MenuItem>
-							<MenuItem value={t("dispensation.statusCancelled")}>{t("dispensation.statusCancelled")}</MenuItem>
-						</Select>
+						<div style={{flex: '1', margin: "5px", display: "flex", flexDirection: "column"}}>
+							<InputLabel id="status_label" style={{fontSize: "small", fontWeight: "bold"}}>{t("dispensation.status")}</InputLabel>
+							<Select
+								labelId="status_label"
+								value={status}
+								onChange={(event: SelectChangeEvent) => {
+									setStatus(event.target.value)
+								}}
+								label={t("dispensation.status")}
+							>
+								<MenuItem value={t("dispensation.statusDraft")}>{t("dispensation.statusDraft")}</MenuItem>
+								<MenuItem value={t("dispensation.statusActive")}>{t("dispensation.statusActive")}</MenuItem>
+								<MenuItem value={t("dispensation.statusExpired")}>{t("dispensation.statusExpired")}</MenuItem>
+								<MenuItem value={t("dispensation.statusCancelled")}>{t("dispensation.statusCancelled")}</MenuItem>
+							</Select>
+						</div>
 					</div>
 					<div className="rowDiv">
 						<div style={{width: '50%'}}>
