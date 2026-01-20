@@ -7,6 +7,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {
 	dispensationType,
 	genericType,
+	lhdUnitsType,
 	notificationType,
 	personType,
 	roomDetailsType
@@ -20,7 +21,8 @@ import {
 	fetchDispensationHistory,
 	fetchDispensationSubjects,
 	fetchPeopleFromFullText,
-	fetchRooms
+	fetchRooms,
+	fetchUnitsForDispensation
 } from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
@@ -63,6 +65,8 @@ export const AddNewDispensationDialog = ({
 	const [requires, setRequires] = useState<string | undefined>(selectedDispensation?.requires);
 	const [savedRooms, setSavedRooms] = useState<roomDetailsType[]>([]);
 	const [selectedRooms, setSelectedRooms] = useState<roomDetailsType[]>([]);
+	const [savedUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
+	const [selectedUnits, setSelectedUnits] = useState<lhdUnitsType[]>([]);
 	const [savedHolders, setSavedHolders] = useState<personType[]>([]);
 	const [selectedHolders, setSelectedHolders] = useState<personType[]>([]);
 	const [savedTickets, setSavedTickets] = useState<genericType[]>([]);
@@ -87,6 +91,9 @@ export const AddNewDispensationDialog = ({
 
 		setSavedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
 		setSelectedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
+
+		setSavedUnits(selectedDispensation ? selectedDispensation.dispensation_units : []);
+		setSelectedUnits(selectedDispensation ? selectedDispensation.dispensation_units : []);
 
 		setSavedHolders(selectedDispensation ? selectedDispensation.dispensation_holders : []);
 		setSelectedHolders(selectedDispensation ? selectedDispensation.dispensation_holders : []);
@@ -127,7 +134,7 @@ export const AddNewDispensationDialog = ({
 		setLoading(true);
 		setOpenDialogConfirm(false);
 		const dispensation = {expDate,creationDate,renewals,status,
-			subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms};
+			subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms, selectedUnits};
 		let fileBase64 = await readFileAsBase64(file);
 		const fileToSend = {
 			file: fileBase64,
@@ -157,7 +164,9 @@ export const AddNewDispensationDialog = ({
 
 	async function askForConfirmation () {
 		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))
-			&& (status === 'Draft' || (selectedRooms.length > 0 && selectedHolders.length > 0))) {
+			&& (status === 'Draft' || (selectedRooms.filter(item => item.status !== 'Deleted').length > 0
+				&& selectedHolders.filter(item => item.status !== 'Deleted').length > 0
+				&& selectedUnits.filter(item => item.status !== 'Deleted').length > 0))) {
 			if (status !== 'Draft') {
 				setOpenDialogConfirm(true);
 			} else {
@@ -171,6 +180,10 @@ export const AddNewDispensationDialog = ({
 
 	function onChangeRoom(changedRooms: roomDetailsType[]) {
 		setSelectedRooms(changedRooms);
+	}
+
+	function onChangeUnit(changedUnits: lhdUnitsType[]) {
+		setSelectedUnits(changedUnits);
 	}
 
 	function onChangeHolder(changedHolders: personType[]) {
@@ -210,6 +223,10 @@ export const AddNewDispensationDialog = ({
 		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
 	}
 
+	function getUnitTitle(unit: lhdUnitsType) {
+		return unit.name;
+	}
+
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
 		const results = await fetchRooms(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -226,6 +243,27 @@ export const AddNewDispensationDialog = ({
 			}
 		}
 		return [];
+	};
+
+	const fetchUnitsList = async () => {
+		if (selectedRooms.length > 0) {
+			const rooms = selectedRooms.filter(room => room.status !== 'Deleted').map(room => room.name);
+			const results = await fetchUnitsForDispensation(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				rooms
+			);
+			if (results.status === 200) {
+				if (results.data) {
+					return (results.data);
+				} else {
+					const errors = getErrorMessage(results, 'unitsForDispensation');
+					setNotificationType(errors.notif);
+					setOpenNotification(true);
+				}
+			}
+		}
+		return ([]);
 	};
 
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
@@ -412,6 +450,13 @@ export const AddNewDispensationDialog = ({
 																 onChangeSelection={onChangeRoom}
 																 getCardTitle={getRoomTitle}
 																 fetchData={fetchRoomList}/>
+						</div>
+						<div className="dispensation-panel">
+							<label className='labelDetails'>{t(`dispensation.unit`)}</label>
+							{selectedRooms && <MultipleSelection selected={savedUnits} objectName="Unit"
+																	onChangeSelection={onChangeUnit}
+																	getCardTitle={getUnitTitle}
+																	fetchData={fetchUnitsList}/>}
 						</div>
 						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`dispensation.holders`)}</label>

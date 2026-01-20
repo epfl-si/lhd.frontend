@@ -88,6 +88,16 @@ export const DispensationControl = ({
 					</div>
 			),
 		},
+		{field: "dispensation_units", headerName: t('dispensation.unit'), flex: 0.1,
+			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
+				<div className="form-card-div">
+					{params.row.dispensation_units.map(item => {
+							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+						}
+					)}
+				</div>
+			),
+		},
 		{field: "dispensation_holders", headerName: t('dispensation.holders'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div className="form-card-div">
@@ -159,6 +169,16 @@ export const DispensationControl = ({
 				</div>
 			),
 		},
+		{field: "dispensation_units", headerName: t('dispensation.unit'), flex: 0.1,
+			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
+				<div className="form-card-div">
+					{params.row.dispensation_units.map(item => {
+							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+						}
+					)}
+				</div>
+			),
+		},
 		{field: "dispensation_holders", headerName: t('dispensation.holders'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
@@ -202,6 +222,9 @@ export const DispensationControl = ({
 					)
 				}
 			);
+			const units= params.row.dispensation_units.map(item => {
+				return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+			});
 			const tickets = params.row.dispensation_tickets.map(item => {
 					return (
 						<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
@@ -214,6 +237,7 @@ export const DispensationControl = ({
 				<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
 				<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
 				{rooms}
+				{units}
 				{holders}
 				{tickets}
 			</div>
@@ -301,6 +325,7 @@ export const DispensationControl = ({
 					modified_by: disp.modified_by,
 					modified_on: formatDate(new Date(disp.modified_on), true),
 					rooms: disp.dispensation_rooms.map(room => room.name),
+					units: disp.dispensation_units.map(unit => unit.name),
 					holders: disp.dispensation_holders.map(holder => `${holder.name} ${holder.surname} (${holder.sciper})`),
 					status: disp.status,
 					tickets: disp.dispensation_tickets.map(ticket => ticket.ticket_number)

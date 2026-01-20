@@ -629,6 +629,9 @@ export const saveNewDispensation = async (
 									rooms: [
 										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
+									units: [
+										${dispensation.selectedUnits.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
 								)
 							 {
 								errors {
@@ -667,6 +670,9 @@ export const updateDispensation = async (
 									],
 									rooms: [
 										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+									units: [
+										${dispensation.selectedUnits.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
 								)
 							 {
