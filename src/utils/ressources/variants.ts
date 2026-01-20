@@ -78,7 +78,7 @@ export const notificationsVariants = {
 	},
 	'no-dispensation-chosen': {
 		type: 'error',
-		text: 'Dispensation subject and requirements are mandatory. You must choose at least one room and one holder.',
+		text: 'Dispensation subject and requirements are mandatory. You must choose at least one room, one holder and one unit.',
 	},
 	'no-organism-chosen': {
 		type: 'error',

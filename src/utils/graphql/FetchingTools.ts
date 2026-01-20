@@ -354,6 +354,26 @@ export const fetchUnits = async (
 	};
 };
 
+export const fetchUnitsForDispensation = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	rooms: string[]
+): Promise<any> => {
+	const query: string = `query fetchUnitsForDispensation { 
+						unitsForDispensation (rooms: "${rooms.join(',')}") {
+							name
+							id
+						}
+					}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.unitsForDispensation,
+		errors: result.errors
+	};
+};
+
 export const fetchRooms = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -1181,6 +1201,9 @@ export const fetchDispensations = async (
 					name
 					isDeleted
 				}
+				dispensation_units {
+					name
+				}
 				dispensation_holders {
 					surname
 					name
@@ -1245,7 +1268,6 @@ export const fetchDispensationHistory = async (
 	}`;
 
 		const resultTable = await doGraphQL(query, {}, address, authToken);
-		debugger;
 		data.push(...resultTable.data?.mutationLogsByTable);
 		if (resultTable.errors) {
 			errors.push(...resultTable.errors);

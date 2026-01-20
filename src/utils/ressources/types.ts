@@ -86,6 +86,7 @@ export type dispensationType = {
 	modified_on: Date;
 	subject: string;
 	dispensation_rooms: roomDetailsType[];
+	dispensation_units: lhdUnitsType[];
 	dispensation_holders: personType[];
 	dispensation_tickets: genericType[];
 }
