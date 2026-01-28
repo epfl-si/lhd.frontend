@@ -219,19 +219,17 @@ export const HazardsControl = ({
 						});
 				}
 			}
-			if (search === 'Biological') {
-				columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
-					renderCell: (params: GridRenderCellParams<any, any>) => (
-							user.canEditOrganisms ? <Button size="icon"
-											iconName={`#trash`}
-											onClick={() => {
-												setOpenDialog(true);
-												setSelectedHazard(params.row.id_lab_has_hazards_child);
-												setSelectedParentHazard(params.row.id_lab_has_hazards);
-											}}/> : <></>
-					)
-				});
-			}
+			columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
+				renderCell: (params: GridRenderCellParams<any, any>) => (
+						user.canEditHazards ? <Button size="icon"
+										iconName={`#trash`}
+										onClick={() => {
+											setOpenDialog(true);
+											setSelectedHazard(params.row.id_lab_has_hazards_child);
+											setSelectedParentHazard(params.row.id_lab_has_hazards);
+										}}/> : <></>
+				)
+			});
 			setIsTableReady(true)
 
 			// Overwrite with actual values
@@ -436,7 +434,7 @@ export const HazardsControl = ({
 					notification={notificationType}
 					close={handleClose}
 				/>
-				{deleted ? <Redirect to={"/hazardscontrol?Category=Biological&" + queryString}/> : <></>}
+				{deleted ? <Redirect to={`/hazardscontrol?Category=${search}&` + queryString}/> : <></>}
 			</> : <b>You are not authorized for this page</b>}
 		</Box>
 	);
