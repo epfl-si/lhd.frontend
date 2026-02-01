@@ -398,7 +398,14 @@ export const AddNewDispensationDialog = ({
 							type="date"
 							required={true}
 							value={formatDate(expDate)}
-							onChange={(e) => setExpDate(new Date(e.target.value))}
+							onChange={(e) => {
+								const newDate = new Date(e.target.value);
+								setStatus(status === 'Expired' && newDate > new Date() ? 'Active' : status);
+								setExpDate(newDate);
+							}}
+							inputProps={{
+								min: formatDate(creationDate),
+							}}
 							style={{flex: '1', margin: "5px"}}
 						/>
 						<TextField
