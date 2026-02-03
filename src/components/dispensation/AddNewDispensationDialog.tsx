@@ -62,7 +62,7 @@ export const AddNewDispensationDialog = ({
 	const [subject, setSubject] = useState<string | undefined>(selectedDispensation?.subject);
 	const [other, setOther] = useState<string | undefined>(selectedDispensation?.subject_other);
 	const [comment, setComment] = useState<string | undefined>(selectedDispensation?.comment);
-	const [requires, setRequires] = useState<string | undefined>(selectedDispensation?.requires);
+	const [description, setDescription] = useState<string | undefined>(selectedDispensation?.description);
 	const [savedRooms, setSavedRooms] = useState<roomDetailsType[]>([]);
 	const [selectedRooms, setSelectedRooms] = useState<roomDetailsType[]>([]);
 	const [savedUnits, setSavedUnits] = useState<lhdUnitsType[]>([]);
@@ -86,7 +86,7 @@ export const AddNewDispensationDialog = ({
 		setStatus(selectedDispensation ? selectedDispensation.status : 'Draft');
 		setSubject(selectedDispensation?.subject);
 		setComment(selectedDispensation ? selectedDispensation.comment : '');
-		setRequires(selectedDispensation ? selectedDispensation.requires : '');
+		setDescription(selectedDispensation ? selectedDispensation.description : '');
 		setOther(selectedDispensation ? selectedDispensation.subject_other : '')
 
 		setSavedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
@@ -134,7 +134,7 @@ export const AddNewDispensationDialog = ({
 		setLoading(true);
 		setOpenDialogConfirm(false);
 		const dispensation = {expDate,creationDate,renewals,status,
-			subject,other,comment,requires,selectedTickets,selectedHolders,selectedRooms, selectedUnits};
+			subject,other,comment,description,selectedTickets,selectedHolders,selectedRooms, selectedUnits};
 		let fileBase64 = await readFileAsBase64(file);
 		const fileToSend = {
 			file: fileBase64,
@@ -163,7 +163,7 @@ export const AddNewDispensationDialog = ({
 	}
 
 	async function askForConfirmation () {
-		if (requires && subject && (subject !== 'Other' || (subject === 'Other' && other))
+		if (description && subject && (subject !== 'Other' || (subject === 'Other' && other))
 			&& (status === 'Draft' || (selectedRooms.filter(item => item.status !== 'Deleted').length > 0
 				&& selectedHolders.filter(item => item.status !== 'Deleted').length > 0
 				&& selectedUnits.filter(item => item.status !== 'Deleted').length > 0))) {
@@ -437,9 +437,9 @@ export const AddNewDispensationDialog = ({
 								id={"requirement"}
 								name="requirement"
 								isRequired={true}
-								label={t('dispensation.requires')}
-								onChange={(event) => setRequires(event)}
-								value={requires}
+								label={t('dispensation.description')}
+								onChange={(event) => setDescription(event)}
+								value={description}
 							/></div>
 						<div style={{width: '50%', marginLeft: '5px'}}>
 						<TextArea
