@@ -317,7 +317,7 @@ export const DispensationControl = ({
 					renewals: disp.renewals,
 					subject: disp.subject,
 					subject_other: disp.subject_other ?? '',
-					requires: disp.requires,
+					description: disp.description,
 					comment: disp.comment ?? '',
 					file_path: disp.file_path ? disp.file_path.split('/').pop() : '',
 					created_by: disp.created_by,
