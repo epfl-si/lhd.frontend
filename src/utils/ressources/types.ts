@@ -73,7 +73,7 @@ export type dispensationType = {
 	id: string;
 	dispensation: string;
 	renewals: number;
-	other_subject: string;
+	subject_other: string;
 	requires: string;
 	comment: string;
 	status: string;

@@ -56,7 +56,7 @@ export const DispensationControl = ({
 			}},
 		{field: "subject", headerName: t('dispensation.subject'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.other_subject ? `${params.row.subject} (${params.row.other_subject})` : params.row.subject}</>
+				return <>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</>
 			}},
 		{field: "renewals", headerName: t('dispensation.renewals'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
@@ -316,7 +316,7 @@ export const DispensationControl = ({
 					date_end: formatDate(new Date(disp.date_end), true),
 					renewals: disp.renewals,
 					subject: disp.subject,
-					other_subject: disp.other_subject ?? '',
+					subject_other: disp.subject_other ?? '',
 					requires: disp.requires,
 					comment: disp.comment ?? '',
 					file_path: disp.file_path ? disp.file_path.split('/').pop() : '',
