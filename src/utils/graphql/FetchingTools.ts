@@ -643,77 +643,6 @@ export const fetchunitsFromFullText = async (
 	};
 };
 
-export const fetchSlugs = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	variables: Object
-): Promise<any> => {
-	const query = `query getSlugs {
-							dispensations {
-								slug
-							}
-						}`;
-
-	const result = await doGraphQL(query, variables, address, authToken);
-	return {
-		status: result.status,
-		data: result.data?.dispensations,
-		errors: result.errors
-	};
-};
-
-export const fetchDispFormDetails = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	variables: Object
-): Promise<any> => {
-	const query = `query getDispensationFormDetails {
-							rooms {
-								name
-							}
-							people {
-								name
-								sciper
-							}
-						}`;
-	return await doGraphQL(query, variables, address, authToken);
-};
-
-export const fetchSingleDispensation = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	slug: string | null,
-	variables: Object
-): Promise<any> => {
-	const query = `query SingleDispensationFetch { 
-							dispensations (where: { slug: { contains: "${slug}" }}) {
-								versions {
-									subject
-									date_start
-									date_end
-									description
-									comment
-									rooms {
-										name
-									}
-									holders {
-										name
-										sciper
-									}
-								}
-								},
-							}`;
-
-	const result = await doGraphQL(query, variables, address, authToken);
-	const version = result.data?.dispensations[0]?.versions;
-
-	return {
-		status: result.status,
-		data: version[version.length-1],
-		errors: result.errors
-	};
-};
-
 export const fetchPeopleFromFullText = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -1252,9 +1181,7 @@ export const fetchDispensationHistory = async (
 	const data = [];
 	const errors = [];
 
-	const tables = ["dispensation"];
-	for (const table of tables) {
-		const query = `query fetchDispensationHistory {
+	const query = `query fetchDispensationHistory {
 		mutationLogsByTable (tableName: "dispensation,dispensation_has_ticket,dispensation_has_room,dispensation_has_holder,dispensation_has_unit", tableIdentifier: ${JSON.stringify(dispensationId)}, 
 		excludedField: "modified_on,id_dispensation,modified_by") {
 			modified_by
@@ -1267,17 +1194,11 @@ export const fetchDispensationHistory = async (
 		}
 	}`;
 
-		const resultTable = await doGraphQL(query, {}, address, authToken);
-		data.push(...resultTable.data?.mutationLogsByTable);
-		if (resultTable.errors) {
-			errors.push(...resultTable.errors);
-		}
-	}
-
+	const result = await doGraphQL(query, {}, address, authToken);
 	return {
-		status: 200,
-		data: data,
-		errors: errors
+		status: result.status,
+		data: result.data?.authorizationsByRoom,
+		errors: result.errors
 	};
 };
 
