@@ -612,7 +612,7 @@ export const saveNewDispensation = async (
 								addDispensation(
 									dispensation: "${dispensation.name}",
 									subject: "${dispensation.subject}",
-									other_subject: "${dispensation.other}",
+									subject_other: "${dispensation.other}",
 									requires: "${encodeURIComponent(dispensation.requires)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
 									file: "${fileToSend.file ?? ''}",
@@ -657,7 +657,7 @@ export const updateDispensation = async (
 									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
 									status: "${dispensation.status}",
 									subject: "${dispensation.subject}",
-									other_subject: "${dispensation.other}",
+									subject_other: "${dispensation.other}",
 									requires: "${encodeURIComponent(dispensation.requires)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
 									file: "${fileToSend.file ?? ''}",

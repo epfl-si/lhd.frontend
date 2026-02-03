@@ -1189,7 +1189,7 @@ export const fetchDispensations = async (
 				date_end
 				renewals
 				subject
-				other_subject
+				subject_other
 				requires
 				comment
 				file_path

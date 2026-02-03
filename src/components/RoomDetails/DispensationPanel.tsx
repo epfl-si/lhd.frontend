@@ -35,7 +35,7 @@ export const DispensationPanel = ({
 			}},
 		{field: "subject", headerName: t('dispensation.subject'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.other_subject ? `${params.row.subject} (${params.row.other_subject})` : params.row.subject}</>
+				return <>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</>
 			}},
 		{field: "renewals", headerName: t('dispensation.renewals'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {

@@ -60,7 +60,7 @@ export const AddNewDispensationDialog = ({
 	const [renewals, setRenewals] = useState<number>(selectedDispensation ? selectedDispensation.renewals : 0);
 	const [status, setStatus] = useState<string>(selectedDispensation ? selectedDispensation.status : 'Active');
 	const [subject, setSubject] = useState<string | undefined>(selectedDispensation?.subject);
-	const [other, setOther] = useState<string | undefined>(selectedDispensation?.other_subject);
+	const [other, setOther] = useState<string | undefined>(selectedDispensation?.subject_other);
 	const [comment, setComment] = useState<string | undefined>(selectedDispensation?.comment);
 	const [requires, setRequires] = useState<string | undefined>(selectedDispensation?.requires);
 	const [savedRooms, setSavedRooms] = useState<roomDetailsType[]>([]);
@@ -87,7 +87,7 @@ export const AddNewDispensationDialog = ({
 		setSubject(selectedDispensation?.subject);
 		setComment(selectedDispensation ? selectedDispensation.comment : '');
 		setRequires(selectedDispensation ? selectedDispensation.requires : '');
-		setOther(selectedDispensation ? selectedDispensation.other_subject : '')
+		setOther(selectedDispensation ? selectedDispensation.subject_other : '')
 
 		setSavedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
 		setSelectedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
