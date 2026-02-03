@@ -1178,9 +1178,6 @@ export const fetchDispensationHistory = async (
 	authToken: string | undefined,
 	dispensationId: string
 ): Promise<any> => {
-	const data = [];
-	const errors = [];
-
 	const query = `query fetchDispensationHistory {
 		mutationLogsByTable (tableName: "dispensation,dispensation_has_ticket,dispensation_has_room,dispensation_has_holder,dispensation_has_unit", tableIdentifier: ${JSON.stringify(dispensationId)}, 
 		excludedField: "modified_on,id_dispensation,modified_by") {
@@ -1197,7 +1194,7 @@ export const fetchDispensationHistory = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.authorizationsByRoom,
+		data: result.data?.mutationLogsByTable,
 		errors: result.errors
 	};
 };
