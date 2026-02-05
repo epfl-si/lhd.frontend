@@ -553,7 +553,6 @@ export const saveNewDispensation = async (
 ): Promise<any> => {
 	const query = `mutation addDispensation {
 								addDispensation(
-									dispensation: "${dispensation.name}",
 									subject: "${dispensation.subject}",
 									subject_other: "${dispensation.other}",
 									description: "${encodeURIComponent(dispensation.description)}",
