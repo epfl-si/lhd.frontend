@@ -87,6 +87,22 @@ export const MultipleAutocomplete = ({
 
 	const filterOptions = (options: OptionType[]): OptionType[] => options;
 
+	function findDispensationStatus(input: string) {
+		const validStatuses = ['Draft', 'Active', 'Expired', 'Cancelled'];
+
+		return validStatuses.find(
+			status => status.toLowerCase().includes(input.trim().toLowerCase())
+		);
+	}
+
+	function findAuthorizationStatus(input: string) {
+		const validStatuses = ['Active', 'Expired'];
+
+		return validStatuses.find(
+			status => status.toLowerCase().includes(input.trim().toLowerCase())
+		);
+	}
+
 	const getOptionsAsync = (query: string): Promise<OptionType[]> => {
 		return new Promise((resolve) => {
 			if (parent === 'hazardscontrol') {
@@ -113,7 +129,7 @@ export const MultipleAutocomplete = ({
 					[
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
 						{ title: "Authorization="+query, encodedTitle: "Authorization="+ encodeURIComponent(query) },
-						{ title: "Status(Active/Expired)="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Status(Active/Expired)="+query, encodedTitle: "Status="+ findAuthorizationStatus(encodeURIComponent(query.trim().toLowerCase())) },
 						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
 						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
@@ -124,7 +140,7 @@ export const MultipleAutocomplete = ({
 					[
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
 						{ title: "Authorization="+query, encodedTitle: "Authorization="+ encodeURIComponent(query) },
-						{ title: "Status(Active/Expired)="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Status(Active/Expired)="+query, encodedTitle: "Status="+ findAuthorizationStatus(encodeURIComponent(query.trim().toLowerCase())) },
 						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
 						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
 						{ title: "Source="+query, encodedTitle: "Source="+ encodeURIComponent(query)},
@@ -136,7 +152,7 @@ export const MultipleAutocomplete = ({
 						{ title: "Dispensation="+query, encodedTitle: "Dispensation="+ encodeURIComponent(query) },
 						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
 						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
-						{ title: "Status="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Status="+query, encodedTitle: "Status="+ findDispensationStatus(encodeURIComponent(query.trim().toLowerCase())) },
 						{ title: "Subject="+query, encodedTitle: "Subject="+ encodeURIComponent(query) },
 						{ title: "Ticket="+query, encodedTitle: "Ticket="+ encodeURIComponent(query)},
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
