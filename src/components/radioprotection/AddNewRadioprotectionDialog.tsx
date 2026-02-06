@@ -256,7 +256,11 @@ export const AddNewRadioprotectionDialog = ({
 							label={t('authorization.expires')}
 							type="date"
 							value={formatDate(expDate)}
-							onChange={(e) => setExpDate(new Date(e.target.value))}
+							onChange={(e) => {
+								const newDate = new Date(e.target.value);
+								setStatus(status === 'Expired' && newDate > new Date() ? 'Active' : status);
+								setExpDate(newDate);
+							}}
 							style={{flex: '1', margin: "5px"}}
 						/>
 						<TextField
