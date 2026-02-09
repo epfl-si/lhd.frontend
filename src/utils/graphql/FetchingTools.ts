@@ -1179,7 +1179,7 @@ export const fetchDispensationHistory = async (
 	dispensationId: string
 ): Promise<any> => {
 	const query = `query fetchDispensationHistory {
-		mutationLogsByTable (tableName: "dispensation,dispensation_has_ticket,dispensation_has_room,dispensation_has_holder,dispensation_has_unit", tableIdentifier: ${JSON.stringify(dispensationId)}, 
+		mutationLogsByTable (tableName: "Dispensation,DispensationHasTicket,DispensationHasRoom,DispensationHasHolder,DispensationHasUnit", tableIdentifier: ${JSON.stringify(dispensationId)}, 
 		excludedField: "modified_on,id_dispensation,modified_by") {
 			modified_by
 			modified_on
