@@ -52,7 +52,11 @@ i18next.use(initReactI18next).init({
 					editName: 'Edit the sub-unit name',
 					linkSnow: 'Link to unit safety tickets',
 					deleteUnitConfirmationMessageTitle: 'Are you sure to delete this unit: ',
-					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles, COSECs, rooms and storages will be deleted. \nAll sub-units will be deleted too.'
+					deleteUnitConfirmationMessageDescription: 'All relationships with responsibles, COSECs, rooms and storages will be deleted. \nAll sub-units will be deleted too.',
+					rooms: 'Rooms',
+					radioAuth: 'Radio protection authorizations',
+					chemAuth: 'Chemical authorizations',
+					dispensation: 'Dispensations'
 				},
 				unit: {
 					name: 'Unit',
@@ -346,7 +350,11 @@ i18next.use(initReactI18next).init({
 					editName: 'Modifier le nom de la sous-unité',
 					linkSnow: 'Lien vers les tickets de l\'unité',
 					deleteUnitConfirmationMessageTitle: 'Êtes-vous sûrs de vouloir supprimer cette unité: ',
-					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les locaux et les stockages seront aussi supprimées, ainsi que toutes les sous-unités.'
+					deleteUnitConfirmationMessageDescription: 'Toutes les rélations avec les responsables, les COSECs, les locaux et les stockages seront aussi supprimées, ainsi que toutes les sous-unités.',
+					rooms: 'Locaux',
+					radioAuth: 'Autorisations de radioprotection',
+					chemAuth: 'Autorisations chimiques',
+					dispensation: 'Dérogations'
 				},
 				unit: {
 					name: 'Unité',

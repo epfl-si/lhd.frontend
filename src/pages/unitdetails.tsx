@@ -214,7 +214,13 @@ export default function UnitDetails() {
 					</ResponsiveTabs.Tab>) : <></>
 				}
 			</ResponsiveTabs>
-			<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
+			<div style={{display: "flex", flexDirection: "column"}}>
+				<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
+				<a target="_blank" href={`/roomcontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.rooms`)}</a>
+				<a target="_blank" href={`/radioprotectionauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.radioAuth`)}</a>
+				<a target="_blank" href={`/chemicalauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.chemAuth`)}</a>
+				<a target="_blank" href={`/dispensationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.dispensation`)}</a>
+			</div>
 			<AuditReportPanel lhd_units={data} style={{marginLeft: '20px'}}/>
 			<div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
 				<Button
