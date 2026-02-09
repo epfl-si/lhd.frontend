@@ -161,8 +161,8 @@ export const MultipleAutocomplete = ({
 			} else {
 				resolve(
 				[
-					{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
 					{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query) },
+					{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query)},
 					{ title: "Building="+query, encodedTitle: "Building="+ encodeURIComponent(query) },
 					{ title: "Sector="+query, encodedTitle: "Sector="+ encodeURIComponent(query) },
 					{ title: "Floor="+query, encodedTitle: "Floor="+ encodeURIComponent(query) },
