@@ -19,6 +19,7 @@ import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {Tooltip} from "@mui/joy";
+import { getFormattedDate } from "../utils/ressources/parser";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -65,7 +66,7 @@ export const HazardsControl = ({
 		{
 			field: "modified_on", headerName: t('organism.updated_on'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
-				(new Date(params.row.modified_on)).toLocaleDateString("en-GB")
+				getFormattedDate(new Date(params.row.modified_on))
 			)
 		},
 		{
@@ -276,7 +277,7 @@ export const HazardsControl = ({
 			{
 				field: "modified_on", headerName: t('organism.updated_on'), width: 100,
 				renderCell: (params: GridRenderCellParams<any, any>) => (
-					(new Date(params.row.modified_on)).toLocaleDateString("en-GB")
+					getFormattedDate(new Date(params.row.modified_on))
 				)
 			},
 			{
@@ -341,7 +342,7 @@ export const HazardsControl = ({
 						if (!['id_lab_has_hazards_child', 'id_lab_has_hazards', 'delete', 'status'].includes(key)) {
 							switch (key) {
 								case 'modified_on':
-									newObj[key] = (new Date(obj[key])).toLocaleDateString("en-GB");
+									newObj[key] = getFormattedDate(new Date(obj[key]));
 									break;
 								case 'global_comment':
 									newObj[key] = obj[key] ? decodeURIComponent(obj[key]) : '';

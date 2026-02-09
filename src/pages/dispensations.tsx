@@ -16,7 +16,7 @@ import {fetchDispensations} from "../utils/graphql/FetchingTools";
 import {AddNewDispensationDialog} from "../components/dispensation/AddNewDispensationDialog";
 import {DeleteDispensationDialog} from "../components/dispensation/DeleteDispensationDialog";
 import {exportToExcel, getExportFileName} from "../utils/ressources/file";
-import {formatDate} from "../utils/ressources/parser";
+import {formatDate, getFormattedDate} from "../utils/ressources/parser";
 
 interface DispensationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -65,12 +65,12 @@ export const DispensationControl = ({
 		{field: "date_start", headerName: t('dispensation.date_start'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
 				const date = new Date(params.row.date_start);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},},
 		{field: "date_end", headerName: t('dispensation.date_end'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
 				const date = new Date(params.row.date_end);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},},
 		{field: "status", headerName: t('dispensation.status'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
@@ -153,8 +153,8 @@ export const DispensationControl = ({
 				const date = new Date(params.row.date_start);
 				const dateExp = new Date(params.row.date_end);
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
-					<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
+					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
+					<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
 				</div>
 			}},
 		{field: "dispensation_rooms", headerName: t('dispensation.room'), flex: 0.1,
@@ -234,8 +234,8 @@ export const DispensationControl = ({
 			return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 				<span>{params.row.dispensation}-{params.row.renewals}</span>
 				<b style={{fontSize: "smaller"}}>{params.row.status}</b>
-				<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
-				<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
+				<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
+				<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
 				{rooms}
 				{units}
 				{holders}

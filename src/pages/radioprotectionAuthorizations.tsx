@@ -15,6 +15,7 @@ import {AddNewRadioprotectionDialog} from "../components/radioprotection/AddNewR
 import {Button} from "epfl-elements-react-si-extra";
 import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteRadioprotectionDialog";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {getFormattedDate} from "../utils/ressources/parser";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -67,12 +68,12 @@ export const RadioprotectionsAuthorizationControl = ({
 		{field: "creation_date", headerName: t('authorization.created'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				const date = new Date(params.row.creation_date);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},},
 		{field: "expiration_date", headerName: t('authorization.expires'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				const date = new Date(params.row.expiration_date);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},},
 		{field: "status", headerName: t('authorization.status'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
@@ -146,8 +147,8 @@ export const RadioprotectionsAuthorizationControl = ({
 				const date = new Date(params.row.creation_date);
 				const dateExp = new Date(params.row.expiration_date);
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
-					<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
+					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
+					<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
 				</div>
 			}},
 		{field: "authorization_rooms", headerName: t('authorization.room'), flex: 0.1,
@@ -215,8 +216,8 @@ export const RadioprotectionsAuthorizationControl = ({
 				<span>{params.row.unit ? params.row.unit.name : ''}</span>
 				<span>{params.row.authorization}-{params.row.renewals}</span>
 				<b style={{fontSize: "smaller"}}>{params.row.status}</b>
-				<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
-				<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
+				<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
+				<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
 				{rooms}
 				{holders}
 				{radiations}

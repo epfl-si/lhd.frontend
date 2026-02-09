@@ -16,6 +16,7 @@ import {AddNewOrganismDialog} from "../components/organism/AddNewOrganismDialog"
 import {deleteOrganism} from "../utils/graphql/PostingTools";
 import {AlertDialog} from "../components/global/AlertDialog";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {getFormattedDate} from "../utils/ressources/parser";
 
 interface OrganismsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -68,12 +69,12 @@ export const OrganismsControl = ({
 		{field: "updated_on", headerName: t('organism.updated_on'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				const date = new Date(params.row.updated_on);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},
 			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
 				if (!params.value) return "";
 				const date = new Date(params.value);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			}
 		},
 		{field: "updated_by", headerName: t('organism.updated_by'), width: 200,
@@ -117,7 +118,7 @@ export const OrganismsControl = ({
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					{params.row.updated_by}
 					<br/>
-					{'(' + date.toLocaleDateString("en-GB") + ')'}
+					{'(' + getFormattedDate(date) + ')'}
 				</div>
 			}
 		},
@@ -147,7 +148,7 @@ export const OrganismsControl = ({
 					<></>}
 					<div style={{display: "flex", flexDirection: 'row'}}>
 						<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>
-							{params.row.updated_by + '(' + date.toLocaleDateString("en-GB") + ')'}
+							{params.row.updated_by + '(' + getFormattedDate(date) + ')'}
 						</span>
 					</div>
 				</div>
