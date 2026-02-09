@@ -163,7 +163,6 @@ function App() {
 						}
 						{(connectedUser.canListRooms) &&
 				<>
-					<li><a href={env().LHDv2_BASE_URL + "cut/lhd_cut.php"}>Supplies interruptions</a></li>
 					<li><a onClick={() => setOpenAudit(!openAudit)}>Audit</a>
 						<ul style={{display: openAudit ? 'block' : 'none'}}>
 							<li><a href={env().LHDv2_BASE_URL + "audit/lhd_audit.php"}>List of reports</a></li>
@@ -181,8 +180,6 @@ function App() {
 						</li>
 						{(connectedUser.canListRooms) &&
 				<>
-					<li><a href={env().LHDv2_BASE_URL + "aa/aa_validation/lhd_aa_validation.php"}>Accred/Archibus</a>
-					</li>
 					<li><a onClick={() => setOpenLinks(!openLinks)}>Links</a>
 						<ul style={{display: openLinks ? 'block' : 'none'}}>
 							<li><a href="http://geoportail.epfl.ch" target="_blank">Geoportail</a></li>
