@@ -13,6 +13,7 @@ import {EntriesTableCategory} from "../Table/EntriesTableCategory";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import Notifications from "../Table/Notifications";
+import {getFormattedDate} from "../../utils/ressources/parser";
 
 interface AuthorizationPanelProps {
 	room: string;
@@ -46,8 +47,8 @@ export const AuthorizationPanel = ({
 				const date = new Date(params.row.creation_date);
 				const dateExp = new Date(params.row.expiration_date);
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					<span><b>{t('generic.from')}</b> {date.toLocaleDateString("en-GB")}</span>
-					<span><b>{t('generic.to')}</b> {dateExp.toLocaleDateString("en-GB")}</span>
+					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
+					<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
 				</div>
 			}},
 		{field: "status", headerName: t('authorization.status'), flex: 0.1,

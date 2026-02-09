@@ -71,12 +71,12 @@ export const ChemicalsControl = ({
 		// {field: "log", headerName: t('organism.log'), width: 100,
 		// 	renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 		// 		const date = new Date(params.row.updated_on);
-		// 		return date.toLocaleDateString("en-GB");
+		// 		return getFormattedDate(date);
 		// 	},
 		// 	valueFormatter: (params: GridRenderCellParams<any, chemicalsType>) => {
 		// 		if (!params.value) return "";
 		// 		const date = new Date(params.value);
-		// 		return date.toLocaleDateString("en-GB");
+		// 		return getFormattedDate(date);
 		// 	}
 		// },
 		{field: "id", headerName: t('chemical.actions'), width: 100,

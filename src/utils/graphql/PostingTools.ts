@@ -9,6 +9,7 @@ import {
 	roomDetailsType
 } from '../ressources/types';
 import {doGraphQL} from "./Utils";
+import {getFormattedDate} from "../ressources/parser";
 
 const escapeGraphQL = (unquotedString: string): string => {
 	return unquotedString
@@ -467,8 +468,8 @@ export const saveNewRadioprotection = async (
 								addAuthorization(
 									id_unit: ${JSON.stringify(radioprotection.unit.id)},
 									authorization: "${radioprotection.name}",
-									creation_date: "${(new Date(radioprotection.creationDate)).toLocaleDateString("en-GB")}",
-									expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
+									creation_date: "${getFormattedDate(new Date(radioprotection.creationDate))}",
+									expiration_date: "${getFormattedDate(new Date(radioprotection.expDate))}",
 									status: "${radioprotection.status}",
 									authority: "${radioprotection.authority}",
 									type: "IonisingRadiation",
@@ -503,7 +504,7 @@ export const updateRadioprotection = async (
 								updateAuthorization(
 									id: ${id},
 									id_unit: ${JSON.stringify(radioprotection.unit.id)},
-									expiration_date: "${(new Date(radioprotection.expDate)).toLocaleDateString("en-GB")}",
+									expiration_date: "${getFormattedDate(new Date(radioprotection.expDate))}",
 									status: "${radioprotection.status}",
 									authority: "${radioprotection.authority}",
 									radiations: [
@@ -559,8 +560,8 @@ export const saveNewDispensation = async (
 									comment: "${encodeURIComponent(dispensation.comment)}",
 									file: "${fileToSend.file ?? ''}",
 									file_name: "${fileToSend.fileName ?? ''}",
-									date_start: "${(new Date(dispensation.creationDate)).toLocaleDateString("en-GB")}",
-									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
+									date_start: "${getFormattedDate(new Date(dispensation.creationDate))}",
+									date_end: "${getFormattedDate(new Date(dispensation.expDate))}",
 									status: "${dispensation.status}",
 									tickets: [
 										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
@@ -596,7 +597,7 @@ export const updateDispensation = async (
 	const query = `mutation updateDispensation {
 								updateDispensation(
 									id: ${id},
-									date_end: "${(new Date(dispensation.expDate)).toLocaleDateString("en-GB")}",
+									date_end: "${getFormattedDate(new Date(dispensation.expDate))}",
 									status: "${dispensation.status}",
 									subject: "${dispensation.subject}",
 									subject_other: "${dispensation.other}",

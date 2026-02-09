@@ -10,6 +10,7 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import Notifications from "../Table/Notifications";
 import {fetchDispensations} from "../../utils/graphql/FetchingTools";
+import { getFormattedDate } from '../../utils/ressources/parser';
 
 interface DispensationPanelProps {
 	room: string;
@@ -44,12 +45,12 @@ export const DispensationPanel = ({
 		{field: "date_start", headerName: t('dispensation.date_start'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
 				const date = new Date(params.row.date_start);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},},
 		{field: "date_end", headerName: t('dispensation.date_end'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
 				const date = new Date(params.row.date_end);
-				return date.toLocaleDateString("en-GB");
+				return getFormattedDate(date);
 			},},
 		{field: "status", headerName: t('dispensation.status'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
