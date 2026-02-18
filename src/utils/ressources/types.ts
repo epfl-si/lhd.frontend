@@ -222,7 +222,7 @@ export type hazardFormHistoryType = {
 }
 
 export type hazardFormType = {
-	id: string;
+	id?: string;
 	form: string;
 	version: string;
 	hazard_category: hazardCategory;
@@ -231,7 +231,7 @@ export type hazardFormType = {
 }
 
 export type hazardFormChildType = {
-	id: string;
+	id?: string;
 	form: string;
 	version: string;
 	hazard_form_child_name: string;

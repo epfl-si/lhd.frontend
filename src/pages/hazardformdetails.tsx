@@ -77,7 +77,6 @@ export default function HazardFormDetails() {
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					{
-						id: JSON.stringify('{"salt":"newHazard","eph_id":"newHazard"}'),
 						form: JSON.stringify(newForm),
 						version: '1.0.0',
 						hazard_category: {hazard_category_name: category}

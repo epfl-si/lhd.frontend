@@ -235,7 +235,6 @@ export const createNewHazardCategory = async (
 ): Promise<any> => {
 	const query = `mutation createNewHazardCategory {
 							 createNewHazardCategory (
-							 id: ${hazardForm.id},
 							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
@@ -313,7 +312,6 @@ export const createNewHazardFormChild = async (
 ): Promise<any> => {
 	const query = `mutation createNewHazardFormChild {
 							 createNewHazardFormChild (
-							 id: ${hazardForm.id},
 							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
 							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}",
@@ -650,7 +648,6 @@ export const deleteDispensation = async (
 export const saveTag = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	id: string,
 	tag: string,
 	comment: string,
 	additionalInfoId: string,
@@ -658,7 +655,7 @@ export const saveTag = async (
 	roomId: string
 ): Promise<any> => {
 	const query = `mutation addTag {
-								addTag(id: ${JSON.stringify(id)}, tag: "${tag}",
+								addTag(tag: "${tag}",
 								comment: "${comment}", additionalInfoId: ${JSON.stringify(additionalInfoId)},
 								categoryName: "${categoryName}", 
 								roomId: ${JSON.stringify(roomId)})

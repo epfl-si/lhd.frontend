@@ -62,11 +62,9 @@ export const TagDialog = ({
 					handleOpen(res, false);
 				});
 			} else {
-				const newKey = createKey(10);
 				saveTag(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
-					`{"salt":"newTag${newKey}","eph_id":"newTag${newKey}"}`,
 					tag,
 					comment,
 					additionalInfo ?? '',

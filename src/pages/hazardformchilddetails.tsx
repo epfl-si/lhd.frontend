@@ -80,7 +80,6 @@ export default function HazardFormChildDetails() {
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					{
-						id: JSON.stringify('{"salt":"NewHazardFormChild","eph_id":"NewHazardFormChild"}'),
 						form: JSON.stringify(newForm),
 						version: '1.0.0',
 						hazard_form_child_name: name,
