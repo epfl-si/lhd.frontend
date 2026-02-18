@@ -107,11 +107,10 @@ export const DispensationPanel = ({
 			`Room=${room}`
 		);
 
-		debugger;
 		if (results.status === 200 && results.data){
 			setDispensations(results.data.dispensations);
 		} else {
-			const errors = getErrorMessage(results, 'dispensationsByRoom');
+			const errors = getErrorMessage(results, 'dispensationsWithPagination');
 			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
