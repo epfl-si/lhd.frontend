@@ -19,8 +19,10 @@ interface TagDialogProps {
 	save: () => void;
 	close: () => void;
 	selectedTag?: hazardsAdditionalInfoHasTagType;
-	additionalInfo: string;
+	additionalInfo?: string;
 	availableTags: tag[];
+	categoryName: string;
+	roomId?: string;
 }
 
 export const TagDialog = ({
@@ -29,7 +31,9 @@ export const TagDialog = ({
 	save,
 	selectedTag,
 	additionalInfo,
-	availableTags
+	availableTags,
+	categoryName,
+	roomId
 }: TagDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -65,7 +69,9 @@ export const TagDialog = ({
 					`{"salt":"newTag${newKey}","eph_id":"newTag${newKey}"}`,
 					tag,
 					comment,
-					additionalInfo
+					additionalInfo ?? '',
+					categoryName,
+					roomId ?? ''
 				).then(res => {
 					handleOpen(res, true);
 				});

@@ -653,11 +653,15 @@ export const saveTag = async (
 	id: string,
 	tag: string,
 	comment: string,
-	additionalInfoId: string
+	additionalInfoId: string,
+	categoryName: string,
+	roomId: string
 ): Promise<any> => {
 	const query = `mutation addTag {
 								addTag(id: ${JSON.stringify(id)}, tag: "${tag}",
-								comment: "${comment}", additionalInfoId: ${JSON.stringify(additionalInfoId)})
+								comment: "${comment}", additionalInfoId: ${JSON.stringify(additionalInfoId)},
+								categoryName: "${categoryName}", 
+								roomId: ${JSON.stringify(roomId)})
 							 {
 								errors {
 									message
