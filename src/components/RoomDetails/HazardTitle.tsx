@@ -210,12 +210,14 @@ export const HazardTitle = ({
       notification={notificationType}
       close={handleClose}
     />
-    {hazardAdditionalInfo && hazardAdditionalInfo.id && user.canEditHazards &&
+    {user.canEditHazards &&
       <TagDialog
         availableTags={availableTags}
         openDialog={openTagDialog}
-        additionalInfo={hazardAdditionalInfo.id}
+        additionalInfo={hazardAdditionalInfo?.id}
         selectedTag={selectedTag}
+        roomId={room?.id}
+        categoryName={selectedHazardCategory}
         close={closeTagDialog}
         save={() => {
           closeTagDialog();
