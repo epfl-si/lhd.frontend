@@ -6,7 +6,7 @@ import {lhdUnitsType, notificationType, personType} from '../utils/ressources/ty
 import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchPeopleFromFullText, fetchUnitDetails} from "../utils/graphql/FetchingTools";
-import {Button, ResponsiveTabs, Text} from "epfl-elements-react-si-extra";
+import {Button, FormCard, ResponsiveTabs, Text} from "epfl-elements-react-si-extra";
 import Notifications from "../components/Table/Notifications";
 import {MultipleSelection} from "../components/global/MultipleSelection";
 import {SubUnits} from "../components/Units/SubUnitsList";
@@ -203,6 +203,13 @@ export default function UnitDetails() {
 															 fetchData={fetchPeople}/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
+			</ResponsiveTabs>
+			<ResponsiveTabs
+				cardStyle={{
+					background: 'white',
+					fontSize: 'small'
+				}}
+			>
 				{
 					data[0]?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits">
 						<ResponsiveTabs.Tab.Title>
@@ -213,14 +220,29 @@ export default function UnitDetails() {
 						</ResponsiveTabs.Tab.Content>
 					</ResponsiveTabs.Tab>) : <></>
 				}
+				<ResponsiveTabs.Tab key="links" id="linksTab">
+					<ResponsiveTabs.Tab.Title>
+						<UnitTabTitle title={t(`unit_details.links`)} icon='#user'/>
+					</ResponsiveTabs.Tab.Title>
+					<ResponsiveTabs.Tab.Content>
+						<FormCard keyValue='linkSnow'>
+							<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
+						</FormCard>
+						<FormCard keyValue='rooms'>
+							<a target="_blank" href={`/roomcontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.rooms`)}</a>
+						</FormCard>
+						<FormCard keyValue='radioAuth'>
+							<a target="_blank" href={`/radioprotectionauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.radioAuth`)}</a>
+						</FormCard>
+						<FormCard keyValue='chemAuth'>
+							<a target="_blank" href={`/chemicalauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.chemAuth`)}</a>
+						</FormCard>
+						<FormCard keyValue='dispensation'>
+							<a target="_blank" href={`/dispensationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.dispensation`)}</a>
+						</FormCard>
+					</ResponsiveTabs.Tab.Content>
+				</ResponsiveTabs.Tab>
 			</ResponsiveTabs>
-			<div style={{display: "flex", flexDirection: "column"}}>
-				<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
-				<a target="_blank" href={`/roomcontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.rooms`)}</a>
-				<a target="_blank" href={`/radioprotectionauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.radioAuth`)}</a>
-				<a target="_blank" href={`/chemicalauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.chemAuth`)}</a>
-				<a target="_blank" href={`/dispensationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.dispensation`)}</a>
-			</div>
 			<AuditReportPanel lhd_units={data} style={{marginLeft: '20px'}}/>
 			<div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
 				<Button

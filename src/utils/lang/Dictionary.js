@@ -56,7 +56,8 @@ i18next.use(initReactI18next).init({
 					rooms: 'Rooms',
 					radioAuth: 'Radio protection authorizations',
 					chemAuth: 'Chemical authorizations',
-					dispensation: 'Dispensations'
+					dispensation: 'Dispensations',
+					links: 'Links'
 				},
 				unit: {
 					name: 'Unit',
@@ -354,7 +355,8 @@ i18next.use(initReactI18next).init({
 					rooms: 'Locaux',
 					radioAuth: 'Autorisations de radioprotection',
 					chemAuth: 'Autorisations chimiques',
-					dispensation: 'Dérogations'
+					dispensation: 'Dérogations',
+					links: 'Liens'
 				},
 				unit: {
 					name: 'Unité',
