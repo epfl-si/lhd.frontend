@@ -31,7 +31,6 @@ export const Edit: Story = {
         "name": "Storage"
       },
       "lhd_units" : [],
-      "haz_levels" : [],
       "hazards": [
         {
           "submission": "{\"data\":{\"laserClass\":\"2M\",\"laserMode\":\"continuousWave\",\"laserWavelengthNm\":266,\"laserPowerW\":0.01,\"laserEnergyJ\":\"0.000000005\",\"laserPulseLengthNs\":0.0001,\"laserFrequencyHz\":20000,\"submit\":true}}",
@@ -64,7 +63,6 @@ export const New: Story = {
         "name": "Storage"
       },
       "lhd_units" : [],
-      "haz_levels" : [],
       "hazards": []
     }
   }

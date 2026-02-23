@@ -169,8 +169,6 @@ export type roomDetailsType = {
 	hazardAdditionalInfo?: hazardAdditionalInfoType[];
 	hazardReferences?: hazardReferencesType[]
 	lhd_units: lhdUnitsType[];
-	haz_levels: hazLevelsType[];
-	yearly_audits?: number;
 	hazardsListName?: string[];
 	submissionList?: submissionForm[];
 	status?: 'New' | 'Deleted' | 'Default';
