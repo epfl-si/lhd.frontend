@@ -75,7 +75,7 @@ export const DetailsTab = ({
       oidc.accessToken,
       {
         id: JSON.stringify(room.id),
-        haz_levels: [], hazards: [],
+        hazards: [],
         name: room.name || '',
         kind: room.kind,//designation
         vent: room.vent,//ventilation
