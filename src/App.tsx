@@ -90,8 +90,6 @@ function App() {
 		setSelectedMenu(page);
 	}
 
-	const [openAudit, setOpenAudit] = useState(false);
-	const [openUpdates, setOpenUpdates] = useState(false);
 	const [openLinks, setOpenLinks] = useState(false);
 
 	if (oidc.state == StateEnum.InProgress) {
@@ -163,17 +161,6 @@ function App() {
 						}
 						{(connectedUser.canListRooms) &&
 				<>
-					<li><a onClick={() => setOpenAudit(!openAudit)}>Audit</a>
-						<ul style={{display: openAudit ? 'block' : 'none'}}>
-							<li><a href={env().LHDv2_BASE_URL + "audit/lhd_audit.php"}>List of reports</a></li>
-							<li><a href={env().LHDv2_BASE_URL + "audit_report/make_report/lhd_auditsR.php"}>Make audit
-								report</a>
-							</li>
-							<li><a href={env().LHDv2_BASE_URL + "audit_report/make_nreport/lhd_auditsN.php"}>Make number
-								of audit
-								report</a></li>
-						</ul>
-					</li>
 				</>
 						}
 						<li><a href={env().LHDv2_BASE_URL + "lhd_cosecs/barcodes/"}>LHD Barcode</a>
