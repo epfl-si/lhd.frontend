@@ -22,7 +22,7 @@ export const AuditReportPanel = ({
 	const [reportFiles, setReportFiles] = React.useState<{unitName: string, reports: reportFile[]}[]>([]);
 
 	useEffect(() => {
-		loadReportFiles(lhd_units.map(u => u.id));
+		loadReportFiles(lhd_units.map(u => u.name));
 	}, [lhd_units]);
 
 	const loadReportFiles = async (unitId: string[]) => {

@@ -831,10 +831,10 @@ export const fetchOrganism = async (
 export const fetchReportFiles = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	unitId: string[]
+	unitNames: string[]
 ): Promise<fetchReportFiles> => {
-	const query = `query reportfiles {
-	unitReportFiles (id: "[${unitId.map(u => u.replaceAll('\"','\\"')).join(',')}]") {
+	const query = `query reportfiles($units: [String!]!) {
+	unitReportFiles (units: $units) {
 			id
 			name
 			path
@@ -842,7 +842,7 @@ export const fetchReportFiles = async (
 	}
 }`;
 
-	const result = await doGraphQL(query, {}, address, authToken);
+	const result = await doGraphQL(query, {units: unitNames}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.unitReportFiles,
