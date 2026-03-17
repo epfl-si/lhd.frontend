@@ -11,6 +11,8 @@ import "../../css/styles.scss";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import { getFormattedDate } from "../utils/ressources/parser";
+import {Button} from "epfl-elements-react-si-extra";
+import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 
 interface ChemicalsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -227,6 +229,58 @@ export const ChemicalsAuthorizationControl = ({
 		setLoading(false);
 	};
 
+	async function onExport () {
+		setLoading(true);
+		const results = await fetchChemicalAuthorizations(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			0, 0,
+			search,
+			'Chemical'
+		);
+		if (results.status === 200 && results.data){
+			exportToExcel(flattenAuthorizations(results.data.authorizations), getExportFileName('Chemical'));
+		} else {
+			const errors = getErrorMessage(results, 'authorizationsWithPagination');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
+		}
+		setLoading(false);
+	}
+
+	const ensureArray = (arr) => (arr && arr.length ? arr : [null]);
+	function flattenAuthorizations(data: any[]) {
+		return data.flatMap(auth => {
+			const rooms = ensureArray(auth.authorization_rooms);
+			const holders = ensureArray(auth.authorization_holders);
+			const chemicals = ensureArray(auth.authorization_chemicals);
+				return rooms.flatMap((room: any) =>
+					holders.flatMap((holder: any) =>
+						chemicals.map((chemical: any) => ({
+							authorization: auth.authorization,
+							creation_date: auth.creation_date,
+							expiration_date: auth.expiration_date,
+							renewals: auth.renewals,
+							unit_name: auth.unit?.name,
+							status: auth.status,
+
+							room_name: room?.name,
+							room_deleted: room?.isDeleted,
+
+							holder_surname: holder?.surname,
+							holder_name: holder?.name,
+							holder_sciper: holder?.sciper,
+
+							cas: chemical?.cas_auth_chem,
+							chemical_name: chemical?.auth_chem_en,
+							chemical_status: chemical?.flag_auth_chem
+						}))
+					)
+				)
+			}
+		);
+	}
+
 	return (
 		<Box>
 			{user.canListChemicals ? <>
@@ -239,6 +293,13 @@ export const ChemicalsAuthorizationControl = ({
 					setSearch={setSearch}
 					parent="chemicalauthorizationscontrol"
 				/>
+				<Button
+					isDisabled={tableData.length == 0}
+					style={{minWidth: '10%', padding: '10px', marginLeft: '10px'}}
+					onClick={() => onExport()}
+					label={t(`generic.export`)}
+					iconName={`#download`}
+					primary/>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
