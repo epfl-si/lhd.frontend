@@ -16,6 +16,7 @@ import {Button} from "epfl-elements-react-si-extra";
 import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteRadioprotectionDialog";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {getFormattedDate} from "../utils/ressources/parser";
+import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -274,6 +275,59 @@ export const RadioprotectionsAuthorizationControl = ({
 		setSelected(data);
 	}
 
+	async function onExport () {
+		if (user.canListAuthorizations) {
+			setLoading(true);
+			const results = await fetchRadioprotectionAuthorizations(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				0, 0,
+				search,
+				'IonisingRadiation'
+			);
+			if (results.status === 200 && results.data){
+				exportToExcel(flattenAuthorizations(results.data.authorizations), getExportFileName('IonisingRadiation'));
+			} else {
+				const errors = getErrorMessage(results, 'authorizationsWithPagination');
+				setNotificationType(errors.notif);
+				setOpenNotification(true);
+			}
+			setLoading(false);
+		}
+	}
+
+	const ensureArray = (arr) => (arr && arr.length ? arr : [null]);
+	function flattenAuthorizations(data: any[]) {
+		return data.flatMap(auth => {
+			const rooms = ensureArray(auth.authorization_rooms);
+			const holders = ensureArray(auth.authorization_holders);
+			const radiations = ensureArray(auth.authorization_radiations);
+				return rooms.flatMap((room: any) =>
+					holders.flatMap((holder: any) =>
+						radiations.map((radiation: any) => ({
+							authorization: auth.authorization,
+							creation_date: auth.creation_date,
+							expiration_date: auth.expiration_date,
+							renewals: auth.renewals,
+							authority: auth.authority,
+							unit_name: auth.unit?.name,
+							status: auth.status,
+
+							room_name: room?.name,
+							room_deleted: room?.isDeleted,
+
+							holder_surname: holder?.surname,
+							holder_name: holder?.name,
+							holder_sciper: holder?.sciper,
+
+							radiation_source: radiation?.source
+						}))
+					)
+				)
+			}
+		);
+	}
+
 	return (
 		<Box>
 			{user.canListAuthorizations ? <>
@@ -287,6 +341,7 @@ export const RadioprotectionsAuthorizationControl = ({
 					parent="radioprotectionauthorizationscontrol"
 				/>
 				{user.canEditAuthorizations && <Button
+					style={{minWidth: '10%', padding: '10px'}}
 					onClick={() => {
 						setOpenDialog(true);
 						setSelected(undefined);
@@ -294,6 +349,13 @@ export const RadioprotectionsAuthorizationControl = ({
 					label={t(`generic.addNew`)}
 					iconName={`#plus-circle`}
 					primary/>}
+				<Button
+					isDisabled={tableData.length == 0}
+					style={{minWidth: '10%', padding: '10px', marginLeft: '10px'}}
+					onClick={() => onExport()}
+					label={t(`generic.export`)}
+					iconName={`#download`}
+					primary/>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
