@@ -258,8 +258,8 @@ export const ChemicalsAuthorizationControl = ({
 					holders.flatMap((holder: any) =>
 						chemicals.map((chemical: any) => ({
 							authorization: auth.authorization,
-							creation_date: auth.creation_date,
-							expiration_date: auth.expiration_date,
+							creation_date: getFormattedDate(new Date(auth.creation_date), "."),
+							expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
 							renewals: auth.renewals,
 							unit_name: auth.unit?.name,
 							status: auth.status,
@@ -273,7 +273,7 @@ export const ChemicalsAuthorizationControl = ({
 
 							cas: chemical?.cas_auth_chem,
 							chemical_name: chemical?.auth_chem_en,
-							chemical_status: chemical?.flag_auth_chem
+							chemical_status: chemical?.flag_auth_chem ? t('chemical.active') : t('chemical.archived')
 						}))
 					)
 				)
