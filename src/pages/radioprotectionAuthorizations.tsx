@@ -306,8 +306,8 @@ export const RadioprotectionsAuthorizationControl = ({
 					holders.flatMap((holder: any) =>
 						radiations.map((radiation: any) => ({
 							authorization: auth.authorization,
-							creation_date: auth.creation_date,
-							expiration_date: auth.expiration_date,
+							creation_date: getFormattedDate(new Date(auth.creation_date), "."),
+							expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
 							renewals: auth.renewals,
 							authority: auth.authority,
 							unit_name: auth.unit?.name,
