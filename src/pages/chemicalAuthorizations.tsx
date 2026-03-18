@@ -251,32 +251,21 @@ export const ChemicalsAuthorizationControl = ({
 	const ensureArray = (arr) => (arr && arr.length ? arr : [null]);
 	function flattenAuthorizations(data: any[]) {
 		return data.flatMap(auth => {
-			const rooms = ensureArray(auth.authorization_rooms);
-			const holders = ensureArray(auth.authorization_holders);
-			const chemicals = ensureArray(auth.authorization_chemicals);
-				return rooms.flatMap((room: any) =>
-					holders.flatMap((holder: any) =>
-						chemicals.map((chemical: any) => ({
-							authorization: auth.authorization,
-							creation_date: getFormattedDate(new Date(auth.creation_date), "."),
-							expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
-							renewals: auth.renewals,
-							unit_name: auth.unit?.name,
-							status: auth.status,
+				const rooms = ensureArray(auth.authorization_rooms);
+				const holders = ensureArray(auth.authorization_holders);
+				const chemicals = ensureArray(auth.authorization_chemicals);
+				return {
+					authorization: auth.authorization,
+					creation_date: getFormattedDate(new Date(auth.creation_date), "."),
+					expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
+					renewals: auth.renewals,
+					unit_name: auth.unit?.name,
+					status: auth.status,
 
-							room_name: room?.name,
-							room_deleted: room?.isDeleted,
-
-							holder_surname: holder?.surname,
-							holder_name: holder?.name,
-							holder_sciper: holder?.sciper,
-
-							cas: chemical?.cas_auth_chem,
-							chemical_name: chemical?.auth_chem_en,
-							chemical_status: chemical?.flag_auth_chem ? t('chemical.active') : t('chemical.archived')
-						}))
-					)
-				)
+					room: rooms.map((r: any) => r ? `${r.name} (${r.isDeleted})` : '').join('\n'),
+					holder: holders.map((h: any) => h ? `${h.name} ${h.surname} (${h.sciper})` : '').join('\n'),
+					cas: chemicals.map((c: any) => c ? `${c.cas_auth_chem} - ${c.auth_chem_en} (${c.flag_auth_chem ? t('chemical.active') : t('chemical.archived')})` : '').join('\n')
+				}
 			}
 		);
 	}

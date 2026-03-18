@@ -302,28 +302,19 @@ export const RadioprotectionsAuthorizationControl = ({
 			const rooms = ensureArray(auth.authorization_rooms);
 			const holders = ensureArray(auth.authorization_holders);
 			const radiations = ensureArray(auth.authorization_radiations);
-				return rooms.flatMap((room: any) =>
-					holders.flatMap((holder: any) =>
-						radiations.map((radiation: any) => ({
-							authorization: auth.authorization,
-							creation_date: getFormattedDate(new Date(auth.creation_date), "."),
-							expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
-							renewals: auth.renewals,
-							authority: auth.authority,
-							unit_name: auth.unit?.name,
-							status: auth.status,
+				return {
+					authorization: auth.authorization,
+					creation_date: getFormattedDate(new Date(auth.creation_date), "."),
+					expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
+					renewals: auth.renewals,
+					authority: auth.authority,
+					unit_name: auth.unit?.name,
+					status: auth.status,
 
-							room_name: room?.name,
-							room_deleted: room?.isDeleted,
-
-							holder_surname: holder?.surname,
-							holder_name: holder?.name,
-							holder_sciper: holder?.sciper,
-
-							radiation_source: radiation?.source
-						}))
-					)
-				)
+					room: rooms.map((r: any) => r ? `${r.name} (${r.isDeleted})` : '').join('\n'),
+					holder: holders.map((h: any) => h ? `${h.name} ${h.surname} (${h.sciper})` : '').join('\n'),
+					radiation_source: radiations.map((s: any) => s ? `${s.source}` : '').join('\n')
+				}
 			}
 		);
 	}
