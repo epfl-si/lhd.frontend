@@ -262,7 +262,7 @@ export const ChemicalsAuthorizationControl = ({
 					unit_name: auth.unit?.name,
 					status: auth.status,
 
-					room: rooms.map((r: any) => r ? `${r.name} (${r.isDeleted})` : '').join('\n'),
+					room: rooms.map((r: any) => r ? `${r.name}${r.isDeleted ? ' (Deleted)' : ''}` : '').join('\n'),
 					holder: holders.map((h: any) => h ? `${h.name} ${h.surname} (${h.sciper})` : '').join('\n'),
 					cas: chemicals.map((c: any) => c ? `${c.cas_auth_chem} - ${c.auth_chem_en} (${c.flag_auth_chem ? t('chemical.active') : t('chemical.archived')})` : '').join('\n')
 				}
