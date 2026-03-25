@@ -20,14 +20,14 @@ const _env_development = {
 };
 
 const _env_production = {
-  REACT_APP_AUTH_SERVER_URL: "https://satosaaas.epfl.ch",
+  REACT_APP_AUTH_SERVER_URL: "https://login.microsoftonline.com/f6c2556a-c4fb-4ab1-a2c7-9e220df11c43/v2.0",
   REACT_APP_HOMEPAGE_URL: "https://lhd.epfl.ch/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "https://lhd.epfl.ch/graphql",
   REACT_APP_ENDPOINT_URL: "https://lhd.epfl.ch",
   LHDv2_BASE_URL:"/",
   CRISTAL_URL:"cristal.epfl.ch",
-  OIDC_SCOPE: "openid profile tequila",
-  OIDC_CLIENT_ID: "LHDv3_prod",
+  OIDC_SCOPE: "openid 4a30c695-3d0c-48a1-93d6-9410647934af/.default",
+  OIDC_CLIENT_ID: "4a30c695-3d0c-48a1-93d6-9410647934af"
 };
 
 export function env() {
