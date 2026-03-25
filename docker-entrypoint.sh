@@ -1,6 +1,6 @@
 #!/bin/bash
 
-INJECT_JSON_FILE=/12factor.json
+INJECT_JSON_FILE=/config/12factor.json
 HTML_FILE=public/index.html
 
 set -e -x
