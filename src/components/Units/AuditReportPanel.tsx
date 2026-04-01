@@ -62,7 +62,7 @@ export const AuditReportPanel = ({
 	}
 
 	return <div className="form-card-div">
-		{reportFiles && reportFiles.length > 0 &&
+		{lhd_units && reportFiles && reportFiles.length > 0 &&
 		<ExpansionPanel style={{width: '100%'}}>
 			<ExpansionPanelSummary expandIcon="▽" style={{backgroundColor: '#fafafa'}}>
 				<Typography style={{textDecoration: 'underline', textDecorationColor: 'red'}}>Audits</Typography>
