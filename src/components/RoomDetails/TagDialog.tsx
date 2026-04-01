@@ -47,7 +47,7 @@ export const TagDialog = ({
 
 	useEffect(() => {
 		setTag(selectedTag?.tag.tag_name);
-		setComment(selectedTag?.comment ?? '');
+		setComment(decodeURIComponent(selectedTag?.comment || ''));
 	}, [openDialog, selectedTag]);
 
 	async function onAddTag() {
@@ -57,7 +57,7 @@ export const TagDialog = ({
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					JSON.stringify(selectedTag.id),
-					comment
+					encodeURIComponent(comment ?? '')
 				).then(res => {
 					handleOpen(res, false);
 				});
@@ -66,7 +66,7 @@ export const TagDialog = ({
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
 					tag,
-					comment,
+					encodeURIComponent(comment ?? ''),
 					additionalInfo ?? '',
 					categoryName,
 					roomId ?? ''

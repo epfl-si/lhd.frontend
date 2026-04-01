@@ -136,7 +136,7 @@ export const HazardTitle = ({
         {isReadonly && <>
           <label className="hazardTitle" style={{marginBottom:'0px', marginRight: '5px'}}>{decodeURIComponent(comment || '')}</label>
           {tags && tags.map(t =>
-            <Tooltip title={t.comment}>
+            <Tooltip title={decodeURIComponent(t?.comment || '')}>
               <Chip
                 className="chip"
                 label={t.tag.tag_name}
@@ -152,7 +152,7 @@ export const HazardTitle = ({
     <div style={{display: "flex", flexDirection: "row"}}>
       {hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag &&
         hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo =>
-          <Tooltip title={addInfo.comment}>
+          <Tooltip title={decodeURIComponent(addInfo?.comment || '')}>
             <Chip
               className="chip"
               label={addInfo.tag.tag_name}
