@@ -153,6 +153,10 @@ export default function UnitDetails() {
 		return `https://epfl.service-now.com/now/nav/ui/classic/params/target/u_scc_ticket_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3DGOTOu_requester_as.u_unitLIKE${data[0]?.name}%26sysparm_query_encoded%3DGOTOu_requester_as.u_unitLIKE${data[0]?.name}%26sysparm_view%3D`;
 	}
 
+	function getSNOWLinkForUnitAccidents() {
+		return `https://epfl.service-now.com/sc_req_item_list.do?sysparm_query=cat_item%3Dccbe6d4187038110252bece60cbb35bc%5Eu_caller_as.u_unitLIKE${data[0]?.name}`;
+	}
+
 	return (
 		<div>
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}} alwaysPresent={false}/>
@@ -227,6 +231,9 @@ export default function UnitDetails() {
 					<ResponsiveTabs.Tab.Content>
 						<FormCard keyValue='linkSnow'>
 							<a target="_blank" href={getSNOWLinkForUnit()} rel="noreferrer">{t(`unit_details.linkSnow`)}</a>
+						</FormCard>
+						<FormCard keyValue='linkSnow'>
+							<a target="_blank" href={getSNOWLinkForUnitAccidents()} rel="noreferrer">{t(`unit_details.linkUnitTicketsSnow`)}</a>
 						</FormCard>
 						<FormCard keyValue='rooms'>
 							<a target="_blank" href={`/roomcontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.rooms`)}</a>
