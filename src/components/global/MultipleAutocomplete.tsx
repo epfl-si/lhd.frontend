@@ -4,20 +4,15 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import {splitCamelCase} from "../../utils/ressources/jsonUtils";
-import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import { OptionType } from "../../utils/ressources/types";
 
 interface MultipleAutocompleteProps {
 	setSearch: (search: string) => void;
 	setPage: (newPage: number) => void;
-	setCategory?: (newCategory: string) => void;
 	parent: string;
 	category?: string;
 	columns?: string[];
-}
-
-export interface OptionType {
-	title: string;
-	encodedTitle: string;
+	queryArray: OptionType[];
 }
 
 export const MultipleAutocomplete = ({
@@ -26,7 +21,7 @@ export const MultipleAutocomplete = ({
 																			 parent,
 																			 category,
 																			 columns,
-																			 setCategory
+																			 queryArray
 }: MultipleAutocompleteProps) => {
 	const history = useHistory();
 	const {t} = useTranslation();
@@ -36,19 +31,8 @@ export const MultipleAutocomplete = ({
 	const [inputValue, setInputValue] = React.useState<string>('');
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(window.location.search);
-		const queryArray: OptionType[] = []
-		urlParams.forEach((value, key) => {
-			if (key != 'Category') {
-				queryArray.push({title: key + "=" + decodeURIComponent(value), encodedTitle: key + "=" + value});
-			} else if ( setCategory ) {
-				setCategory(value);
-			}
-		});
 		setSelectedOptions(queryArray);
-		setPage(0);
-		setSearch(queryArray.map(qs => qs.title).join('&'));
-	}, [window.location.search]);
+	}, [queryArray]);
 
 	function onChangeInput(event: any, newValue: string) {
 		const val = newValue ?? '';

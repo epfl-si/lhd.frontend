@@ -10,12 +10,12 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
 import "../../css/styles.scss";
 import {Button} from "epfl-elements-react-si-extra";
-import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {AddNewChemicalDialog} from "../components/chemical/AddNewChemicalDialog";
 import {deleteChemical} from "../utils/graphql/PostingTools";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface ChemicalsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -33,7 +33,8 @@ export const ChemicalsControl = ({
 	const [tableData, setTableData] = useState<chemicalsType[]>([]);
 	const [selectedChemical, setSelectedChemical] = useState<chemicalsType>();
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
+	const queryArray = getQueryStringArray();
+	const [search, setSearch] = React.useState<string>(queryArray.map(qs => qs.title).join('&'));
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -137,11 +138,10 @@ export const ChemicalsControl = ({
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, deleted, page, user]);
+	}, [search, deleted, page, user.canListChemicals]);
 
 	useEffect(() => {
 		handleCurrentPage("chemicalscontrol");
-		setPage(0);
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
@@ -167,6 +167,7 @@ export const ChemicalsControl = ({
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
 		setSearch(`CAS=${encodeURIComponent(val)}`);
+		setPage(0);
 		history.push(`/chemicalscontrol?CAS=${encodeURIComponent(val)}`);
 	}
 
@@ -196,6 +197,7 @@ export const ChemicalsControl = ({
 				setDeleted(true);
 				setSelectedChemical(undefined);
 				setSearch('');
+				setPage(0);
 			} else {
 				setNotificationType(errors.notif);
 				setOpenNotification(true);
@@ -214,6 +216,7 @@ export const ChemicalsControl = ({
 					setPage={setPage}
 					setSearch={setSearch}
 					parent="chemicalscontrol"
+					queryArray={queryArray}
 				/>
 				{user.canEditChemicals && <Button
 					onClick={() => {
@@ -237,7 +240,6 @@ export const ChemicalsControl = ({
 			{<AddNewChemicalDialog openDialog={openDialog}
 														close={() => {
 															setOpenDialog(false);
-															setSearch('');
 														}}
 														save={(searchVal: string) => {
 															setOpenDialog(false);
