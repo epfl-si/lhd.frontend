@@ -279,10 +279,9 @@ export const DispensationControl = ({
 	};
 
 	function onChangeInput(newValue: string) {
-		const val = newValue ?? '';
-		setSearch(`Dispensation=${val}`);
+		setSearch('');
 		setPage(0);
-		history.push(`/dispensationscontrol?Dispensation=${encodeURIComponent(val)}`);
+		history.push(`/dispensationscontrol`);
 	}
 
 	const handleClose = () => {
