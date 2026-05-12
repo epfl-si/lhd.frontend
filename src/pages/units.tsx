@@ -32,7 +32,8 @@ export const UnitControl = ({
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
 	const [tableData, setTableData] = useState<lhdUnitsType[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
+	const urlParams = new URLSearchParams(location.search);
+	const [search, setSearch] = React.useState(urlParams.has('search') ? decodeURIComponent(urlParams.get('search') as string) : '');
 	const [page, setPage] = useState<number>(0);
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [notificationType, setNotificationType] = useState<notificationType>({
@@ -231,21 +232,15 @@ export const UnitControl = ({
 	];
 
 	useEffect(() => {
+		handleCurrentPage("units");
+	}, [oidc.accessToken]);
+
+	useEffect(() => {
 		if (user.canListUnits) {
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, page, user, deleted]);
-
-	useEffect(() => {
-		const urlParams = new URLSearchParams(location.search);
-		if (urlParams.has('search')) {
-			setSearch(decodeURIComponent(urlParams.get('search') as string));
-		} else {
-			setSearch('');
-		}
-		handleCurrentPage("units");
-	}, [oidc.accessToken, location]);
+	}, [search, user.canListUnits, deleted]);
 
 	const loadFetch = async () => {
 		setLoading(true);

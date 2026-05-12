@@ -17,6 +17,7 @@ import {AddNewDispensationDialog} from "../components/dispensation/AddNewDispens
 import {DeleteDispensationDialog} from "../components/dispensation/DeleteDispensationDialog";
 import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 import {formatDate, getFormattedDate} from "../utils/ressources/parser";
+import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface DispensationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -34,7 +35,8 @@ export const DispensationControl = ({
 	const [tableData, setTableData] = useState<dispensationType[]>([]);
 	const [selected, setSelected] = useState<dispensationType>();
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
+	const queryArray = getQueryStringArray();
+	const [search, setSearch] = React.useState<string>(queryArray.map(qs => qs.title).join('&'));
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -250,11 +252,10 @@ export const DispensationControl = ({
 			setDeleted(false);
 			setSelected(undefined);
 		}
-	}, [search, page, user, deleted]);
+	}, [search, page, user.canListDispensations, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("dispensationscontrol");
-		setPage(0);
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
@@ -279,12 +280,9 @@ export const DispensationControl = ({
 
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
-		setSearch(val);
-		if (val === '') {
-			loadFetch();
-		} else {
-			history.push(`/dispensationscontrol?Dispensation=${encodeURIComponent(val)}`);
-		}
+		setSearch(`Dispensation=${val}`);
+		setPage(0);
+		history.push(`/dispensationscontrol?Dispensation=${encodeURIComponent(val)}`);
 	}
 
 	const handleClose = () => {
@@ -351,6 +349,7 @@ export const DispensationControl = ({
 					setPage={setPage}
 					setSearch={setSearch}
 					parent="dispensationscontrol"
+					queryArray={queryArray}
 				/>
 				{user.canEditDispensations && <Button
 					style={{minWidth: '10%', padding: '10px'}}
@@ -382,7 +381,6 @@ export const DispensationControl = ({
 				{user.canEditDispensations && <><AddNewDispensationDialog openDialog={openDialog}
 																			close={() => {
 																				setOpenDialog(false);
-																				setSearch('');
 																			}}
 																			save={(searchVal: string) => {
 																				setOpenDialog(false);

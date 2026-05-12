@@ -17,6 +17,7 @@ import {DeleteRadioprotectionDialog} from "../components/radioprotection/DeleteR
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {getFormattedDate} from "../utils/ressources/parser";
 import {exportToExcel, getExportFileName} from "../utils/ressources/file";
+import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -34,7 +35,8 @@ export const RadioprotectionsAuthorizationControl = ({
 	const [tableData, setTableData] = useState<authorizationType[]>([]);
 	const [selected, setSelected] = useState<authorizationType>();
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
+	const queryArray = getQueryStringArray();
+	const [search, setSearch] = React.useState<string>(queryArray.map(qs => qs.title).join('&'));
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -232,11 +234,10 @@ export const RadioprotectionsAuthorizationControl = ({
 			setDeleted(false);
 			setSelected(undefined);
 		}
-	}, [search, page, user, deleted]);
+	}, [search, page, user.canListAuthorizations, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("radioprotectionauthorizationscontrol");
-		setPage(0);
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
@@ -262,7 +263,8 @@ export const RadioprotectionsAuthorizationControl = ({
 
 	function onChangeInput(newValue: string) {
 		const val = newValue ?? '';
-		setSearch(val);
+		setSearch(`Authorization=${val}`);
+		setPage(0);
 		history.push(`/radioprotectionauthorizationscontrol?Authorization=${encodeURIComponent(val)}`);
 	}
 
@@ -330,6 +332,7 @@ export const RadioprotectionsAuthorizationControl = ({
 					setPage={setPage}
 					setSearch={setSearch}
 					parent="radioprotectionauthorizationscontrol"
+					queryArray={queryArray}
 				/>
 				{user.canEditAuthorizations && <Button
 					style={{minWidth: '10%', padding: '10px'}}
@@ -361,7 +364,6 @@ export const RadioprotectionsAuthorizationControl = ({
 				{user.canEditAuthorizations && <><AddNewRadioprotectionDialog openDialog={openDialog}
 																			close={() => {
 																				setOpenDialog(false);
-																				setSearch('');
 																			}}
 																			save={(searchVal: string) => {
 																				setOpenDialog(false);

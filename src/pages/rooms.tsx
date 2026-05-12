@@ -12,11 +12,12 @@ import {AddNewRoomDialog} from "../components/RoomDetails/AddNewRoomDialog";
 import {notificationsVariants} from "../utils/ressources/variants";
 import Notifications from "../components/Table/Notifications";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
-import {useHistory, useLocation} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {convertToTable, readOrEditHazard} from "../utils/ressources/jsonUtils";
 import {HazardList} from "../components/RoomDetails/HazardList";
 import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -27,7 +28,6 @@ export const RoomControl = ({
 	handleCurrentPage,
 	user
 }: RoomControlProps) => {
-	const location = useLocation();
 	const PAGE_SIZE = 100;
 	const history = useHistory();
 	const {t} = useTranslation();
@@ -46,7 +46,6 @@ export const RoomControl = ({
 	const isLargeDevice = useMediaQuery("only screen and (min-width : 993px) and (max-width : 1200px)");
 	const isExtraLargeDevice = useMediaQuery("only screen and (min-width : 1201px)");
 	const [page, setPage] = useState<number>(0);
-	const [search, setSearch] = React.useState<string>('');
 
 	const columnsLarge: columnType[] = [
 			{field: "name", headerName: t('room.name'), flex: 0.2,
@@ -239,15 +238,17 @@ export const RoomControl = ({
 		}
 	];
 
+	const queryArray = getQueryStringArray();
+	const [search, setSearch] = React.useState<string>(queryArray.map(qs => qs.title).join('&'));
+
 	useEffect(() => {
 		if (user.canListRooms) {
 			loadFetch();
 		}
-	}, [search, page, user, location]);
+	}, [search, page, user.canListRooms]);
 
 	useEffect(() => {
 		handleCurrentPage("rooms");
-		setPage(0);
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
@@ -405,15 +406,8 @@ export const RoomControl = ({
 					setPage={setPage}
 					setSearch={setSearch}
 					parent="roomcontrol"
+					queryArray={queryArray}
 				/>
-				{/*<DebounceInput
-					key={search}
-					input={search}
-					id={search + "'_id"}
-					onChange={onChangeInput}
-					placeholder={t(`room.search`)}
-					className="debounce-input"
-				/>*/}
 				<Button
 					style={{minWidth: '10%', padding: '10px'}}
 					onClick={() => setOpenDialog(true)}

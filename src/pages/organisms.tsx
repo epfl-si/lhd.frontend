@@ -27,6 +27,7 @@ export const OrganismsControl = ({
 	handleCurrentPage,
 	user
 }: OrganismsControlProps) => {
+	const location = useLocation();
 	const history = useHistory();
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
@@ -34,7 +35,8 @@ export const OrganismsControl = ({
 	const [tableData, setTableData] = useState<organismType[]>([]);
 	const [selectedOrganism, setSelectedOrganism] = useState<organismType>();
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
+	const urlParams = new URLSearchParams(location.search);
+	const [search, setSearch] = React.useState(urlParams.has('search') ? decodeURIComponent(urlParams.get('search') as string) : '');
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -156,25 +158,16 @@ export const OrganismsControl = ({
 		}
 	];
 
-	const location = useLocation();
-
 	useEffect(() => {
 		if (user.canListOrganisms) {
 			loadFetch();
 			setDeleted(false);
 		}
-	}, [search, deleted, user, page]);
+	}, [search, page, deleted, user.canListOrganisms]);
 
 	useEffect(() => {
-		const urlParams = new URLSearchParams(location.search);
-		if ( urlParams.has('search') ) {
-			setSearch(decodeURIComponent(urlParams.get('search') as string));
-		} else {
-			setSearch('');
-		}
 		handleCurrentPage("organisms");
-		setPage(0);
-	}, [oidc.accessToken, location]);
+	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
 		setLoading(true);
@@ -245,6 +238,7 @@ export const OrganismsControl = ({
 				setDeleted(true);
 				setSelectedOrganism(undefined);
 				setSearch('');
+				setPage(0);
 			} else {
 				setNotificationType(errors.notif);
 				setOpenNotification(true);
@@ -288,7 +282,6 @@ export const OrganismsControl = ({
 			<AddNewOrganismDialog openDialog={openDialog}
 														close={() => {
 															setOpenDialog(false);
-															setSearch('');
 														}}
 														save={(searchVal: string) => {
 															setOpenDialog(false);

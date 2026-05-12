@@ -19,7 +19,8 @@ import Notifications from "../components/Table/Notifications";
 import {notificationsVariants} from "../utils/ressources/variants";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {Tooltip} from "@mui/joy";
-import { getFormattedDate } from "../utils/ressources/parser";
+import {getFormattedDate} from "../utils/ressources/parser";
+import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -40,8 +41,6 @@ export const HazardsControl = ({
 	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const [page, setPage] = useState<number>(0);
-	const [search, setSearch] = React.useState<string>('');
-	const [queryString, setQueryString] = React.useState<string>('');
 	const [categoryList, setCategoryList] = React.useState<hazardCategory[]>([]);
 	const [isTableReady, setIsTableReady] = React.useState<boolean>(false);
 	const columns = React.useRef([
@@ -96,23 +95,22 @@ export const HazardsControl = ({
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
-	useEffect(() => {
-		if (location.search === '') {
-			setSearch('');
-			setQueryString('');
-		}
-	}, [location]);
+	const queryArray = getQueryStringArray();
+	const cat = queryArray.find(cat => cat.title.startsWith("Category"))?.title;
+	const [search, setSearch] = React.useState<string>(cat ? cat.split("=")[1] : '');
+	const [queryString, setQueryString] = React.useState<string>(queryArray.filter(cat =>
+		!cat.title.startsWith("Category"))
+		.map(qs => qs.title).join('&'));
 
 	useEffect(() => {
-		if (user.canListHazards && search != '') {
+		if (user.canListHazards && location.search != '') {
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, queryString, page, user, deleted]);
+	}, [location.search, page, user.canListHazards, deleted]);
 
 	useEffect(() => {
 		handleCurrentPage("hazards");
-		setPage(0);
 		loadCategories();
 	}, [oidc.accessToken]);
 
@@ -258,6 +256,7 @@ export const HazardsControl = ({
 		setSearch(event.target.value as string);
 		setIsTableReady(false);
 		setQueryString('');
+		setPage(0);
 		columns.current = [{field: "lab_display", headerName: t('room.name'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
 				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
@@ -296,7 +295,9 @@ export const HazardsControl = ({
 					})}</div>
 				}
 			}];
-		history.push(`/hazardscontrol?Category=${(event.target.value)}`);
+		const newQueryString = `/hazardscontrol?Category=${(event.target.value)}`;
+		if (location.search !== newQueryString)
+			history.push(newQueryString);
 	};
 
 	function handleHazardDelete() {
@@ -402,7 +403,7 @@ export const HazardsControl = ({
 						parent="hazardscontrol"
 						category={search}
 						columns={keys}
-						setCategory={setSearch}
+						queryArray={queryArray.filter(cat => !cat.title.startsWith("Category"))}
 				/>
 				<Button
 					isDisabled={tableData.length == 0}

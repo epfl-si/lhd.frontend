@@ -287,3 +287,8 @@ export type hazardsAdditionalInfoHasTagType = {
 	comment?: string;
 	tag: tag;
 }
+
+export interface OptionType {
+	title: string;
+	encodedTitle: string;
+}

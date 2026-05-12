@@ -10,9 +10,10 @@ import {GridRenderCellParams} from "@mui/x-data-grid";
 import "../../css/styles.scss";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import {getErrorMessage} from "../utils/graphql/Utils";
-import { getFormattedDate } from "../utils/ressources/parser";
+import {getFormattedDate} from "../utils/ressources/parser";
 import {Button} from "epfl-elements-react-si-extra";
 import {exportToExcel, getExportFileName} from "../utils/ressources/file";
+import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface ChemicalsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -27,7 +28,8 @@ export const ChemicalsAuthorizationControl = ({
 	const oidc = useOpenIDConnectContext();
 	const [tableData, setTableData] = useState<authorizationType[]>([]);
 	const [loading, setLoading] = useState(false);
-	const [search, setSearch] = React.useState('');
+	const queryArray = getQueryStringArray();
+	const [search, setSearch] = React.useState<string>(queryArray.map(qs => qs.title).join('&'));
 	const [notificationType, setNotificationType] = useState<notificationType>({
 		type: "info",
 		text: '',
@@ -201,11 +203,10 @@ export const ChemicalsAuthorizationControl = ({
 		if (user.canListChemicals) {
 			loadFetch();
 		}
-	}, [search, page, user]);
+	}, [search, page, user.canListChemicals]);
 
 	useEffect(() => {
 		handleCurrentPage("chemicalauthorizationscontrol");
-		setPage(0);
 	}, [oidc.accessToken]);
 
 	const loadFetch = async () => {
@@ -281,6 +282,7 @@ export const ChemicalsAuthorizationControl = ({
 					setPage={setPage}
 					setSearch={setSearch}
 					parent="chemicalauthorizationscontrol"
+					queryArray={queryArray}
 				/>
 				<Button
 					isDisabled={tableData.length == 0}
