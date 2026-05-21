@@ -111,7 +111,9 @@ function App() {
 		);
 	}
 	return (
-		<><BrowserRouter>
+		<>
+			{process.env.NODE_ENV !== 'prod' && <div className="environment">{t("environment")}</div>}
+			<BrowserRouter>
 			<Base>
 				<Base.AsideMenu>
 					<ul>

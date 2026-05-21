@@ -7,6 +7,7 @@ i18next.use(initReactI18next).init({
 	resources: {
 		en: {
 			translation: {
+				environment: "You are in TEST environment",
 				room: {
 					search: 'Search...',
 					roomList: 'Rooms',
@@ -307,6 +308,7 @@ i18next.use(initReactI18next).init({
 		},
 		fr: {
 			translation: {
+				environment: "Vous êtes dans l'environnement de TEST",
 				room: {
 					search: 'Rechercher...',
 					roomList: 'Locaux',
