@@ -61,14 +61,14 @@ export const ChemicalsControl = ({
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
 			}},
-		/*{field: "fastway", headerName: t('chemical.fastway'), width: 300,
-			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				params.row.fastway
-			)},
+		{field: "fastway", headerName: t('chemical.fastway'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
+				return <>{params.row.fastway ? t('chemical.yes') : t('chemical.no')}</>
+			}},
 		{field: "auth_code", headerName: t('chemical.auth_code'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
 				params.row.auth_code
-			)},*/
+			)},
 		// {field: "log", headerName: t('organism.log'), width: 100,
 		// 	renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 		// 		const date = new Date(params.row.updated_on);
@@ -99,7 +99,7 @@ export const ChemicalsControl = ({
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					<span>
 						<b>{params.row.cas_auth_chem}</b><br/>{params.row.auth_chem_en}
-						<br/><b>{params.row.fastway}</b><br/>{params.row.auth_code}
+						<br/><b>{params.row.fastway ? t('chemical.yes') : t('chemical.no')}</b><br/>{params.row.auth_code}
 					</span>
 				</div>
 			},
