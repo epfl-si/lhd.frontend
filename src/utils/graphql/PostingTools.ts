@@ -398,12 +398,16 @@ export const saveNewChemical = async (
 	authToken: string | undefined,
 	cas: string,
 	name: string,
-	status: boolean
+	status: boolean,
+	fastway: boolean,
+	authcode: string
 ): Promise<any> => {
 	const query = `mutation addChemical {
 								addChemical(auth_chem_en: "${name}",
 								cas_auth_chem: "${cas}",
-								flag_auth_chem: ${status})
+								flag_auth_chem: ${status},
+								fastway: ${fastway},
+								auth_code: "${authcode}")
 							 {
 								errors {
 									message
@@ -421,13 +425,17 @@ export const updateChemical = async (
 	id: string,
 	cas: string,
 	name: string,
-	status: boolean
+	status: boolean,
+	fastway: boolean,
+	authcode: string
 ): Promise<any> => {
 	const query = `mutation updateChemical {
 							 updateChemical(id: ${id},
 								auth_chem_en: "${name}",
 								cas_auth_chem: "${cas}",
-								flag_auth_chem: ${status})
+								flag_auth_chem: ${status},
+								fastway: ${fastway},
+								auth_code: "${authcode}")
 							 {
 								errors {
 									message
