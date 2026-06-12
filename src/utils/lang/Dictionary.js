@@ -195,7 +195,9 @@ i18next.use(initReactI18next).init({
 					fastway: 'Fastway',
 					auth_code: 'Auth code',
 					chemicalAuthorizationList: 'Chemical authorizations',
-					errorUnique: 'Un chemical already exists with this name'
+					errorUnique: 'Un chemical already exists with this name',
+					yes: 'Yes',
+					no: 'No'
 				},
 				authorization: {
 					room: 'Rooms',
@@ -496,7 +498,9 @@ i18next.use(initReactI18next).init({
 					fastway: 'Fastway',
 					auth_code: 'Auth code',
 					chemicalAuthorizationList: 'Autorisations chimiques',
-					errorUnique: 'Un produit chimique existe déjà avec ce nom'
+					errorUnique: 'Un produit chimique existe déjà avec ce nom',
+					yes: 'Oui',
+					no: 'Non'
 				},
 				authorization: {
 					room: 'Rooms',
