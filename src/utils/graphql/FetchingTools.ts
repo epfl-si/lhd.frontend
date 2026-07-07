@@ -744,6 +744,8 @@ export const fetchConnectedUser = async (
 							canEditAuthorizations
 							canListDispensations
 							canEditDispensations
+							canListAssessments
+							canEditAssessments
 							canListPersons
 							canListForms
 						}
@@ -1296,6 +1298,103 @@ export const fetchTags = async (
 	return {
 		status: result.status,
 		data: result.data?.tags,
+		errors: result.errors
+	};
+};
+
+export const fetchAssessments = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string
+): Promise<any> => {
+	const query = `query fetchAssessments {
+		assessmentWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
+			assessment {
+				id
+				assessment
+				date
+				subject
+				subject_other
+				description
+				conclusion
+				created_by
+				created_on
+				modified_by
+				modified_on
+				assessment_rooms {
+					name
+					isDeleted
+				}
+				assessment_units {
+					name
+				}
+				assessment_contacts {
+					surname
+					name
+					sciper
+				}
+				status
+				assessment_tickets {
+					ticket_number
+				}
+				assessment_files {
+					file_path
+				}
+			}
+			totalCount
+		}
+	}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.assessmentWithPagination,
+		errors: result.errors
+	};
+};
+
+export const fetchAssessmentSubjects = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query = `query fetchAssessmentSubjects {
+		assessmentDecisionSubjects {
+			subject
+		}
+	}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.assessmentDecisionSubjects,
+		errors: result.errors
+	};
+};
+
+export const fetchAssessmentHistory = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string
+): Promise<any> => {
+	const query = `query fetchAssessmentHistory {
+		mutationLogsByTable (tableName: "AssessmentDecision,AssessmentDecisionHasTicket,AssessmentDecisionHasRoom,AssessmentDecisionHasContact,AssessmentDecisionHasUnit", tableIdentifier: ${JSON.stringify(id)}, 
+		excludedField: "modified_on,id_assessment_and_decision,modified_by") {
+			modified_by
+			modified_on
+			diffs {
+				field
+				before
+				after
+			}
+		}
+	}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.mutationLogsByTable,
 		errors: result.errors
 	};
 };
