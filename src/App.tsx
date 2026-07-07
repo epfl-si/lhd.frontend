@@ -20,10 +20,11 @@ import {ChemicalsControl} from "./pages/chemicals";
 import {ChemicalsAuthorizationControl} from "./pages/chemicalAuthorizations";
 import {RadioprotectionsAuthorizationControl} from "./pages/radioprotectionAuthorizations";
 import {Base} from "./components/global/Base";
-import {notificationType} from "./utils/ressources/types";
+import {notificationType, UserInfo} from "./utils/ressources/types";
 import Notifications from "./components/Table/Notifications";
 import packageJson from '../package.json';
 import {DispensationControl} from "./pages/dispensations";
+import {AssessmentDecisionControl} from "./pages/assessments";
 
 function App() {
 	const { t } = useTranslation();
@@ -35,9 +36,9 @@ function App() {
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [connectedUser, setConnectedUser] = useState<object>({
+	const [connectedUser, setConnectedUser] = useState<UserInfo>({
 		groups: [],
-		userName: '',
+		username: '',
 		canEditHazards: false,
 		canEditRooms: false,
 		canListUnits: false,
@@ -53,7 +54,13 @@ function App() {
 		canListAuthorizations: false,
 		canEditAuthorizations: false,
 		canListPersons: false,
-		canListForms: false
+		canListForms: false,
+		canEditAssessments: false,
+		canEditDispensations: false,
+		canListAssessments: false,
+		canListDispensations: false,
+		isCosec: false,
+		isManager: false,
 	});
 
 	useEffect(() => {
@@ -156,6 +163,11 @@ function App() {
 							<Link to="/dispensationscontrol">{t(`menu.dispensations`)}</Link>
 						</li>
 						}
+						{(connectedUser.canListAssessments) &&
+						<li style={{backgroundColor: `${selectedMenu === 'assessmentscontrol' ? '#FFCECE' : ''}`}}>
+							<Link to="/assessmentscontrol">{t(`menu.assessments`)}</Link>
+						</li>
+						}
 						{connectedUser.isAdmin &&
 						<li style={{backgroundColor: `${selectedMenu === 'hazardForms' ? '#FFCECE' : ''}`}}>
 							<Link to="/hazardformcontrol">🛠️ {t(`menu.hazardFormControl`)}</Link>
@@ -244,6 +256,10 @@ function App() {
 						<Route path="/dispensationscontrol">
 							<DispensationControl handleCurrentPage={handleCurrentPage}
 																										user={connectedUser}/>
+						</Route>
+						<Route path="/assessmentscontrol">
+							<AssessmentDecisionControl handleCurrentPage={handleCurrentPage}
+																	 user={connectedUser}/>
 						</Route>
 					</Switch>
 					<p style={{display: 'flex',justifyContent: 'end',fontSize: 'smaller',margin: '10px'}}>Version: {packageJson.version}</p>
