@@ -118,6 +118,26 @@ export type dispensationType = {
 	dispensation_tickets: genericType[];
 }
 
+export type assessmentType = {
+	id: string;
+	assessment: string;
+	subject_other: string;
+	description: string;
+	conclusion: string;
+	status: string;
+	date: Date;
+	created_by: string;
+	created_on: Date;
+	modified_by: string;
+	modified_on: Date;
+	subject: string;
+	assessment_rooms: roomDetailsType[];
+	assessment_units: lhdUnitsType[];
+	assessment_contacts: personType[];
+	assessment_tickets: genericType[];
+	assessment_files: genericType[];
+}
+
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
@@ -132,6 +152,7 @@ export type lhdUnitsType = {
 };
 
 export type genericType = {
+	path?: string;
 	source?: string;
 	ticket_number?: string;
 	status?: 'New' | 'Deleted' | 'Default';
