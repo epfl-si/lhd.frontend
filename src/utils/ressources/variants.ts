@@ -80,6 +80,14 @@ export const notificationsVariants = {
 		type: 'error',
 		text: 'Dispensation subject and requirements are mandatory. You must choose at least one room, one holder and one unit.',
 	},
+	'save-new-assessment-success': {
+		type: 'success',
+		text: 'New assessment has been saved',
+	},
+	'no-assessment-chosen': {
+		type: 'error',
+		text: 'Assessment subject and requirements are mandatory. You must choose at least one room and one unit.',
+	},
 	'no-organism-chosen': {
 		type: 'error',
 		text: 'Organism name and risk are mandatory',
