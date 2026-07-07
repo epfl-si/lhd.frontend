@@ -33,6 +33,7 @@ import {MutationLogsTable} from "../global/MutationLogsTable";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
 import {ConfirmSavingDispensationDialog} from "./ConfirmSavingDispensationDialog";
 import {CircularProgress} from "@mui/joy";
+import {getFormattedDate} from "../../utils/ressources/parser";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -206,19 +207,6 @@ export const AddNewDispensationDialog = ({
 		setOpenNotification(false);
 	};
 
-	const formatDate = (date: Date) => {
-		try {
-			if (!date) return "";
-			date = new Date(date);
-			const year = date.getFullYear();
-			const month = String(date.getMonth() + 1).padStart(2, "0");
-			const day = String(date.getDate()).padStart(2, "0");
-			return `${year}-${month}-${day}`;
-		} catch ( e ) {
-			return date;
-		}
-	};
-
 	function getRoomTitle(room: roomDetailsType) {
 		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
 	}
@@ -389,7 +377,7 @@ export const AddNewDispensationDialog = ({
 							type="date"
 							required={true}
 							disabled={!!selectedDispensation}
-							value={formatDate(creationDate)}
+							value={getFormattedDate(creationDate, '-')}
 							onChange={(e) => setCreationDate(new Date(e.target.value))}
 							style={{flex: '1', margin: "5px"}}
 						/>
@@ -397,7 +385,7 @@ export const AddNewDispensationDialog = ({
 							label={t('dispensation.date_end')}
 							type="date"
 							required={true}
-							value={formatDate(expDate)}
+							value={getFormattedDate(expDate, '-')}
 							onChange={(e) => {
 								const newDate = new Date(e.target.value);
 								setStatus(status === 'Expired' && newDate > new Date() ? 'Active' : status);
