@@ -16,21 +16,16 @@ import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {Box, InputLabel, MenuItem, TextField} from "@material-ui/core";
-import {
-	fetchAssessmentHistory,
-	fetchAssessmentSubjects,
-	fetchPeopleFromFullText,
-	fetchRooms,
-} from "../../utils/graphql/FetchingTools";
+import {fetchAssessmentHistory, fetchAssessmentSubjects,} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
 import {TextArea} from "epfl-elements-react-si-extra";
 import {sprintf} from "sprintf-js";
 import {MutationLogsTable} from "../global/MutationLogsTable";
-import {ConfirmSavingAssessmentDialog} from "./ConfirmSavingAssessmentDialog";
 import {CircularProgress} from "@mui/joy";
-import {getFormattedDate} from "../../utils/ressources/parser";
+import {formatDateForPickers} from "../../utils/ressources/parser";
+import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
 
 interface AddNewAssessmentDialogProps {
 	openDialog: boolean;
@@ -69,7 +64,6 @@ export const AddNewAssessmentDialog = ({
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 	const [history, setHistory] = useState<any[]>([]);
 	const [file, setFile] = useState<[]>();
-	const [openDialogConfirm, setOpenDialogConfirm] = useState<boolean>(false);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -125,7 +119,6 @@ export const AddNewAssessmentDialog = ({
 
 	async function onAddAssessment() {
 		setLoading(true);
-		setOpenDialogConfirm(false);
 		const assessment = {creationDate,status,
 			subject,other,conclusion,description,selectedTickets,selectedContacts,selectedRooms, selectedUnits};
 		// if (selectedAssessment) {
@@ -152,11 +145,7 @@ export const AddNewAssessmentDialog = ({
 		if (description && subject && (subject !== 'Other' || (subject === 'Other' && other))
 			&& (status === 'Draft' || (selectedRooms.filter(item => item.status !== 'Deleted').length > 0
 				&& selectedUnits.filter(item => item.status !== 'Deleted').length > 0))) {
-			if (status !== 'Draft') {
-				setOpenDialogConfirm(true);
-			} else {
-				await onAddAssessment();
-			}
+			await onAddAssessment();
 		} else {
 			setNotificationType(notificationsVariants['no-assessment-chosen']);
 			setOpenNotification(true);
@@ -200,60 +189,15 @@ export const AddNewAssessmentDialog = ({
 	}
 
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
-		const results = await fetchRooms(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			100,0, "Room=" + newValue
-		);
-		if (results.status === 200) {
-			if (results.data) {
-				return results.data.rooms;
-			} else {
-				const errors = getErrorMessage(results, 'roomsWithPagination');
-				setNotificationType(errors.notif);
-				setOpenNotification(true);
-			}
-		}
-		return [];
+		return await commonFetchRoomList(oidc.accessToken, newValue, setNotificationType, setOpenNotification);
 	};
 
 	const fetchUnitsList = async () => {
-		if (selectedRooms.length > 0) {
-			const rooms = selectedRooms.filter(room => room.status !== 'Deleted').map(room => room.name);
-			const results = await fetchUnitsForAssessment(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				rooms
-			);
-			if (results.status === 200) {
-				if (results.data) {
-					return (results.data);
-				} else {
-					const errors = getErrorMessage(results, 'unitsForAssessment');
-					setNotificationType(errors.notif);
-					setOpenNotification(true);
-				}
-			}
-		}
-		return ([]);
+		return commonFetchUnitsListByRooms(oidc.accessToken, selectedRooms, setNotificationType, setOpenNotification);
 	};
 
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
-		const results = await fetchPeopleFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			newValue
-		);
-		if (results.status === 200) {
-			if (results.data) {
-				return results.data;
-			} else {
-				const errors = getErrorMessage(results, 'personFullText');
-				setNotificationType(errors.notif);
-				setOpenNotification(true);
-			}
-		}
-		return [];
+		return commonFetchPeople(oidc.accessToken, newValue, setNotificationType, setOpenNotification);
 	};
 
 	function getPersonTitle(person: personType) {
@@ -360,7 +304,7 @@ export const AddNewAssessmentDialog = ({
 							type="date"
 							required={true}
 							disabled={!!selectedAssessment}
-							value={getFormattedDate(creationDate, '-')}
+							value={formatDateForPickers(creationDate)}
 							onChange={(e) => setCreationDate(new Date(e.target.value))}
 							style={{flex: '1', margin: "5px"}}
 						/>
@@ -430,11 +374,6 @@ export const AddNewAssessmentDialog = ({
 					<MutationLogsTable history={history} />
 				</div>
 			</AlertDialog>
-			<ConfirmSavingAssessmentDialog
-				openDialog={openDialogConfirm}
-				setOpenDialog={setOpenDialogConfirm}
-				onAddAssessment={onAddAssessment}
-			/>
 			<Notifications
 				open={openNotification}
 				notification={notificationType}
