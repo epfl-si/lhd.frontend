@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {submissionForm} from "../../utils/ressources/types";
+import {submissionForm, UserInfo} from "../../utils/ressources/types";
 import {Paper, Table, TableBody, TableCell, tableCellClasses, TableHead, TableRow} from "@mui/material";
 import TableContainer from "@material-ui/core/TableContainer";
 import {styled} from "@mui/joy";
@@ -12,7 +12,7 @@ interface HazardListProps {
 	submissionsList: submissionForm[];
 	onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
 	inRoomDetails: boolean;
-	user: any;
+	user: UserInfo;
 }
 
 export const HazardList = ({

@@ -4,7 +4,7 @@ import {fetchHazardCategories, fetchHazards} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, Chip, MenuItem, Select, Typography} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {hazardCategory, hazardDetailsType, notificationType} from "../utils/ressources/types";
+import {hazardCategory, hazardDetailsType, notificationType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {SelectChangeEvent} from "@mui/material";
@@ -24,7 +24,7 @@ import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface HazardsControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const HazardsControl = ({

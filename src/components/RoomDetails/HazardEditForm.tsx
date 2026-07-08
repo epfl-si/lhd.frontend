@@ -8,7 +8,7 @@ import {
 	hazardFormType,
 	notificationType,
 	roomDetailsType,
-	submissionForm
+	submissionForm, UserInfo
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import {createKey} from "../../utils/ressources/keyGenerator";
@@ -32,7 +32,7 @@ interface HazardEditFormProps {
 	organismList: object[];
 	initialSubmissionsList: submissionForm[];
 	hazardAdditionalInfo: hazardAdditionalInfoType | undefined;
-	user: any;
+	user: UserInfo;
 }
 
 export const HazardEditForm = ({

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {kindType, lhdUnitsType, notificationType, roomDetailsType} from "../../utils/ressources/types";
+import {kindType, lhdUnitsType, notificationType, roomDetailsType, UserInfo} from "../../utils/ressources/types";
 import {fetchRoomTypes, fetchunitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
@@ -23,7 +23,7 @@ import {DispensationPanel} from "./DispensationPanel";
 interface DetailsTabProps {
   roomData: roomDetailsType;
   onSaveRoom: () => void;
-  user: any;
+  user: UserInfo;
 }
 
 export const DetailsTab = ({

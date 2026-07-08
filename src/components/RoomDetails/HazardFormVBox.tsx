@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {hazardFormType, roomDetailsType, submissionForm} from "../../utils/ressources/types";
+import {hazardFormType, roomDetailsType, submissionForm, UserInfo} from "../../utils/ressources/types";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {HazardEditForm} from "./HazardEditForm";
 import {HazardList} from "./HazardList";
@@ -7,7 +7,7 @@ import {readOrEditHazard} from "../../utils/ressources/jsonUtils";
 
 interface HazardFormVBoxProps {
   room: roomDetailsType;
-  user: any;
+  user: UserInfo;
   selectedHazardCategory: string;
   lastVersionForm: hazardFormType | undefined;
   action: 'Add' | 'Edit' | 'Read';
