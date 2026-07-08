@@ -17,13 +17,7 @@ import Notifications from "../Table/Notifications";
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {Box, InputLabel, MenuItem, TextField} from "@material-ui/core";
 import {saveNewDispensation, updateDispensation} from '../../utils/graphql/PostingTools';
-import {
-	fetchDispensationHistory,
-	fetchDispensationSubjects,
-	fetchPeopleFromFullText,
-	fetchRooms,
-	fetchUnitsForDispensation
-} from "../../utils/graphql/FetchingTools";
+import {fetchDispensationHistory, fetchDispensationSubjects} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
@@ -33,7 +27,8 @@ import {MutationLogsTable} from "../global/MutationLogsTable";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
 import {ConfirmSavingDispensationDialog} from "./ConfirmSavingDispensationDialog";
 import {CircularProgress} from "@mui/joy";
-import {getFormattedDate} from "../../utils/ressources/parser";
+import {formatDateForPickers} from "../../utils/ressources/parser";
+import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -216,60 +211,15 @@ export const AddNewDispensationDialog = ({
 	}
 
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
-		const results = await fetchRooms(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			100,0, "Room=" + newValue
-		);
-		if (results.status === 200) {
-			if (results.data) {
-				return results.data.rooms;
-			} else {
-				const errors = getErrorMessage(results, 'roomsWithPagination');
-				setNotificationType(errors.notif);
-				setOpenNotification(true);
-			}
-		}
-		return [];
+		return await commonFetchRoomList(oidc.accessToken, newValue, setNotificationType, setOpenNotification);
 	};
 
 	const fetchUnitsList = async () => {
-		if (selectedRooms.length > 0) {
-			const rooms = selectedRooms.filter(room => room.status !== 'Deleted').map(room => room.name);
-			const results = await fetchUnitsForDispensation(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-				oidc.accessToken,
-				rooms
-			);
-			if (results.status === 200) {
-				if (results.data) {
-					return (results.data);
-				} else {
-					const errors = getErrorMessage(results, 'unitsForDispensation');
-					setNotificationType(errors.notif);
-					setOpenNotification(true);
-				}
-			}
-		}
-		return ([]);
+		return commonFetchUnitsListByRooms(oidc.accessToken, selectedRooms, setNotificationType, setOpenNotification);
 	};
 
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
-		const results = await fetchPeopleFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-			oidc.accessToken,
-			newValue
-		);
-		if (results.status === 200) {
-			if (results.data) {
-				return results.data;
-			} else {
-				const errors = getErrorMessage(results, 'personFullText');
-				setNotificationType(errors.notif);
-				setOpenNotification(true);
-			}
-		}
-		return [];
+		return commonFetchPeople(oidc.accessToken, newValue, setNotificationType, setOpenNotification);
 	};
 
 	function getPersonTitle(person: personType) {
@@ -377,7 +327,7 @@ export const AddNewDispensationDialog = ({
 							type="date"
 							required={true}
 							disabled={!!selectedDispensation}
-							value={getFormattedDate(creationDate, '-')}
+							value={formatDateForPickers(creationDate)}
 							onChange={(e) => setCreationDate(new Date(e.target.value))}
 							style={{flex: '1', margin: "5px"}}
 						/>
@@ -385,14 +335,14 @@ export const AddNewDispensationDialog = ({
 							label={t('dispensation.date_end')}
 							type="date"
 							required={true}
-							value={getFormattedDate(expDate, '-')}
+							value={formatDateForPickers(expDate)}
 							onChange={(e) => {
 								const newDate = new Date(e.target.value);
 								setStatus(status === 'Expired' && newDate > new Date() ? 'Active' : status);
 								setExpDate(newDate);
 							}}
 							inputProps={{
-								min: formatDate(creationDate),
+								min: formatDateForPickers(creationDate),
 							}}
 							style={{flex: '1', margin: "5px"}}
 						/>
