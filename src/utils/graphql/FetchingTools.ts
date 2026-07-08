@@ -354,13 +354,13 @@ export const fetchUnits = async (
 	};
 };
 
-export const fetchUnitsForDispensation = async (
+export const fetchUnitsByRoom = async (
 	address: string | undefined,
 	authToken: string | undefined,
 	rooms: string[]
 ): Promise<any> => {
-	const query: string = `query fetchUnitsForDispensation { 
-						unitsForDispensation (rooms: "${rooms.join(',')}") {
+	const query: string = `query fetchUnitsByRoom { 
+						unitsByRoom (rooms: "${rooms.join(',')}") {
 							name
 							id
 						}
@@ -369,7 +369,7 @@ export const fetchUnitsForDispensation = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.unitsForDispensation,
+		data: result.data?.unitsByRoom,
 		errors: result.errors
 	};
 };
