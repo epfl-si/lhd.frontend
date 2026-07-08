@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {authorizationType, columnType, notificationType} from "../utils/ressources/types";
+import {authorizationType, columnType, notificationType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
@@ -21,7 +21,7 @@ import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface RadioprotectionsAuthorizationControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const RadioprotectionsAuthorizationControl = ({

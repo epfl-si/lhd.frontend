@@ -4,7 +4,7 @@ import {fetchRooms, fetchRoomsWithHazards} from "../utils/graphql/FetchingTools"
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, notificationType, personType, roomDetailsType} from "../utils/ressources/types";
+import {columnType, notificationType, personType, roomDetailsType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button, FormCard} from "epfl-elements-react-si-extra";
@@ -21,7 +21,7 @@ import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface RoomControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const RoomControl = ({

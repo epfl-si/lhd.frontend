@@ -4,7 +4,7 @@ import {fetchHazards, fetchOrganismsFromFullText} from "../utils/graphql/Fetchin
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, notificationType, organismType} from "../utils/ressources/types";
+import {columnType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button, DebounceInput} from "epfl-elements-react-si-extra";
@@ -20,7 +20,7 @@ import {getFormattedDate} from "../utils/ressources/parser";
 
 interface OrganismsControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const OrganismsControl = ({

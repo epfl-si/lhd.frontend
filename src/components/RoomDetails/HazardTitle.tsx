@@ -5,7 +5,7 @@ import {
   hazardAdditionalInfoType,
   hazardsAdditionalInfoHasTagType,
   notificationType,
-  roomDetailsType, tag
+  roomDetailsType, tag, UserInfo
 } from "../../utils/ressources/types";
 import {sprintf} from "sprintf-js";
 import {handleClickFileLink} from "../../utils/ressources/file";
@@ -30,7 +30,7 @@ interface HazardTitleProps {
   comment?: string | undefined;
   isReadonly: boolean;
   onChangeAction?: (hazardName: string, reloadRoom: boolean) => void;
-  user: any;
+  user: UserInfo;
   refreshView?: () => void;
   tags?: hazardsAdditionalInfoHasTagType[];
 }

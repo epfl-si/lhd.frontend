@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {assessmentType, columnType, notificationType} from "../utils/ressources/types";
+import {assessmentType, columnType, notificationType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
@@ -17,11 +17,10 @@ import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 import {formatDate, getFormattedDate} from "../utils/ressources/parser";
 import {getQueryStringArray} from "../utils/web/URLUtils";
 import {AddNewAssessmentDialog} from "../components/assessment/AddNewAssessmentDialog";
-import {DeleteAssessmentDialog} from "../components/assessment/DeleteAssessmentDialog";
 
 interface AssessmentDecisionControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const AssessmentDecisionControl = ({

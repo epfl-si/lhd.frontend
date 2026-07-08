@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {hazardFormType, notificationType, roomDetailsType} from "../../utils/ressources/types";
+import {hazardFormType, notificationType, roomDetailsType, UserInfo} from "../../utils/ressources/types";
 import {fetchHazardForms, fetchOrganism, fetchRoomsForDropDownComponent} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
@@ -12,7 +12,7 @@ import Notifications from "../Table/Notifications";
 interface HazardTabProps {
   room: roomDetailsType;
   onSaveRoom: () => void;
-  user: any;
+  user: UserInfo;
 }
 
 export const HazardTab = ({

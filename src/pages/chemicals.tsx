@@ -4,7 +4,7 @@ import {fetchChemicals} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {chemicalsType, columnType, notificationType} from "../utils/ressources/types";
+import {chemicalsType, columnType, notificationType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
@@ -19,7 +19,7 @@ import {getQueryStringArray} from "../utils/web/URLUtils";
 
 interface ChemicalsControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const ChemicalsControl = ({

@@ -1,7 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {columnType, hazardFormType, notificationType} from "../utils/ressources/types";
+import {columnType, hazardFormType, notificationType, UserInfo} from "../utils/ressources/types";
 import {fetchHazardForms} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography} from "@material-ui/core";
@@ -14,7 +14,7 @@ import {getErrorMessage} from "../utils/graphql/Utils";
 
 interface HazardFormControlProps {
 	handleCurrentPage: (page: string) => void;
-	user: any;
+	user: UserInfo;
 }
 
 export const HazardFormControl = ({
