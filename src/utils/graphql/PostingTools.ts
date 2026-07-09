@@ -707,3 +707,97 @@ export const deleteTag = async (
 
 	return doGraphQL(query, {}, address, authToken);
 };
+
+export const saveNewAssessment = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	assessment: any,
+): Promise<any> => {
+	const query = `mutation addAssessmentDecision {
+								addAssessmentDecision (
+									subject: "${assessment.subject}",
+									subject_other: "${assessment.other}",
+									description: "${encodeURIComponent(assessment.description)}",
+									conclusion: "${encodeURIComponent(assessment.conclusion)}",
+									date: "${getFormattedDate(new Date(assessment.creationDate))}",
+									status: "${assessment.status}",
+									tickets: [
+										${assessment.selectedTickets.map(ass => `{name: "${ass.ticket_number}", status: "${ass.status}"}`)}
+									],
+									contacts: [
+										${assessment.selectedContacts.map(ass => `{sciper: ${ass.sciper}, status: "${ass.status}"}`)}
+									],
+									rooms: [
+										${assessment.selectedRooms.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+									],
+									units: [
+										${assessment.selectedUnits.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+									],
+								)
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const updateAssessment = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+	assessment: any,
+): Promise<any> => {
+	const query = `mutation updateAssessmentDecision {
+								updateAssessmentDecision (
+									id: ${id},
+									date: "${getFormattedDate(new Date(assessment.creationDate))}",
+									status: "${assessment.status}",
+									subject: "${assessment.subject}",
+									subject_other: "${assessment.other}",
+									description: "${encodeURIComponent(assessment.description)}",
+									conclusion: "${encodeURIComponent(assessment.conclusion)}",
+									tickets: [
+										${assessment.selectedTickets.map(ass => `{name: "${ass.ticket_number}", status: "${ass.status}"}`)}
+									],
+									contacts: [
+										${assessment.selectedContacts.map(ass => `{sciper: ${ass.sciper}, status: "${ass.status}"}`)}
+									],
+									rooms: [
+										${assessment.selectedRooms.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+									],
+									units: [
+										${assessment.selectedUnits.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+									],
+								)
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
+
+export const deleteAssessment = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	id: string,
+): Promise<any> => {
+	const query = `mutation deleteAssessmentDecision {
+							 deleteAssessmentDecision (id: ${id})
+							 {
+								errors {
+									message
+								}
+								isSuccess
+							}
+						}`;
+
+	return doGraphQL(query, {}, address, authToken);
+};
