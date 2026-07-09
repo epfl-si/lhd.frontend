@@ -395,7 +395,7 @@ export const HazardsControl = ({
 					label={t(`hazard.category`)}
 					onChange={handleCategoryChange}
 				>
-					{categoryList.map(cat => <MenuItem value={cat.hazard_category_name}>{cat.hazard_category_name}</MenuItem>)}
+					{categoryList.map(cat => <MenuItem key={cat.hazard_category_name} value={cat.hazard_category_name}>{cat.hazard_category_name}</MenuItem>)}
 				</Select>
 				<MultipleAutocomplete
 						setPage={setPage}

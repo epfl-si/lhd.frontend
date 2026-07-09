@@ -284,7 +284,7 @@ export const AddNewAssessmentDialog = ({
 								label={t("assessment.subject")}
 							>
 								{availableSubjects.map(as =>
-									<MenuItem value={as}>{as}</MenuItem>
+									<MenuItem value={as} key={as}>{as}</MenuItem>
 								)}
 							</Select>
 						</div>
