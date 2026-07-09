@@ -94,11 +94,6 @@ export function EntriesTableCategory({
 						switch ( pageToOpen ) {
 							case "unit":
 								return row.name;
-							case "room":
-								return row.id;
-							case "chemicals":
-							case "organism":
-								return row.id;
 							case "chemicalauthorizations":
 							case "chemicalauthorizationsByRoom":
 							case "radioprotectionauthorization":
@@ -113,6 +108,8 @@ export function EntriesTableCategory({
 								return row.dispensation;
 							case "assessment":
 								return row.assessment;
+							default:
+								return row.id;
 						}
 					}}
 					pagination
