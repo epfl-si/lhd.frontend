@@ -278,12 +278,6 @@ export const DispensationControl = ({
 		setLoading(false);
 	};
 
-	function onChangeInput(newValue: string) {
-		setSearch('');
-		setPage(0);
-		history.push(`/dispensationscontrol`);
-	}
-
 	const handleClose = () => {
 		setOpenNotification(false);
 	};
@@ -381,9 +375,9 @@ export const DispensationControl = ({
 																			close={() => {
 																				setOpenDialog(false);
 																			}}
-																			save={(searchVal: string) => {
+																			save={() => {
 																				setOpenDialog(false);
-																				onChangeInput(searchVal);
+																				loadFetch();
 																			}}
 																			selectedDispensation={selected}/>
 					<DeleteDispensationDialog disp={selected}

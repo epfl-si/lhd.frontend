@@ -17,6 +17,7 @@ import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 import {formatDate, getFormattedDate} from "../utils/ressources/parser";
 import {getQueryStringArray} from "../utils/web/URLUtils";
 import {AddNewAssessmentDialog} from "../components/assessment/AddNewAssessmentDialog";
+import {DeleteAssessmentDialog} from "../components/assessment/DeleteAssessmentDialog";
 
 interface AssessmentDecisionControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -264,12 +265,6 @@ export const AssessmentDecisionControl = ({
 		setLoading(false);
 	};
 
-	function onChangeInput(newValue: string) {
-		setSearch('');
-		setPage(0);
-		history.push(`/assessmentscontrol`);
-	}
-
 	const handleClose = () => {
 		setOpenNotification(false);
 	};
@@ -364,9 +359,9 @@ export const AssessmentDecisionControl = ({
 																			close={() => {
 																				setOpenDialog(false);
 																			}}
-																			save={(searchVal: string) => {
+																			save={() => {
 																				setOpenDialog(false);
-																				onChangeInput(searchVal);
+																				loadFetch();
 																			}}
 																			selectedAssessment={selected}/>
 			<DeleteAssessmentDialog assessment={selected}
