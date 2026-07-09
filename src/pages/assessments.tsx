@@ -369,11 +369,11 @@ export const AssessmentDecisionControl = ({
 																				onChangeInput(searchVal);
 																			}}
 																			selectedAssessment={selected}/>
-			{/*<DeleteAssessmentDialog assessment={selected}*/}
-			{/*						openDialog={openDialogDelete}*/}
-			{/*						setOpenDialog={setOpenDialogDelete}*/}
-			{/*						setDeleted={setDeleted}*/}
-			{/*/>*/}
+			<DeleteAssessmentDialog assessment={selected}
+									openDialog={openDialogDelete}
+									setOpenDialog={setOpenDialogDelete}
+									setDeleted={setDeleted}
+			/>
 				</>}
 				<Notifications
 					open={openNotification}

@@ -26,6 +26,7 @@ import {MutationLogsTable} from "../global/MutationLogsTable";
 import {CircularProgress} from "@mui/joy";
 import {formatDateForPickers} from "../../utils/ressources/parser";
 import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
+import {saveNewAssessment, updateAssessment} from "../../utils/graphql/PostingTools";
 
 interface AddNewAssessmentDialogProps {
 	openDialog: boolean;
@@ -121,24 +122,24 @@ export const AddNewAssessmentDialog = ({
 		setLoading(true);
 		const assessment = {creationDate,status,
 			subject,other,conclusion,description,selectedTickets,selectedContacts,selectedRooms, selectedUnits};
-		// if (selectedAssessment) {
-		// 	updateAssessment(
-		// 		env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-		// 		oidc.accessToken,
-		// 		JSON.stringify(selectedAssessment.id),
-		// 		assessment
-		// 	).then(res => {
-		// 		handleOpen(res, false);
-		// 	});
-		// } else {
-		// 	saveNewAssessment(
-		// 		env().REACT_APP_GRAPHQL_ENDPOINT_URL,
-		// 		oidc.accessToken,
-		// 		assessment
-		// 	).then(res => {
-		// 		handleOpen(res, true);
-		// 	});
-		// }
+		if (selectedAssessment) {
+			updateAssessment(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				JSON.stringify(selectedAssessment.id),
+				assessment
+			).then(res => {
+				handleOpen(res, false);
+			});
+		} else {
+			saveNewAssessment(
+				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				oidc.accessToken,
+				assessment
+			).then(res => {
+				handleOpen(res, true);
+			});
+		}
 	}
 
 	async function askForConfirmation () {
@@ -165,7 +166,7 @@ export const AddNewAssessmentDialog = ({
 	}
 
 	const handleOpen = (res: any, saveNew: boolean) => {
-		const errors = getErrorMessage(res, saveNew ? 'addAssessment' : 'updateAssessment');
+		const errors = getErrorMessage(res, saveNew ? 'addAssessmentDecision' : 'updateAssessmentDecision');
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else {
@@ -344,21 +345,21 @@ export const AddNewAssessmentDialog = ({
 						/></div>
 					</div>
 					<div className="rowDiv">
-						<div className="assessment-panel">
+						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`assessment.room`)}</label>
 							<MultipleSelection selected={savedRooms} objectName="NewRoom"
 																 onChangeSelection={onChangeRoom}
 																 getCardTitle={getRoomTitle}
 																 fetchData={fetchRoomList}/>
 						</div>
-						<div className="assessment-panel">
+						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`assessment.unit`)}</label>
 							{selectedRooms && <MultipleSelection selected={savedUnits} objectName="Unit"
 																	onChangeSelection={onChangeUnit}
 																	getCardTitle={getUnitTitle}
 																	fetchData={fetchUnitsList}/>}
 						</div>
-						<div className="assessment-panel">
+						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`assessment.contacts`)}</label>
 							<MultipleSelection selected={savedContacts}
 																 onChangeSelection={onChangeContact}
@@ -366,7 +367,7 @@ export const AddNewAssessmentDialog = ({
 																 getCardTitle={getPersonTitle}
 																 fetchData={fetchPeople}/>
 						</div>
-						<div className="assessment-panel">
+						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`assessment.tickets`)}</label>
 							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number'/>
 						</div>

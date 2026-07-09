@@ -7,7 +7,7 @@ import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {assessmentType, notificationType} from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
-import {deleteDispensation} from "../../utils/graphql/PostingTools";
+import {deleteAssessment} from "../../utils/graphql/PostingTools";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface DeleteRadioprotectionDialogProps {
@@ -32,11 +32,11 @@ export const DeleteAssessmentDialog = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	function deleteDetails() {
-		if (disp) {
-			deleteDispensation(
+		if (assessment) {
+			deleteAssessment(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(disp.id)
+				JSON.stringify(assessment.id)
 			).then(res => {
 				handleOpen(res);
 			});
@@ -44,7 +44,7 @@ export const DeleteAssessmentDialog = ({
 	}
 
 	const handleOpen = (res: any) => {
-		const errors = getErrorMessage(res, 'deleteDispensation');
+		const errors = getErrorMessage(res, 'deleteAssessmentDecision');
 		if (errors.errorCount > 0) {
 			setNotificationType(errors.notif);
 		} else if (res.status === 200) {
@@ -63,13 +63,13 @@ export const DeleteAssessmentDialog = ({
 
 	return (
 		<>
-			{disp && disp.status === 'Draft' && <AlertDialog openDialog={openDialog}
+			{assessment && assessment.status === 'Draft' && <AlertDialog openDialog={openDialog}
 									 onOkClick={deleteDetails}
 									 onCancelClick={() => setOpenDialog(false)}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.deleteButton')}
-									 title={t('dispensation.deleteDispConfirmationMessageTitle') + disp.dispensation + "?"}>
-				{t('dispensation.deleteDispConfirmationMessageDescription')}
+									 title={t('assessment.deleteAssConfirmationMessageTitle') + assessment.assessment + "?"}>
+				{t('assessment.deleteAssConfirmationMessageDescription')}
 			</AlertDialog>}
 
 			<Notifications
