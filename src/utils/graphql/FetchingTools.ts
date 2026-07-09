@@ -1379,7 +1379,7 @@ export const fetchAssessmentHistory = async (
 	id: string
 ): Promise<any> => {
 	const query = `query fetchAssessmentHistory {
-		mutationLogsByTable (tableName: "AssessmentDecision,AssessmentDecisionHasTicket,AssessmentDecisionHasRoom,AssessmentDecisionHasContact,AssessmentDecisionHasUnit", tableIdentifier: ${JSON.stringify(id)}, 
+		mutationLogsByTable (tableName: "AssessmentDecision,AssessmentDecisionHasTicket,AssessmentDecisionHasFile,AssessmentDecisionHasRoom,AssessmentDecisionHasContact,AssessmentDecisionHasUnit", tableIdentifier: ${JSON.stringify(id)}, 
 		excludedField: "modified_on,id_assessment_and_decision,modified_by") {
 			modified_by
 			modified_on
