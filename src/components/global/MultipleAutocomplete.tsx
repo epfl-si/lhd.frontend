@@ -142,6 +142,18 @@ export const MultipleAutocomplete = ({
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
 					]
 				);
+			} else if (parent === 'assessmentscontrol') {
+				resolve(
+					[
+						{ title: "Assessment="+query, encodedTitle: "Assessment="+ encodeURIComponent(query) },
+						{ title: "Contact="+query, encodedTitle: "Contact="+ encodeURIComponent(query)},
+						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
+						{ title: "Status="+query, encodedTitle: "Status="+ findDispensationStatus(encodeURIComponent(query.trim().toLowerCase())) },
+						{ title: "Subject="+query, encodedTitle: "Subject="+ encodeURIComponent(query) },
+						{ title: "Ticket="+query, encodedTitle: "Ticket="+ encodeURIComponent(query)},
+						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
+					]
+				);
 			} else {
 				resolve(
 				[
