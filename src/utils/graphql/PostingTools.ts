@@ -1,5 +1,4 @@
 import {
-	dispensationRequestType,
 	hazardAdditionalInfoType,
 	hazardFormChildType,
 	hazardFormType,
@@ -10,12 +9,6 @@ import {
 } from '../ressources/types';
 import {doGraphQL} from "./Utils";
 import {getFormattedDate} from "../ressources/parser";
-
-const escapeGraphQL = (unquotedString: string): string => {
-	return unquotedString
-		.replaceAll(/("|\\)/g, '\\$1')
-		.replaceAll(/\n/g, '\\n')
-}
 
 export const updateRoom = async (
 	address: string | undefined,
