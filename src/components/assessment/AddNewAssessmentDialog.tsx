@@ -27,6 +27,7 @@ import {CircularProgress} from "@mui/joy";
 import {formatDateForPickers} from "../../utils/ressources/parser";
 import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
 import {saveNewAssessment, updateAssessment} from "../../utils/graphql/PostingTools";
+import MultiFileUploader from "../global/MultiFileUploader";
 
 interface AddNewAssessmentDialogProps {
 	openDialog: boolean;
@@ -62,9 +63,10 @@ export const AddNewAssessmentDialog = ({
 	const [selectedContacts, setSelectedContacts] = useState<personType[]>([]);
 	const [savedTickets, setSavedTickets] = useState<genericType[]>([]);
 	const [selectedTickets, setSelectedTickets] = useState<genericType[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<genericType[]>([]);
+	const [savedFiles, setSavedFiles] = useState<genericType[]>([]);
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 	const [history, setHistory] = useState<any[]>([]);
-	const [file, setFile] = useState<[]>();
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -88,6 +90,9 @@ export const AddNewAssessmentDialog = ({
 
 		setSavedTickets(selectedAssessment ? selectedAssessment.assessment_tickets : []);
 		setSelectedTickets(selectedAssessment ? selectedAssessment.assessment_tickets : []);
+
+		setSavedFiles(selectedAssessment ? selectedAssessment.assessment_files : []);
+		setSelectedFiles(selectedAssessment ? selectedAssessment.assessment_files : []);
 	}, [openDialog, selectedAssessment]);
 
 	const loadSubjects = async () => {
@@ -121,7 +126,7 @@ export const AddNewAssessmentDialog = ({
 	async function onAddAssessment() {
 		setLoading(true);
 		const assessment = {creationDate,status,
-			subject,other,conclusion,description,selectedTickets,selectedContacts,selectedRooms, selectedUnits};
+			subject,other,conclusion,description,selectedTickets,selectedContacts,selectedRooms, selectedUnits, selectedFiles};
 		if (selectedAssessment) {
 			updateAssessment(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -209,12 +214,6 @@ export const AddNewAssessmentDialog = ({
 		setSelectedTickets(changedTickets);
 	}
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files) {
-			setFile(e.target.files[0]);
-		}
-	};
-
 	return (
 		<>
 			<AlertDialog openDialog={openDialog}
@@ -242,13 +241,11 @@ export const AddNewAssessmentDialog = ({
 				<div style={{display: "flex", flexDirection: "column"}}>
 					<div style={{display: "flex", flexDirection: "row"}}>
 						<div style={{display: "flex", flexDirection: "column"}}>
-							<div>
-								<input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'/>
-							</div>
-
-
-
-
+							<MultiFileUploader
+								maxFiles={10}
+								selectedFiles={selectedFiles}
+								setSelectedFiles={setSelectedFiles}
+								selectedId={selectedAssessment?.id ?? ''} />
 						</div>
 						{selectedAssessment && <div style={{display: "flex", flexDirection: "column"}}><label
 				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
