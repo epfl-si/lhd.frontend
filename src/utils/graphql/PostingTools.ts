@@ -733,6 +733,9 @@ export const saveNewAssessment = async (
 									units: [
 										${assessment.selectedUnits.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
 									],
+									files: [
+										${assessment.selectedFiles.map(ass => `{path: "${ass.path}", status: "${ass.status}", base64: "${ass.base64}"}`)}
+									],
 								)
 							 {
 								errors {
@@ -771,6 +774,9 @@ export const updateAssessment = async (
 									],
 									units: [
 										${assessment.selectedUnits.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+									],
+									files: [
+										${assessment.selectedFiles.map(ass => `{path: "${ass.path}", status: "${ass.status}", base64: "${ass.base64}"}`)}
 									],
 								)
 							 {
