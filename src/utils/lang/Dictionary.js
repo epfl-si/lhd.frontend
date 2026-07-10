@@ -4,6 +4,8 @@ import { initReactI18next } from 'react-i18next';
 // init i18next with elements inside const dictionary
 i18next.use(initReactI18next).init({
 	fallbackLng: 'en',
+	returnNull: false,
+	returnEmptyString: false,
 	resources: {
 		en: {
 			translation: {

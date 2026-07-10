@@ -1,3 +1,4 @@
+import {notificationType} from "../ressources/types";
 
 export async function doGraphQL(
 	query: string,
@@ -53,7 +54,7 @@ export function getErrorMessage (response: any, method: string) {
 		notif: {
 			text: errorMessage,
 			type: 'error'
-		},
+		} as notificationType,
 		errorCount: errorList.length
 	};
 }
