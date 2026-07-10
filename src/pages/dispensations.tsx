@@ -6,7 +6,7 @@ import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
 import {columnType, dispensationType, notificationType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
-import {Redirect, useHistory} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import "../../css/styles.scss";
 import {MultipleAutocomplete} from "../components/global/MultipleAutocomplete";
 import Notifications from "../components/Table/Notifications";
@@ -28,7 +28,6 @@ export const DispensationControl = ({
 	handleCurrentPage,
 	user
 }: DispensationControlProps) => {
-	const history = useHistory();
 	const { t } = useTranslation();
 	const oidc = useOpenIDConnectContext();
 	const [openDialog, setOpenDialog] = useState<boolean>(false);
