@@ -152,7 +152,7 @@ export type lhdUnitsType = {
 };
 
 export type genericType = {
-	path?: string;
+	file_path?: string;
 	base64?: string;
 	source?: string;
 	ticket_number?: string;
