@@ -21,7 +21,7 @@ import {fetchDispensationHistory, fetchDispensationSubjects} from "../../utils/g
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
-import {TextArea} from "epfl-elements-react-si-extra";
+import {Button, TextArea} from "epfl-elements-react-si-extra";
 import {sprintf} from "sprintf-js";
 import {MutationLogsTable} from "../global/MutationLogsTable";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
@@ -96,6 +96,8 @@ export const AddNewDispensationDialog = ({
 
 		setSavedTickets(selectedDispensation ? selectedDispensation.dispensation_tickets : []);
 		setSelectedTickets(selectedDispensation ? selectedDispensation.dispensation_tickets : []);
+
+		setFile(selectedDispensation && selectedDispensation.file_path ? (new File([], selectedDispensation.file_path)) : undefined);
 	}, [openDialog, selectedDispensation]);
 
 	const loadSubjects = async () => {
@@ -266,11 +268,20 @@ export const AddNewDispensationDialog = ({
 							<div>
 								<input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'/>
 							</div>
-							{selectedDispensation && selectedDispensation.file_path &&
-								<a style={{fontSize: 'small'}}
-								 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedDispensation?.id, 'dispensation')}
-								 href={selectedDispensation.file_path}>{selectedDispensation.file_path.split('/').pop()}
-								</a>}
+							{selectedDispensation && file &&
+									<div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
+											<a style={{fontSize: 'small'}}
+												 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedDispensation.id, 'dispensation')}
+												 href={file.name}>{file.name.split('/').pop()}
+											</a>
+											<Button size="icon"
+															style={{marginLeft: '10px'}}
+															iconName={`#trash`}
+															onClick={() => {
+																	setFile(undefined);
+															}}/>
+									</div>
+							}
 						</div>
 						{selectedDispensation && <div style={{display: "flex", flexDirection: "column"}}><label
 				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
