@@ -85,13 +85,14 @@ export const OrganismsControl = ({
 			)},
 		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				user.canEditOrganisms ? <><Button size="icon"
-								iconName={"#edit-3"}
-								onClick={() => modifyOrganism(params.row)}/>
+				user.canEditOrganisms ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></> : <></>
+									onClick={async (event) => {
+										event.stopPropagation();
+										await handleDelete(params.row);
+									}}/></> : <></>
 			)
 		},
 	];
@@ -126,13 +127,15 @@ export const OrganismsControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				user.canEditOrganisms ? <><Button size="icon"
-									iconName={"#edit-3"}
-									onClick={() => modifyOrganism(params.row)}/>
+				user.canEditOrganisms ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></> : <></>
+									onClick={async (event) => {
+										event.stopPropagation();
+										await handleDelete(params.row)
+									}
+					}/></> : <></>
 			)
 		},
 	];
@@ -278,6 +281,8 @@ export const OrganismsControl = ({
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
+				canModify={user.canEditOrganisms}
+				onRowClick={modifyOrganism}
 			/>
 			<AddNewOrganismDialog openDialog={openDialog}
 														close={() => {

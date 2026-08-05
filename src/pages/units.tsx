@@ -107,13 +107,12 @@ export const UnitControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
-				user.canEditUnits ? <><Button size="icon"
-									iconName={"#edit-3"}
-									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
+				user.canEditUnits ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => {
+									onClick={(event) => {
+										event.stopPropagation();
 										setOpenDialogDelete(true);
 										setSelectedUnit(params.row);
 									}}/></> : <></>
@@ -164,13 +163,12 @@ export const UnitControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
-				user.canEditUnits ? <><Button size="icon"
-									iconName={"#edit-3"}
-									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
+				user.canEditUnits ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => {
+									onClick={(event) => {
+										event.stopPropagation();
 										setOpenDialogDelete(true);
 										setSelectedUnit(params.row);
 									}}/></> : <></>
@@ -217,13 +215,12 @@ export const UnitControl = ({
 		},
 		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
-				user.canEditUnits ? <><Button size="icon"
-									iconName={"#edit-3"}
-									onClick={() => history.push(`/unitdetails?unit=${encodeURIComponent(params.row.name)}`)}/>
+				user.canEditUnits ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => {
+									onClick={(event) => {
+										event.stopPropagation();
 										setOpenDialogDelete(true);
 										setSelectedUnit(params.row);
 									}}/></> : <></>
@@ -302,6 +299,7 @@ export const UnitControl = ({
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
+				canModify={user.canEditUnits}
 			/>
 				{user.canEditUnits && <><AddNewUnitDialog openDialog={openDialog} close={() => setOpenDialog(false)}
 													 save={(searchVal: string) => {

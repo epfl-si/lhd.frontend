@@ -118,12 +118,10 @@ export const AssessmentDecisionControl = ({
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				user.canEditAssessments ? <>
 					<Button size="icon"
-								iconName={"#edit-3"}
-								onClick={() => modify(params.row)}/>
-					<Button size="icon"
 								style={{marginLeft: '10px', visibility: params.row.status === 'Draft' ? 'visible' : 'hidden'}}
 								iconName={`#trash`}
-								onClick={() => {
+								onClick={(event) => {
+									event.stopPropagation();
 									setOpenDialogDelete(true);
 									setSelected(params.row);
 								}}/>
@@ -353,6 +351,8 @@ export const AssessmentDecisionControl = ({
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
+				canModify={user.canEditAssessments}
+				onRowClick={modify}
 			/>
 				{user.canEditAssessments && <><AddNewAssessmentDialog openDialog={openDialog}
 																			close={() => {

@@ -82,13 +82,14 @@ export const ChemicalsControl = ({
 		// },
 		{field: "id", headerName: t('chemical.actions'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				user.canEditChemicals ? <><Button size="icon"
-								iconName={"#edit-3"}
-								onClick={() => modify(params.row)}/>
+				user.canEditChemicals ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></> : <></>
+									onClick={async (event) => {
+										event.stopPropagation();
+										await handleDelete(params.row);
+									}}/></> : <></>
 			)
 		},
 	];
@@ -110,13 +111,14 @@ export const ChemicalsControl = ({
 			}},
 		{field: "id", headerName: t('chemical.actions'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				user.canEditChemicals ? <><Button size="icon"
-									iconName={"#edit-3"}
-									onClick={() => modify(params.row)}/>
+				user.canEditChemicals ? <>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
-									onClick={() => handleDelete(params.row)}/></> : <></>
+									onClick={async (event) => {
+										event.stopPropagation();
+										await handleDelete(params.row);
+									}}/></> : <></>
 			)
 		},
 	];
@@ -236,6 +238,8 @@ export const ChemicalsControl = ({
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
+				canModify={user.canEditChemicals}
+				onRowClick={modify}
 			/>
 			{<AddNewChemicalDialog openDialog={openDialog}
 														close={() => {
