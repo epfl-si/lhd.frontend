@@ -105,7 +105,9 @@ export const MultipleAutocomplete = ({
 					[
 						{ title: "CAS="+query, encodedTitle: "CAS="+ encodeURIComponent(query)},
 						{ title: "Name="+query, encodedTitle: "Name="+ encodeURIComponent(query) },
-						{ title: "Status(Active/Archived)="+query, encodedTitle: "Status="+ encodeURIComponent(query) }
+						{ title: "Status(Active/Archived)="+query, encodedTitle: "Status="+ encodeURIComponent(query) },
+						{ title: "Fastway="+query, encodedTitle: "Fastway="+ encodeURIComponent(query) },
+						{ title: "Auth Code="+query, encodedTitle: "AuthCode="+ encodeURIComponent(query) },
 					]
 				);
 			} else if (parent === 'chemicalauthorizationscontrol') {
