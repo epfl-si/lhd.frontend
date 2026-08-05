@@ -3,7 +3,7 @@ import {DataGrid} from '@mui/x-data-grid';
 import React from 'react';
 import {TableToolbar} from './TableToolbar';
 import {useHistory} from 'react-router-dom';
-import {columnType, organismType, parameterType} from '../../utils/ressources/types';
+import {columnType, parameterType} from '../../utils/ressources/types';
 import {useTranslation} from "react-i18next";
 import {styled} from '@mui/material/styles';
 
@@ -18,6 +18,8 @@ type EntriesTableCategoryProps = {
 	pageSize?: number;
 	totalCount?: number;
 	loadServerRows?: (newPage: number) => void;
+	canModify?: boolean;
+	onRowClick?: (data: any) => void;
 };
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
@@ -45,6 +47,8 @@ export function EntriesTableCategory({
 	pageSize,
 	totalCount,
 	loadServerRows,
+	canModify,
+	onRowClick
 }: EntriesTableCategoryProps) {
 	const history = useHistory();
 	const { t } = useTranslation();
@@ -87,6 +91,20 @@ export function EntriesTableCategory({
 								break;
 							case "hazardFormsChild":
 								history.push(`/hazardFormChildDetails?name=${e.row['hazard_form_child_name']}`);
+								break;
+							case "unit":
+								if (canModify) {
+									history.push(`/unitdetails?unit=${encodeURIComponent(e.row['name'])}`);
+								}
+								break;
+							case "organism":
+							case "chemicals":
+							case "radioprotectionauthorization":
+							case "dispensation":
+							case "assessment":
+								if (canModify && onRowClick) {
+									onRowClick(e.row);
+								}
 								break;
 						}
 					}}

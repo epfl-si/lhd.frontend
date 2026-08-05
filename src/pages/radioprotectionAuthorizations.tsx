@@ -122,12 +122,10 @@ export const RadioprotectionsAuthorizationControl = ({
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				user.canEditAuthorizations ? <>
 					<Button size="icon"
-								iconName={"#edit-3"}
-								onClick={() => modify(params.row)}/>
-					<Button size="icon"
 								style={{marginLeft: '10px'}}
 								iconName={`#trash`}
-								onClick={() => {
+								onClick={(event) => {
+									event.stopPropagation();
 									setOpenDialogDelete(true);
 									setSelected(params.row);
 								}}/>
@@ -360,6 +358,8 @@ export const RadioprotectionsAuthorizationControl = ({
 				page={page}
 				totalCount={totalCount}
 				pageSize={PAGE_SIZE}
+				canModify={user.canEditAuthorizations}
+				onRowClick={modify}
 			/>
 				{user.canEditAuthorizations && <><AddNewRadioprotectionDialog openDialog={openDialog}
 																			close={() => {
