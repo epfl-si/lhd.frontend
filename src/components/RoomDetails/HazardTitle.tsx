@@ -25,7 +25,7 @@ interface HazardTitleProps {
   hazardAdditionalInfo?: hazardAdditionalInfoType | undefined;
   selectedHazardCategory: string;
   room?: roomDetailsType | null;
-  handleFileChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleFileChange?: (event: React.ChangeEvent<HTMLInputElement> | undefined) => void;
   setComment?: (newValue: string) => void;
   comment?: string | undefined;
   isReadonly: boolean;
@@ -60,6 +60,11 @@ export const HazardTitle = ({
   const [openDeleteTagDialog, setOpenDeleteTagDialog] = useState<boolean>(false);
   const [selectedTag, setSelectedTag] = useState<hazardsAdditionalInfoHasTagType>();
   const [availableTags, setAvailableTags] = useState<tag[]>([]);
+  const [file, setFile] = useState<string | undefined>();
+
+  useEffect(() => {
+    setFile(hazardAdditionalInfo?.filePath);
+  }, [hazardAdditionalInfo]);
 
   useEffect(() => {
     if(selectedHazardCategory == 'StaticMagneticField' && room) {
@@ -199,12 +204,22 @@ export const HazardTitle = ({
       <input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'
              key={'newFile' + selectedHazardCategory}/>
     </div>}
-    {hazardAdditionalInfo && hazardAdditionalInfo.filePath &&
-      <a style={{fontSize: 'small'}}
-         onClick={async e => await handleClickFileLink(e, oidc.accessToken, hazardAdditionalInfo!.id!, 'hazardAdditionalInfo')}
-         href={hazardAdditionalInfo.filePath}>
-        {hazardAdditionalInfo.filePath.split('/').pop()}
-      </a>}
+    {file &&
+      <div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
+        <a style={{fontSize: 'small'}}
+           onClick={async e => await handleClickFileLink(e, oidc.accessToken, hazardAdditionalInfo!.id!, 'hazardAdditionalInfo')}
+           href={file}>
+          {file.split('/').pop()}
+        </a>
+        <Button size="icon"
+                style={{marginLeft: '10px'}}
+                iconName={`#trash`}
+                onClick={() => {
+                  if ( handleFileChange ) {
+                    setFile(undefined);
+                    handleFileChange(undefined);
+                  } }}/>
+      </div>}
     <Notifications
       open={openNotification}
       notification={notificationType}

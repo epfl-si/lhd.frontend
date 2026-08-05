@@ -10,7 +10,7 @@ import Notifications from "../Table/Notifications";
 import {saveNewOrganism, updateOrganism} from "../../utils/graphql/PostingTools";
 import {TextField} from "@material-ui/core";
 import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
-import {Numeric} from "epfl-elements-react-si-extra";
+import {Button, Numeric} from "epfl-elements-react-si-extra";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 
 interface AddNewOrganismDialogProps {
@@ -40,7 +40,7 @@ export const AddNewOrganismDialog = ({
 	useEffect(() => {
 		setTextInput(selectedOrganism ? selectedOrganism.organism : '');
 		setRisk(selectedOrganism ? selectedOrganism.risk_group : undefined);
-		setSelectedFile(null)
+		setSelectedFile(selectedOrganism?.filePath ? (new File([], selectedOrganism?.filePath)) : null);
 	}, [openDialog, selectedOrganism]);
 
 	const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,11 +130,17 @@ export const AddNewOrganismDialog = ({
 					max={3}
 					onChange={setRisk}
 				/>
-				{selectedOrganism && selectedOrganism.filePath &&
-			<div><a href={selectedOrganism.filePath}
-					onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedOrganism.id, 'organism')}>
-							{selectedOrganism.filePath.split('/').pop()}
-			</a></div>
+				{selectedOrganism && selectedOrganism.filePath && selectedFile &&
+			<div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
+				<a href={selectedOrganism.filePath}
+						onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedOrganism.id, 'organism')}>
+					{selectedOrganism.filePath.split('/').pop()}
+				</a>
+				<Button size="icon"
+						style={{marginLeft: '10px'}}
+						iconName={`#trash`}
+						onClick={() => { setSelectedFile(null); }}/>
+			</div>
 				}
 				<input
 					style={{marginTop: '10px'}}

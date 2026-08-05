@@ -283,8 +283,9 @@ export const OrganismsControl = ({
 														close={() => {
 															setOpenDialog(false);
 														}}
-														save={(searchVal: string) => {
+														save={async (searchVal: string) => {
 															setOpenDialog(false);
+															await loadFetch();
 															onChangeInput(searchVal);
 														}}
 														selectedOrganism={selectedOrganism}/>

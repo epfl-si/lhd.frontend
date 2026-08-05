@@ -159,9 +159,11 @@ export const HazardEditForm = ({
 		}
 	}
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files) {
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | undefined) => {
+		if (e && e.target.files) {
 			setFile(e.target.files[0]);
+		} else {
+			setFile(undefined);
 		}
 	};
 
