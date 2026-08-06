@@ -185,9 +185,10 @@ export const addHazard = async (
 							 submission: ${JSON.stringify(JSON.stringify(submission))}, 
 							 additionalInfo: {
 							 	comment: "${additionalInfo.comment}",
-							 	file: "${additionalInfo.file ?? ''}",
-							 	fileName: "${additionalInfo.fileName ?? ''}"
-							 }
+							 },
+							files: [
+								${additionalInfo.hazardsAdditionalInfoHasFile.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+							],
 							 category: "${lastVersionForm.hazard_category.hazard_category_name}")
 							 {
 								errors {

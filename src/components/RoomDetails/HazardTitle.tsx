@@ -2,13 +2,15 @@ import React, {useEffect, useState} from 'react';
 import {getHazardImage} from "./HazardProperties";
 import {useTranslation} from "react-i18next";
 import {
+  genericType,
   hazardAdditionalInfoType,
   hazardsAdditionalInfoHasTagType,
   notificationType,
-  roomDetailsType, tag, UserInfo
+  roomDetailsType,
+  tag,
+  UserInfo
 } from "../../utils/ressources/types";
 import {sprintf} from "sprintf-js";
-import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {fetchOtherRoomsForStaticMagneticField, fetchTags} from "../../utils/graphql/FetchingTools";
 import {env} from "../../utils/env";
@@ -20,12 +22,12 @@ import {TagDialog} from "./TagDialog";
 import {Tooltip} from "@mui/joy";
 import {DeleteTagDialog} from "./DeleteTagDialog";
 import {SplitButton} from "../global/SplitButton";
+import MultiFileUploader from "../global/MultiFileUploader";
 
 interface HazardTitleProps {
   hazardAdditionalInfo?: hazardAdditionalInfoType | undefined;
   selectedHazardCategory: string;
   room?: roomDetailsType | null;
-  handleFileChange?: (event: React.ChangeEvent<HTMLInputElement> | undefined) => void;
   setComment?: (newValue: string) => void;
   comment?: string | undefined;
   isReadonly: boolean;
@@ -33,13 +35,16 @@ interface HazardTitleProps {
   user: UserInfo;
   refreshView?: () => void;
   tags?: hazardsAdditionalInfoHasTagType[];
+  selectedFiles?: genericType[];
+  setSelectedFiles?: (files: genericType[]) => void;
 }
 
 export const HazardTitle = ({
+  selectedFiles,
+  setSelectedFiles,
   hazardAdditionalInfo,
   selectedHazardCategory,
   room,
-  handleFileChange,
   setComment,
   comment,
   isReadonly,
@@ -60,11 +65,6 @@ export const HazardTitle = ({
   const [openDeleteTagDialog, setOpenDeleteTagDialog] = useState<boolean>(false);
   const [selectedTag, setSelectedTag] = useState<hazardsAdditionalInfoHasTagType>();
   const [availableTags, setAvailableTags] = useState<tag[]>([]);
-  const [file, setFile] = useState<string | undefined>();
-
-  useEffect(() => {
-    setFile(hazardAdditionalInfo?.filePath);
-  }, [hazardAdditionalInfo]);
 
   useEffect(() => {
     if(selectedHazardCategory == 'StaticMagneticField' && room) {
@@ -200,26 +200,13 @@ export const HazardTitle = ({
       value={comment}
       isReadonly={isReadonly}
     />}
-    {!isReadonly && <div>
-      <input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'
-             key={'newFile' + selectedHazardCategory}/>
-    </div>}
-    {file &&
-      <div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
-        <a style={{fontSize: 'small'}}
-           onClick={async e => await handleClickFileLink(e, oidc.accessToken, hazardAdditionalInfo!.id!, 'hazardAdditionalInfo')}
-           href={file}>
-          {file.split('/').pop()}
-        </a>
-        <Button size="icon"
-                style={{marginLeft: '10px'}}
-                iconName={`#trash`}
-                onClick={() => {
-                  if ( handleFileChange ) {
-                    setFile(undefined);
-                    handleFileChange(undefined);
-                  } }}/>
-      </div>}
+    {selectedFiles && setSelectedFiles && <MultiFileUploader
+      maxFiles={10}
+      model={'hazardAdditionalInfo'}
+      selectedFiles={selectedFiles}
+      setSelectedFiles={setSelectedFiles}
+      isReadonly={isReadonly}
+      selectedId={hazardAdditionalInfo?.id ?? ''}/>}
     <Notifications
       open={openNotification}
       notification={notificationType}

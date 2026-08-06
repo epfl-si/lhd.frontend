@@ -4,16 +4,17 @@ import {HazardForm} from "./HazardForm";
 import Notifications from "../Table/Notifications";
 import {AlertDialog} from "../global/AlertDialog";
 import {
+	genericType,
 	hazardAdditionalInfoType,
 	hazardFormType,
 	notificationType,
 	roomDetailsType,
-	submissionForm, UserInfo
+	submissionForm,
+	UserInfo
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import {createKey} from "../../utils/ressources/keyGenerator";
 import {env} from "../../utils/env";
-import {readFileAsBase64} from "../../utils/ressources/file";
 import {addHazard} from "../../utils/graphql/PostingTools";
 import {useTranslation} from "react-i18next";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
@@ -61,9 +62,9 @@ export const HazardEditForm = ({
 		(lastVersionForm.children[0].form ? JSON.parse(lastVersionForm.children[0].form) : undefined) : undefined;
 	const formsMapValidation = useRef<{[key: string]: boolean}>({});
 	const [comment, setComment] = useState<string | undefined>();
-	const [file, setFile] = useState<File | undefined>();
 	const [_, setRender] = useState(0);
 	const submissionsList = useRef<submissionForm[]>(initialSubmissionsList);
+	const [selectedFiles, setSelectedFiles] = useState<genericType[]>();
 	const [openDialog, setOpenDialog] = useState<boolean>(action != 'Read');
 
 	useEffect(() => {
@@ -80,7 +81,7 @@ export const HazardEditForm = ({
 		};
 		loadFetch();
 		setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
-		setFile(undefined);
+		setSelectedFiles(hazardAdditionalInfo?.hazardsAdditionalInfoHasFile ?? []);
 	}, [oidc.accessToken, initialSubmissionsList]);
 
 	function onAddHazard(submissions: submissionForm[]) {
@@ -159,14 +160,6 @@ export const HazardEditForm = ({
 		}
 	}
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement> | undefined) => {
-		if (e && e.target.files) {
-			setFile(e.target.files[0]);
-		} else {
-			setFile(undefined);
-		}
-	};
-
 	const getValidationFromMapItem = (itemId: string, checkedId: string, isValid: boolean, formJson: string): boolean => {
 		if (itemId == checkedId) {
 			return isValid;
@@ -193,7 +186,6 @@ export const HazardEditForm = ({
 					})
 				})
 			});
-			let fileBase64 = await readFileAsBase64(file);
 			addHazard(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
@@ -202,8 +194,7 @@ export const HazardEditForm = ({
 				room.name,
 				{
 					comment: encodeURIComponent(comment ?? ''),
-					file: fileBase64,
-					fileName: file?.name
+					hazardsAdditionalInfoHasFile: selectedFiles ?? []
 				}
 			).then(res => {
 				handleOpen(res);
@@ -247,7 +238,8 @@ export const HazardEditForm = ({
 		<div style={{display: 'flex', flexDirection: 'column'}}>
 			<HazardTitle hazardAdditionalInfo={hazardAdditionalInfo}
 									 selectedHazardCategory={selectedHazardCategory}
-									 handleFileChange={handleFileChange}
+									 selectedFiles={selectedFiles}
+									 setSelectedFiles={setSelectedFiles}
 									 comment={comment}
 									 setComment={setComment}
 									 isReadonly={false}
