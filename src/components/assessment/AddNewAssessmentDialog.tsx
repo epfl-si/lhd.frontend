@@ -34,13 +34,15 @@ interface AddNewAssessmentDialogProps {
 	save: (searchVal: string) => void;
 	close: () => void;
 	selectedAssessment?: assessmentType;
+	onDelete?: (organism: assessmentType) => void;
 }
 
 export const AddNewAssessmentDialog = ({
 																			 openDialog,
 																			 close,
 																			 save,
-																				 selectedAssessment
+																				 selectedAssessment,
+																				 onDelete
 																		 }: AddNewAssessmentDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -222,6 +224,9 @@ export const AddNewAssessmentDialog = ({
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
 									 title={(selectedAssessment ? t('assessment.modifyAssessment') : t('assessment.addAssessment')) + " " + (selectedAssessment ? selectedAssessment.assessment : '')}
+									 deleteLabel={t('generic.deleteButton')}
+									 onDeleteClick={onDelete}
+									 data={selectedAssessment}
 									 type='selection'>
 				{loading && <Box
 					sx={{

@@ -35,13 +35,15 @@ interface AddNewDispensationDialogProps {
 	save: (searchVal: string) => void;
 	close: () => void;
 	selectedDispensation?: dispensationType;
+	onDelete?: (disp: dispensationType) => void;
 }
 
 export const AddNewDispensationDialog = ({
 																			 openDialog,
 																			 close,
 																			 save,
-																			 selectedDispensation
+																			 selectedDispensation,
+																			 onDelete
 																		 }: AddNewDispensationDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -246,6 +248,9 @@ export const AddNewDispensationDialog = ({
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
 									 title={(selectedDispensation ? t('dispensation.modifyDispensation') : t('dispensation.addDispensation')) + " " + (selectedDispensation ? selectedDispensation.dispensation : '')}
+									 deleteLabel={t('generic.deleteButton')}
+									 onDeleteClick={onDelete}
+									 data={selectedDispensation}
 									 type='selection'>
 				{loading && <Box
 					sx={{

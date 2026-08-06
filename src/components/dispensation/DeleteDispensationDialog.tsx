@@ -14,6 +14,7 @@ interface DeleteRadioprotectionDialogProps {
 	disp?: dispensationType;
 	openDialog: boolean;
 	setOpenDialog: (open: boolean) => void;
+	setOpenParentDialog: (open: boolean) => void;
 	setDeleted: (open: boolean) => void;
 }
 
@@ -21,6 +22,7 @@ export const DeleteDispensationDialog = ({
 	disp,
 	openDialog,
 	setOpenDialog,
+	setOpenParentDialog,
 	setDeleted,
 }: DeleteRadioprotectionDialogProps) => {
 	const oidc = useOpenIDConnectContext();
@@ -50,6 +52,7 @@ export const DeleteDispensationDialog = ({
 		} else if (res.status === 200) {
 			setDeleted(true);
 			setOpenDialog(false);
+			setOpenParentDialog(false);
 			setNotificationType(notificationsVariants['update_success']);
 		} else {
 			setNotificationType(notificationsVariants['update_error']);

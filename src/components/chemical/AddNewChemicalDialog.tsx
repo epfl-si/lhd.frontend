@@ -17,13 +17,15 @@ interface AddNewChemicalDialogProps {
 	save: (searchVal: string) => void;
 	close: () => void;
 	selectedChemical?: chemicalsType;
+	onDelete: (organism: chemicalsType) => void;
 }
 
 export const AddNewChemicalDialog = ({
 																			 openDialog,
 																			 close,
 																			 save,
-																			 selectedChemical
+																			 selectedChemical,
+																			 onDelete
 																		 }: AddNewChemicalDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -103,6 +105,9 @@ export const AddNewChemicalDialog = ({
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
 									 title={selectedChemical ? t('chemical.modifyChemical') : t('chemical.addChemical')}
+									 deleteLabel={t('generic.deleteButton')}
+									 onDeleteClick={onDelete}
+									 data={selectedChemical}
 									 type='selection'>
 				<TextField
 					label={t('chemical.CASNumber')}

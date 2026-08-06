@@ -6,11 +6,11 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {
 	authorizationType,
+	genericType,
 	lhdUnitsType,
 	notificationType,
 	personType,
-	roomDetailsType,
-	genericType
+	roomDetailsType
 } from "../../utils/ressources/types";
 import {notificationsVariants} from "../../utils/ressources/variants";
 import Notifications from "../Table/Notifications";
@@ -27,13 +27,15 @@ interface AddNewRadioprotectionDialogProps {
 	save: (searchVal: string) => void;
 	close: () => void;
 	selectedRadioprotection?: authorizationType;
+	onDelete: (organism: authorizationType) => void;
 }
 
 export const AddNewRadioprotectionDialog = ({
 																			 openDialog,
 																			 close,
 																			 save,
-																			 selectedRadioprotection
+																			 selectedRadioprotection,
+																			 onDelete
 																		 }: AddNewRadioprotectionDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -215,6 +217,9 @@ export const AddNewRadioprotectionDialog = ({
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
 									 title={selectedRadioprotection ? t('authorization.modifyRadioprotection') : t('authorization.addRadioprotection')}
+									 deleteLabel={t('generic.deleteButton')}
+									 onDeleteClick={onDelete}
+									 data={selectedRadioprotection}
 									 type='selection'>
 				<div style={{display: "flex", flexDirection: "column"}}>
 					<Autocomplete

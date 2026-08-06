@@ -197,6 +197,7 @@ export const ChemicalsControl = ({
 			const errors = getErrorMessage(res, 'deleteChemical');
 			if(errors.errorCount == 0) {
 				setDeleted(true);
+				setOpenDialog(false);
 				setSelectedChemical(undefined);
 				setSearch('');
 				setPage(0);
@@ -249,6 +250,7 @@ export const ChemicalsControl = ({
 															setOpenDialog(false);
 															onChangeInput(searchVal);
 														}}
+														 onDelete={handleDelete}
 														selectedChemical={selectedChemical}/>}
 			<Notifications
 				open={openNotification}

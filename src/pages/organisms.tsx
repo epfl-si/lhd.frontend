@@ -238,6 +238,7 @@ export const OrganismsControl = ({
 			const errors = getErrorMessage(res, 'deleteOrganism');
 			if(errors.errorCount == 0) {
 				setOpenDialogDelete(false);
+				setOpenDialog(false);
 				setDeleted(true);
 				setSelectedOrganism(undefined);
 				setSearch('');
@@ -293,6 +294,7 @@ export const OrganismsControl = ({
 															await loadFetch();
 															onChangeInput(searchVal);
 														}}
+														onDelete={handleDelete}
 														selectedOrganism={selectedOrganism}/>
 			<Notifications
 				open={openNotification}

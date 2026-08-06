@@ -126,8 +126,7 @@ export const RadioprotectionsAuthorizationControl = ({
 								iconName={`#trash`}
 								onClick={(event) => {
 									event.stopPropagation();
-									setOpenDialogDelete(true);
-									setSelected(params.row);
+									handleDelete(params.row);
 								}}/>
 				</> : <></>
 			)
@@ -270,6 +269,11 @@ export const RadioprotectionsAuthorizationControl = ({
 		setOpenNotification(false);
 	};
 
+	const handleDelete = (data: authorizationType) => {
+		setOpenDialogDelete(true);
+		setSelected(data);
+	}
+
 	const modify = (data: authorizationType) => {
 		setOpenDialog(true);
 		setSelected(data);
@@ -369,10 +373,12 @@ export const RadioprotectionsAuthorizationControl = ({
 																				setOpenDialog(false);
 																				onChangeInput(searchVal);
 																			}}
+																			onDelete={handleDelete}
 																			selectedRadioprotection={selected}/>
 					<DeleteRadioprotectionDialog auth={selected}
 				openDialog={openDialogDelete}
 				setOpenDialog={setOpenDialogDelete}
+				setOpenParentDialog={setOpenDialog}
 				setDeleted={setDeleted}
 			/></>}
 				<Notifications
