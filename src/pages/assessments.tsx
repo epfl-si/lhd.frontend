@@ -136,6 +136,7 @@ export const AssessmentDecisionControl = ({
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.assessment}</span>
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
+					<b style={{fontSize: "smaller"}}>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</b>
 				</div>
 			}},
 		{field: "creation_date", headerName: t('assessment.created'), flex: 0.1,
@@ -179,7 +180,7 @@ export const AssessmentDecisionControl = ({
 				</div>
 			),
 		},
-		{field: "assessment_tickets", headerName: t('assessment.ticket'), flex: 0.2,
+		{field: "assessment_tickets", headerName: t('assessment.tickets'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.assessment_tickets.map(item => {

@@ -61,6 +61,7 @@ i18next.use(initReactI18next).init({
 					radioAuth: 'Radio protection authorizations',
 					chemAuth: 'Chemical authorizations',
 					dispensation: 'Dispensations',
+					assessment: 'Assessments',
 					links: 'Links'
 				},
 				unit: {
@@ -178,7 +179,7 @@ i18next.use(initReactI18next).init({
 					units: 'Units',
 					organisms: 'Organisms',
 					dispensations: 'Dispensations',
-					assessments: 'Assessments and decisions',
+					assessments: 'Assessments',
 					hazardFormControl: 'Hazard Form Control',
 					hazards: 'Hazards',
 					authChem: 'Chemical authorizations',
@@ -389,6 +390,7 @@ i18next.use(initReactI18next).init({
 					radioAuth: 'Autorisations de radioprotection',
 					chemAuth: 'Autorisations chimiques',
 					dispensation: 'Dérogations',
+					assessment: 'Analyses',
 					links: 'Liens'
 				},
 				unit: {
@@ -506,7 +508,7 @@ i18next.use(initReactI18next).init({
 					units: 'Unités',
 					organisms: 'Organismes',
 					dispensations: 'Dérogations',
-					assessments: 'Analyses et décisions',
+					assessments: 'Analyses',
 					hazardFormControl: 'Contrôle des formulaires de dangers',
 					hazards: 'Dangers',
 					authChem: 'Autorisations chimiques',
