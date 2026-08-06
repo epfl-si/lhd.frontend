@@ -149,6 +149,8 @@ export const MultipleAutocomplete = ({
 					[
 						{ title: "Assessment="+query, encodedTitle: "Assessment="+ encodeURIComponent(query) },
 						{ title: "Contact="+query, encodedTitle: "Contact="+ encodeURIComponent(query)},
+						{ title: "Before (dd/MM/YYYY)="+query, encodedTitle: "Before="+ encodeURIComponent(query)},
+						{ title: "After (dd/MM/YYYY)="+query, encodedTitle: "After="+ encodeURIComponent(query)},
 						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
 						{ title: "Status="+query, encodedTitle: "Status="+ findDispensationStatus(encodeURIComponent(query.trim().toLowerCase())) },
 						{ title: "Subject="+query, encodedTitle: "Subject="+ encodeURIComponent(query) },
