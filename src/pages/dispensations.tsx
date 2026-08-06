@@ -131,8 +131,7 @@ export const DispensationControl = ({
 								iconName={`#trash`}
 								onClick={(event) => {
 									event.stopPropagation();
-									setOpenDialogDelete(true);
-									setSelected(params.row);
+									handleDelete(params.row);
 								}}/>
 				</> : <></>
 			)
@@ -280,6 +279,11 @@ export const DispensationControl = ({
 		setOpenNotification(false);
 	};
 
+	const handleDelete = (data: dispensationType) => {
+		setOpenDialogDelete(true);
+		setSelected(data);
+	}
+
 	const modify = (data: dispensationType) => {
 		setOpenDialog(true);
 		setSelected(data);
@@ -379,10 +383,12 @@ export const DispensationControl = ({
 																				setOpenDialog(false);
 																				loadFetch();
 																			}}
+																			onDelete={selected?.status === 'Draft' ? handleDelete : undefined}
 																			selectedDispensation={selected}/>
 					<DeleteDispensationDialog disp={selected}
 				openDialog={openDialogDelete}
 				setOpenDialog={setOpenDialogDelete}
+				setOpenParentDialog={setOpenDialog}
 				setDeleted={setDeleted}
 			/></>}
 				<Notifications

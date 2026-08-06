@@ -18,13 +18,15 @@ interface AddNewOrganismDialogProps {
 	save: (searchVal: string) => void;
 	close: () => void;
 	selectedOrganism?: organismType;
+	onDelete: (organism: organismType) => void;
 }
 
 export const AddNewOrganismDialog = ({
 																			 openDialog,
 																			 close,
 																			 save,
-																			 selectedOrganism
+																			 selectedOrganism,
+																			 onDelete
 																		 }: AddNewOrganismDialogProps) => {
 	const oidc = useOpenIDConnectContext();
 	const { t } = useTranslation();
@@ -111,6 +113,9 @@ export const AddNewOrganismDialog = ({
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.saveButton')}
 									 title={selectedOrganism ? t('organism.modifyOrganism') : t('organism.addNewOrganism')}
+									 deleteLabel={t('generic.deleteButton')}
+									 onDeleteClick={onDelete}
+									 data={selectedOrganism}
 									 type='selection'>
 				<TextField
 					label={t('organism.organismName')}

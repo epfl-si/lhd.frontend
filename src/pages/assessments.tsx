@@ -122,8 +122,7 @@ export const AssessmentDecisionControl = ({
 								iconName={`#trash`}
 								onClick={(event) => {
 									event.stopPropagation();
-									setOpenDialogDelete(true);
-									setSelected(params.row);
+									handleDelete(params.row);
 								}}/>
 				</> : <></>
 			)
@@ -267,6 +266,11 @@ export const AssessmentDecisionControl = ({
 		setOpenNotification(false);
 	};
 
+	const handleDelete = (data: assessmentType) => {
+		setOpenDialogDelete(true);
+		setSelected(data);
+	}
+
 	const modify = (data: assessmentType) => {
 		setOpenDialog(true);
 		setSelected(data);
@@ -363,10 +367,12 @@ export const AssessmentDecisionControl = ({
 																				setOpenDialog(false);
 																				loadFetch();
 																			}}
+																			onDelete={selected?.status === 'Draft' ? handleDelete : undefined}
 																			selectedAssessment={selected}/>
 			<DeleteAssessmentDialog assessment={selected}
 									openDialog={openDialogDelete}
 									setOpenDialog={setOpenDialogDelete}
+									setOpenParentDialog={setOpenDialog}
 									setDeleted={setDeleted}
 			/>
 				</>}

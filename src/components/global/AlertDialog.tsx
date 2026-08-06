@@ -8,10 +8,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 interface AlertDialogProps {
 	onOkClick?: () => void;
+	onDeleteClick?: (data: any) => void;
+	data?: any;
 	onCancelClick?: () => void;
 	title?: string;
 	children?: React.ReactNode;
 	okLabel: string;
+	deleteLabel?: string;
 	cancelLabel: string;
 	openDialog: boolean;
 	type?: 'alert' | 'selection';
@@ -21,10 +24,13 @@ interface AlertDialogProps {
 
 export const AlertDialog = ({
 	onOkClick,
+	onDeleteClick,
+	data,
 	onCancelClick,
 	title,
 	children,
 	okLabel,
+	deleteLabel,
 	cancelLabel,
 	openDialog,
 	type,
@@ -58,6 +64,7 @@ export const AlertDialog = ({
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={onCancelClick}>{cancelLabel}</Button>
+					{onDeleteClick && <Button onClick={() => onDeleteClick(data)}>{deleteLabel}</Button>}
 					{onOkClick && <Button onClick={onOkClick}
 									disabled={isOkDisabled || false} autoFocus>
 						{okLabel}
