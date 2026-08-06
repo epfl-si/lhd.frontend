@@ -106,7 +106,6 @@ export type dispensationType = {
 	status: string;
 	date_start: Date;
 	date_end: Date;
-	file_path: string;
 	created_by: string;
 	created_on: Date;
 	modified_by: string;
@@ -116,6 +115,7 @@ export type dispensationType = {
 	dispensation_units: lhdUnitsType[];
 	dispensation_holders: personType[];
 	dispensation_tickets: genericType[];
+	dispensation_files: genericType[];
 }
 
 export type assessmentType = {

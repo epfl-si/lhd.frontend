@@ -66,7 +66,6 @@ export const AddNewAssessmentDialog = ({
 	const [savedTickets, setSavedTickets] = useState<genericType[]>([]);
 	const [selectedTickets, setSelectedTickets] = useState<genericType[]>([]);
 	const [selectedFiles, setSelectedFiles] = useState<genericType[]>([]);
-	const [savedFiles, setSavedFiles] = useState<genericType[]>([]);
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 	const [history, setHistory] = useState<any[]>([]);
 	const [loading, setLoading] = useState(false);
@@ -93,7 +92,6 @@ export const AddNewAssessmentDialog = ({
 		setSavedTickets(selectedAssessment ? selectedAssessment.assessment_tickets : []);
 		setSelectedTickets(selectedAssessment ? selectedAssessment.assessment_tickets : []);
 
-		setSavedFiles(selectedAssessment ? selectedAssessment.assessment_files : []);
 		setSelectedFiles(selectedAssessment ? selectedAssessment.assessment_files : []);
 	}, [openDialog, selectedAssessment]);
 
@@ -248,6 +246,7 @@ export const AddNewAssessmentDialog = ({
 						<div style={{display: "flex", flexDirection: "column"}}>
 							<MultiFileUploader
 								maxFiles={10}
+								model={'assessment'}
 								selectedFiles={selectedFiles}
 								setSelectedFiles={setSelectedFiles}
 								selectedId={selectedAssessment?.id ?? ''} />

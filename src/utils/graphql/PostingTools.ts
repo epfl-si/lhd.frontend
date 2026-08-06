@@ -548,8 +548,7 @@ export const deleteAuthorization = async (
 export const saveNewDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	dispensation: any,
-	fileToSend: { file: string; fileName: string | undefined; }
+	dispensation: any
 ): Promise<any> => {
 	const query = `mutation addDispensation {
 								addDispensation(
@@ -557,8 +556,6 @@ export const saveNewDispensation = async (
 									subject_other: "${dispensation.other}",
 									description: "${encodeURIComponent(dispensation.description)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
-									file: "${fileToSend.file ?? ''}",
-									file_name: "${fileToSend.fileName ?? ''}",
 									date_start: "${getFormattedDate(new Date(dispensation.creationDate))}",
 									date_end: "${getFormattedDate(new Date(dispensation.expDate))}",
 									status: "${dispensation.status}",
@@ -573,6 +570,9 @@ export const saveNewDispensation = async (
 									],
 									units: [
 										${dispensation.selectedUnits.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+									files: [
+										${dispensation.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
 							 {
@@ -590,8 +590,7 @@ export const updateDispensation = async (
 	address: string | undefined,
 	authToken: string | undefined,
 	id: string,
-	dispensation: any,
-	fileToSend: { file: string; fileName: string | undefined; }
+	dispensation: any
 ): Promise<any> => {
 	const query = `mutation updateDispensation {
 								updateDispensation(
@@ -602,8 +601,6 @@ export const updateDispensation = async (
 									subject_other: "${dispensation.other}",
 									description: "${encodeURIComponent(dispensation.description)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
-									file: "${fileToSend.file ?? ''}",
-									file_name: "${fileToSend.fileName ?? ''}",
 									tickets: [
 										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
 									],
@@ -615,6 +612,9 @@ export const updateDispensation = async (
 									],
 									units: [
 										${dispensation.selectedUnits.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+									],
+									files: [
+										${dispensation.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
 							 {
