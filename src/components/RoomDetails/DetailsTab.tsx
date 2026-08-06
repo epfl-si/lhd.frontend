@@ -19,6 +19,7 @@ import {AuthorizationPanel} from "./AuthorizationPanel";
 import {Button} from "epfl-elements-react-si-extra";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {DispensationPanel} from "./DispensationPanel";
+import {AssessmentPanel} from "./AssessmentPanel";
 
 interface DetailsTabProps {
   roomData: roomDetailsType;
@@ -247,6 +248,9 @@ export const DetailsTab = ({
           </div>
           <div>
             <DispensationPanel room={roomData.name}/>
+          </div>
+          <div>
+            <AssessmentPanel room={roomData.name}/>
           </div>
         </div>
         : <></>

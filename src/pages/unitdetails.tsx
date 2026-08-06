@@ -247,6 +247,9 @@ export default function UnitDetails() {
 						<FormCard keyValue='dispensation'>
 							<a target="_blank" href={`/dispensationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.dispensation`)}</a>
 						</FormCard>
+						<FormCard keyValue='assessment'>
+							<a target="_blank" href={`/assessmentscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.assessment`)}</a>
+						</FormCard>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 			</ResponsiveTabs>
