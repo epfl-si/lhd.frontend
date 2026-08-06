@@ -145,6 +145,7 @@ export const DispensationControl = ({
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.dispensation}-{params.row.renewals}</span>
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
+					<b style={{fontSize: "smaller"}}>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</b>
 				</div>
 			}},
 		{field: "creation_date", headerName: t('dispensation.created'), flex: 0.1,
@@ -190,7 +191,7 @@ export const DispensationControl = ({
 				</div>
 			),
 		},
-		{field: "dispensation_tickets", headerName: t('dispensation.ticket'), flex: 0.2,
+		{field: "dispensation_tickets", headerName: t('dispensation.tickets'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.dispensation_tickets.map(item => {

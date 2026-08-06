@@ -30,35 +30,26 @@ export const DispensationPanel = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 
 	const columnsLarge: columnType[] = [
-		{field: "dispensation", headerName: t('dispensation.dispensation'), flex: 0.1,
+		{field: "dispensation", headerName: t('dispensation.dispensation'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.dispensation}</>
+				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
+					<span>{params.row.dispensation}-{params.row.renewals}</span>
+					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
+					<b style={{fontSize: "smaller"}}>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</b>
+				</div>
 			}},
-		{field: "subject", headerName: t('dispensation.subject'), flex: 0.1,
-			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</>
-			}},
-		{field: "renewals", headerName: t('dispensation.renewals'), flex: 0.1,
-			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.renewals}</>
-			}},
-		{field: "date_start", headerName: t('dispensation.date_start'), flex: 0.1,
+		{field: "creation_date", headerName: t('dispensation.created'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
 				const date = new Date(params.row.date_start);
-				return getFormattedDate(date);
-			},},
-		{field: "date_end", headerName: t('dispensation.date_end'), flex: 0.1,
-			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				const date = new Date(params.row.date_end);
-				return getFormattedDate(date);
-			},},
-		{field: "status", headerName: t('dispensation.status'), flex: 0.1,
-			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				return <>{params.row.status}</>
+				const dateExp = new Date(params.row.date_end);
+				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
+					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
+					<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
+				</div>
 			}},
 		{field: "dispensation_rooms", headerName: t('dispensation.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
-				<div className="form-card-div">
+				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.dispensation_rooms.map(item => {
 							return (
 								item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
@@ -68,9 +59,19 @@ export const DispensationPanel = ({
 				</div>
 			),
 		},
-		{field: "dispensation_holders", headerName: t('dispensation.holders'), flex: 0.2,
+		{field: "dispensation_units", headerName: t('dispensation.unit'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div className="form-card-div">
+					{params.row.dispensation_units.map(item => {
+							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
+						}
+					)}
+				</div>
+			),
+		},
+		{field: "dispensation_holders", headerName: t('dispensation.holders'), flex: 0.2,
+			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
+				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.dispensation_holders.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
@@ -80,9 +81,9 @@ export const DispensationPanel = ({
 				</div>
 			),
 		},
-		{field: "dispensation_tickets", headerName: t('dispensation.tickets'), flex: 0.2,
+		{field: "dispensation_tickets", headerName: t('dispensation.ticket'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
-				<div className="form-card-div">
+				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.dispensation_tickets.map(item => {
 							return (
 								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
