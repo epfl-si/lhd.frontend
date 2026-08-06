@@ -9,13 +9,15 @@ interface MultiFileUploaderProps {
 	setSelectedFiles: (files: genericType[]) => void;
 	maxFiles?: number;
 	selectedId: string;
+	model: string;
 }
 
 export default function MultiFileUploader({
 	selectedFiles,
 	setSelectedFiles,
 	maxFiles = 1,
-	selectedId
+	selectedId,
+	model
 }: MultiFileUploaderProps) {
 	const oidc = useOpenIDConnectContext();
 	const [visibleFiles, setvisibleFiles] = useState<genericType[]>(selectedFiles);
@@ -52,7 +54,7 @@ export default function MultiFileUploader({
 			if (file.file_path) {
 				return <div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
 					<a style={{fontSize: 'small'}}
-						 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedId, 'assessment', file.file_path)}
+						 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedId, model, file.file_path)}
 						 href={file.file_path}>{file.file_path.split('/').pop()}
 					</a>
 					<Button size="icon"

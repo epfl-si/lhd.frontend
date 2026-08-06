@@ -1123,7 +1123,6 @@ export const fetchDispensations = async (
 				subject_other
 				description
 				comment
-				file_path
 				created_by
 				created_on
 				modified_by
@@ -1143,6 +1142,9 @@ export const fetchDispensations = async (
 				status
 				dispensation_tickets {
 					ticket_number
+				}
+				dispensation_files {
+					file_path
 				}
 			}
 			totalCount

@@ -21,14 +21,14 @@ import {fetchDispensationHistory, fetchDispensationSubjects} from "../../utils/g
 import {MultipleSelection} from "../global/MultipleSelection";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import {Source} from '../radioprotection/SourceList';
-import {Button, TextArea} from "epfl-elements-react-si-extra";
+import {TextArea} from "epfl-elements-react-si-extra";
 import {sprintf} from "sprintf-js";
 import {MutationLogsTable} from "../global/MutationLogsTable";
-import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
 import {ConfirmSavingDispensationDialog} from "./ConfirmSavingDispensationDialog";
 import {CircularProgress} from "@mui/joy";
 import {formatDateForPickers} from "../../utils/ressources/parser";
 import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
+import MultiFileUploader from "../global/MultiFileUploader";
 
 interface AddNewDispensationDialogProps {
 	openDialog: boolean;
@@ -69,9 +69,9 @@ export const AddNewDispensationDialog = ({
 	const [selectedHolders, setSelectedHolders] = useState<personType[]>([]);
 	const [savedTickets, setSavedTickets] = useState<genericType[]>([]);
 	const [selectedTickets, setSelectedTickets] = useState<genericType[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<genericType[]>([]);
 	const [availableSubjects, setAvailableSubjects] = useState<string[]>([]);
 	const [history, setHistory] = useState<any[]>([]);
-	const [file, setFile] = useState<File | undefined>();
 	const [openDialogConfirm, setOpenDialogConfirm] = useState<boolean>(false);
 	const [loading, setLoading] = useState(false);
 
@@ -99,7 +99,7 @@ export const AddNewDispensationDialog = ({
 		setSavedTickets(selectedDispensation ? selectedDispensation.dispensation_tickets : []);
 		setSelectedTickets(selectedDispensation ? selectedDispensation.dispensation_tickets : []);
 
-		setFile(selectedDispensation && selectedDispensation.file_path ? (new File([], selectedDispensation.file_path)) : undefined);
+		setSelectedFiles(selectedDispensation ? selectedDispensation.dispensation_files : []);
 	}, [openDialog, selectedDispensation]);
 
 	const loadSubjects = async () => {
@@ -134,19 +134,13 @@ export const AddNewDispensationDialog = ({
 		setLoading(true);
 		setOpenDialogConfirm(false);
 		const dispensation = {expDate,creationDate,renewals,status,
-			subject,other,comment,description,selectedTickets,selectedHolders,selectedRooms, selectedUnits};
-		let fileBase64 = await readFileAsBase64(file);
-		const fileToSend = {
-			file: fileBase64,
-			fileName: file?.name
-		};
+			subject,other,comment,description,selectedTickets,selectedHolders,selectedRooms, selectedUnits, selectedFiles};
 		if (selectedDispensation) {
 			updateDispensation(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
 				JSON.stringify(selectedDispensation.id),
-				dispensation,
-				fileToSend
+				dispensation
 			).then(res => {
 				handleOpen(res, false);
 			});
@@ -154,8 +148,7 @@ export const AddNewDispensationDialog = ({
 			saveNewDispensation(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
-				dispensation,
-				fileToSend
+				dispensation
 			).then(res => {
 				handleOpen(res, true);
 			});
@@ -234,12 +227,6 @@ export const AddNewDispensationDialog = ({
 		setSelectedTickets(changedTickets);
 	}
 
-	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (e.target.files) {
-			setFile(e.target.files[0]);
-		}
-	};
-
 	return (
 		<>
 			<AlertDialog openDialog={openDialog}
@@ -270,23 +257,12 @@ export const AddNewDispensationDialog = ({
 				<div style={{display: "flex", flexDirection: "column"}}>
 					<div style={{display: "flex", flexDirection: "row"}}>
 						<div style={{display: "flex", flexDirection: "column"}}>
-							<div>
-								<input id="file" style={{fontSize: 'small'}} type="file" onChange={handleFileChange} accept='.pdf'/>
-							</div>
-							{selectedDispensation && file &&
-									<div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
-											<a style={{fontSize: 'small'}}
-												 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedDispensation.id, 'dispensation')}
-												 href={file.name}>{file.name.split('/').pop()}
-											</a>
-											<Button size="icon"
-															style={{marginLeft: '10px'}}
-															iconName={`#trash`}
-															onClick={() => {
-																	setFile(undefined);
-															}}/>
-									</div>
-							}
+							<MultiFileUploader
+								maxFiles={10}
+								model={'dispensation'}
+								selectedFiles={selectedFiles}
+								setSelectedFiles={setSelectedFiles}
+								selectedId={selectedDispensation?.id ?? ''} />
 						</div>
 						{selectedDispensation && <div style={{display: "flex", flexDirection: "column"}}><label
 				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}

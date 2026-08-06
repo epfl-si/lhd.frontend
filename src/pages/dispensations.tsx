@@ -312,7 +312,6 @@ export const DispensationControl = ({
 					subject_other: disp.subject_other ?? '',
 					description: disp.description,
 					comment: disp.comment ?? '',
-					file_path: disp.file_path ? disp.file_path.split('/').pop() : '',
 					created_by: disp.created_by,
 					created_on: formatDate(new Date(disp.created_on), true),
 					modified_by: disp.modified_by,
