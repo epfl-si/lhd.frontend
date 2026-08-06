@@ -10,6 +10,7 @@ interface MultiFileUploaderProps {
 	maxFiles?: number;
 	selectedId: string;
 	model: string;
+	isReadonly?: boolean;
 }
 
 export default function MultiFileUploader({
@@ -17,7 +18,8 @@ export default function MultiFileUploader({
 	setSelectedFiles,
 	maxFiles = 1,
 	selectedId,
-	model
+	model,
+	isReadonly
 }: MultiFileUploaderProps) {
 	const oidc = useOpenIDConnectContext();
 	const [visibleFiles, setvisibleFiles] = useState<genericType[]>(selectedFiles);
@@ -40,16 +42,14 @@ export default function MultiFileUploader({
 	};
 
 	return <div style={{display: "flex", flexDirection: "column"}}>
-		<div>
-			<input
-				id="file"
-				style={{fontSize: 'small'}}
-				type="file"
-				onChange={handleFileChange}
-				accept='.pdf'
-				multiple
-			/>
-		</div>
+		{!isReadonly && <input
+			id="file"
+			style={{fontSize: 'small'}}
+			type="file"
+			onChange={handleFileChange}
+			accept='.pdf'
+			multiple
+		/>}
 		{visibleFiles.map(file => {
 			if (file.file_path) {
 				return <div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>

@@ -178,7 +178,6 @@ export const fetchRoomDetails = async (
 					hazardAdditionalInfo {
 						id
 						comment
-						filePath
 						modified_by
 						modified_on
 						hazard_category {
@@ -190,6 +189,9 @@ export const fetchRoomDetails = async (
 							tag {
 								tag_name
 							}
+						}
+						hazardsAdditionalInfoHasFile{
+							file_path
 						}
 					}
 					lhd_units {
