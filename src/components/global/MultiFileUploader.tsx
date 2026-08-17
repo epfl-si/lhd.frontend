@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {handleClickFileLink, readFileAsBase64} from "../../utils/ressources/file";
+import {handleClickFileLink, readFileAsBase64, removeDuplicates} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {genericType} from "../../utils/ressources/types";
 import {Button} from "epfl-elements-react-si-extra";
@@ -34,8 +34,13 @@ export default function MultiFileUploader({
 			const base64 = await readFileAsBase64(newFiles[i]);
 			fileList.push({status: "New", file_path: newFiles[i].name, base64});
 		}
-		setSelectedFiles([...selectedFiles, ...fileList]);
-		setvisibleFiles([...visibleFiles, ...fileList]);
+
+		const selected = removeDuplicates([...selectedFiles, ...fileList]);
+		const visibles = removeDuplicates([...visibleFiles, ...fileList]);
+
+		debugger;
+		setSelectedFiles(selected);
+		setvisibleFiles(visibles);
 
 		// Allows selecting the same file again after removal
 		event.target.value = "";
@@ -47,7 +52,6 @@ export default function MultiFileUploader({
 			style={{fontSize: 'small'}}
 			type="file"
 			onChange={handleFileChange}
-			accept='.pdf'
 			multiple
 		/>}
 		{visibleFiles.map(file => {
