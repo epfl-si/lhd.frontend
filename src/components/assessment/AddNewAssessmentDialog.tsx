@@ -149,8 +149,11 @@ export const AddNewAssessmentDialog = ({
 
 	async function askForConfirmation () {
 		if (description && subject && (subject !== 'Other' || (subject === 'Other' && other))
-			&& (status === 'Draft' || (selectedRooms.filter(item => item.status !== 'Deleted').length > 0
-				&& selectedUnits.filter(item => item.status !== 'Deleted').length > 0))) {
+			&& status !== 'Active') {
+			await onAddAssessment();
+		} else if (description && subject && (subject !== 'Other' || (subject === 'Other' && other))
+			&& status === 'Active' && selectedRooms.filter(item => item.status !== 'Deleted').length > 0
+				&& selectedUnits.filter(item => item.status !== 'Deleted').length > 0) {
 			await onAddAssessment();
 		} else {
 			setNotificationType(notificationsVariants['no-assessment-chosen']);
@@ -276,10 +279,11 @@ export const AddNewAssessmentDialog = ({
 					</div>
 					<div className="rowDiv">
 						<div style={{flex: '1', margin: "5px", display: "flex", flexDirection: "column"}}>
-							<InputLabel id="subject_label" style={{fontSize: "small", fontWeight: "bold"}}>{t("assessment.subject")}</InputLabel>
+							<InputLabel id="subject_label" style={{fontSize: "small", fontWeight: "bold"}} required={true}>{t("assessment.subject")}</InputLabel>
 							<Select
 								labelId="subject_label"
 								value={subject}
+								required={true}
 								onChange={(event: SelectChangeEvent) => {
 									setSubject(event.target.value)
 								}}
@@ -328,40 +332,41 @@ export const AddNewAssessmentDialog = ({
 					</div>
 					<div className="rowDiv">
 						<div style={{width: '50%'}}>
+							<InputLabel id="requirement_label" style={{fontSize: "small", fontWeight: "bold"}} required={true}>{t("assessment.description")}</InputLabel>
 							<TextArea
 								id={"requirement"}
 								name="requirement"
 								isRequired={true}
-								label={t('assessment.description')}
 								onChange={(event) => setDescription(event)}
 								value={description}
 							/></div>
 						<div style={{width: '50%', marginLeft: '5px'}}>
-						<TextArea
-							id={"conclusion"}
-							name="conclusion"
-							label={t('assessment.conclusion')}
-							onChange={(event) => setConclusion(event)}
-							value={conclusion}
-						/></div>
+							<InputLabel id="conclusion_label" style={{fontSize: "small", fontWeight: "bold"}}>{t("assessment.conclusion")}</InputLabel>
+							<TextArea
+								id={"conclusion"}
+								name="conclusion"
+								onChange={(event) => setConclusion(event)}
+								value={conclusion}
+							/>
+						</div>
 					</div>
 					<div className="rowDiv">
 						<div className="dispensation-panel">
-							<label className='labelDetails'>{t(`assessment.room`)}</label>
+							<InputLabel style={{fontSize: "small", fontWeight: "bold"}} required={status === 'Active'}>{t("assessment.room")}</InputLabel>
 							<MultipleSelection selected={savedRooms} objectName="NewRoom"
 																 onChangeSelection={onChangeRoom}
 																 getCardTitle={getRoomTitle}
 																 fetchData={fetchRoomList}/>
 						</div>
 						<div className="dispensation-panel">
-							<label className='labelDetails'>{t(`assessment.unit`)}</label>
+							<InputLabel style={{fontSize: "small", fontWeight: "bold"}} required={status === 'Active'}>{t("assessment.unit")}</InputLabel>
 							{selectedRooms && <MultipleSelection selected={savedUnits} objectName="Unit"
 																	onChangeSelection={onChangeUnit}
 																	getCardTitle={getUnitTitle}
 																	fetchData={fetchUnitsList}/>}
 						</div>
 						<div className="dispensation-panel">
-							<label className='labelDetails'>{t(`assessment.contacts`)}</label>
+							<InputLabel style={{fontSize: "small", fontWeight: "bold"}}>{t("assessment.contacts")}</InputLabel>
 							<MultipleSelection selected={savedContacts}
 																 onChangeSelection={onChangeContact}
 																 objectName="Person"
