@@ -374,8 +374,8 @@ export const AddNewAssessmentDialog = ({
 																 fetchData={fetchPeople}/>
 						</div>
 						<div className="dispensation-panel">
-							<label className='labelDetails'>{t(`assessment.tickets`)}</label>
-							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number'/>
+							<InputLabel style={{fontSize: "small", fontWeight: "bold"}}>{t("assessment.references")}</InputLabel>
+							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number' checkFormat={false}/>
 						</div>
 					</div>
 					<MutationLogsTable history={history} />

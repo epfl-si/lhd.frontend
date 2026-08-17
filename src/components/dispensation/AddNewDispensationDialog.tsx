@@ -405,7 +405,7 @@ export const AddNewDispensationDialog = ({
 						</div>
 						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`dispensation.tickets`)}</label>
-							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number'/>
+							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number' checkFormat={true}/>
 						</div>
 					</div>
 					<MutationLogsTable history={history} />

@@ -16,12 +16,14 @@ interface SourceProps {
 	 */
 	onChangeSelection?: (currentlySelected: genericType[]) => void;
 	type: 'source' | 'ticket_number';
+	checkFormat: boolean;
 }
 
 export const Source = ({
 	selected,
 	onChangeSelection,
-	type
+	type,
+	checkFormat
 }: SourceProps) => {
 	const { t } = useTranslation();
 	const [currentlySelected, setCurrentlySelected] = React.useState<genericType[]>(selected);
@@ -66,7 +68,7 @@ export const Source = ({
 
 	function onAdd() {
 		const regex = /^SCCTI\d{7}$/;
-		if (inputValue && (type === 'source' || regex.test(inputValue))) {
+		if (inputValue && (type === 'source' || !checkFormat || regex.test(inputValue))) {
 			const newsourceType: genericType = {status: 'New'};
 			newsourceType[type] = inputValue;
 			setCurrentlySelected([...currentlySelected, newsourceType]);
@@ -120,7 +122,7 @@ export const Source = ({
 									>
 										<div>
 											<small className="text-muted">
-												{type === 'ticket_number' ? <a href={`https://go.epfl.ch/${item[type]}`} target="_blank">{item[type]}</a> : item[type]}
+												{type === 'ticket_number' && checkFormat ? <a href={`https://go.epfl.ch/${item[type]}`} target="_blank">{item[type]}</a> : item[type]}
 											</small>
 										</div>
 									</FormCard></li>)
