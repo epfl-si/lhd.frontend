@@ -87,7 +87,7 @@ export const notificationsVariants = {
 	} as notificationType,
 	'no-assessment-chosen': {
 		type: 'error',
-		text: 'Assessment subject and requirements are mandatory. You must choose at least one room and one unit.',
+		text: 'Assessment subject and requirements are mandatory. For active status, you must choose at least one room and one unit.',
 	} as notificationType,
 	'no-organism-chosen': {
 		type: 'error',
