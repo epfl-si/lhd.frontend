@@ -107,7 +107,7 @@ export const AssessmentDecisionControl = ({
 				<div className="form-card-div">
 					{params.row.assessment_tickets.map(item => {
 							return (
-								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
+								<span>• {item.ticket_number}<br/></span>
 							)
 						}
 					)}
@@ -184,7 +184,7 @@ export const AssessmentDecisionControl = ({
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.assessment_tickets.map(item => {
 							return (
-								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
+								<span>• {item.ticket_number}<br/></span>
 							)
 						}
 					)}
@@ -214,7 +214,7 @@ export const AssessmentDecisionControl = ({
 			});
 			const tickets = params.row.assessment_tickets.map(item => {
 					return (
-						<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
+						<span>• {item.ticket_number}<br/></span>
 					)
 				}
 			);
