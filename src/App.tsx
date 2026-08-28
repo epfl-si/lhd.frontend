@@ -177,7 +177,7 @@ function App() {
 				<>
 				</>
 						}
-						<li><a href={env().LHDv2_BASE_URL + "lhd_cosecs/barcodes/"}>LHD Barcode</a>
+						<li><a href={env().LIL_URL}>LIL Barcode</a>
 						</li>
 						{(connectedUser.canListRooms) &&
 				<>
