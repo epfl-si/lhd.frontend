@@ -14,6 +14,7 @@ import {AddNewUnitDialog} from "../components/Units/AddnewUnitDialog";
 import Notifications from "../components/Table/Notifications";
 import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 
 interface UnitControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -269,6 +270,37 @@ export const UnitControl = ({
 		setOpenNotification(false);
 	};
 
+	const onExport = async () => {
+		setLoading(true);
+		const results = await fetchunitsFromFullTextAndPagination(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			0, 0,
+			search
+		);
+
+		if ( results.status === 200 && results.data ) {
+			const fileName = search.split('&')
+				.map(part => part.split('=')[1])
+				.join('_');
+			const parsedResults = results.data.units.map((unit: lhdUnitsType) => {
+				return {
+					subUnit: unit.unitId ? '' : 'Yes',
+					institute: unit.institute?.name,
+					faculty: unit.institute?.school?.name,
+					professor: unit.professors.map(c => c.name + ' ' + c.surname).join(', '),
+					cosec: unit.cosecs.map(c => c.name + ' ' + c.surname).join(', ')
+				}
+			});
+			exportToExcel(parsedResults, getExportFileName(search !== '' ? `unit_${fileName}` : 'unit'));
+		} else {
+			const errors = getErrorMessage(results, 'unitsFromFullTextAndPagination');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
+		}
+		setLoading(false);
+	};
+
 	return (
 		<Box>
 			{user.canListUnits ? <>
@@ -284,11 +316,20 @@ export const UnitControl = ({
 					placeholder={t(`unit.search`)}
 					className="debounce-input"
 				/>
-				{user.canEditUnits && <Button
-					onClick={() => setOpenDialog(true)}
-					label={t(`generic.addNew`)}
-					iconName={`#plus-circle`}
-					primary/>}
+				<div className="utilsBar">
+					{user.canEditUnits && <Button
+						onClick={() => setOpenDialog(true)}
+						label={t(`generic.addNew`)}
+						iconName={`#plus-circle`}
+						primary/>}
+					{user.canListUnits && <Button
+						isDisabled={tableData.length == 0}
+						style={{minWidth: '10%', padding: '10px'}}
+						onClick={onExport}
+						label={t(`generic.export`)}
+						iconName={`#download`}
+						primary/>}
+				</div>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}

@@ -1,17 +1,21 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchHazards, fetchOrganismsFromFullText} from "../utils/graphql/FetchingTools";
+import {
+	fetchHazards,
+	fetchOrganismsFromFullText,
+	fetchunitsFromFullTextAndPagination
+} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
+import {columnType, lhdUnitsType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button, DebounceInput} from "epfl-elements-react-si-extra";
 import {Redirect, useHistory, useLocation} from "react-router-dom";
 import "../../css/styles.scss";
 import Notifications from "../components/Table/Notifications";
-import {handleClickFileLink} from "../utils/ressources/file";
+import {exportToExcel, getExportFileName, handleClickFileLink} from "../utils/ressources/file";
 import {AddNewOrganismDialog} from "../components/organism/AddNewOrganismDialog";
 import {deleteOrganism} from "../utils/graphql/PostingTools";
 import {AlertDialog} from "../components/global/AlertDialog";
@@ -250,6 +254,36 @@ export const OrganismsControl = ({
 		});
 	}
 
+	const onExport = async () => {
+		setLoading(true);
+		const results = await fetchOrganismsFromFullText(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			search,
+			0, 0
+		);
+
+		if ( results.status === 200 && results.data ) {
+			const fileName = search.split('&')
+				.map(part => part.split('=')[1])
+				.join('_');
+			const parsedResults = results.data.bios.map((org: organismType) => {
+				return {
+					institute: org.organism,
+					risk: org.risk_group,
+					updatedOn: getFormattedDate(new Date(org.updated_on)),
+					updatedBy: org.updated_by
+				}
+			});
+			exportToExcel(parsedResults, getExportFileName(search !== '' ? `org_${fileName}` : 'org'));
+		} else {
+			const errors = getErrorMessage(results, 'organismsFromFullText');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
+		}
+		setLoading(false);
+	};
+
 	return (
 		<Box>
 			<Typography gutterBottom>
@@ -264,14 +298,23 @@ export const OrganismsControl = ({
 					placeholder={t(`organism.search`)}
 					className="debounce-input"
 				/>
-				{user.canEditOrganisms && <Button
-					onClick={() => {
-						setOpenDialog(true);
-						setSelectedOrganism(undefined);
-					}}
-					label={t(`generic.addNew`)}
-					iconName={`#plus-circle`}
+				<div className="utilsBar">
+					{user.canEditOrganisms && <Button
+						onClick={() => {
+							setOpenDialog(true);
+							setSelectedOrganism(undefined);
+						}}
+						label={t(`generic.addNew`)}
+						iconName={`#plus-circle`}
+						primary/>}
+					{user.canListOrganisms && <Button
+					isDisabled={tableData.length == 0}
+					style={{minWidth: '10%', padding: '10px'}}
+					onClick={onExport}
+					label={t(`generic.export`)}
+					iconName={`#download`}
 					primary/>}
+				</div>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}

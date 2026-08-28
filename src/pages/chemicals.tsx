@@ -1,10 +1,10 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchChemicals} from "../utils/graphql/FetchingTools";
+import {fetchChemicals, fetchOrganismsFromFullText} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {chemicalsType, columnType, notificationType, UserInfo} from "../utils/ressources/types";
+import {chemicalsType, columnType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Redirect, useHistory} from "react-router-dom";
@@ -16,6 +16,8 @@ import {AddNewChemicalDialog} from "../components/chemical/AddNewChemicalDialog"
 import {deleteChemical} from "../utils/graphql/PostingTools";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {getQueryStringArray} from "../utils/web/URLUtils";
+import {getFormattedDate} from "../utils/ressources/parser";
+import {exportToExcel, getExportFileName} from "../utils/ressources/file";
 
 interface ChemicalsControlProps {
 	handleCurrentPage: (page: string) => void;
@@ -208,6 +210,37 @@ export const ChemicalsControl = ({
 		});
 	}
 
+	const onExport = async () => {
+		setLoading(true);
+		const results = await fetchChemicals(
+			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			oidc.accessToken,
+			0, 0,
+			search
+		);
+
+		if ( results.status === 200 && results.data ) {
+			const fileName = search.split('&')
+				.map(part => part.split('=')[1])
+				.join('_');
+			const parsedResults = results.data.chemicals.map((chem: chemicalsType) => {
+				return {
+					cas: chem.cas_auth_chem,
+					name: chem.auth_chem_en,
+					status: chem.flag_auth_chem ? t('chemical.active') : t('chemical.archived'),
+					fastway: chem.fastway ? t('chemical.yes') : t('chemical.no'),
+					authCode: chem.auth_code
+				}
+			});
+			exportToExcel(parsedResults, getExportFileName(search !== '' ? `chem_${fileName}` : 'chem'));
+		} else {
+			const errors = getErrorMessage(results, 'chemicalsWithPagination');
+			setNotificationType(errors.notif);
+			setOpenNotification(true);
+		}
+		setLoading(false);
+	};
+
 	return (
 		<Box>
 			{user.canListChemicals ? <>
@@ -221,14 +254,23 @@ export const ChemicalsControl = ({
 					parent="chemicalscontrol"
 					queryArray={queryArray}
 				/>
-				{user.canEditChemicals && <Button
-					onClick={() => {
-						setOpenDialog(true);
-						setSelectedChemical(undefined);
-					}}
-					label={t(`generic.addNew`)}
-					iconName={`#plus-circle`}
-					primary/>}
+				<div className="utilsBar">
+					{user.canEditChemicals && <Button
+						onClick={() => {
+							setOpenDialog(true);
+							setSelectedChemical(undefined);
+						}}
+						label={t(`generic.addNew`)}
+						iconName={`#plus-circle`}
+						primary/>}
+					{user.canListChemicals && <Button
+						isDisabled={tableData.length == 0}
+						style={{minWidth: '10%', padding: '10px'}}
+						onClick={onExport}
+						label={t(`generic.export`)}
+						iconName={`#download`}
+						primary/>}
+				</div>
 			</div>
 			<EntriesTableCategory
 				tableData={tableData}
