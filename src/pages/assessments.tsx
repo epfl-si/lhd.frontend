@@ -102,7 +102,7 @@ export const AssessmentDecisionControl = ({
 				</div>
 			),
 		},
-		{field: "assessment_tickets", headerName: t('assessment.tickets'), flex: 0.2,
+		{field: "assessment_tickets", headerName: t('assessment.references'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div className="form-card-div">
 					{params.row.assessment_tickets.map(item => {
@@ -179,7 +179,7 @@ export const AssessmentDecisionControl = ({
 				</div>
 			),
 		},
-		{field: "assessment_tickets", headerName: t('assessment.tickets'), flex: 0.2,
+		{field: "assessment_tickets", headerName: t('assessment.references'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					{params.row.assessment_tickets.map(item => {
