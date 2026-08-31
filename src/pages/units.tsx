@@ -238,7 +238,7 @@ export const UnitControl = ({
 			loadFetch();
 		}
 		setDeleted(false);
-	}, [search, user.canListUnits, deleted]);
+	}, [search, user.canListUnits, deleted, page]);
 
 	const loadFetch = async () => {
 		setLoading(true);
