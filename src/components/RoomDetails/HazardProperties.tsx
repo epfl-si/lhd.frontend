@@ -11,6 +11,7 @@ import nanoparticles from "../../../public/pictogrammes/Nanoparticles.svg"
 import noise from "../../../public/pictogrammes/Noise.svg"
 import temperature from "../../../public/pictogrammes/Temperature.svg"
 import incoherentLightSource from "../../../public/pictogrammes/IncoherentLightSource.svg"
+import leadArsenicSelenium from "../../../public/pictogrammes/LeadArsenicSelenium.svg"
 
 export function getHazardImage(hazardName: string) {
   let image;
@@ -53,6 +54,9 @@ export function getHazardImage(hazardName: string) {
       break;
     case "IncoherentLightSource":
       image = incoherentLightSource;
+      break;
+    case "LeadArsenicSelenium":
+      image = leadArsenicSelenium;
       break;
   }
   return image;
