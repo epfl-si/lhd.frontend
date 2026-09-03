@@ -14,7 +14,6 @@ const _env_development = {
   REACT_APP_HOMEPAGE_URL: "http://localhost:3000/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "//localhost:3010/graphql",
   REACT_APP_ENDPOINT_URL: "//localhost:3010",
-  LHDv2_BASE_URL:"https://lhd-127-0-0-1.nip.io/",
   LIL_URL:"https://lil-test.epfl.ch/",
   CRISTAL_URL:"cristal-test.epfl.ch",
   OIDC_SCOPE: "openid 2c822adc-1365-4b59-931f-64cde59e7d20/.default",
