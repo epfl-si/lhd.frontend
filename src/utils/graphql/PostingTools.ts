@@ -482,6 +482,9 @@ export const saveNewRadioprotection = async (
 									rooms: [
 										${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
 									],
+									files: [
+										${radioprotection.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+									],
 								)
 							 {
 								errors {
@@ -515,6 +518,9 @@ export const updateRadioprotection = async (
 									],
 									rooms: [
 										${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+									],
+									files: [
+										${radioprotection.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
 							 {
