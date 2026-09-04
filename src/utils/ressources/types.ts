@@ -91,6 +91,7 @@ export type authorizationType = {
 	unit: lhdUnitsType;
 	authorization_rooms: roomDetailsType[];
 	authorization_holders: personType[];
+	authorization_files: genericType[];
 	authorization_chemicals: chemicalsType[];
 	authorization_radiations: genericType[];
 	authority?: string;

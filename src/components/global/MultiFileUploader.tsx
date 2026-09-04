@@ -38,7 +38,6 @@ export default function MultiFileUploader({
 		const selected = removeDuplicates([...selectedFiles, ...fileList]);
 		const visibles = removeDuplicates([...visibleFiles, ...fileList]);
 
-		debugger;
 		setSelectedFiles(selected);
 		setvisibleFiles(visibles);
 

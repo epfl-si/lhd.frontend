@@ -1093,6 +1093,9 @@ export const fetchRadioprotectionAuthorizations = async (
 			authorization_radiations {
 				source
 			}
+			authorization_files {
+				file_path
+			}
 		}
 			totalCount
 		}
@@ -1185,7 +1188,7 @@ export const fetchDispensationHistory = async (
 	dispensationId: string
 ): Promise<any> => {
 	const query = `query fetchDispensationHistory {
-		mutationLogsByTable (tableName: "Dispensation,DispensationHasTicket,DispensationHasRoom,DispensationHasHolder,DispensationHasUnit", tableIdentifier: ${JSON.stringify(dispensationId)}, 
+		mutationLogsByTable (tableName: "Dispensation,DispensationHasTicket,DispensationHasRoom,DispensationHasHolder,DispensationHasUnit,DispensationHasFile", tableIdentifier: ${JSON.stringify(dispensationId)}, 
 		excludedField: "modified_on,id_dispensation,modified_by") {
 			modified_by
 			modified_on

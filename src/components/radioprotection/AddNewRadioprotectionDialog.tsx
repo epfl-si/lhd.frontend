@@ -21,6 +21,7 @@ import {fetchPeopleFromFullText, fetchRooms, fetchunitsFromFullText} from "../..
 import {MultipleSelection} from "../global/MultipleSelection";
 import {Source} from "./SourceList";
 import {getErrorMessage} from "../../utils/graphql/Utils";
+import MultiFileUploader from "../global/MultiFileUploader";
 
 interface AddNewRadioprotectionDialogProps {
 	openDialog: boolean;
@@ -57,6 +58,7 @@ export const AddNewRadioprotectionDialog = ({
 	const [selectedRooms, setSelectedRooms] = useState<roomDetailsType[]>([]);
 	const [savedHolders, setSavedHolders] = useState<personType[]>([]);
 	const [selectedHolders, setSelectedHolders] = useState<personType[]>([]);
+	const [selectedFiles, setSelectedFiles] = useState<genericType[]>([]);
 	const [savedSources, setSavedSources] = useState<genericType[]>([]);
 	const [selectedSources, setSelectedSources] = useState<genericType[]>([]);
 
@@ -74,6 +76,8 @@ export const AddNewRadioprotectionDialog = ({
 
 		setSavedHolders(selectedRadioprotection ? selectedRadioprotection.authorization_holders : []);
 		setSelectedHolders(selectedRadioprotection ? selectedRadioprotection.authorization_holders : []);
+
+		setSelectedFiles(selectedRadioprotection ? selectedRadioprotection.authorization_files : []);
 
 		setSavedSources(selectedRadioprotection ? selectedRadioprotection.authorization_radiations : []);
 		setSelectedSources(selectedRadioprotection ? selectedRadioprotection.authorization_radiations : []);
@@ -100,7 +104,7 @@ export const AddNewRadioprotectionDialog = ({
 	async function onAddRadioprotection() {
 		if ( unit && name != '' && creationDate != expDate) {
 			const radioprotection = {unit,name,expDate,creationDate,renewals,status,
-				authority,selectedSources,selectedHolders,selectedRooms};
+				authority,selectedSources,selectedHolders,selectedRooms, selectedFiles};
 			if (selectedRadioprotection) {
 				updateRadioprotection(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -222,6 +226,12 @@ export const AddNewRadioprotectionDialog = ({
 									 data={selectedRadioprotection}
 									 type='selection'>
 				<div style={{display: "flex", flexDirection: "column"}}>
+					<MultiFileUploader
+						maxFiles={10}
+						model={'authorization'}
+						selectedFiles={selectedFiles}
+						setSelectedFiles={setSelectedFiles}
+						selectedId={selectedRadioprotection?.id ?? ''} />
 					<Autocomplete
 						value={unit}
 						onChange={(event: any, newValue: lhdUnitsType) => {setUnit(newValue)}}
