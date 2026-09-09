@@ -88,7 +88,7 @@ export const HazardEditForm = ({
 		const newKey = createKey(10);
 		const id = `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`;
 		let children: { id: string; submission: { data: {}; }; form: any; }[] = [];
-		if (currentFormChild) {
+		if (currentFormChild && selectedHazardCategory !== 'LeadArsenicSelenium') {
 			children = [{
 				id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
 				form: currentFormChild
@@ -98,7 +98,7 @@ export const HazardEditForm = ({
 			id: id, submission: {data: {}},
 			form: currentForm, children: children
 		}], id, JSON.stringify(currentForm).indexOf('"required":true') == -1 &&
-			(currentFormChild ? JSON.stringify(currentFormChild).indexOf('"required":true') == -1 : true));
+			(currentFormChild && selectedHazardCategory !== 'LeadArsenicSelenium' ? JSON.stringify(currentFormChild).indexOf('"required":true') == -1 : true));
 	}
 
 	function onAddHazardChild(parentId: string) {
@@ -131,7 +131,14 @@ export const HazardEditForm = ({
 	const onChangeSubmission = (id: string) => {
 		return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
 			const oldSubmission = submissionsList.current.find(s => s.id == id);
-			if(oldSubmission) {
+			if (oldSubmission) {
+				if (selectedHazardCategory === 'LeadArsenicSelenium' && newSubmission['typeOfArea'] === 'Localized' && oldSubmission.children?.length == 0) {
+					const newKey = createKey(10);
+					oldSubmission.children.push({
+						id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+						form: currentFormChild
+					});
+				}
 				const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm,
 					children: oldSubmission.children};
 				setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == id ? changedSubmission : s), id, isValid);
