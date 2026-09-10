@@ -257,7 +257,7 @@ export const HazardEditForm = ({
 			<Button size="icon"
 							iconName={"#plus-circle"}
 							onClick={() => onAddHazard(submissionsList.current)}
-							style={{visibility: action == "Edit" ? "visible" : "hidden"}}/>
+							style={{visibility: action == "Edit" ? "visible" : "hidden", color: '#ff0000', marginTop: '5px'}}/>
 			{submissionsList.current.map(sf => <div key={sf.id + action + 'div'}>
 					<HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
 											key={sf.id + action} roomList={roomList} organismList={organismList}/>
