@@ -50,6 +50,7 @@ export const RadioprotectionsAuthorizationControl = ({
 	const [totalCount, setTotalCount] = useState<number>(0);
 	const [deleted, setDeleted] = useState(false);
 	const [openDialogDelete, setOpenDialogDelete] = useState<boolean>(false);
+	const [refresh, setRefresh] = useState<Boolean>(false)
 
 	const columnsLarge: columnType[] = [
 		{field: "unit", headerName: t('authorization.unit'), flex: 0.1,
@@ -231,7 +232,7 @@ export const RadioprotectionsAuthorizationControl = ({
 			setDeleted(false);
 			setSelected(undefined);
 		}
-	}, [search, page, user.canListAuthorizations, deleted]);
+	}, [search, page, user.canListAuthorizations, deleted, refresh]);
 
 	useEffect(() => {
 		handleCurrentPage("radioprotectionauthorizationscontrol");
@@ -250,6 +251,7 @@ export const RadioprotectionsAuthorizationControl = ({
 		if (results.status === 200 && results.data){
 			setTableData(results.data.authorizations);
 			setTotalCount(results.data.totalCount);
+			setRefresh(false);
 		} else {
 			const errors = getErrorMessage(results, 'authorizationsWithPagination');
 			setNotificationType(errors.notif);
@@ -263,6 +265,7 @@ export const RadioprotectionsAuthorizationControl = ({
 		setSearch(`Authorization=${val}`);
 		setPage(0);
 		history.push(`/radioprotectionauthorizationscontrol?Authorization=${encodeURIComponent(val)}`);
+		setRefresh(true);
 	}
 
 	const handleClose = () => {
