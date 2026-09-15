@@ -187,7 +187,11 @@ export const HazardsControl = ({
 		for (const item of parsedHazards) {
 			for (const key of ['child_submission', 'parent_submission']) {
 				if (item[key]) {
-					Object.keys(item[key]).forEach(k => allKeys.add(k));
+					Object.keys(item[key]).forEach(k => {
+						if (k !== 'status' && k !== 'delete' && k !== 'canDeleteChildren') {
+							allKeys.add(k)
+						}
+					});
 				}
 			}
 		}
@@ -206,7 +210,7 @@ export const HazardsControl = ({
 			// Add all keys with null by default
 			for (const key of allKeys) {
 				flat[key] = null;
-				if(key !== 'status' && key !== 'delete') {
+				if(key !== 'status' && key !== 'delete' && key !== 'canDeleteChildren') {
 						columns.current.push({field: key, headerName: splitCamelCase(key), width: key === 'comment' ? 300 : 200,
 							renderCell: (params: GridRenderCellParams<any, any>) => (
 								key === 'fileLink' && params.row.fileLink ?
@@ -241,6 +245,8 @@ export const HazardsControl = ({
 							flat[k] = v['organism'];
 						else if (k === 'container')
 							flat[k] = v['name'];
+						else if (k === 'declassificationDate')
+							flat[k] = getFormattedDate(new Date(v));
 						else
 							flat[k] = v;
 					});
@@ -340,7 +346,7 @@ export const HazardsControl = ({
 				for (const obj of data) {
 					const newObj = {};
 					for (let key in obj) {
-						if (!['id_lab_has_hazards_child', 'id_lab_has_hazards', 'delete', 'status'].includes(key)) {
+						if (!['id_lab_has_hazards_child', 'id_lab_has_hazards', 'delete', 'status', 'canDeleteChildren'].includes(key)) {
 							switch (key) {
 								case 'modified_on':
 									newObj[key] = getFormattedDate(new Date(obj[key]));

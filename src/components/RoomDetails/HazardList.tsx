@@ -7,6 +7,7 @@ import {HazardTitle} from "./HazardTitle";
 import {splitCamelCase} from "../../utils/ressources/jsonUtils";
 import {handleClickFileLink} from "../../utils/ressources/file";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
+import {getFormattedDate} from "../../utils/ressources/parser";
 
 interface HazardListProps {
 	submissionsList: submissionForm[];
@@ -93,7 +94,8 @@ export const HazardList = ({
 
 	return <div style={{display: 'flex', flexDirection: 'column'}}>
 		{Object.keys(groupedSubmissionList).sort().map((cat, index) => {
-			fields.current = Object.keys(groupedSubmissionList[cat].length > 0 ? groupedSubmissionList[cat][0].submission.data : []).filter(key => key != 'status' && key != "delete");
+			fields.current = Object.keys(groupedSubmissionList[cat].length > 0 ? groupedSubmissionList[cat][0].submission.data : [])
+				.filter(key => key != 'status' && key != "delete" && key !== 'canDeleteChildren');
 			findChildFields(groupedSubmissionList[cat]);
 			return <div style={{marginTop: '10px'}}>
 				{inRoomDetails && <HazardTitle selectedHazardCategory={cat}
@@ -117,10 +119,16 @@ export const HazardList = ({
 										sx={{'&:last-child td, &:last-child th': {border: 0}}}
 									>
 										{fields.current.map((field) => {
-											const label = getValueFromSubmission(submission.submission.data[field]);
-											return <StyledTableCell inRoomDetails={inRoomDetails} component="th" scope="row">
-												{label}
-											</StyledTableCell>
+											if (field === 'declassificationDate') {
+												return <StyledTableCell inRoomDetails={inRoomDetails} component="th" scope="row">
+													{getFormattedDate((new Date(submission.submission.data[field])))}
+												</StyledTableCell>
+											} else {
+												const label = getValueFromSubmission(submission.submission.data[field]);
+												return <StyledTableCell inRoomDetails={inRoomDetails} component="th" scope="row">
+													{label}
+												</StyledTableCell>
+											}
 										})}
 									</TableRow>
 									{submission.children && submission.children.length > 0 && <TableRow>
