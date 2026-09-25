@@ -58,7 +58,7 @@ export const AddNewOrganismDialog = ({
 			const fileName = fileBase64 ? date.toISOString().split("T")[0] + "_" + textInput.replaceAll(" ", "_").replaceAll("/", "_") + ".pdf" : '';
 			if (selectedOrganism) {
 				updateOrganism(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					JSON.stringify(selectedOrganism.opLock),
 					textInput,
@@ -72,7 +72,7 @@ export const AddNewOrganismDialog = ({
 				});
 			} else {
 				saveNewOrganism(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					textInput,
 					risk,

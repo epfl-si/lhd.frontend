@@ -348,19 +348,30 @@ export const saveNewOrganism = async (
 	risk: number,
 	file: {name?: string, content?: string}
 ): Promise<any> => {
-	const query = `mutation addOrganism {
-							 addOrganism(organismName: "${organismName}",
-								risk: ${risk},
-								fileContent: "${file.content ?? ''}",
-								fileName: "${file.name ?? ''}")
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
-						}`;
-	return doGraphQL(query, {}, address, authToken);
+	const query = `
+    mutation addOrganism(
+      $organismName: String!
+      $risk: Int!
+      $fileContent: String
+      $fileName: String
+    ) {
+      addOrganism(
+        organismName: $organismName
+        risk: $risk
+        fileContent: $fileContent
+        fileName: $fileName
+      )
+    }
+  `;
+
+	const variables = {
+		organismName,
+		risk,
+		...(file.content && { fileContent: file.content }),
+		...(file.name && { fileName: file.name }),
+	};
+
+	return doGraphQL(query, variables, address, authToken);
 };
 
 export const updateOrganism = async (
