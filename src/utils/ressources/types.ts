@@ -63,12 +63,12 @@ export type lhdUnitsFromAPIType = {
 };
 
 export type organismType = {
-	id: string;
+	opLock: string;
 	organism: string;
-	risk_group: number;
+	riskGroup: number;
 	filePath: string;
-	updated_on: Date;
-	updated_by: string;
+	updatedOn: Date;
+	updatedBy: string;
 }
 
 export type chemicalsType = {

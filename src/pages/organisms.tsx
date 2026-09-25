@@ -61,20 +61,20 @@ export const OrganismsControl = ({
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.organism
 			)},
-		{field: "risk_group", headerName: t('organism.risk'), width: 80,
+		{field: "riskGroup", headerName: t('organism.risk'), width: 80,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				params.row.risk_group
+				params.row.riskGroup
 			)},
 		{field: "filePath", headerName: t('organism.file'), width: 200, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
-																 onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
+																 onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.opLock, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>
 			)
 		},
-		{field: "updated_on", headerName: t('organism.updated_on'), width: 100,
+		{field: "updatedOn", headerName: t('organism.updated_on'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
-				const date = new Date(params.row.updated_on);
+				const date = new Date(params.row.updatedOn);
 				return getFormattedDate(date);
 			},
 			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
@@ -83,9 +83,9 @@ export const OrganismsControl = ({
 				return getFormattedDate(date);
 			}
 		},
-		{field: "updated_by", headerName: t('organism.updated_by'), width: 200,
+		{field: "updatedBy", headerName: t('organism.updated_by'), width: 200,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
-				params.row.updated_by
+				params.row.updatedBy
 			)},
 		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
@@ -106,7 +106,7 @@ export const OrganismsControl = ({
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					<span>
-						<b>{params.row.organism}</b><br/>{` (${t('organism.risk')} : ${params.row.risk_group})`}
+						<b>{params.row.organism}</b><br/>{` (${t('organism.risk')} : ${params.row.riskGroup})`}
 					</span>
 				</div>
 			},
@@ -115,15 +115,15 @@ export const OrganismsControl = ({
 		{field: "filePath", headerName: t('organism.file'), width: 150, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => (
 				params.row.filePath && params.row.filePath != 'NA' ? <a href={params.row.filePath}
-																																onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
+																																onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.opLock, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>
 			)
 		},
-		{field: "updated_by", headerName: t('organism.updated'), width: 150,
+		{field: "updatedBy", headerName: t('organism.updated'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
-				const date = new Date(params.row.updated_on);
+				const date = new Date(params.row.updatedOn);
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
-					{params.row.updated_by}
+					{params.row.updatedBy}
 					<br/>
 					{'(' + getFormattedDate(date) + ')'}
 				</div>
@@ -147,17 +147,17 @@ export const OrganismsControl = ({
 	const columnsSmall: columnType[] = [
 		{field: "organism", headerName: t('organism.name'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, organismType>) => {
-				const date = new Date(params.row.updated_on);
+				const date = new Date(params.row.updatedOn);
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					<span>
-						<b>{params.row.organism}</b>{` (${t('organism.risk')} : ${params.row.risk_group})`}
+						<b>{params.row.organism}</b>{` (${t('organism.risk')} : ${params.row.riskGroup})`}
 					</span>
 					{params.row.filePath && params.row.filePath != 'NA' ?
-					<a href={params.row.filePath} onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
+					<a href={params.row.filePath} onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.opLock, 'organism')}>{params.row.filePath.split('/').pop()}</a> :
 					<></>}
 					<div style={{display: "flex", flexDirection: 'row'}}>
 						<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>
-							{params.row.updated_by + '(' + getFormattedDate(date) + ')'}
+							{params.row.updatedBy + '(' + getFormattedDate(date) + ')'}
 						</span>
 					</div>
 				</div>
@@ -179,7 +179,7 @@ export const OrganismsControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchOrganismsFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			search,
 			PAGE_SIZE,
@@ -237,7 +237,7 @@ export const OrganismsControl = ({
 		deleteOrganism(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			JSON.stringify(dataOrganism?.id),
+			JSON.stringify(dataOrganism?.opLock),
 		).then(res => {
 			const errors = getErrorMessage(res, 'deleteOrganism');
 			if(errors.errorCount == 0) {
@@ -270,9 +270,9 @@ export const OrganismsControl = ({
 			const parsedResults = results.data.bios.map((org: organismType) => {
 				return {
 					institute: org.organism,
-					risk: org.risk_group,
-					updatedOn: getFormattedDate(new Date(org.updated_on)),
-					updatedBy: org.updated_by
+					risk: org.riskGroup,
+					updatedOn: getFormattedDate(new Date(org.updatedOn)),
+					updatedBy: org.updatedBy
 				}
 			});
 			exportToExcel(parsedResults, getExportFileName(search !== '' ? `org_${fileName}` : 'org'));

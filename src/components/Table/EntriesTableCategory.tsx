@@ -126,6 +126,8 @@ export function EntriesTableCategory({
 								return row.dispensation;
 							case "assessment":
 								return row.assessment;
+							case "organism":
+								return row.opLock;
 							default:
 								return row.id;
 						}

@@ -36,12 +36,12 @@ export const AddNewOrganismDialog = ({
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [textInput, setTextInput] = useState<string>(selectedOrganism ? selectedOrganism.organism : "");
-	const [risk, setRisk] = useState<number | undefined>(selectedOrganism ? selectedOrganism.risk_group : undefined);
+	const [risk, setRisk] = useState<number | undefined>(selectedOrganism ? selectedOrganism.riskGroup : undefined);
 	const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 	useEffect(() => {
 		setTextInput(selectedOrganism ? selectedOrganism.organism : '');
-		setRisk(selectedOrganism ? selectedOrganism.risk_group : undefined);
+		setRisk(selectedOrganism ? selectedOrganism.riskGroup : undefined);
 		setSelectedFile(selectedOrganism?.filePath ? (new File([], selectedOrganism?.filePath)) : null);
 	}, [openDialog, selectedOrganism]);
 
@@ -60,7 +60,7 @@ export const AddNewOrganismDialog = ({
 				updateOrganism(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 					oidc.accessToken,
-					JSON.stringify(selectedOrganism.id),
+					JSON.stringify(selectedOrganism.opLock),
 					textInput,
 					risk,
 					{
@@ -138,7 +138,7 @@ export const AddNewOrganismDialog = ({
 				{selectedOrganism && selectedOrganism.filePath && selectedFile &&
 			<div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
 				<a href={selectedOrganism.filePath}
-						onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedOrganism.id, 'organism')}>
+						onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedOrganism?.opLock, 'organism')}>
 					{selectedOrganism.filePath.split('/').pop()}
 				</a>
 				<Button size="icon"
