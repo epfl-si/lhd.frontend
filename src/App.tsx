@@ -53,7 +53,7 @@ function App() {
 		canEditChemicals: false,
 		canListAuthorizations: false,
 		canEditAuthorizations: false,
-		canListPersons: false,
+		canListPeople: false,
 		canListForms: false,
 		canEditAssessments: false,
 		canEditDispensations: false,

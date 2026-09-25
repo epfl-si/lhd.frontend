@@ -23,7 +23,7 @@ export type UserInfo = {
 	canEditDispensations?: boolean;
 	canListAssessments?: boolean;
 	canEditAssessments?: boolean;
-	canListPersons?: boolean;
+	canListPeople?: boolean;
 	canListForms?: boolean;
 };
 
