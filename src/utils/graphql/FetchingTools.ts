@@ -910,12 +910,12 @@ export const fetchOrganismsFromFullText = async (
 	const query: string = `query OrganismFetchFromFullText {
 						organismsFromFullText(take: ${take}, skip: ${skip}, search: "${search}") {
 							bios {
-								id
+								opLock
 								organism
-								risk_group
+								riskGroup
 								filePath
-								updated_on
-								updated_by
+								updatedOn
+								updatedBy
 							}
 							totalCount
 						}

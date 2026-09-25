@@ -4,7 +4,7 @@ import {fetchunitsFromFullTextAndPagination} from "../utils/graphql/FetchingTool
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
+import {columnType, lhdUnitsType, notificationType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button, DebounceInput} from "epfl-elements-react-si-extra";
@@ -128,7 +128,7 @@ export const UnitControl = ({
 				params.row.unitId ? <></> :
 					<>✔️</>
 			),
-			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
+			valueFormatter: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				return params.value ? '' : '✔️';
 			}
 		},
@@ -184,7 +184,7 @@ export const UnitControl = ({
 				params.row.unitId ? <></> :
 					<>✔️</>
 			),
-			valueFormatter: (params: GridRenderCellParams<any, organismType>) => {
+			valueFormatter: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				return params.value ? '' : '✔️';
 			}
 		},

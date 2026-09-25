@@ -13,6 +13,7 @@ const _env_development = {
   REACT_APP_AUTH_SERVER_URL: "https://login.microsoftonline.com/f6c2556a-c4fb-4ab1-a2c7-9e220df11c43/v2.0",
   REACT_APP_HOMEPAGE_URL: "http://localhost:3000/",
   REACT_APP_GRAPHQL_ENDPOINT_URL: "//localhost:3010/graphql",
+  REACT_APP_BACKEND_ENDPOINT_URL: "//localhost:3020/graphql",
   REACT_APP_ENDPOINT_URL: "//localhost:3010",
   LIL_URL:"https://lil-test.epfl.ch/",
   CRISTAL_URL:"cristal-test.epfl.ch",
