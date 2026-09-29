@@ -92,11 +92,11 @@ export const SubUnits = ({
 			</div>
 			<div className="form-card-div">
 				<ul>
-					<li>
+					<li key={parentName}>
 						<span>{currentlySelected.length>0 ? parentName : t('unit_details.noSubUnits')}</span>
 						<ul className="nested">
 							{currentlySelected.map(item => {
-									return (<li><FormCard
+									return (<li key={item.name}><FormCard
 										key={item.name}
 										keyValue={item.name}
 										icon={item.status === 'Deleted' ? '#rotate-ccw' : '#trash-2'}
