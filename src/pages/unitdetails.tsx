@@ -2,7 +2,7 @@ import {Typography} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
 import {env} from '../utils/env.js';
 import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
-import {lhdUnitsType, notificationType, personType} from '../utils/ressources/types';
+import {lhdUnitsType, notificationType, profile} from '../utils/ressources/types';
 import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchPeopleFromFullText, fetchUnitDetails} from "../utils/graphql/FetchingTools";
@@ -24,13 +24,10 @@ export default function UnitDetails() {
 	const { t } = useTranslation();
 	const history = useHistory();
 	const oidc = useOpenIDConnectContext();
-	const [data, setData] = useState<lhdUnitsType[]>([]);
-
-	const [savedProfs, setSavedProfs] = useState<personType[]>([]);
-	const [savedCosecs, setSavedCosecs] = useState<personType[]>([]);
+	const [data, setData] = useState<lhdUnitsType>();
+	const [savedProfiles, setSavedProfiles] = useState<profile[]>([]);
+	const [selectedProfiles, setSelectedProfiles] = useState<profile[]>([]);
 	const [savedSubUnits, setSavedSubUnits] = useState<lhdUnitsType[]>([]);
-	const [selectedProfs, setSelectedProfs] = useState<personType[]>([]);
-	const [selectedCosecs, setSelectedCosecs] = useState<personType[]>([]);
 	const [selectedSubUnits, setSelectedSubUnits] = useState<lhdUnitsType[]>([]);
 	const [deleted, setDeleted] = useState(false);
 
@@ -50,23 +47,19 @@ export default function UnitDetails() {
 	const fetchData = async () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const results = await fetchUnitDetails(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			decodeURIComponent(urlParams.get('unit') as string),
 			{}
 		);
 
-		if (results.status === 200 && results.data && typeof results.data !== 'string') {
+		if (results.status === 200 && results.data) {
 			setData(results.data);
-			if (results.data[0]) {
-				setSavedProfs(results.data[0]?.professors);
-				setSavedCosecs(results.data[0]?.cosecs);
-				setSavedSubUnits(results.data[0].subUnits);
-				setSelectedCosecs(results.data[0]?.cosecs);
-				setSelectedProfs(results.data[0]?.professors);
-				setSelectedSubUnits(results.data[0].subUnits);
-				setInputValueForEdit(results.data[0].name.substring(results.data[0].name.indexOf('(') + 1, results.data[0].name.indexOf(')')));
-			}
+			setSavedProfiles(results.data?.profiles);
+			setSelectedProfiles(results.data?.profiles);
+			setSavedSubUnits(results.data.subUnits);
+			setSelectedSubUnits(results.data.subUnits);
+			setInputValueForEdit(results.data.name.substring(results.data.name.indexOf('(') + 1, results.data.name.indexOf(')')));
 		} else {
 			const errors = getErrorMessage(results, 'units');
 			setNotificationType(errors.notif);
@@ -84,26 +77,22 @@ export default function UnitDetails() {
 	}
 
 	function saveUnitDetails() {
-		let newName: string = data[0]?.unitId ? data[0]?.name : data[0]?.name.replace(/\(.*?\)/, `(${inputValueForEdit})`);
+		let newName: string = data?.unitId ? data?.name : data?.name.replace(/\(.*?\)/, `(${inputValueForEdit})`);
 		updateUnit(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
-			{id: JSON.stringify(data[0]?.id), unit: newName, profs: selectedProfs, cosecs: selectedCosecs, subUnits: selectedSubUnits},
+			{id: JSON.stringify(data?.id), unit: newName, profs: [], cosecs: [], subUnits: selectedSubUnits},
 		).then(res => {
 			setOpenDialogEdit(false);
 			handleOpen(res);
-			if (!data[0]?.unitId && newName != data[0]?.name) {
+			if (!data?.unitId && newName != data?.name) {
 				history.push(`/unitdetails?unit=${encodeURIComponent(newName)}`);
 			}
 		});
 	}
 
-	function onChangeProfs(changedPerson: personType[]) {
-		setSelectedProfs(changedPerson);
-	}
-
-	function onChangeCosecs(changedPerson: personType[]) {
-		setSelectedCosecs(changedPerson);
+	function onChangeProfiles(changedPerson: profile[]) {
+		setSelectedProfiles(changedPerson);
 	}
 
 	function onChangeSubUnits(changedSubUnit: lhdUnitsType[]) {
@@ -127,11 +116,11 @@ export default function UnitDetails() {
 		setOpenNotification(false);
 	};
 
-	function getPersonTitle(person: personType) {
-		return person.name + ' ' + person.surname;
+	function getPersonTitle(person: profile) {
+		return person.person.name + ' ' + person.person.surname;
 	}
 
-	const fetchPeople = async (newValue: string): Promise<personType[]> => {
+	const fetchPeople = async (newValue: string): Promise<profile[]> => {
 		const results = await fetchPeopleFromFullText(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
@@ -150,11 +139,11 @@ export default function UnitDetails() {
 	};
 
 	function getSNOWLinkForUnit() {
-		return `https://epfl.service-now.com/now/nav/ui/classic/params/target/u_scc_ticket_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3DGOTOu_requester_as.u_unitLIKE${data[0]?.name}%26sysparm_query_encoded%3DGOTOu_requester_as.u_unitLIKE${data[0]?.name}%26sysparm_view%3D`;
+		return `https://epfl.service-now.com/now/nav/ui/classic/params/target/u_scc_ticket_list.do%3Fsysparm_first_row%3D1%26sysparm_query%3DGOTOu_requester_as.u_unitLIKE${data?.name}%26sysparm_query_encoded%3DGOTOu_requester_as.u_unitLIKE${data?.name}%26sysparm_view%3D`;
 	}
 
 	function getSNOWLinkForUnitAccidents() {
-		return `https://epfl.service-now.com/sc_req_item_list.do?sysparm_query=cat_item%3Dccbe6d4187038110252bece60cbb35bc%5Eu_caller_as.u_unitLIKE${data[0]?.name}`;
+		return `https://epfl.service-now.com/sc_req_item_list.do?sysparm_query=cat_item%3Dccbe6d4187038110252bece60cbb35bc%5Eu_caller_as.u_unitLIKE${data?.name}`;
 	}
 
 	return (
@@ -162,12 +151,12 @@ export default function UnitDetails() {
 			<BackButton icon="#arrow-left" onClickButton={() => {history.push("/unitcontrol")}} alwaysPresent={false}/>
 			<Typography style={{display:"flex"}} gutterBottom>
 				{
-					(data[0]?.unitId ? '' :
+					(data?.unitId ? '' :
 						<svg aria-hidden="true" className="icon feather" style={{margin: '3px'}}>
 							<use xlinkHref={`#layers`}></use>
 						</svg>)
-				} {(t(`unit_details.title`)).concat(' ').concat(getUnitTitle(data[0]))}
-				{(data[0]?.unitId ? '' :
+				} {(t(`unit_details.title`)).concat(' ').concat(getUnitTitle(data))}
+				{(data?.unitId ? '' :
 				<Button
 					style={{marginLeft: '10px'}}
 					onClick={() => setOpenDialogEdit(true)}
@@ -186,41 +175,21 @@ export default function UnitDetails() {
 						<UnitTabTitle title={t(`unit_details.profTab`)} icon='#user'/>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
-						<MultipleSelection selected={savedProfs}
-															 onChangeSelection={onChangeProfs}
+						<MultipleSelection selected={savedProfiles}
+															 onChangeSelection={onChangeProfiles}
 															 objectName="Person"
 															 getCardTitle={getPersonTitle}
 															 fetchData={fetchPeople}
-															 unitResponsible={data[0]?.responsible?.sciper}
 						/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
-				<ResponsiveTabs.Tab key="cosec" id="cosec">
-					<ResponsiveTabs.Tab.Title>
-						<UnitTabTitle title={t(`unit_details.cosecTab`)} icon='#shield'/>
-					</ResponsiveTabs.Tab.Title>
-					<ResponsiveTabs.Tab.Content>
-						<MultipleSelection selected={savedCosecs}
-															 onChangeSelection={onChangeCosecs}
-															 objectName="Person"
-															 getCardTitle={getPersonTitle}
-															 fetchData={fetchPeople}/>
-					</ResponsiveTabs.Tab.Content>
-				</ResponsiveTabs.Tab>
-			</ResponsiveTabs>
-			<ResponsiveTabs
-				cardStyle={{
-					background: 'white',
-					fontSize: 'small'
-				}}
-			>
 				{
-					data[0]?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits">
+					data?.unitId ? (<ResponsiveTabs.Tab key="subunits" id="subunits">
 						<ResponsiveTabs.Tab.Title>
 							<UnitTabTitle title={t(`unit_details.subunitTab`)} icon='#layers'/>
 						</ResponsiveTabs.Tab.Title>
 						<ResponsiveTabs.Tab.Content>
-							<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data[0]?.name}/>
+							<SubUnits selected={savedSubUnits} onChangeSelection={onChangeSubUnits} parentName={data?.name}/>
 						</ResponsiveTabs.Tab.Content>
 					</ResponsiveTabs.Tab>) : <></>
 				}
@@ -236,24 +205,24 @@ export default function UnitDetails() {
 							<a target="_blank" href={getSNOWLinkForUnitAccidents()} rel="noreferrer">{t(`unit_details.linkUnitTicketsSnow`)}</a>
 						</FormCard>
 						<FormCard keyValue='rooms'>
-							<a target="_blank" href={`/roomcontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.rooms`)}</a>
+							<a target="_blank" href={`/roomcontrol?Unit=${data?.name}`} rel="noreferrer">{t(`unit_details.rooms`)}</a>
 						</FormCard>
 						<FormCard keyValue='radioAuth'>
-							<a target="_blank" href={`/radioprotectionauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.radioAuth`)}</a>
+							<a target="_blank" href={`/radioprotectionauthorizationscontrol?Unit=${data?.name}`} rel="noreferrer">{t(`unit_details.radioAuth`)}</a>
 						</FormCard>
 						<FormCard keyValue='chemAuth'>
-							<a target="_blank" href={`/chemicalauthorizationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.chemAuth`)}</a>
+							<a target="_blank" href={`/chemicalauthorizationscontrol?Unit=${data?.name}`} rel="noreferrer">{t(`unit_details.chemAuth`)}</a>
 						</FormCard>
 						<FormCard keyValue='dispensation'>
-							<a target="_blank" href={`/dispensationscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.dispensation`)}</a>
+							<a target="_blank" href={`/dispensationscontrol?Unit=${data?.name}`} rel="noreferrer">{t(`unit_details.dispensation`)}</a>
 						</FormCard>
 						<FormCard keyValue='assessment'>
-							<a target="_blank" href={`/assessmentscontrol?Unit=${data[0]?.name}`} rel="noreferrer">{t(`unit_details.assessment`)}</a>
+							<a target="_blank" href={`/assessmentscontrol?Unit=${data?.name}`} rel="noreferrer">{t(`unit_details.assessment`)}</a>
 						</FormCard>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 			</ResponsiveTabs>
-			<AuditReportPanel lhd_units={data} style={{marginLeft: '20px'}}/>
+			<AuditReportPanel lhd_units={data ? [data] : []} style={{marginLeft: '20px'}}/>
 			<div style={{marginTop: '50px', display: "flex", flexDirection: "row"}}>
 				<Button
 					onClick={() => setOpenDialog(true)}
@@ -273,7 +242,7 @@ export default function UnitDetails() {
 				close={handleClose}
 			/>
 			{deleted ? <Redirect to="/unitcontrol"/> : <></>}
-			<DeleteUnitDialog unit={data[0]}
+			<DeleteUnitDialog unit={data}
 												openDialog={openDialog}
 												setOpenDialog={setOpenDialog}
 												setDeleted={setDeleted}

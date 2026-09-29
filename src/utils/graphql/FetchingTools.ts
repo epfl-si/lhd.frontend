@@ -51,7 +51,7 @@ type fetchKindRoomType = {
 
 type fetchUnitsType = {
 	status?: number;
-	data?: lhdUnitsType[] | string;
+	data?: lhdUnitsType;
 	errors?: any;
 };
 
@@ -264,42 +264,39 @@ export const fetchUnitDetails = async (
 	variables: Object
 ): Promise<fetchUnitsType> => {
 	const query: string = `query SingleUnitFetch { 
-						units (where: {name: { equals: "${unit}"} }) {
-							id
+						unitByName (name: "${unit}") {
+							name
+							opLock
 							unitId
-								name
-								responsible {
-									sciper
-								}
-								unitType
-								institute {
+							unitType
+							institute {
 									name
 									school {
-										name
+											name
 									}
-								}
-								cosecs {
-									name
-									surname
+							}
+							responsible {
 									sciper
-									email
-								}
-								professors {
+							}
+							subUnits {
 									name
-									surname
-									sciper
-									email
-								}
-								subUnits {
-									name
-								}
+							}
+							profiles {
+									role
+									person {
+											email
+											name
+											sciper
+											surname
+									}
+							}
 						},
 					}`;
 
 	const result = await doGraphQL(query, variables, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.units,
+		data: result.data?.unitByName,
 		errors: result.errors
 	};
 };
@@ -318,40 +315,6 @@ export const fetchRoomTypes = async (
 	return {
 		status: result.status,
 		data: result.data?.roomKinds,
-		errors: result.errors
-	};
-};
-
-export const fetchUnits = async (
-	address: string | undefined,
-	authToken: string | undefined
-): Promise<fetchUnitsType> => {
-	const query: string = `query UnitFetch { 
-						units {
-							name
-							unitId
-							id
-							institute {
-								name
-								school {
-									name
-								}
-							}
-							cosecs {
-								name
-								surname
-							}
-							professors {
-								name
-								surname
-							}
-						}
-					}`;
-
-	const result = await doGraphQL(query, {}, address, authToken);
-	return {
-		status: result.status,
-		data: result.data?.units,
 		errors: result.errors
 	};
 };
