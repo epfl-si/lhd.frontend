@@ -261,7 +261,7 @@ export const UnitControl = ({
 	const onExport = async () => {
 		setLoading(true);
 		const results = await fetchunitsFromFullTextAndPagination(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0, 0,
 			search
@@ -274,10 +274,10 @@ export const UnitControl = ({
 			const parsedResults = results.data.units.map((unit: lhdUnitsType) => {
 				return {
 					subUnit: unit.unitId ? '' : 'Yes',
+					name: unit.name,
 					institute: unit.institute?.name,
 					faculty: unit.institute?.school?.name,
-					professor: unit.professors.map(c => c.name + ' ' + c.surname).join(', '),
-					cosec: unit.cosecs.map(c => c.name + ' ' + c.surname).join(', ')
+					profile: unit.profiles.map(c => `${c.person.name} ${c.person.surname} (${c.role})`).join(', '),
 				}
 			});
 			exportToExcel(parsedResults, getExportFileName(search !== '' ? `unit_${fileName}` : 'unit'));
