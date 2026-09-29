@@ -2,13 +2,12 @@ import {Typography} from '@material-ui/core';
 import React, {useEffect, useState} from 'react';
 import {env} from '../utils/env.js';
 import {useOpenIDConnectContext} from '@epfl-si/react-appauth';
-import {lhdUnitsType, notificationType, profile} from '../utils/ressources/types';
+import {lhdUnitsType, notificationType, personType, profile} from '../utils/ressources/types';
 import '../../css/styles.scss'
 import {notificationsVariants} from "../utils/ressources/variants";
 import {fetchPeopleFromFullText, fetchUnitDetails} from "../utils/graphql/FetchingTools";
 import {Button, FormCard, ResponsiveTabs, Text} from "epfl-elements-react-si-extra";
 import Notifications from "../components/Table/Notifications";
-import {MultipleSelection} from "../components/global/MultipleSelection";
 import {SubUnits} from "../components/Units/SubUnitsList";
 import {updateUnit} from "../utils/graphql/PostingTools";
 import {useTranslation} from "react-i18next";
@@ -19,6 +18,8 @@ import {BackButton} from "../components/global/BackButton";
 import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 import {AuditReportPanel} from "../components/Units/AuditReportPanel";
 import {getErrorMessage} from "../utils/graphql/Utils";
+import {getFormattedDate} from "../utils/ressources/parser";
+import {MultipleSelectionForProfile} from "../components/global/MultipleSelectionForProfile";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -117,10 +118,18 @@ export default function UnitDetails() {
 	};
 
 	function getPersonTitle(person: profile) {
-		return person.person.name + ' ' + person.person.surname;
+		if (person.expirationDate) {
+			return `${person.role == 'Professor' ? '🎓' : '⛑️'} ${person.person.name} ${person.person.surname} - ${getFormattedDate(new Date(person.expirationDate))}`;
+		} else {
+			return `⭐ ${person.role == 'Professor' ? '🎓' : '⛑️'} ${person.person.name} ${person.person.surname}`;
+		}
 	}
 
-	const fetchPeople = async (newValue: string): Promise<profile[]> => {
+	function getSuggestionTitle(person: personType) {
+		return `${person.name} ${person.surname}`;
+	}
+
+	const fetchPeople = async (newValue: string): Promise<personType[]> => {
 		const results = await fetchPeopleFromFullText(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
@@ -175,12 +184,11 @@ export default function UnitDetails() {
 						<UnitTabTitle title={t(`unit_details.profTab`)} icon='#user'/>
 					</ResponsiveTabs.Tab.Title>
 					<ResponsiveTabs.Tab.Content>
-						<MultipleSelection selected={savedProfiles}
-															 onChangeSelection={onChangeProfiles}
-															 objectName="Person"
-															 getCardTitle={getPersonTitle}
-															 fetchData={fetchPeople}
-						/>
+						<MultipleSelectionForProfile selected={savedProfiles}
+																				 onChangeSelection={onChangeProfiles}
+																				 getCardTitle={getPersonTitle}
+																				 fetchData={fetchPeople}
+																				 getSuggestionTitle={getSuggestionTitle}/>
 					</ResponsiveTabs.Tab.Content>
 				</ResponsiveTabs.Tab>
 				{

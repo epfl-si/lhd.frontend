@@ -283,6 +283,7 @@ export const fetchUnitDetails = async (
 							}
 							profiles {
 									role
+									expirationDate
 									person {
 											email
 											name
@@ -612,7 +613,7 @@ export const fetchPeopleFromFullText = async (
 	authToken: string | undefined,
 	fullText: string | null
 ): Promise<any> => {
-	const query = `query FullTextTest {
+	const query = `query personFullText {
 				personFullText(search:"${fullText}", lhdOnly: false) {
 					... on DirectoryPerson { name surname email sciper type}
 					... on Person { name surname email sciper type}

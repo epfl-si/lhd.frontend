@@ -143,6 +143,7 @@ export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
 	id: string;
+	// TODO remove these two fields
 	cosecs: personType[];
 	professors: personType[];
 	profiles: profile[];
@@ -155,7 +156,9 @@ export type lhdUnitsType = {
 
 export type profile = {
 	role: string;
+	expirationDate: Date;
 	person: personType;
+	status?: 'New' | 'Deleted' | 'Default';
 }
 
 export type genericType = {
