@@ -145,12 +145,18 @@ export type lhdUnitsType = {
 	id: string;
 	cosecs: personType[];
 	professors: personType[];
+	profiles: profile[];
 	subUnits: lhdUnitsType[];
 	institute?: instituteType;
 	responsible?: responsible;
 	unitType: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
+
+export type profile = {
+	role: string;
+	person: personType;
+}
 
 export type genericType = {
 	file_path?: string;

@@ -110,8 +110,6 @@ export function EntriesTableCategory({
 					}}
 					getRowId={(row: any) =>  {
 						switch ( pageToOpen ) {
-							case "unit":
-								return row.name;
 							case "chemicalauthorizations":
 							case "chemicalauthorizationsByRoom":
 							case "radioprotectionauthorization":
@@ -127,6 +125,7 @@ export function EntriesTableCategory({
 							case "assessment":
 								return row.assessment;
 							case "organism":
+							case "unit":
 								return row.opLock;
 							default:
 								return row.id;

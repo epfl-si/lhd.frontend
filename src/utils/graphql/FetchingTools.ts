@@ -579,26 +579,25 @@ export const fetchunitsFromFullTextAndPagination = async (
 ): Promise<fetchUnitsTypeWithPagination> => {
 	const query: string = `query UnitFetchFromFullText { 
 						unitsFromFullTextAndPagination(take: ${take}, skip: ${skip}, search: "${search}") {
-							units {
-								name
-								unitId
-								id
-								institute {
-									name
-									school {
-										name
-									}
-								}
-								cosecs {
-									name
-									surname
-								}
-								professors {
-									name
-									surname
-								}
-							}
 							totalCount
+							units {
+									name
+									opLock
+									unitId
+									institute {
+											name
+											school {
+													name
+											}
+									}
+									profiles {
+											role
+											person {
+													name
+													surname
+											}
+									}
+							}
 						}
 					}`;
 
