@@ -85,28 +85,20 @@ export const UnitControl = ({
 				return "";
 			}},
 		{
-			field: "professors", headerName: t('unit.prof'), width: 200,
-			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
-				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
-				return <span style={{lineHeight: '20px', fontSize: "small"}}>
-					{professors}
-				</span>
-			},
+			field: "profiles", headerName: t('unit.prof'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				<div className="form-card-div">
+					{params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
+						.map(c => {
+							return <span>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+						})}
+				</div>
+			),
 			valueGetter: (params: GridRenderCellParams<any, lhdUnitsType>) =>
-				params.row.professors.map(c => c.name + ' ' + c.surname).join(', ')
+				params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
+					.map(c => `${c.person.name} ${c.person.surname} (${c.role})`).join(', ')
 		},
-		{
-			field: "cosecs", headerName: t('unit.cosec'), width: 200,
-			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
-				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
-				return <span style={{lineHeight: '20px', fontSize: "small"}}>
-					{cosecs}
-				</span>
-			},
-			valueGetter: (params: GridRenderCellParams<any, lhdUnitsType>) =>
-				params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ')
-		},
-		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
 				user.canEditUnits ? <>
 					<Button size="icon"
@@ -150,19 +142,19 @@ export const UnitControl = ({
 			},
 		},
 		{
-			field: "cosecs", headerName: t('unit.prof') + ' - ' + t('unit.cosec'), width: 200, disableExport: true,
-			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
-				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
-				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
-				return <div style={{display: "flex", flexDirection:"column"}}><span style={{lineHeight: '20px', fontSize: "small"}}>
-						{professors != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.prof')} :</span>{professors}</> : ''}
-					</span>
-					<span style={{lineHeight: '20px', fontSize: "small"}}>
-					{cosecs != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.cosec')} :</span>{cosecs}</> : ''}
-				</span></div>
-			},
+			field: "profiles", headerName: t('unit.prof'), width: 300,
+			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
+				<div className="form-card-div">
+					{params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
+						.map(c => {
+							return <span>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+						})}
+				</div>
+			),
+			valueGetter: (params: GridRenderCellParams<any, lhdUnitsType>) =>
+				params.row.profiles.map(c => `${c.person.name} ${c.person.surname} (${c.role})`).join(', ')
 		},
-		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
 				user.canEditUnits ? <>
 					<Button size="icon"
@@ -192,8 +184,10 @@ export const UnitControl = ({
 			field: "name", headerName: t('unit.name'), minWidth: 300,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => {
 				const names: string[] = [];
-				const cosecs = params.row.cosecs.map(c => c.name + ' ' + c.surname).join(', ');
-				const professors = params.row.professors.map(c => c.name + ' ' + c.surname).join(', ');
+				const cosecs = params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
+					.map(c => {
+						return <span><br/>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}</span>
+					});
 				if (params.row.institute && params.row.institute.name) {
 					names.push(params.row.institute.name);
 				}
@@ -204,17 +198,11 @@ export const UnitControl = ({
 					<b>{params.row.name}</b>
 					<br/>
 					{names.join(', ')}
-					<div style={{display: "flex", flexDirection: "column"}}><span
-						style={{lineHeight: '20px', fontSize: "small"}}>
-						{professors != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.prof')} :</span>{professors}</> : ''}
-					</span>
-					<span style={{lineHeight: '20px', fontSize: "small"}}>
-					{cosecs != '' ? <><span style={{fontWeight: "bold"}}>{t('unit.cosec')} :</span>{cosecs}</> : ''}
-				</span></div>
+					{cosecs}
 				</span>
 			},
 		},
-		{field: "id", headerName: t('organism.actions'), width: 300, disableExport: true,
+		{field: "id", headerName: t('organism.actions'), width: 100, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, lhdUnitsType>) => (
 				user.canEditUnits ? <>
 					<Button size="icon"
@@ -243,7 +231,7 @@ export const UnitControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchunitsFromFullTextAndPagination(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
 			PAGE_SIZE * page,
