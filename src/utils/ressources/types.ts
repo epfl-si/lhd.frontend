@@ -142,10 +142,12 @@ export type assessmentType = {
 export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
-	id: string;
+	opLock: string;
 	// TODO remove these two fields
+	id: string;
 	cosecs: personType[];
 	professors: personType[];
+	// -----------------------
 	profiles: profile[];
 	subUnits: lhdUnitsType[];
 	institute?: instituteType;
@@ -156,7 +158,7 @@ export type lhdUnitsType = {
 
 export type profile = {
 	role: string;
-	expirationDate: Date;
+	expirationDate?: Date;
 	person: personType;
 	status?: 'New' | 'Deleted' | 'Default';
 }
