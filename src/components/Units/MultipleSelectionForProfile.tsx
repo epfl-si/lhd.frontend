@@ -79,6 +79,8 @@ export const MultipleSelectionForProfile = ({
 	}
 
 	function onAddProfile () {
+		if (selectedRoles.length == 0 || !expirationDate)
+			return;
 		setOpenDialog(false);
 		const newProfiles: profile[] = []
 		selectedRoles.forEach(role => {

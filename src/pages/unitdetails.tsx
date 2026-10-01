@@ -131,7 +131,7 @@ export default function UnitDetails() {
 
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
 		const results = await fetchPeopleFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue
 		);
