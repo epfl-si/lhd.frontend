@@ -630,9 +630,12 @@ export const fetchPeopleFromFullText = async (
 	fullText: string | null
 ): Promise<any> => {
 	const query = `query personFullText {
-				personFullText(search:"${fullText}", lhdOnly: false) {
-					... on DirectoryPerson { name surname email sciper type}
-					... on Person { name surname email sciper type}
+				personFullText(search: "${fullText}") {
+					name
+					surname
+					sciper
+					email
+					type
 				}
 			}`;
 

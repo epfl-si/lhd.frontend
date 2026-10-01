@@ -48,6 +48,7 @@ export const AddNewProfileDialog = ({
 	return (
 		<AlertDialog openDialog={openDialog}
 								 onOkClick={save}
+								 isOkDisabled={!expirationDate}
 								 onCancelClick={close}
 								 cancelLabel={t('generic.cancelButton')}
 								 okLabel={t('generic.addButton')}
