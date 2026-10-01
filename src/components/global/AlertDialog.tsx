@@ -20,6 +20,7 @@ interface AlertDialogProps {
 	type?: 'alert' | 'selection';
 	isOkDisabled?: boolean;
 	audit?: string;
+	width?: 'lg' | 'sm' | 'md' | 'xs' | 'xl';
 }
 
 export const AlertDialog = ({
@@ -35,7 +36,8 @@ export const AlertDialog = ({
 	openDialog,
 	type,
 	isOkDisabled,
-	audit
+	audit,
+	width
 }: AlertDialogProps) => {
 	const [open, setOpen] = React.useState(false);
 
@@ -49,8 +51,8 @@ export const AlertDialog = ({
 				onClose={onCancelClick}
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
-				fullWidth={true}
-				maxWidth={"lg"}
+				fullWidth={!width || width === 'lg'}
+				maxWidth={width ?? 'lg'}
 			>
 				{title && <DialogTitle id="alert-dialog-title">
 					<div style={{display: "flex", flexDirection: "row"}}>{title}
