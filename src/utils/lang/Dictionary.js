@@ -155,6 +155,7 @@ i18next.use(initReactI18next).init({
 					saveButton: 'Save',
 					deleteButton: 'Delete',
 					cancelButton: 'Cancel',
+					addButton: 'Add',
 					continueButton: 'Continue',
 					addNew: 'Add new',
 					search: 'Search',
@@ -334,6 +335,10 @@ i18next.use(initReactI18next).init({
 					confirmationMessageTitle: 'Are you sure you want to save this assessment?',
 					confirmationMessageBody: 'As its status is not "Draft", an email will be sent to inform all the parties about modifications.',
 					history: 'History'
+				},
+				roles: {
+					title: 'Role',
+					expirationDate: 'Expiration date'
 				}
 			},
 		},
@@ -485,6 +490,7 @@ i18next.use(initReactI18next).init({
 					saveButton: 'Enregistrer',
 					deleteButton: 'Supprimer',
 					cancelButton: 'Annuler',
+					addButton: 'Ajouter',
 					continueButton: 'Continuer',
 					addNew: 'Ajouter',
 					search: 'Rechercher',
@@ -666,6 +672,10 @@ i18next.use(initReactI18next).init({
 					confirmationMessageTitle: 'Are you sure you want to save this analyse?',
 					confirmationMessageBody: 'Comme le statut n\'est pas "Brouillon", un email sera aussi envoyé afin de notifier les différentes parties prenantes sur les modifications.',
 					history: 'Changements'
+				},
+				roles: {
+					title: 'Rôle',
+					expirationDate: 'Date d\'expiration'
 				}
 			},
 		},

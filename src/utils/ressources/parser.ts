@@ -24,7 +24,7 @@ export function getFormattedDate(date: Date, split: String = '/') {
 	return `${day}${split}${month}${split}${year}`;
 }
 
-export const formatDateForPickers = (date: Date) => {
+export const formatDateForPickers = (date: Date | undefined) => {
 	try {
 		if (!date) return "";
 		date = new Date(date);

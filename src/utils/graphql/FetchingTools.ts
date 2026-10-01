@@ -302,6 +302,22 @@ export const fetchUnitDetails = async (
 	};
 };
 
+export const fetchProfileRoles = async (
+	address: string | undefined,
+	authToken: string | undefined
+): Promise<any> => {
+	const query: string = `query RolesFetch { 
+						roles
+					}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.roles,
+		errors: result.errors
+	};
+};
+
 export const fetchRoomTypes = async (
 	address: string | undefined,
 	authToken: string | undefined
