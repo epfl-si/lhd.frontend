@@ -1,9 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {DebounceInput, FormCard} from "epfl-elements-react-si-extra";
 import {useTranslation} from "react-i18next";
-import "./multipleSelection.css"
+import "../global/multipleSelection.css"
 import "../../../css/styles.scss";
 import {personType, profile} from "../../utils/ressources/types";
+import {AddNewProfileDialog} from "./AddNewProfileDialog";
 
 interface SelectionProps {
 	/**
@@ -40,6 +41,10 @@ export const MultipleSelectionForProfile = ({
 	const [filteredSuggestions, setFilteredSuggestions] = useState<personType[]>([]);
 	const [inputValue, setInputValue] = React.useState('');
 	const inputRef = useRef<HTMLDivElement>(null);
+	const [openDialog, setOpenDialog] = useState<boolean>(false);
+	const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+	const [expirationDate, setExpirationDate] = useState<Date>();
+	const [selectedPerson, setSelectedPerson] = useState<personType>();
 
 	useEffect(() => {
 		function handleClickOutside(event: MouseEvent) {
@@ -66,15 +71,39 @@ export const MultipleSelectionForProfile = ({
 
 	function onChange(newValue: personType | null) {
 		if (newValue) {
-			setCurrentlySelected([...currentlySelected, {expirationDate: new Date, role: 'Cosec', status: "New", person: newValue}]);
-			if ( onChangeSelection ) {
-				onChangeSelection([...currentlySelected, {expirationDate: new Date, role: 'Cosec', status: "New", person: newValue}]);
-			}
-			const filtered = filteredSuggestions.filter((suggestion) => {
-				return suggestion.sciper != newValue.sciper;
-			});
-			setFilteredSuggestions(filtered);
+			setOpenDialog(true);
+			setSelectedPerson(newValue);
+			setSelectedRoles([]);
+			setExpirationDate(undefined);
 		}
+	}
+
+	function onAddProfile () {
+		setOpenDialog(false);
+		const newProfiles: profile[] = []
+		selectedRoles.forEach(role => {
+			newProfiles.push({expirationDate: expirationDate, role: role, status: "New", person: selectedPerson!});
+
+		})
+		setCurrentlySelected([...currentlySelected, ...newProfiles]);
+		if ( onChangeSelection ) {
+			onChangeSelection([...currentlySelected, ...newProfiles]);
+		}
+		const filtered = filteredSuggestions.filter((suggestion) => {
+			return suggestion.sciper != selectedPerson!.sciper;
+		});
+		setFilteredSuggestions(filtered);
+	}
+
+	function onCloseProfile () {
+		setOpenDialog(false);
+		setSelectedPerson(undefined);
+		setSelectedRoles([]);
+	}
+
+	function onChangeRoles (event: React.ChangeEvent<HTMLInputElement>) {
+		console.log(event.target)
+		setSelectedRoles([...selectedRoles, event.target.value])
 	}
 
 	function onDelete(item: profile) {
@@ -103,13 +132,13 @@ export const MultipleSelectionForProfile = ({
 	let lhd = true;
 	return (
 		<div ref={inputRef} >
-			<DebounceInput
+			{<DebounceInput
 				input={inputValue}
 				id="member"
 				onChange={onChangeInput}
 				placeholder={t(`generic.search`)}
 				style={{fontSize: 'small'}}
-			/>
+			/>}
 			<div className={'resultDiv'}>
 				{filteredSuggestions.length > 0 && (
 					<ul className="ulList" style={{fontSize: 'small'}}>
@@ -162,6 +191,12 @@ export const MultipleSelectionForProfile = ({
 					}
 				)}
 			</div>
+			<AddNewProfileDialog openDialog={openDialog}
+													 setSelectedRoles={onChangeRoles}
+													 setExpirationDate={setExpirationDate}
+													 expirationDate={expirationDate}
+													 save={onAddProfile}
+													 close={onCloseProfile} />
 		</div>
 	);
 };

@@ -19,7 +19,7 @@ import {DeleteUnitDialog} from "../components/Units/DeleteUnitDialog";
 import {AuditReportPanel} from "../components/Units/AuditReportPanel";
 import {getErrorMessage} from "../utils/graphql/Utils";
 import {getFormattedDate} from "../utils/ressources/parser";
-import {MultipleSelectionForProfile} from "../components/global/MultipleSelectionForProfile";
+import {MultipleSelectionForProfile} from "../components/Units/MultipleSelectionForProfile";
 
 export default function UnitDetails() {
 	const { t } = useTranslation();
@@ -80,9 +80,9 @@ export default function UnitDetails() {
 	function saveUnitDetails() {
 		let newName: string = data?.unitId ? data?.name : data?.name.replace(/\(.*?\)/, `(${inputValueForEdit})`);
 		updateUnit(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
-			{id: JSON.stringify(data?.id), unit: newName, profs: [], cosecs: [], subUnits: selectedSubUnits},
+			{opLock: JSON.stringify(data?.opLock), unit: newName, profiles: selectedProfiles, subUnits: selectedSubUnits},
 		).then(res => {
 			setOpenDialogEdit(false);
 			handleOpen(res);

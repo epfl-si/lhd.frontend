@@ -4,11 +4,11 @@ import {
 	hazardFormType,
 	lhdUnitsFromAPIType,
 	lhdUnitsType,
-	personType,
+	profile,
 	roomDetailsType
 } from '../ressources/types';
 import {doGraphQL} from "./Utils";
-import {getFormattedDate} from "../ressources/parser";
+import {formatDateForPickers, getFormattedDate} from "../ressources/parser";
 
 export const updateRoom = async (
 	address: string | undefined,
@@ -40,42 +40,29 @@ export const updateRoom = async (
 export const updateUnit = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	details: {id: string, unit: string, profs: personType[], cosecs: personType[], subUnits: lhdUnitsType[]},
+	details: {opLock: string, unit: string, profiles: profile[], subUnits: lhdUnitsType[]},
 ): Promise<any> => {
 	const query = `mutation updateUnit {
 							 updateUnit (
-							 id: ${details.id}
+							 opLock: ${details.opLock}
 							 unit: "${details.unit}"
-							 profs: [${details.profs.map(prof => 
+							 profiles: [${details.profiles.map(profile => 
 								`{
-									status: "${prof.status}",
+									status: "${profile.status}",
+									role: ${profile.role},
+									${profile.expirationDate ? `expirationDate: "${formatDateForPickers(profile.expirationDate)}",` : ''}
 									person: {
-										name: "${prof.name}",
-										surname: "${prof.surname}",
-										sciper: ${prof.sciper},
-										email: "${prof.email}"
-									}
-								}`)}]
-							 cosecs: [${details.cosecs.map(cosec =>
-								`{
-									status: "${cosec.status}",
-									person: {
-										name: "${cosec.name}",
-										surname: "${cosec.surname}",
-										sciper: ${cosec.sciper},
-										email: "${cosec.email}"
+										name: "${profile.person.name}",
+										surname: "${profile.person.surname}",
+										sciper: ${profile.person.sciper},
+										email: "${profile.person.email}"
 									}
 								}`)}]
 								subUnits: [${details.subUnits.map(u =>
 								`{
 									name: "${u.name}",
 									status: "${u.status}"
-								}`)}]) {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								}`)}])
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
