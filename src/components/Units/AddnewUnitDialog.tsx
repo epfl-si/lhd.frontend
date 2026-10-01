@@ -37,7 +37,7 @@ export const AddNewUnitDialog = ({
 		if (name && name != '') {
 			searchValForNewUnit = name;
 			const results = await fetchUnitsFromAPI(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				name
 			);
@@ -63,7 +63,7 @@ export const AddNewUnitDialog = ({
 	function onAddUnit() {
 		if (selectedUnits.length > 0) {
 			saveNewUnitsFromAPI(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				selectedUnits,
 			).then(res => {
@@ -99,7 +99,7 @@ export const AddNewUnitDialog = ({
 								 cancelLabel={t('generic.cancelButton')}
 								 okLabel={t('generic.saveButton')}
 								 title={t('unit.addNewUnit')}
-								 type='selection'>
+								 type='selection' width={"sm"}>
 			<MultipleSelection selected={[]} objectName="NewUnit"
 												 onChangeSelection={onSelectUnit}
 												 getCardTitle={getNewUnitTitle}

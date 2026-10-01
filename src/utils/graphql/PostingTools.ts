@@ -74,13 +74,7 @@ export const deleteUnit = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteUnit {
-							 deleteUnit(id: ${id} )
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteUnit(opLock: ${id} )
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -239,19 +233,13 @@ export const saveNewUnitsFromAPI = async (
 							 units: [${selectedUnits.map(u =>
 								`{
 									name: "${u.name}",
-									status: "${u.status}",
 									unitId: ${u.unitId},
 									path: "${u.path}"
 									responsibleId: ${u.responsibleId},
 									responsibleFirstName: "${u.responsibleFirstName}",
 									responsibleLastName: "${u.responsibleLastName}",
 									responsibleEmail: "${u.responsibleEmail}",
-								}`)}]) {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								}`)}])
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
