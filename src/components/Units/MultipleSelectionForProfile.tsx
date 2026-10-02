@@ -104,8 +104,11 @@ export const MultipleSelectionForProfile = ({
 	}
 
 	function onChangeRoles (event: React.ChangeEvent<HTMLInputElement>) {
-		console.log(event.target)
-		setSelectedRoles([...selectedRoles, event.target.value])
+		if (event.target.checked) {
+			setSelectedRoles([...selectedRoles, event.target.value])
+		} else {
+			setSelectedRoles(selectedRoles.filter(role => role !== event.target.value));
+		}
 	}
 
 	function onDelete(item: profile) {
@@ -194,6 +197,7 @@ export const MultipleSelectionForProfile = ({
 				)}
 			</div>
 			<AddNewProfileDialog openDialog={openDialog}
+													 selectedProfile={`${selectedPerson?.name} ${selectedPerson?.surname}`}
 													 setSelectedRoles={onChangeRoles}
 													 setExpirationDate={setExpirationDate}
 													 expirationDate={expirationDate}

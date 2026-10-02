@@ -104,13 +104,7 @@ export const deleteOrganism = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteOrganism {
-							 deleteOrganism(id: ${id} )
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteOrganism(opLock: ${id} )
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -352,25 +346,38 @@ export const saveNewOrganism = async (
 export const updateOrganism = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	id: string,
+	opLock: string,
 	organismName: string,
 	risk: number,
 	file: {name?: string, content?: string}
 ): Promise<any> => {
-	const query = `mutation updateOrganism {
-							 updateOrganism(id: ${id},
-								organismName: "${organismName}",
-								risk: ${risk},
-								fileContent: "${file.content ?? ''}",
-								fileName: "${file.name ?? ''}")
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
-						}`;
-	return doGraphQL(query, {}, address, authToken);
+	const query = `
+    mutation updateOrganism(
+      $opLock: String!
+      $organismName: String!
+      $risk: Int!
+      $fileContent: String
+      $fileName: String
+    ) {
+      updateOrganism(
+        opLock: $opLock
+        organismName: $organismName
+        risk: $risk
+        fileContent: $fileContent
+        fileName: $fileName
+      )
+    }
+  `;
+
+	const variables = {
+		opLock,
+		organismName,
+		risk,
+		...(file.content && { fileContent: file.content }),
+		...(file.name && { fileName: file.name }),
+	};
+
+	return doGraphQL(query, variables, address, authToken);
 };
 
 export const saveNewChemical = async (
