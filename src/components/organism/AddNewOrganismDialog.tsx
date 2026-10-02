@@ -60,7 +60,7 @@ export const AddNewOrganismDialog = ({
 				updateOrganism(
 					env().REACT_APP_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
-					JSON.stringify(selectedOrganism.opLock),
+					selectedOrganism.opLock,
 					textInput,
 					risk,
 					{

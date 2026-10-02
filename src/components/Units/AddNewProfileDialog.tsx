@@ -11,6 +11,7 @@ import {formatDateForPickers} from "../../utils/ressources/parser";
 
 interface AddNewProfileDialogProps {
 	openDialog: boolean;
+	selectedProfile: string;
 	setSelectedRoles: (event: React.ChangeEvent<HTMLInputElement>) => void;
 	setExpirationDate: (date: Date) => void;
 	expirationDate?: Date;
@@ -21,6 +22,7 @@ interface AddNewProfileDialogProps {
 export const AddNewProfileDialog = ({
 	openDialog,
 	setSelectedRoles,
+	selectedProfile,
 	setExpirationDate,
 	expirationDate,
 	save,
@@ -50,6 +52,7 @@ export const AddNewProfileDialog = ({
 								 onOkClick={save}
 								 isOkDisabled={!expirationDate}
 								 onCancelClick={close}
+								 title={selectedProfile}
 								 cancelLabel={t('generic.cancelButton')}
 								 okLabel={t('generic.addButton')}
 								 type='selection' width={"sm"}>
