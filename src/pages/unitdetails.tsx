@@ -48,7 +48,7 @@ export default function UnitDetails() {
 	const fetchData = async () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		const results = await fetchUnitDetails(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			decodeURIComponent(urlParams.get('unit') as string),
 			{}
@@ -80,7 +80,7 @@ export default function UnitDetails() {
 	function saveUnitDetails() {
 		let newName: string = data?.unitId ? data?.name : data?.name.replace(/\(.*?\)/, `(${inputValueForEdit})`);
 		updateUnit(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			{opLock: JSON.stringify(data?.opLock), unit: newName, profiles: selectedProfiles, subUnits: selectedSubUnits},
 		).then(res => {
@@ -131,7 +131,7 @@ export default function UnitDetails() {
 
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
 		const results = await fetchPeopleFromFullText(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue
 		);

@@ -34,7 +34,7 @@ export const DeleteUnitDialog = ({
 	function deleteUnitDetails() {
 		if (unit) {
 			deleteUnit(
-				env().REACT_APP_BACKEND_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				JSON.stringify(unit.opLock),
 			).then(res => {

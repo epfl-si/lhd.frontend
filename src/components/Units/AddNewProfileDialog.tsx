@@ -38,7 +38,7 @@ export const AddNewProfileDialog = ({
 
 	const fetchRoles = async () => {
 		const results = await fetchProfileRoles(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 

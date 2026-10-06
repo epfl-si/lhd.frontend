@@ -179,7 +179,7 @@ export const OrganismsControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchOrganismsFromFullText(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			search,
 			PAGE_SIZE,

@@ -231,7 +231,7 @@ export const UnitControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchunitsFromFullTextAndPagination(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
 			PAGE_SIZE * page,
@@ -261,7 +261,7 @@ export const UnitControl = ({
 	const onExport = async () => {
 		setLoading(true);
 		const results = await fetchunitsFromFullTextAndPagination(
-			env().REACT_APP_BACKEND_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0, 0,
 			search
