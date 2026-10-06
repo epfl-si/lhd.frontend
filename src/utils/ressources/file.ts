@@ -32,9 +32,9 @@ const fetchFile = async (
 	fileName: string
 ): Promise<any> => {
 	const keys: any = JSON.parse(id);
-	let url = `${env().REACT_APP_ENDPOINT_URL}/files/${model}/${encodeURIComponent(keys.eph_id)}?salt=${keys.salt}&fileName=${fileName}`;
+	let url = `${env().REACT_APP_BACKEND_ENDPOINT_URL}/files/${model}/${encodeURIComponent(keys.eph_id)}?salt=${keys.salt}&fileName=${fileName}`;
 	if (model === 'organismByFormIO') {
-		url = `${env().REACT_APP_ENDPOINT_URL}/files/${model}/${id}`;
+		url = `${env().REACT_APP_BACKEND_ENDPOINT_URL}/files/${model}/${id}`;
 	}
 	const response =
 		await fetch(url, {
