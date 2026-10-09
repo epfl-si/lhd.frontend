@@ -143,11 +143,6 @@ export type lhdUnitsType = {
 	name: string;
 	unitId?: number;
 	opLock: string;
-	// TODO remove these two fields
-	id: string;
-	cosecs: personType[];
-	professors: personType[];
-	// -----------------------
 	profiles: profile[];
 	subUnits: lhdUnitsType[];
 	institute?: instituteType;

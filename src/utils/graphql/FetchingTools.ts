@@ -401,15 +401,24 @@ export const fetchRooms = async (
 									name
 								}
 							}
-							cosecs {
-								name
-								surname
-								email
-							}
-							professors {
-								name
-								surname
-								email
+							profiles {
+								role
+								expirationDate
+								unit {
+									name
+									institute {
+										name
+										school {
+											name
+										}
+									}
+								}
+								person {
+									name
+									surname
+									sciper
+									email
+								}
 							}
 						}
 					}

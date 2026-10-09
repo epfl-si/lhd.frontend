@@ -100,73 +100,53 @@ export function convertToTable(roomsList: roomDetailsType[], search: string) {
 		const hazards = hazardName != 'search' && r.hazards && r.hazards.length > 0 ? r.hazards : [null];
 
 		lhdUnits.forEach(u => {
-			//const cosecs = u && u.cosecs && u.cosecs.length > 0 ? u.cosecs : [null];
-			//const professors = u && u.professors && u.professors.length > 0 ? u.professors : [null];
-			let cosecs = [];
-			if (u && u.cosecs && u.cosecs.length > 0) {
-				if (result['Cosec'] && result['Cosec'].length > 0) {
-					result['Cosec'].forEach(cos => {
+			let profiles: profile[] = [];
+			if (u && u.profiles && u.profiles.length > 0) {
+				if (result['Profile'] && result['Profile'].length > 0) {
+					result['Profile'].forEach(cos => {
 						const cosLower = cos.toLowerCase();
-						const cosec = u.cosecs.filter(co => co.name.toLowerCase().indexOf(cosLower) > -1 || co.surname.toLowerCase().indexOf(cosLower) > -1 || co.email.toLowerCase().indexOf(cosLower) > -1);
-						cosecs.push(...cosec);
+						const profile = u.profiles.filter(co => co.person.name.toLowerCase().indexOf(cosLower) > -1 || co.person.surname.toLowerCase().indexOf(cosLower) > -1 || (co.person.email ?? '').toLowerCase().indexOf(cosLower) > -1);
+						profiles.push(...profile);
 					});
 				} else {
-					cosecs = u.cosecs;
+					profiles = u.profiles;
 				}
 			} else {
-				cosecs = [null];
+				profiles = [];
 			}
 
-			let professors = [];
-			if (u && u.professors && u.professors.length > 0) {
-				if (result['Prof'] && result['Prof'].length > 0) {
-					result['Prof'].forEach(pr => {
-						const profLower = pr.toLowerCase();
-						const cosec = u.professors.filter(p => p.name.toLowerCase().indexOf(profLower) > -1 || p.surname.toLowerCase().indexOf(profLower) > -1 || p.email.toLowerCase().indexOf(profLower) > -1);
-						professors.push(...cosec);
-					});
-				} else {
-					professors = u.professors;
-				}
-			} else {
-				professors = [null];
-			}
+			profiles.forEach(prof => {
+				hazards.forEach(haz => {
+					if (hazardName == 'search' || (hazardName != 'search' && haz && haz.hazardFormHistory.hazardForm.hazardCategory.hazardCategoryName.toLowerCase().indexOf(hazardName.toLowerCase()) > -1)) {
+						const children = haz && haz.children && haz.children.length > 0 ? haz.children : [null];
 
-			cosecs.forEach(cos => {
-				professors.forEach(prof => {
-
-					hazards.forEach(haz => {
-						if (hazardName == 'search' || (hazardName != 'search' && haz && haz.hazard_form_history.hazard_form.hazard_category.hazard_category_name.toLowerCase().indexOf(hazardName.toLowerCase()) > -1)) {
-							const children = haz && haz.children && haz.children.length > 0 ? haz.children : [null];
-
-							children.forEach(child => {
-								const catName = hazardName != 'search' && haz ? haz.hazard_form_history.hazard_form.hazard_category.hazard_category_name : null;
-								const infos = r.hazardAdditionalInfo?.filter(info => catName && info.hazard_category && info.hazard_category.hazard_category_name == catName);
-								const comment = (infos && infos.length > 0) ? infos[0].comment : undefined;
-								dataExport.push({
-									room: r.name,
-									building: r.building,
-									sector: r.sector,
-									floor: r.floor,
-									vol: r.vol,
-									vent: r.vent,
-									site: r.site,
-									kind: r.kind?.name ?? null,
-									unit: u?.name ?? null,
-									institute: u?.institute?.name ?? null,
-									school: u?.institute?.school?.name ?? null,
-									cosec: cos ? `${cos.name} ${cos.surname}` : null,
-									cosecEmail: cos?.email ?? null,
-									professor: prof ? `${prof.name} ${prof.surname}` : null,
-									professorEmail: prof?.email ?? null,
-									hazardCategory: catName,
-									hazardComment: decodeURIComponent(comment || ''),
-									parent_submission: haz?.submission ? JSON.parse(haz.submission).data : {},
-									child_submission: child?.submission ? JSON.parse(child.submission).data : {},
-								});
+						children.forEach(child => {
+							const catName = hazardName != 'search' && haz ? haz.hazardFormHistory.hazardForm.hazardCategory.hazardCategoryName : null;
+							const infos = r.hazardAdditionalInfo?.filter(info => catName && info.hazardCategory && info.hazardCategory.hazardCategoryName == catName);
+							const comment = (infos && infos.length > 0) ? infos[0].comment : undefined;
+							dataExport.push({
+								room: r.name,
+								building: r.building,
+								sector: r.sector,
+								floor: r.floor,
+								vol: r.vol,
+								vent: r.vent,
+								site: r.site,
+								kind: r.kind?.name ?? null,
+								unit: u?.name ?? null,
+								institute: u?.institute?.name ?? null,
+								school: u?.institute?.school?.name ?? null,
+								profile: prof ? `${prof.person.name} ${prof.person.surname}` : null,
+								profileEmail: prof?.person.email ?? null,
+								profileRole: prof ? `${prof.role}` : null,
+								profileExpirationDate: prof && prof.expirationDate ? `${prof.expirationDate}` : null,
+								hazardCategory: catName,
+								hazardComment: decodeURIComponent(comment || ''),
+								parent_submission: haz?.submission ? JSON.parse(haz.submission).data : {},
+								child_submission: child?.submission ? JSON.parse(child.submission).data : {},
 							});
-						}
-					});
+						});
+					}
 				});
 			});
 		});
