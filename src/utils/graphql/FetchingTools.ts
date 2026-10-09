@@ -21,7 +21,7 @@ type fetchRoomResultsType = {
 	errors?: any;
 };
 
-type fetchRoomResultsTypeWithPagination = {
+export type fetchRoomResultsTypeWithPagination = {
 	status?: number;
 	data?: roomsWithPaginationType;
 	errors?: any;
@@ -366,7 +366,7 @@ export const fetchRooms = async (
 	const query: string = `query RoomFetch { 
 				roomsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
 					rooms {
-						id
+						opLock
 						name
 						building
 						sector
@@ -378,21 +378,21 @@ export const fetchRooms = async (
 						}
 						hazardAdditionalInfo {
 							comment
-							hazard_category {
-								hazard_category_name
+							hazardCategory {
+								hazardCategoryName
 							}
 						}
 						hazards {
-							hazard_form_history {
-								hazard_form {
-									hazard_category {
-										hazard_category_name
+							hazardFormHistory {
+								hazardForm {
+									hazardCategory {
+										hazardCategoryName
 									}
 								}
 							}
 						}
-						lhd_units {
-							id
+						lhdUnits {
+							opLock
 							unitId
 							name
 							institute {

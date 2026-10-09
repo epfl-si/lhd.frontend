@@ -171,7 +171,7 @@ export const AddNewRadioprotectionDialog = ({
 
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
 		const results = await fetchRooms(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			100,0, "Room=" + newValue
 		);
