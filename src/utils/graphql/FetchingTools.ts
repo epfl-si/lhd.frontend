@@ -61,11 +61,6 @@ type fetchUnitsTypeWithPagination = {
 	errors?: any;
 };
 
-type fetchOrganismsTypeWithPagination = {
-	status?: number;
-	data?: organismType[];
-};
-
 type fetchReportFiles = {
 	status?: number;
 	data?: reportFile[];
@@ -75,54 +70,6 @@ type fetchReportFiles = {
 type unitsWithPaginationType = {
 	units: lhdUnitsType[];
 	totalCount: number;
-};
-
-type fetchFormsType = {
-	status?: number;
-	data?: string; //TODO
-};
-
-export const fetchResults = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	graphqlBody: string,
-	variables: Object
-): Promise<fetchResultsType> => {
-	const operationName = 'AppTableFetch';
-	const results =
-		typeof address === 'string'
-			? await fetch(address, {
-					headers: {
-						accept: '*/*',
-						'content-type': 'application/json',
-						'sec-fetch-dest': 'empty',
-						'sec-fetch-mode': 'cors',
-						'sec-fetch-site': 'cross-site',
-						authorization: `Bearer ${authToken}`,
-					},
-					referrerPolicy: 'no-referrer-when-downgrade',
-					body: JSON.stringify({
-						query: `query ${operationName} { ${graphqlBody} }`,
-						variables,
-					}),
-					method: 'POST',
-					mode: 'cors',
-					credentials: 'omit',
-				})
-			: null;
-
-	if (results?.status !== 200) {
-		return { status: results?.status, data: await results?.text() };
-	}
-
-	const graphQLResponse = await results.json();
-
-	return {
-		status: results.status,
-		data: graphQLResponse.data?.rooms.map((room: roomType, index: number) =>
-			formatDataToColumns(graphqlBody, room, index)
-		),
-	};
 };
 
 export const fetchRoomDetails = async (
@@ -217,39 +164,6 @@ export const fetchRoomDetails = async (
 			}`;
 
 	const result = await doGraphQL(query, variables, address, authToken);
-	return {
-		status: result.status,
-		data: result.data?.rooms,
-		errors: result.errors
-	};
-};
-
-export const fetchHazardsInRoom = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	room: string | null
-): Promise<fetchRoomResultsType> => {
-	const query: string = `query fetchHazardsInRoom { 
-				rooms (where: { name: { equals: "${room}"} }) {
-					name
-					hazards {
-						id
-						submission
-						hazard_form_history {
-							form
-							hazard_form {
-								form
-								version
-								hazard_category {
-									hazard_category_name
-								}
-							}
-						}
-					}
-				},
-			}`;
-
-	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
 		data: result.data?.rooms,
@@ -841,25 +755,6 @@ export const fetchReportFiles = async (
 	return {
 		status: result.status,
 		data: result.data?.unitReportFiles,
-		errors: result.errors
-	};
-};
-
-export const fetchDoorPlug = async (
-	address: string | undefined,
-	authToken: string | undefined,
-	roomName: string
-): Promise<any> => {
-	const query = `query fetchDoorPlug {
-	fetchDoorPlug (roomName: "${roomName}") {
-			fileUrl
-	}
-}`;
-
-	const result = await doGraphQL(query, {}, address, authToken);
-	return {
-		status: result.status,
-		data: result.data,
 		errors: result.errors
 	};
 };
