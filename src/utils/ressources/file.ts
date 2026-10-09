@@ -4,23 +4,23 @@ import {splitCamelCase} from "./jsonUtils";
 import * as XLSX from 'xlsx-js-style';
 import {formatDate} from "./parser";
 
-export async function readFileAsBase64(file: File | undefined): Promise<string> {
+export async function readFileAsBase64(file: File | undefined): Promise<string | undefined> {
 	return new Promise((resolve, reject) => {
-		if (file) {
+		if (file && file.size > 0) {
 			const reader = new FileReader();
 			reader.onload = function(e) {
 				if (e.target) {
 					resolve(e.target.result as string); // Resolve the promise with the base64 string
 				} else {
-					resolve('');
+					resolve(undefined);
 				}
 			};
 			reader.onerror = function() {
-				resolve('');
+				resolve(undefined);
 			};
 			reader.readAsDataURL(file);
 		} else {
-			resolve('');
+			resolve(undefined);
 		}
 	});
 }

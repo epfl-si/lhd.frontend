@@ -64,7 +64,7 @@ export const AddNewOrganismDialog = ({
 					textInput,
 					risk,
 					{
-						content: fileBase64 ?? '',
+						content: fileBase64,
 						name: fileName
 					}
 				).then(res => {
