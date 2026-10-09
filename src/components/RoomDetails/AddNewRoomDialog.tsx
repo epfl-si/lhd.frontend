@@ -37,7 +37,7 @@ export const AddNewRoomDialog = ({
 		if (name && name != '') {
 			searchValForNewRoom = name;
 			const results = await fetchRoomsFromAPI(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				name
 			);
