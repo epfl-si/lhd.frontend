@@ -35,7 +35,7 @@ export default function RoomDetails() {
 
 	const loadFetch = async () => {
 		const userResult = await fetchConnectedUser(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 		if (userResult.status === 200 && userResult.data) {

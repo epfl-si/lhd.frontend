@@ -39,7 +39,7 @@ export default function HazardFormChildDetails() {
 
 	const loadFetchUser = async () => {
 		const results = await fetchConnectedUser(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data) {
