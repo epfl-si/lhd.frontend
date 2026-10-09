@@ -48,7 +48,7 @@ export type kindType = {
 };
 
 export type hazardCategory = {
-	hazard_category_name: string;
+	hazardCategoryName: string;
 };
 
 export type lhdUnitsFromAPIType = {
@@ -155,6 +155,7 @@ export type profile = {
 	role: string;
 	expirationDate?: Date;
 	person: personType;
+	unit: lhdUnitsType;
 	status?: 'New' | 'Deleted' | 'Default';
 }
 
@@ -209,7 +210,7 @@ export type hazardDetailsType = {
 }
 
 export type roomDetailsType = {
-	id: string,
+	opLock: string,
 	name: string;
 	building?: string;
 	sector?: string;
@@ -219,12 +220,12 @@ export type roomDetailsType = {
 	vent?: string;
 	adminuse?: string;
 	facultyuse?: string;
-	lab_type_is_different?: boolean;
+	labTypeIsDifferent?: boolean;
 	site?: string;
 	hazards: hazardType[];
 	hazardAdditionalInfo?: hazardAdditionalInfoType[];
 	hazardReferences?: hazardReferencesType[]
-	lhd_units: lhdUnitsType[];
+	lhdUnits: lhdUnitsType[];
 	hazardsListName?: string[];
 	submissionList?: submissionForm[];
 	status?: 'New' | 'Deleted' | 'Default';
@@ -242,7 +243,7 @@ export type hazardAdditionalInfoType = {
 	comment?: string;
 	modified_by?: string;
 	modified_on?: string;
-	hazard_category?: hazardCategory;
+	hazardCategory?: hazardCategory;
 	hazardsAdditionalInfoHasTag?: hazardsAdditionalInfoHasTagType[];
 	hazardsAdditionalInfoHasFile: genericType[];
 }
@@ -250,7 +251,7 @@ export type hazardAdditionalInfoType = {
 export type hazardType = {
 	id: string;
 	submission: string;
-	hazard_form_history: hazardFormHistoryType;
+	hazardFormHistory: hazardFormHistoryType;
 	children: hazardChildType[];
 	room?: roomDetailsType;
 }
@@ -270,14 +271,14 @@ export type hazardFormChildHistoryType = {
 export type hazardFormHistoryType = {
 	form: string;
 	version: string;
-	hazard_form: hazardFormType;
+	hazardForm: hazardFormType;
 }
 
 export type hazardFormType = {
 	id?: string;
 	form: string;
 	version: string;
-	hazard_category: hazardCategory;
+	hazardCategory: hazardCategory;
 	isSelected?: boolean;
 	children?: hazardFormChildType[];
 }

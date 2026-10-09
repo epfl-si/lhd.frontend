@@ -126,6 +126,7 @@ export function EntriesTableCategory({
 								return row.assessment;
 							case "organism":
 							case "unit":
+							case "room":
 								return row.opLock;
 							default:
 								return row.id;

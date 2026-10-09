@@ -1,6 +1,6 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {fetchRooms, fetchRoomsWithHazards} from "../utils/graphql/FetchingTools";
+import {fetchRoomResultsTypeWithPagination, fetchRooms, fetchRoomsWithHazards} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
@@ -81,14 +81,15 @@ export const RoomControl = ({
 				}},
 		{field: "submissionList", headerName: t('room_details.hazards'), flex: 2, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
-				params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
+				params.row.submissionList ? <HazardList key={params.row.opLock} submissionsList={params.row.submissionList}
+																								inRoomDetails={false} user={user}/> : <></>
 			),
 		},
 		{field: "lhd_units", headerName: t('room.unit'), flex: 0.8, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
-				params.row.lhd_units ?
+				params.row.lhdUnits ?
 					<div className="form-card-div">
-						{params.row.lhd_units.map(item => {
+						{params.row.lhdUnits.map(item => {
 								return (
 									<FormCard
 										keyValue={item.name}
@@ -141,9 +142,9 @@ export const RoomControl = ({
 					(params.row.sector ? (',' + params.row.sector) : '') +
 					(params.row.floor ? (',' + params.row.floor) : '')}`}
 					<br/>
-					{params.row.lhd_units ?
+					{params.row.lhdUnits ?
 						<div className="form-card-div">
-							{params.row.lhd_units.map(item => {
+							{params.row.lhdUnits.map(item => {
 									return (
 										<FormCard
 											keyValue={item.name}
@@ -174,7 +175,7 @@ export const RoomControl = ({
 			field: "submissionList", headerName: t('room_details.hazards'), flex: 1, disableExport: true,
 			renderCell: (params: GridRenderCellParams<any, roomDetailsType>) => (
 				params.row.submissionList ?
-					<HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>
+					<HazardList key={params.row.opLock} submissionsList={params.row.submissionList} inRoomDetails={false} user={user}/> : <></>
 			),
 		}
 		/*{
@@ -212,9 +213,9 @@ export const RoomControl = ({
 							}
 						</div>*/}
 					</div>
-					<div>{params.row.lhd_units ?
+					<div>{params.row.lhdUnits ?
 						<div className="form-card-div">
-							{params.row.lhd_units.map(item => {
+							{params.row.lhdUnits.map(item => {
 									return (
 										<FormCard
 											keyValue={item.name}
@@ -238,7 +239,7 @@ export const RoomControl = ({
 								}
 							)}
 						</div> : <></>}</div>
-					<div>{params.row.submissionList ? <HazardList key={params.row.id} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>}</div>
+					<div>{params.row.submissionList ? <HazardList key={params.row.opLock} user={user} submissionsList={params.row.submissionList} inRoomDetails={false}/> : <></>}</div>
 				</div>
 			),
 		}
@@ -260,9 +261,9 @@ export const RoomControl = ({
 	const loadFetch = async () => {
 		if (page != undefined) {
 			setLoading(true);
-			const hazards = search && search != null ? (search.match(/Hazard/g)) : [];
-			const numberOfSearchedHazards = hazards && hazards!=null ? hazards.length : 0;
-			let results = {};
+			const hazards = search ? (search.match(/Hazard/g)) : [];
+			const numberOfSearchedHazards = hazards ? hazards.length : 0;
+			let results: fetchRoomResultsTypeWithPagination = {};
 			if (numberOfSearchedHazards == 1) {
 				results = await fetchRoomsWithHazards(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -273,7 +274,7 @@ export const RoomControl = ({
 				);
 			} else {
 				results = await fetchRooms(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					PAGE_SIZE,
 					PAGE_SIZE * page,
@@ -284,7 +285,7 @@ export const RoomControl = ({
 			if ( results.status && results.status === 200 && results.data ) {
 				const roomsList: roomDetailsType[] = results.data.rooms;
 				roomsList.forEach(r => {
-					const listCat = r.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+					const listCat = r.hazards.map(h => h.hazardFormHistory.hazardForm.hazardCategory.hazardCategoryName);
 					r.hazardsListName = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
 					if (numberOfSearchedHazards == 1) {
 						const match = search.match(/Hazard=([^&]*)/);
@@ -310,10 +311,10 @@ export const RoomControl = ({
 
 	const onExport = async () => {
 			setLoading(true);
-			const searchParameters = search && search != null ? (search.split('&')) : [];
-			const hazards = searchParameters && searchParameters!=null ? searchParameters.filter(s => s.startsWith('Hazard')) : [];
+			const searchParameters = search ? (search.split('&')) : [];
+			const hazards = searchParameters ? searchParameters.filter(s => s.startsWith('Hazard')) : [];
 			const hazardName = hazards.length == 1 ? hazards[0].split('=')[1] : 'search';
-			let results = {};
+			let results: fetchRoomResultsTypeWithPagination = {};
 			if (hazards.length == 1) {
 				results = await fetchRoomsWithHazards(
 					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
@@ -323,7 +324,7 @@ export const RoomControl = ({
 				);
 			} else {
 				results = await fetchRooms(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					0, 0,
 					search ?? ''
@@ -335,14 +336,14 @@ export const RoomControl = ({
 				if (dataExport && dataExport.length > 0) {
 					const allKeys = new Set<string>();
 					for (const item of dataExport) {
-						for (const key of ['child_submission', 'parent_submission']) {
+						for (const key of ['childSubmission', 'parentSubmission']) {
 							if (item[key]) {
 								Object.keys(item[key]).forEach(k => allKeys.add(k));
 							}
 						}
 					}
 					const result = dataExport.map(item => {
-						const flat = {
+						const flat: any = {
 							room: item.room,
 							building: item.building,
 							sector: item.sector,
@@ -372,7 +373,7 @@ export const RoomControl = ({
 						}
 
 						// Overwrite with actual values
-						for ( const key of ['child_submission', 'parent_submission']) {
+						for ( const key of ['childSubmission', 'parentSubmission']) {
 							if (item[key]) {
 								Object.entries(item[key]).forEach(([k, v]) => {
 									if (k === 'chemical')

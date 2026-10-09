@@ -1,13 +1,13 @@
-import {roomDetailsType, submissionForm} from "./types";
+import {lhdUnitsType, profile, roomDetailsType, submissionForm} from "./types";
 
 export function findAllKeysForSubmission(obj: object) {
 	let results: any[] = [];
 
-	function search(obj: object) {
+	function search(obj: any) {
 		Object.keys(obj).forEach(key => {
-			if (key == 'key' && obj['type'] != 'columns' && obj['key'] != 'status' && obj['key'] != 'delete' && obj['key'] != 'undo') {
+			if ( key == 'key' && obj['type'] != 'columns' && obj['key'] != 'status' && obj['key'] != 'delete' && obj['key'] != 'undo' ) {
 				results.push({value: obj[key], type: obj['type'] ?? ''});
-			} else if (typeof obj[key] == 'object' && obj[key]) {
+			} else if ( typeof obj[key] == 'object' && obj[key] ) {
 				search(obj[key]);
 			}
 		})
@@ -18,17 +18,17 @@ export function findAllKeysForSubmission(obj: object) {
 }
 
 
-export function compareVersions(oldVersion: object[], newVersion: object[], actualVersion: string | undefined) {
-	const version =  actualVersion ? actualVersion.split(".") : ['1', '0', '0'];
+export function compareVersions(oldVersion: any[], newVersion: any[], actualVersion: string | undefined) {
+	const version = actualVersion ? actualVersion.split(".") : ['1', '0', '0'];
 	// Check if in the new version there are all old fields
-	for (const item1 of oldVersion) {
+	for ( const item1 of oldVersion ) {
 		const matchingIndex = newVersion.findIndex(item2 => item1.value === item2.value && item1.type === item2.type);
-		if (matchingIndex === -1) {
+		if ( matchingIndex === -1 ) {
 			// An element has been deleted => major version
 			return (+version[0] + 1) + "." + version[1] + "." + version[2];
 		}
 	}
-	if (oldVersion.length !== newVersion.length) {
+	if ( oldVersion.length !== newVersion.length ) {
 		// There are new element in the form
 		return version[0] + "." + (+version[1] + 1) + "." + version[2];
 	} else {
@@ -40,20 +40,30 @@ export function readOrEditHazard(room: roomDetailsType, action: string, currentF
 	const subForm: submissionForm[] = [];
 	room.hazards.forEach(h => {
 		try {
-			const category = h.hazard_form_history.hazard_form.hazard_category.hazard_category_name;
-			const infos = room.hazardAdditionalInfo?.filter(info => info.hazard_category && info.hazard_category.hazard_category_name == category);
+			const category = h.hazardFormHistory.hazardForm.hazardCategory.hazardCategoryName;
+			const infos = room.hazardAdditionalInfo?.filter(info => info.hazardCategory && info.hazardCategory.hazardCategoryName == category);
 			const comment = (infos && infos.length > 0) ? infos[0].comment : undefined;
 			const tags = (infos && infos.length > 0 && infos[0].hazardsAdditionalInfoHasTag) ? infos[0].hazardsAdditionalInfoHasTag : [];
 			//if (category == selectedHazardCategory) {
 			const childrenList: submissionForm[] = [];
 			h.children.forEach(child => {
-				childrenList.push({id: child.id, submission: JSON.parse(child.submission),
-					form: withForm ? (action == 'Read' ? JSON.parse(child.hazard_form_child_history.form) : JSON.parse(child.hazard_form_child_history.hazard_form_child.form)) : {}});
+				childrenList.push({
+					id: child.id, submission: JSON.parse(child.submission),
+					form: withForm ? (action == 'Read' ? JSON.parse(child.hazard_form_child_history.form) : JSON.parse(child.hazard_form_child_history.hazard_form_child.form)) : {}
+				});
 			})
-			subForm.push({id: h.id, submission: JSON.parse(h.submission), form: withForm ? (action == 'Read' ? JSON.parse(h.hazard_form_history.form) : currentForm) : {},
-				children: childrenList, room: room, category: category, comment: comment, tags: tags});
+			subForm.push({
+				id: h.id,
+				submission: JSON.parse(h.submission),
+				form: withForm ? (action == 'Read' ? JSON.parse(h.hazardFormHistory.form) : currentForm) : {},
+				children: childrenList,
+				room: room,
+				category: category,
+				comment: comment,
+				tags: tags
+			});
 			//}
-		} catch (error) {
+		} catch ( error ) {
 			console.error(error);
 		}
 	});
@@ -71,30 +81,30 @@ export function convertToTable(roomsList: roomDetailsType[], search: string) {
 
 	search.split('&').forEach(pair => {
 		const [key, value] = pair.split('=');
-		if (key in result) {
+		if ( key in result ) {
 			result[key].push(value);
 		} else {
 			result[key] = [value];
 		}
 	});
-	const dataExport = [];
+	const dataExport: any[] = [];
 	roomsList.forEach(r => {
-		let lhdUnits = [];
-		if (r.lhd_units && r.lhd_units.length > 0) {
-			if (result['Unit'] && result['Unit'].length > 0) {
+		let lhdUnits: lhdUnitsType[] = [];
+		if ( r.lhdUnits && r.lhdUnits.length > 0 ) {
+			if ( result['Unit'] && result['Unit'].length > 0 ) {
 				result['Unit'].forEach(u => {
 					const ulower = u.toLowerCase();
-					const unit = r.lhd_units.filter(un => un.name.toLowerCase().indexOf(ulower) > -1 ||
+					const unit = r.lhdUnits.filter(un => un.name.toLowerCase().indexOf(ulower) > -1 ||
 						(un.institute && un.institute.name && un.institute.name.toLowerCase().indexOf(ulower) > -1) ||
 						(un.institute && un.institute.school && un.institute.school.name && un.institute.school.name.toLowerCase().indexOf(ulower) > -1)
 					);
 					lhdUnits.push(...unit);
 				});
 			} else {
-				lhdUnits = r.lhd_units;
+				lhdUnits = r.lhdUnits;
 			}
 		} else {
-			lhdUnits = [null];
+			lhdUnits = [];
 		}
 		const hazardName = result['Hazard'] && result['Hazard'].length == 1 ? result['Hazard'][0] : 'search';
 		const hazards = hazardName != 'search' && r.hazards && r.hazards.length > 0 ? r.hazards : [null];
