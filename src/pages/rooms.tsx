@@ -100,8 +100,10 @@ export const RoomControl = ({
 											</span>
 											{
 												<div className="displayFlexColumn">
-													{item.cosecs && item.cosecs.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Cosec:</b> {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
-													{item.professors && item.professors.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Prof:</b> {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+													{item.profiles.sort((a, b) => b.role.localeCompare(a.role))
+														.map(c => {
+															return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+														})}
 												</div>
 											}
 										</div>
@@ -153,8 +155,10 @@ export const RoomControl = ({
 											</span>
 												{
 													<div className="displayFlexColumn">
-														{item.cosecs && item.cosecs.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Cosec:</b> {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
-														{item.professors && item.professors.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Prof:</b> {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+														{item.profiles.sort((a, b) => b.role.localeCompare(a.role))
+															.map(c => {
+																return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+															})}
 													</div>
 												}
 											</div>
@@ -222,8 +226,10 @@ export const RoomControl = ({
 											</span>
 												{
 													<div className="displayFlexColumn">
-														{item.cosecs && item.cosecs.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Cosec:</b> {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
-														{item.professors && item.professors.length > 0 && <span style={{lineHeight: 'normal', fontSize: 'smaller'}}><b>Prof:</b> {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</span>}
+														{item.profiles.sort((a, b) => b.role.localeCompare(a.role))
+															.map(c => {
+																return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+															})}
 													</div>
 												}
 											</div>
@@ -347,10 +353,10 @@ export const RoomControl = ({
 							unit: item.unit,
 							institute: item.institute,
 							school: item.school,
-							cosec: item.cosec,
-							cosecEmail: item.cosecEmail,
-							professor: item.professor,
-							professorEmail: item.professorEmail,
+							profile: item.profile,
+							profileEmail: item.profileEmail,
+							profileRole: item.profileRole,
+							profileExpirationDate: item.profileExpirationDate
 						};
 
 						if (hazardName != 'search') {
