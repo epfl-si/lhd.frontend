@@ -195,16 +195,16 @@ function App() {
 					<li className="breadcrumb-item">Laboratory Hazards Directory</li>
 				</Base.Breadcrumbs>
 				<Base.User>
-						<Box
-							display="flex"
-							flexDirection="row"
-							alignItems="center"
-							justifyContent="center"
-							gridGap={4}
-						>
-							<LoginButton/>
-							{/*<LanguageSwitcher/>*/}
-						</Box>
+					<Box
+						display="flex"
+						flexDirection="row"
+						alignItems="center"
+						justifyContent="center"
+						gridGap={4}
+					>
+						<LoginButton/>
+						{/*<LanguageSwitcher/>*/}
+					</Box>
 				</Base.User>
 
 				<div className="container-full" style={{width: '100%', padding: '1em'}}>
