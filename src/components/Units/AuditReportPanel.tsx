@@ -6,8 +6,10 @@ import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import {FormCard} from "epfl-elements-react-si-extra";
 import {handleClickFileLink} from "../../utils/ressources/file";
-import {Style} from "node:util";
+import type * as CSS from "csstype";
 import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography} from "@material-ui/core";
+
+interface Style extends CSS.Properties, CSS.PropertiesHyphen {}
 
 interface AuditReportPanelProps {
 	lhd_units: lhdUnitsType[];
