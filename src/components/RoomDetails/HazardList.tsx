@@ -97,7 +97,7 @@ export const HazardList = ({
 			fields.current = Object.keys(groupedSubmissionList[cat].length > 0 ? groupedSubmissionList[cat][0].submission.data : [])
 				.filter(key => key != 'status' && key != "delete" && key !== 'canDeleteChildren');
 			findChildFields(groupedSubmissionList[cat]);
-			return <div style={{marginTop: '10px'}}>
+			return <div style={{marginTop: '10px'}} key={`${cat}-group`}>
 				{inRoomDetails && <HazardTitle selectedHazardCategory={cat}
 														isReadonly={true} comment={submissionsList.filter(sub => sub.category == cat)[0] ? submissionsList.filter(sub => sub.category == cat)[0].comment : ''}
 														tags={submissionsList.filter(sub => sub.category == cat)[0] ? submissionsList.filter(sub => sub.category == cat)[0].tags : []}
@@ -105,9 +105,9 @@ export const HazardList = ({
 				<TableContainer component={Paper} style={{marginBottom: '5px'}}>
 					<Table size="small" aria-label="a dense table">
 						<TableHead>
-							<TableRow>
+							<TableRow key={cat}>
 								{fields.current.map((field) => (
-									<StyledTableCell inRoomDetails={inRoomDetails}>{splitCamelCase(field)}</StyledTableCell>
+									<StyledTableCell key={field} inRoomDetails={inRoomDetails}>{splitCamelCase(field)}</StyledTableCell>
 								))}
 							</TableRow>
 						</TableHead>
@@ -115,7 +115,7 @@ export const HazardList = ({
 							{groupedSubmissionList[cat].map((submission) => (
 								<>
 									<TableRow
-										key={submission.id}
+										key={submission.opLock}
 										sx={{'&:last-child td, &:last-child th': {border: 0}}}
 									>
 										{fields.current.map((field) => {
@@ -131,12 +131,12 @@ export const HazardList = ({
 											}
 										})}
 									</TableRow>
-									{submission.children && submission.children.length > 0 && <TableRow>
-					  <StyledTableCell colSpan={fields.current.length}>
+									{submission.children && submission.children.length > 0 && <TableRow key={`${submission.opLock}-children`}>
+					  <StyledTableCell colSpan={fields.current.length} inRoomDetails={false}>
 						  <TableContainer component={Paper}>
 							  <Table size="small" aria-label="a dense table">
 								  <TableHead>
-									  <TableRow>
+									  <TableRow key={`${cat}-children`}>
                       {childFields.current.map((childField) => (
                         <StyledTableCellForChild inRoomDetails={inRoomDetails}>{splitCamelCase(childField)}</StyledTableCellForChild>
                       ))}
@@ -146,7 +146,7 @@ export const HazardList = ({
                     {submission.children?.map((submissionChild) => (
                       <>
                         <TableRow
-                          key={submissionChild.id}
+                          key={submissionChild.opLock}
                           sx={{'&:last-child td, &:last-child th': {border: 0}}}
                         >
                           {childFields.current.map((childField) => {
@@ -155,7 +155,7 @@ export const HazardList = ({
                               {
 																(childField === 'fileLink') ?
 																	(label && label != 'NA' ? <a href={label}
-																		 onClick={async e => await handleClickFileLink(e, oidc.accessToken, submissionChild.id, 'labHasHazardsChild')}>{label.split('/').pop()}</a> : '')
+																		 onClick={async e => await handleClickFileLink(e, oidc.accessToken, submissionChild.opLock, 'labHasHazardsChild')}>{label.split('/').pop()}</a> : '')
 																	: label
 															}
                             </StyledTableCellForChild>

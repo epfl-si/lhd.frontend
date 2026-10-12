@@ -239,17 +239,17 @@ export type hazardReferencesType = {
 }
 
 export type hazardAdditionalInfoType = {
-	id?: string;
+	opLock?: string;
 	comment?: string;
-	modified_by?: string;
-	modified_on?: string;
+	modifiedBy?: string;
+	modifiedOn?: string;
 	hazardCategory?: hazardCategory;
 	hazardsAdditionalInfoHasTag?: hazardsAdditionalInfoHasTagType[];
 	hazardsAdditionalInfoHasFile: genericType[];
 }
 
 export type hazardType = {
-	id: string;
+	opLock: string;
 	submission: string;
 	hazardFormHistory: hazardFormHistoryType;
 	children: hazardChildType[];
@@ -258,14 +258,14 @@ export type hazardType = {
 
 export type hazardChildType = {
 	submission: string;
-	id: string;
-	hazard_form_child_history: hazardFormChildHistoryType;
+	opLock: string;
+	hazardFormChildHistory: hazardFormChildHistoryType;
 }
 
 export type hazardFormChildHistoryType = {
 	form: string;
 	version: string;
-	hazard_form_child: hazardFormChildType;
+	hazardFormChild: hazardFormChildType;
 }
 
 export type hazardFormHistoryType = {
@@ -275,7 +275,7 @@ export type hazardFormHistoryType = {
 }
 
 export type hazardFormType = {
-	id?: string;
+	opLock?: string;
 	form: string;
 	version: string;
 	hazardCategory: hazardCategory;
@@ -284,16 +284,16 @@ export type hazardFormType = {
 }
 
 export type hazardFormChildType = {
-	id?: string;
+	opLock?: string;
 	form: string;
 	version: string;
-	hazard_form_child_name: string;
+	hazardFormChildName: string;
 	category?: string;
 }
 
 export type submissionForm = {
-	id: string;
-	submission: object;
+	opLock: string;
+	submission: any;
 	form?: object;
 	children?: submissionForm[];
 	formName?: string;
@@ -303,42 +303,16 @@ export type submissionForm = {
 	tags?: hazardsAdditionalInfoHasTagType[];
 }
 
-export type hazLevelsType = {
-	haz_type: hazType;
-}
-
-export type hazType = {
-	haz_en: string;
-}
-
 export type roomType = {
 	[key: string]: roomType | any;
 };
 
-type dispensationRequestRoomType = {
-	id: number;
-};
-
-type dispensationRequestHolderType = {
-	sciper: number;
-};
-
-export type dispensationRequestType = {
-	subject: string;
-	startDate: string;
-	endDate: string;
-	requirements: string;
-	comment: string;
-	rooms: dispensationRequestRoomType[];
-	holders: dispensationRequestHolderType[];
-};
-
 export type tag = {
-	tag_name: string;
+	tagName: string;
 }
 
 export type hazardsAdditionalInfoHasTagType = {
-	id: string;
+	opLock: string;
 	comment?: string;
 	tag: tag;
 }

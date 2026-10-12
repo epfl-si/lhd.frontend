@@ -17,21 +17,16 @@ export const updateRoom = async (
 ): Promise<any> => {
 	const query = `mutation updateRoom {
 							 updateRoom(
-							 id: ${room.id},
+							 opLock: ${room.opLock},
 							 name: "${room.name}",
 							 kind: "${room.kind?.name}",
 							 vent: "${room.vent ?? 'n'}",
-							 lab_type_is_different: ${room.lab_type_is_different}
-							 units: [${room.lhd_units.map(u =>
+							 labTypeIsDifferent: ${room.labTypeIsDifferent ?? false}
+							 units: [${room.lhdUnits.map(u =>
 								`{
 									name: "${u.name}",
 									status: "${u.status}"
-								}`)}] ) {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								}`)}] )
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -242,7 +237,7 @@ export const saveNewUnitsFromAPI = async (
 export const saveNewRoomsFromAPI = async (
 	address: string | undefined,
 	authToken: string | undefined,
-	selectedRooms: roomDetailsType[],
+	selectedRooms: any[],
 ): Promise<any> => {
 	const query = `mutation saveNewRoomsFromAPI {
 							 createRoom (
@@ -257,12 +252,7 @@ export const saveNewRoomsFromAPI = async (
 									site: "${u.site}"
 									vol: ${u.vol},
 									facultyuse: "${u.facultyuse}"
-								}`)}]) {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								}`)}])
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);

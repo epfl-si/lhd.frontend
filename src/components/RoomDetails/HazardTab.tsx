@@ -26,7 +26,7 @@ export const HazardTab = ({
   // The initial value means none of them.
   const [selectedHazardCategory, setSelectedHazardCategory] = useState<string>('');
   const [action, setAction] = useState<'Add' | 'Edit' | 'Read'>('Read');
-  const listSavedCategories = room.hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name).filter(uniqueFilter);
+  const listSavedCategories = room.hazards.map(h => h.hazardFormHistory.hazardForm.hazardCategory.hazardCategoryName).filter(uniqueFilter);
   const roomList = useRef<string[]>([]);
   const organismList = useRef<object[]>([]);
   const [isNewHazardListVisible, setNewHazardListVisible] = useState(false);
@@ -46,8 +46,8 @@ export const HazardTab = ({
 
         if ( resultsHazardCategory.status === 200 && resultsHazardCategory.data && typeof resultsHazardCategory.data !== 'string' ) {
           const sortedHazardCategories = resultsHazardCategory.data.sort((a: hazardFormType, b: hazardFormType) =>
-            a.hazard_category.hazard_category_name ?
-              a.hazard_category.hazard_category_name.localeCompare(b.hazard_category.hazard_category_name) :
+            a.hazardCategory.hazardCategoryName ?
+              a.hazardCategory.hazardCategoryName.localeCompare(b.hazardCategory.hazardCategoryName) :
               0
           )
           setAvailableHazardsInDB([...sortedHazardCategories]);
@@ -120,7 +120,7 @@ export const HazardTab = ({
   function onChangeHazard(hazard: string) {
     setSelectedHazardCategory(hazard);
     const newHazardArray = availableHazardsInDB.map(h => {
-      h.isSelected = h.hazard_category.hazard_category_name == hazard
+      h.isSelected = h.hazardCategory.hazardCategoryName == hazard
       return h;
     })
     setAvailableHazardsInDB([...newHazardArray]);
@@ -149,7 +149,7 @@ export const HazardTab = ({
                     onChangeAction={onEditHazard}
                     onReadAction={onReadHazard}
                     selectedHazardCategory={selectedHazardCategory}
-                    lastVersionForm={availableHazardsInDB.find(f => f.hazard_category.hazard_category_name == selectedHazardCategory)}
+                    lastVersionForm={availableHazardsInDB.find(f => f.hazardCategory.hazardCategoryName == selectedHazardCategory)}
                     organismList={organismList.current}
                     roomList={roomList.current}/>
     <Notifications

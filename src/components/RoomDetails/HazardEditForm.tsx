@@ -124,12 +124,12 @@ export const HazardEditForm = ({
 			})
 		});
 		formsMapValidation.current = map;
-		setIsSaveDisabled(Object.values(map).some(value => value === false));
+		setIsSaveDisabled(Object.values(map).some(value => !value));
 		setRender(prev => prev + 1);
 	}
 
 	const onChangeSubmission = (id: string) => {
-		return (newSubmission: object, isUnchanged: boolean, isValid: boolean) => {
+		return (newSubmission: any, isUnchanged: boolean, isValid: boolean) => {
 			const oldSubmission = submissionsList.current.find(s => s.id == id);
 			if (oldSubmission) {
 				if (selectedHazardCategory === 'LeadArsenicSelenium' && newSubmission['typeOfArea'] === 'Localized' && oldSubmission.children?.length == 0) {

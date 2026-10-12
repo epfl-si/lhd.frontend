@@ -218,7 +218,7 @@ export const HazardTitle = ({
         openDialog={openTagDialog}
         additionalInfo={hazardAdditionalInfo?.id}
         selectedTag={selectedTag}
-        roomId={room?.id}
+        roomId={room?.opLock}
         categoryName={selectedHazardCategory}
         close={closeTagDialog}
         save={() => {

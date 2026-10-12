@@ -52,7 +52,7 @@ export const DetailsTab = ({
     if (user.canListRooms) {
       const loadFetch = async () => {
         const resultsRoomTypes = await fetchRoomTypes(
-          env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+          env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
           oidc.accessToken
         );
 
@@ -72,16 +72,16 @@ export const DetailsTab = ({
 
   function saveRoomDetails() {
     updateRoom(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
       oidc.accessToken,
       {
-        id: JSON.stringify(room.id),
+        opLock: JSON.stringify(room.opLock),
         hazards: [],
         name: room.name || '',
         kind: room.kind,//designation
         vent: room.vent,//ventilation
-        lhd_units: selectedUnits,
-        lab_type_is_different: room.lab_type_is_different
+        lhdUnits: selectedUnits,
+        labTypeIsDifferent: room.labTypeIsDifferent
       },
     ).then(res => {
       handleOpen(res);
@@ -171,18 +171,18 @@ export const DetailsTab = ({
                 <Button
                   style={{marginLeft: '10px'}}
                   onClick={() => {
-                    room.lab_type_is_different = !room.lab_type_is_different;
-                    if ( !room.lab_type_is_different ) {
+                    room.labTypeIsDifferent = !room.labTypeIsDifferent;
+                    if ( !room.labTypeIsDifferent ) {
                       room.kind = roomKind.find(k => k.name == room.facultyuse?.trim());
                     }
                     setRoom({...room});
                   }}
                   size="icon"
-                  iconName={room.lab_type_is_different ? "#delete" : "#edit-2"}/>
+                  iconName={room.labTypeIsDifferent ? "#delete" : "#edit-2"}/>
 
               </div>
               <Autocomplete
-                style={{visibility: room.lab_type_is_different ? "visible" : "hidden"}}
+                style={{visibility: room.labTypeIsDifferent ? "visible" : "hidden"}}
                 value={room.kind?.name}
                 onChange={(event: any, newValue: string | null) => {
                   if ( newValue ) {
@@ -201,7 +201,7 @@ export const DetailsTab = ({
           <DoorPlug roomName={roomData.name}/>
 
           {(!isExtraLargeDevice && !isLargeDevice) ?
-            <AuditReportPanel lhd_units={roomData.lhd_units} style={{marginLeft: '20px'}}/> : <></>}
+            <AuditReportPanel lhd_units={roomData.lhdUnits} style={{marginLeft: '20px'}}/> : <></>}
           <label className='labelDetails'>{t(`room_details.attachUnitTitle`)}</label>
           <MultipleSelection selected={savedUnits} objectName="Unit"
                              onChangeSelection={onChangeUnits}
@@ -238,13 +238,13 @@ export const DetailsTab = ({
         <div style={{width: '50%'}}>
           <a target="_blank" href={getSNOWLinkForRoom()} rel="noreferrer">{t(`room_details.linkSnow`)}</a>
           <div>
-            <AuditReportPanel lhd_units={roomData.lhd_units}/>
+            <AuditReportPanel lhd_units={roomData.lhdUnits}/>
           </div>
           <div>
-            <AuthorizationPanel room={roomData.id} type='Chemical'/>
+            <AuthorizationPanel room={roomData.opLock} type='Chemical'/>
           </div>
           <div>
-            <AuthorizationPanel room={roomData.id} type='IonisingRadiation'/>
+            <AuthorizationPanel room={roomData.opLock} type='IonisingRadiation'/>
           </div>
           <div>
             <DispensationPanel room={roomData.name}/>

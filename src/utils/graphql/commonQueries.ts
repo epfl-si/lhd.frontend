@@ -8,7 +8,7 @@ export const commonFetchRoomList = async (token: string | undefined,
 																					setNotificationType: (value: (((prevState: notificationType) => notificationType) | notificationType)) => void,
 																					setOpenNotification: (b: boolean) => void): Promise<roomDetailsType[]> => {
 	const results = await fetchRooms(
-		env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+		env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 		token,
 		100,0, "Room=" + room
 	);

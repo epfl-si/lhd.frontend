@@ -21,6 +21,12 @@ type fetchRoomResultsType = {
 	errors?: any;
 };
 
+type fetchRoomDetailsResultsType = {
+	status?: number;
+	data?: roomDetailsType | string;
+	errors?: any;
+};
+
 export type fetchRoomResultsTypeWithPagination = {
 	status?: number;
 	data?: roomsWithPaginationType;
@@ -61,13 +67,19 @@ type fetchUnitsTypeWithPagination = {
 	errors?: any;
 };
 
+type fetchUnitListType = {
+	status?: number;
+	data?: lhdUnitsType[];
+	errors?: any;
+};
+
 type fetchReportFiles = {
 	status?: number;
 	data?: reportFile[];
 	errors?: any;
 };
 
-type unitsWithPaginationType = {
+export type unitsWithPaginationType = {
 	units: lhdUnitsType[];
 	totalCount: number;
 };
@@ -77,10 +89,10 @@ export const fetchRoomDetails = async (
 	authToken: string | undefined,
 	room: string | null,
 	variables: Object
-): Promise<fetchRoomResultsType> => {
+): Promise<fetchRoomDetailsResultsType> => {
 	const query: string = `query SingleRoomFetch { 
-				rooms (where: { name: { equals: "${room}"}, isDeleted: { equals: false } }) {
-				id
+				roomDetails (name: "${room}", isDeleted: false) {
+					opLock
 					name
 					building
 					sector
@@ -88,61 +100,61 @@ export const fetchRoomDetails = async (
 					vol
 					adminuse
 					facultyuse
-					lab_type_is_different
+					labTypeIsDifferent
 					site
 					assignedTo
 					kind {
 						name
 					}
 					hazards {
-						id
+						opLock
 						submission
 						children {
 							submission
-							hazard_form_child_history {
+							hazardFormChildHistory {
 								form
 								version
-								hazard_form_child {
-									id
+								hazardFormChild {
+									opLock
 									form
 									version
-									hazard_form_child_name
+									hazardFormChildName
 								}
 							}
-							id
+							opLock
 						}
-						hazard_form_history {
+						hazardFormHistory {
 							form
-							hazard_form {
+							hazardForm {
 								form
 								version
-								hazard_category {
-									hazard_category_name
+								hazardCategory {
+									hazardCategoryName
 								}
 							}
 						}
 					}
 					hazardAdditionalInfo {
-						id
+						opLock
 						comment
-						modified_by
-						modified_on
-						hazard_category {
-							hazard_category_name
+						modifiedBy
+						modifiedOn
+						hazardCategory {
+							hazardCategoryName
 						}
 						hazardsAdditionalInfoHasTag {
-							id
+							opLock
 							comment
 							tag {
-								tag_name
+								tagName
 							}
 						}
 						hazardsAdditionalInfoHasFile{
-							file_path
+							filePath
 						}
 					}
-					lhd_units {
-						id
+					lhdUnits {
+						opLock
 						unitId
 						name
 						institute {
@@ -151,13 +163,24 @@ export const fetchRoomDetails = async (
 								name
 							}
 						}
-						cosecs {
-							name
-							surname
-						}
-						professors {
-							name
-							surname
+						profiles {
+							role
+							expirationDate
+							unit {
+								name
+								institute {
+									name
+									school {
+										name
+									}
+								}
+							}
+							person {
+								name
+								surname
+								sciper
+								email
+							}
 						}
 					}
 				},
@@ -166,7 +189,7 @@ export const fetchRoomDetails = async (
 	const result = await doGraphQL(query, variables, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.rooms,
+		data: result.data?.roomDetails,
 		errors: result.errors
 	};
 };

@@ -48,12 +48,12 @@ export function readOrEditHazard(room: roomDetailsType, action: string, currentF
 			const childrenList: submissionForm[] = [];
 			h.children.forEach(child => {
 				childrenList.push({
-					id: child.id, submission: JSON.parse(child.submission),
-					form: withForm ? (action == 'Read' ? JSON.parse(child.hazard_form_child_history.form) : JSON.parse(child.hazard_form_child_history.hazard_form_child.form)) : {}
+					opLock: child.opLock, submission: JSON.parse(child.submission),
+					form: withForm ? (action == 'Read' ? JSON.parse(child.hazardFormChildHistory.form) : JSON.parse(child.hazardFormChildHistory.hazardFormChild.form)) : {}
 				});
 			})
 			subForm.push({
-				id: h.id,
+				opLock: h.opLock,
 				submission: JSON.parse(h.submission),
 				form: withForm ? (action == 'Read' ? JSON.parse(h.hazardFormHistory.form) : currentForm) : {},
 				children: childrenList,
