@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import "../../../css/styles.scss";
-import {assessmentType, columnType, dispensationType, notificationType} from "../../utils/ressources/types";
+import {assessmentType, columnType, notificationType} from "../../utils/ressources/types";
 import {env} from "../../utils/env";
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
-import {ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, Typography} from "@material-ui/core";
 import {useTranslation} from "react-i18next";
 import {EntriesTableCategory} from "../Table/EntriesTableCategory";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import Notifications from "../Table/Notifications";
-import {fetchAssessments, fetchDispensations} from "../../utils/graphql/FetchingTools";
-import { getFormattedDate } from '../../utils/ressources/parser';
-import {Button} from "epfl-elements-react-si-extra";
+import {fetchAssessments} from "../../utils/graphql/FetchingTools";
+import {getFormattedDate} from '../../utils/ressources/parser';
+import {Accordion, AccordionDetails, AccordionSummary, Typography} from '@mui/material';
 
 interface AssessmentPanelProps {
 	room: string;
@@ -122,20 +121,20 @@ export const AssessmentPanel = ({
 	};
 
 	return <div className="form-card-div">
-		<ExpansionPanel style={{width: '100%'}}>
-			<ExpansionPanelSummary expandIcon="▽" style={{backgroundColor: '#fafafa'}}>
+		<Accordion style={{width: '100%'}}>
+			<AccordionSummary expandIcon="▽" style={{backgroundColor: '#fafafa'}}>
 				<Typography style={{textDecoration: 'underline', textDecorationColor: 'red'}}>
 					{t('menu.assessments')}</Typography>
-			</ExpansionPanelSummary>
-			<ExpansionPanelDetails style={{display: "flex", flexDirection: "column"}}>
+			</AccordionSummary>
+			<AccordionDetails style={{display: "flex", flexDirection: "column"}}>
 				<EntriesTableCategory
 					tableData={assessments}
 					columns={columnsLarge}
 					loading={loading}
 					pageToOpen={"assessment"}
 				/>
-			</ExpansionPanelDetails>
-		</ExpansionPanel>
+			</AccordionDetails>
+		</Accordion>
 		<Notifications
 			open={openNotification}
 			notification={notificationType}
