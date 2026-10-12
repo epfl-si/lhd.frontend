@@ -30,7 +30,7 @@ export const HazardFormVBox = ({
 }: HazardFormVBoxProps) => {
   const oidc = useOpenIDConnectContext();
   const [submissionsList, setSubmissionList] = useState<submissionForm[]>([]);
-  const hazardAdditionalInfo = selectedHazardCategory ? room.hazardAdditionalInfo.find(h => h.hazard_category?.hazard_category_name == selectedHazardCategory) : undefined;
+  const hazardAdditionalInfo = selectedHazardCategory ? room.hazardAdditionalInfo?.find(h => h.hazardCategory?.hazardCategoryName == selectedHazardCategory) : undefined;
   const currentForm = lastVersionForm?.form ? JSON.parse(lastVersionForm?.form) : {};
 
   useEffect(() => {

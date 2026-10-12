@@ -30,9 +30,9 @@ export const NewHazardChoise = ({
 											okLabel=''>
 		<div style={{flexDirection: 'column'}}>
 		{availableHazardsInDB.map(h => {
-			return !listSavedCategories.includes(h.hazard_category.hazard_category_name) ?
-				<HazardCard hazardName={h.hazard_category.hazard_category_name}
-										key={h.hazard_category.hazard_category_name}
+			return !listSavedCategories.includes(h.hazardCategory.hazardCategoryName) ?
+				<HazardCard hazardName={h.hazardCategory.hazardCategoryName}
+										key={h.hazardCategory.hazardCategoryName}
 										onAdd={onAddHazard}
 										onCloseNewHazardListDialog={onCancelClick}/> :
 				<></>

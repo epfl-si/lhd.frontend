@@ -46,14 +46,14 @@ export default function RoomDetails() {
 
 		setLoadingRoom(true);
 		const results = await fetchRoomDetails(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			decodeURIComponent(urlParams.get('room') as string),
 			{}
 		);
-		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
-			setData(results.data[0]);
-			const listCat = results.data[0].hazards.map(h => h.hazard_form_history.hazard_form.hazard_category.hazard_category_name);
+		if (results.status === 200 && results.data && typeof results.data !== 'string') {
+			setData(results.data);
+			const listCat = results.data.hazards.map(h => h.hazardFormHistory.hazardForm.hazardCategory.hazardCategoryName);
 			const listCatFiltered = listCat.filter((q, idx) => listCat.indexOf(q) === idx);
 			setListSavedCategories(listCatFiltered)
 		} else {
