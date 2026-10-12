@@ -17,7 +17,7 @@ import Notifications from "../Table/Notifications";
 import {MenuItem, Select, TextField} from "@material-ui/core";
 import {Autocomplete, SelectChangeEvent} from "@mui/material";
 import {saveNewRadioprotection, updateRadioprotection} from '../../utils/graphql/PostingTools';
-import {fetchPeopleFromFullText, fetchRooms, fetchunitsFromFullText} from "../../utils/graphql/FetchingTools";
+import {fetchPeopleFromFullText, fetchRooms, fetchUnitsFromFullText} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {Source} from "./SourceList";
 import {getErrorMessage} from "../../utils/graphql/Utils";
@@ -85,7 +85,7 @@ export const AddNewRadioprotectionDialog = ({
 	}, [openDialog, selectedRadioprotection]);
 
 	const fetchUnitsList = async (newValue: string) => {
-		const results = await fetchunitsFromFullText(
+		const results = await fetchUnitsFromFullText(
 			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue

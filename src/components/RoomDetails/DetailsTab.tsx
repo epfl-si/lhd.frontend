@@ -66,8 +66,8 @@ export const DetailsTab = ({
 
   useEffect(() => {
     setRoom(roomData);
-    setSavedUnits(roomData.lhd_units);
-    setSelectedUnits(roomData.lhd_units);
+    setSavedUnits(roomData.lhdUnits);
+    setSelectedUnits(roomData.lhdUnits);
   }, [roomData]);
 
   function saveRoomDetails() {
@@ -115,8 +115,8 @@ export const DetailsTab = ({
   }
 
   const fetchUnitsList = async (newValue: string): Promise<lhdUnitsType[]> => {
-    const results = await fetchunitsFromFullText(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+    const results = await fetchUnitsFromFullText(
+      env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
       oidc.accessToken,
       newValue
     );

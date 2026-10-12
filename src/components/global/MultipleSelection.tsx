@@ -3,7 +3,7 @@ import {DebounceInput, FormCard} from "epfl-elements-react-si-extra";
 import {useTranslation} from "react-i18next";
 import "./multipleSelection.css"
 import "../../../css/styles.scss";
-import {personType} from "../../utils/ressources/types";
+import {profile} from "../../utils/ressources/types";
 
 interface SelectionProps<Member> {
 	/**
@@ -78,7 +78,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			}
 			const filtered = filteredSuggestions.filter((suggestion) => {
 				if (objectName === 'Unit') {
-					return suggestion.id != newValue.id;
+					return suggestion.opLock != newValue.opLock;
 				} else if (objectName === 'Person') {
 					return suggestion.sciper != newValue.sciper;
 				} else if (objectName === 'NewUnit') {
@@ -106,7 +106,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 			fetchData(newValue).then(r => {
 				let filtered: Member[] =  r.filter((suggestion) => {
 					if (objectName === 'Unit') {
-						return !currentlySelected.find(s => s.id == suggestion.id);
+						return !currentlySelected.find(s => s.opLock == suggestion.opLock);
 					} else if (objectName === 'Person') {
 						return !currentlySelected.find(s => s.sciper == suggestion.sciper);
 					} else if (objectName === 'NewUnit') {
@@ -183,8 +183,10 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 								{
 									objectName == 'Unit' ?
 										<div className="displayFlexColumn">
-											{item.cosecs && item.cosecs.length > 0 && <small>Cosec: {item.cosecs?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</small>}
-											{item.professors && item.professors.length > 0 && <small>Prof: {item.professors?.map((i: personType) => i.name.concat(' ').concat(i.surname)).join(', ')}</small>}
+											{item.profiles.sort((a: profile, b: profile) => b.role.localeCompare(a.role))
+												.map((c: profile) => {
+													return <small>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></small>
+												})}
 										</div>
 									: <></>
 								}

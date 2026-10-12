@@ -535,30 +535,41 @@ export const fetchunitsFromFullTextAndPagination = async (
 	};
 };
 
-export const fetchunitsFromFullText = async (
+export const fetchUnitsFromFullText = async (
 	address: string | undefined,
 	authToken: string | undefined,
 	search: string
-): Promise<fetchUnitsTypeWithPagination> => {
+): Promise<fetchUnitListType> => {
 	const query: string = `query UnitFetchFromFullText { 
 						unitsFromFullText(search: "${search}") {
+							name
+							unitId
+							opLock
+							institute {
 								name
-								unitId
-								id
-								institute {
+								school {
 									name
-									school {
+								}
+							}
+							profiles {
+								role
+								expirationDate
+								unit {
+									name
+									institute {
 										name
+										school {
+											name
+										}
 									}
 								}
-								cosecs {
+								person {
 									name
 									surname
+									sciper
+									email
 								}
-								professors {
-									name
-									surname
-								}
+							}
 						}
 					}`;
 
