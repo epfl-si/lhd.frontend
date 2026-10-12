@@ -63,7 +63,7 @@ export const AddNewRoomDialog = ({
 	function onAddRoom() {
 		if (selectedRooms.length > 0) {
 			saveNewRoomsFromAPI(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				selectedRooms,
 			).then(res => {

@@ -36,7 +36,7 @@ export const DeleteRoomDialog = ({
 			deleteRoom(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(room.id),
+				JSON.stringify(room.opLock),
 			).then(res => {
 				handleOpen(res);
 			});

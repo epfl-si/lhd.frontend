@@ -1,14 +1,10 @@
 import {useOpenIDConnectContext} from "@epfl-si/react-appauth";
 import React, {useEffect, useState} from "react";
-import {
-	fetchHazards,
-	fetchOrganismsFromFullText,
-	fetchunitsFromFullTextAndPagination
-} from "../utils/graphql/FetchingTools";
+import {fetchHazards, fetchOrganismsFromFullText} from "../utils/graphql/FetchingTools";
 import {env} from "../utils/env";
 import {Box, Typography, useMediaQuery} from "@material-ui/core";
 import {EntriesTableCategory} from "../components/Table/EntriesTableCategory";
-import {columnType, lhdUnitsType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
+import {columnType, notificationType, organismType, UserInfo} from "../utils/ressources/types";
 import {useTranslation} from "react-i18next";
 import {GridRenderCellParams} from "@mui/x-data-grid";
 import {Button, DebounceInput} from "epfl-elements-react-si-extra";

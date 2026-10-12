@@ -36,7 +36,7 @@ export default function DispensationTable({ data }: DispensationTableProps) {
 		() =>
 			optionsList?.length === 0
 				? originalData
-				: originalData.filter(e =>
+				: originalData.filter((e: any) =>
 						optionsList.every((p: parameterType) =>
 							String(e[p.label]).toUpperCase().includes(p.value.toUpperCase())
 						)
