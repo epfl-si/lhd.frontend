@@ -197,15 +197,15 @@ export type personType = {
 };
 
 export type hazardDetailsType = {
-	lab_display: string,
-	hazard_category_name: string,
-	parent_submission: string,
-	child_submission: string,
-	id_lab_has_hazards_child: string,
-	id_lab_has_hazards: number
-	global_comment?: string,
-	modified_by?: string,
-	modified_on?: Date,
+	labDisplay: string,
+	hazardCategoryName: string,
+	parentSubmission: string,
+	childSubmission: string,
+	idLabHasHazardsChild: string,
+	idLabHasHazards: number
+	globalComment?: string,
+	modifiedBy?: string,
+	modifiedOn?: Date,
 	tags?: string
 }
 
