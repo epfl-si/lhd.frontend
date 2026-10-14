@@ -156,9 +156,9 @@ export function removeDuplicates(items: any[]): any[] {
 	const map = new Map<string, any>();
 
 	for (const item of items) {
-		const existing = map.get(item.file_path.split('/').pop());
+		const existing = map.get(item.filePath.split('/').pop());
 		if (!existing || (existing.status === 'New' && item.status !== 'New')) {
-			map.set(item.file_path.split('/').pop(), item);
+			map.set(item.filePath.split('/').pop(), item);
 		}
 	}
 

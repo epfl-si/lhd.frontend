@@ -90,7 +90,7 @@ export const HazardTab = ({
     );
     if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
       organismList.current = results.data;
-      organismList.current.push({filePath: null, organism: "Other", risk_group: 1});
+      organismList.current.push({filePath: null, organism: "Other", riskGroup: 1});
     } else {
       const errors = getErrorMessage(results, 'bioOrgs');
       setNotificationType(errors.notif);

@@ -77,7 +77,7 @@ export const HazardEditForm = ({
 				case "Edit":
 					setSubmissionListAndValidationMap([...initialSubmissionsList], '', true);
 					break;
-			};
+			}
 		};
 		loadFetch();
 		setComment(decodeURIComponent(hazardAdditionalInfo?.comment ?? ''));
@@ -87,15 +87,15 @@ export const HazardEditForm = ({
 	function onAddHazard(submissions: submissionForm[]) {
 		const newKey = createKey(10);
 		const id = `{"salt":"newHazard${newKey}","eph_id":"newHazard${newKey}"}`;
-		let children: { id: string; submission: { data: {}; }; form: any; }[] = [];
+		let children: { opLock: string; submission: { data: {}; }; form: any; }[] = [];
 		if (currentFormChild && selectedHazardCategory !== 'LeadArsenicSelenium') {
 			children = [{
-				id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+				opLock: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
 				form: currentFormChild
 			}];//TODO make it generic if there are more than one child, in this case add one form for each child
 		}
 		setSubmissionListAndValidationMap([...submissions, {
-			id: id, submission: {data: {}},
+			opLock: id, submission: {data: {}},
 			form: currentForm, children: children
 		}], id, JSON.stringify(currentForm).indexOf('"required":true') == -1 &&
 			(currentFormChild && selectedHazardCategory !== 'LeadArsenicSelenium' ? JSON.stringify(currentFormChild).indexOf('"required":true') == -1 : true));
@@ -103,13 +103,13 @@ export const HazardEditForm = ({
 
 	function onAddHazardChild(parentId: string) {
 		const newKey = createKey(10);
-		const parent = submissionsList.current.find(s => s.id == parentId);
+		const parent = submissionsList.current.find(s => s.opLock == parentId);
 		if(parent) {
 			const id = `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`;
 			parent.children?.push({
-				id: id, submission: {data: {}},
+				opLock: id, submission: {data: {}},
 				form: currentFormChild});
-			setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == parentId ? parent : s),
+			setSubmissionListAndValidationMap(submissionsList.current.map(s => s.opLock == parentId ? parent : s),
 				id, JSON.stringify(currentFormChild).indexOf('"required":true') == -1);
 		}
 	}
@@ -118,9 +118,9 @@ export const HazardEditForm = ({
 		submissionsList.current = submissions;
 		const map: {[key: string]: boolean} = {};
 		submissions.forEach(s => {
-			map[s.id] = s.submission.data.status == 'Deleted' || getValidationFromMapItem(s.id, id, isValid, JSON.stringify(s));
+			map[s.opLock] = s.submission.data.status == 'Deleted' || getValidationFromMapItem(s.opLock, id, isValid, JSON.stringify(s));
 			s.children?.forEach(child => {
-				map[child.id] = child.submission.data.status == 'Deleted' || getValidationFromMapItem(child.id, id, isValid, JSON.stringify(child));
+				map[child.opLock] = child.submission.data.status == 'Deleted' || getValidationFromMapItem(child.opLock, id, isValid, JSON.stringify(child));
 			})
 		});
 		formsMapValidation.current = map;
@@ -130,18 +130,18 @@ export const HazardEditForm = ({
 
 	const onChangeSubmission = (id: string) => {
 		return (newSubmission: any, isUnchanged: boolean, isValid: boolean) => {
-			const oldSubmission = submissionsList.current.find(s => s.id == id);
+			const oldSubmission = submissionsList.current.find(s => s.opLock == id);
 			if (oldSubmission) {
 				if (selectedHazardCategory === 'LeadArsenicSelenium' && newSubmission['typeOfArea'] === 'Localized' && oldSubmission.children?.length == 0) {
 					const newKey = createKey(10);
 					oldSubmission.children.push({
-						id: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
+						opLock: `{"salt":"newHazardChild${newKey}","eph_id":"newHazardChild${newKey}"}`, submission: {data: {}},
 						form: currentFormChild
 					});
 				}
-				const changedSubmission = {id, submission: {data: newSubmission}, form: currentForm,
+				const changedSubmission = {opLock: id, submission: {data: newSubmission}, form: currentForm,
 					children: oldSubmission.children};
-				setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == id ? changedSubmission : s), id, isValid);
+				setSubmissionListAndValidationMap(submissionsList.current.map(s => s.opLock == id ? changedSubmission : s), id, isValid);
 			}
 		}
 	}
@@ -152,17 +152,17 @@ export const HazardEditForm = ({
 			let oldParentSubmission: submissionForm | undefined;
 			let oldChildSubmission: submissionForm | undefined;
 			submissionsList.current.forEach(s => {
-				const child = s.children?.find(c => c.id == id);
+				const child = s.children?.find(c => c.opLock == id);
 				if (child) {
 					oldParentSubmission = s;
 					oldChildSubmission = child;
 				}
 			});
 			if(oldParentSubmission && oldChildSubmission) {
-				const changedChildSubmission = {id, submission: {data: newSubmission}, form: currentFormChild};
-				const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.id == id ? changedChildSubmission : s);
+				const changedChildSubmission = {opLock: id, submission: {data: newSubmission}, form: currentFormChild};
+				const updatedParentSubmissionChildren = oldParentSubmission.children?.map(s => s.opLock == id ? changedChildSubmission : s);
 				const changedParentSubmission: submissionForm = {...oldParentSubmission, children: updatedParentSubmissionChildren};
-				setSubmissionListAndValidationMap(submissionsList.current.map(s => s.id == oldParentSubmission?.id ? changedParentSubmission : s), id, isValid);
+				setSubmissionListAndValidationMap(submissionsList.current.map(s => s.opLock == oldParentSubmission?.opLock ? changedParentSubmission : s), id, isValid);
 			}
 		}
 	}
@@ -184,11 +184,11 @@ export const HazardEditForm = ({
 			const submissionsToSave: submissionForm[] = [];
 			submissionsList.current.forEach(f => {
 				submissionsToSave.push({
-					id: JSON.parse(f.id),
+					opLock: JSON.parse(f.opLock),
 					submission: f.submission,
 					children: f.children?.map(c => {
-						const childForSave: submissionForm = {id: JSON.parse(c.id), submission: c.submission,
-							formName: currentFormChild ? lastVersionForm!.children![0].hazard_form_child_name : ''};
+						const childForSave: submissionForm = {opLock: JSON.parse(c.opLock), submission: c.submission,
+							formName: currentFormChild ? lastVersionForm!.children![0].hazardFormChildName : ''};
 						return childForSave;
 					})
 				})
@@ -258,21 +258,21 @@ export const HazardEditForm = ({
 							iconName={"#plus-circle"}
 							onClick={() => onAddHazard(submissionsList.current)}
 							style={{visibility: action == "Edit" ? "visible" : "hidden", color: '#ff0000', marginTop: '5px'}}/>
-			{submissionsList.current.map(sf => <div key={sf.id + action + 'div'}>
-					<HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.id)}
-											key={sf.id + action} roomList={roomList} organismList={organismList}/>
+			{submissionsList.current.map(sf => <div key={sf.opLock + action + 'div'}>
+					<HazardForm submission={sf} action={action} onChangeSubmission={onChangeSubmission(sf.opLock)}
+											key={sf.opLock + action} roomList={roomList} organismList={organismList}/>
 					{currentFormChild &&
 				<Button size="icon"
 						iconName={"#plus-circle"}
-						onClick={() => onAddHazardChild(sf.id)}
+						onClick={() => onAddHazardChild(sf.opLock)}
 						style={{visibility: action == "Edit" ? "visible" : "hidden", marginLeft: '30px'}}/>}
-					{sf.children && sf.children.map(child => <div key={child.id + action + 'div'}
+					{sf.children && sf.children.map(child => <div key={child.opLock + action + 'div'}
 																												style={{marginLeft: '30px', display: "flex", flexDirection: "row"}}>
 							<Button size="icon"
 											iconName={"#corner-down-right"}
 											style={{marginRight: '5px', zIndex: '10'}}/>
-							<HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.id)}
-													key={child.id + action} roomList={roomList} organismList={organismList}/>
+							<HazardForm submission={child} action={action} onChangeSubmission={onChangeChildSubmission(child.opLock)}
+													key={child.opLock + action} roomList={roomList} organismList={organismList}/>
 						</div>
 					)}
 					<hr style={{height: '3px', backgroundColor: '#FFCECE'}}/>

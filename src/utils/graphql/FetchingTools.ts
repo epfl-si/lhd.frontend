@@ -610,17 +610,17 @@ export const fetchHazardForms = async (
 ): Promise<any> => {
 	const query = `query fetchHazardForms {
 				hazardForms {
-					id
+					opLock
 					form
 					version
-					hazard_category {
-						hazard_category_name
+					hazardCategory {
+						hazardCategoryName
 					}
 					children {
-						id
+						opLock
 						form
 						version
-						hazard_form_child_name
+						hazardFormChildName
 					}
 				}
 			}`;
@@ -758,7 +758,7 @@ export const fetchOrganism = async (
 	const query = `query org {
 	bioOrgs {
 		organism
-		risk_group
+		riskGroup
 		filePath
 	}
 }`;

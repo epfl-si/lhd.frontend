@@ -32,7 +32,7 @@ export default function MultiFileUploader({
 		const fileList: genericType[] = [];
 		for (let i = 0; i < newFiles.length; i++) {
 			const base64 = await readFileAsBase64(newFiles[i]);
-			fileList.push({status: "New", file_path: newFiles[i].name, base64});
+			fileList.push({status: "New", filePath: newFiles[i].name, base64});
 		}
 
 		const selected = removeDuplicates([...selectedFiles, ...fileList]);
@@ -54,18 +54,18 @@ export default function MultiFileUploader({
 			multiple
 		/>}
 		{visibleFiles.map(file => {
-			if (file.file_path) {
+			if (file.filePath) {
 				return <div style={{display: "flex", flexDirection: "row", alignItems: "baseline", marginTop: "5px"}}>
 					<a style={{fontSize: 'small'}}
-						 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedId, model, file.file_path)}
-						 href={file.file_path}>{file.file_path.split('/').pop()}
+						 onClick={async e => await handleClickFileLink(e, oidc.accessToken, selectedId, model, file.filePath)}
+						 href={file.filePath}>{file.filePath.split('/').pop()}
 					</a>
 					<Button size="icon"
 									style={{marginLeft: '10px'}}
 									iconName={`#trash`}
 									onClick={() => {
 										const list = selectedFiles.map(f => {
-											if ( f.file_path !== file.file_path ) return f;
+											if ( f.filePath !== file.filePath ) return f;
 											if ( f.status === 'New' ) return undefined;
 											if ( f.status === undefined ) return {...f, status: 'Deleted'} as genericType;
 											return f;

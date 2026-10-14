@@ -157,15 +157,9 @@ export const addHazard = async (
 							 	comment: "${additionalInfo.comment}",
 							 },
 							files: [
-								${additionalInfo.hazardsAdditionalInfoHasFile.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+								${additionalInfo.hazardsAdditionalInfoHasFile.map(ass => `{status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}${ass.filePath ? `, path: "${ass.filePath}"` : ''}}`)}
 							],
-							 category: "${lastVersionForm.hazard_category.hazard_category_name}")
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 category: "${lastVersionForm.hazardCategory.hazardCategoryName}")
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
