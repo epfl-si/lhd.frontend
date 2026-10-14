@@ -1216,15 +1216,15 @@ export const fetchTags = async (
 	savedTags: string[]
 ): Promise<any> => {
 	const query = `query fetchTags {
-		tags (where: {tag_name: {notIn: ${JSON.stringify(savedTags)}}}) {
-			tag_name
+		availableTags (savedTags: ${JSON.stringify(savedTags)}) {
+			tagName
 		}
 	}`;
 
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.tags,
+		data: result.data?.availableTags,
 		errors: result.errors
 	};
 };

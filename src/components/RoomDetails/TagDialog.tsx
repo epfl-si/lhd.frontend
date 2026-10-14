@@ -46,24 +46,24 @@ export const TagDialog = ({
 	const [tag, setTag] = useState<string>();
 
 	useEffect(() => {
-		setTag(selectedTag?.tag.tag_name);
+		setTag(selectedTag?.tag.tagName);
 		setComment(decodeURIComponent(selectedTag?.comment || ''));
 	}, [openDialog, selectedTag]);
 
 	async function onAddTag() {
 		if (tag && comment) {
-			if (selectedTag?.id) {
+			if (selectedTag?.opLock) {
 				updateTag(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
-					JSON.stringify(selectedTag.id),
+					JSON.stringify(selectedTag.opLock),
 					encodeURIComponent(comment ?? '')
 				).then(res => {
 					handleOpen(res, false);
 				});
 			} else {
 				saveTag(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					tag,
 					encodeURIComponent(comment ?? ''),
@@ -113,7 +113,7 @@ export const TagDialog = ({
 					}}
 					id="tag"
 					key={tag}
-					options={availableTags.map(k => k.tag_name)}
+					options={availableTags.map(k => k.tagName)}
 					renderInput={(params) => <TextField {...params} />}
 				/>
 				<TextArea
