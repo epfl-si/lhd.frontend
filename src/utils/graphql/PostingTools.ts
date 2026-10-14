@@ -646,17 +646,14 @@ export const saveTag = async (
 	roomId: string
 ): Promise<any> => {
 	const query = `mutation addTag {
-								addTag(tag: "${tag}",
-								comment: "${comment}", additionalInfoId: ${JSON.stringify(additionalInfoId)},
-								categoryName: "${categoryName}", 
-								roomId: ${JSON.stringify(roomId)})
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
-						}`;
+		addTag(
+			tag: "${tag}",
+			comment: "${comment}", 
+			additionalInfoId: ${JSON.stringify(additionalInfoId)},
+			categoryName: "${categoryName}", 
+			roomId: ${JSON.stringify(roomId)}
+		)
+}`;
 
 	return doGraphQL(query, {}, address, authToken);
 };
@@ -668,13 +665,7 @@ export const updateTag = async (
 	comment: string,
 ): Promise<any> => {
 	const query = `mutation updateTag {
-								updateTag(id: ${id}, comment: "${comment}")
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								updateTag(opLock: ${id}, comment: "${comment}")
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -686,13 +677,7 @@ export const deleteTag = async (
 	id: string
 ): Promise<any> => {
 	const query = `mutation deleteTag {
-								deleteTag(id: ${id})
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								deleteTag(opLock: ${id})
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
