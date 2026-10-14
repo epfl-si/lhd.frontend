@@ -468,7 +468,7 @@ export const fetchOtherRoomsForStaticMagneticField = async (
 	roomName: string
 ): Promise<fetchRoomResultsType> => {
 	const query: string = `query OtherRoomsFetch { 
-			rooms (where: {name: {equals: "${roomName}"}}) {
+			roomDetails (name: "${roomName}") {
 					name
 					hazardReferences {
 					submission
@@ -476,10 +476,10 @@ export const fetchOtherRoomsForStaticMagneticField = async (
 							room {
 								name
 							}
-							hazard_form_history {
-								hazard_form {
-									hazard_category {
-										hazard_category_name
+							hazardFormHistory {
+								hazardForm {
+									hazardCategory {
+										hazardCategoryName
 									}
 								}
 							}

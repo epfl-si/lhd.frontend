@@ -102,14 +102,14 @@ export const HazardTitle = ({
     if (hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag)
       savedTags = hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo => addInfo.tag.tagName);
     const results = await fetchTags(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
       oidc.accessToken,
       savedTags
     );
     if ( results.status === 200 && results.data ) {
       setAvailableTags(results.data);
     } else {
-      const errors = getErrorMessage(results, 'tags');
+      const errors = getErrorMessage(results, 'availableTags');
       setNotificationType(errors.notif);
       setOpenNotification(true);
     }

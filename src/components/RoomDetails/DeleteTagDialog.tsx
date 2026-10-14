@@ -34,9 +34,9 @@ export const DeleteTagDialog = ({
 	function deleteTagFromAdditionalInfo() {
 		if (tag) {
 			deleteTag(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(tag.id),
+				JSON.stringify(tag.opLock),
 			).then(res => {
 				handleOpen(res);
 			});

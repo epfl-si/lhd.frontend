@@ -81,13 +81,7 @@ export const deleteRoom = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteRoom {
-							 deleteRoom(id: ${id} )
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteRoom(opLock: ${id} )
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
