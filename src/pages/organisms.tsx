@@ -213,7 +213,7 @@ export const OrganismsControl = ({
 		setLoadingDelete(true);
 		setSelectedOrganism(dataOrganism);
 		const results = await fetchHazards(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			20,
 			0,
@@ -231,7 +231,7 @@ export const OrganismsControl = ({
 
 	function deleteOrg(dataOrganism: organismType) {
 		deleteOrganism(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			JSON.stringify(dataOrganism?.opLock),
 		).then(res => {
@@ -253,7 +253,7 @@ export const OrganismsControl = ({
 	const onExport = async () => {
 		setLoading(true);
 		const results = await fetchOrganismsFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			search,
 			0, 0
