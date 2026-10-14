@@ -40,7 +40,7 @@ export const HazardTab = ({
     if (user.canListHazards) {
       const loadFetch = async () => {
         const resultsHazardCategory = await fetchHazardForms(
-          env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+          env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
           oidc.accessToken
         );
 
@@ -66,7 +66,7 @@ export const HazardTab = ({
 
   const fetchRoomList = async () => {
     const results = await fetchRoomsForDropDownComponent(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
       oidc.accessToken
     );
     if (results.status === 200 && results.data && typeof results.data !== 'string') {
@@ -85,7 +85,7 @@ export const HazardTab = ({
 
   const fetchOrganismList = async () => {
     const results = await fetchOrganism(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
       oidc.accessToken
     );
     if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {

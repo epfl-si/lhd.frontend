@@ -194,7 +194,7 @@ export const HazardEditForm = ({
 				})
 			});
 			addHazard(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				submissionsToSave,
 				lastVersionForm,

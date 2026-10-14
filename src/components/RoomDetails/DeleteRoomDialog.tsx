@@ -34,7 +34,7 @@ export const DeleteRoomDialog = ({
 	function deleteRoomDetails() {
 		if (room) {
 			deleteRoom(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				JSON.stringify(room.opLock),
 			).then(res => {
