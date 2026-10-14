@@ -54,17 +54,18 @@ export default function HazardFormDetails() {
 
 	const loadFetch = async (cat: string) => {
 		const results = await fetchHazardFormDetails(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			cat
 		);
-		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
-			setHazardFormDetails(results.data[0]);
-			setNewForm(JSON.stringify(results.data[0].form));
-			setOriginalForm(results.data[0].form);
-			setCategory(results.data[0].hazard_category.hazard_category_name);
+
+		if (results.status === 200 && results.data && typeof results.data !== 'string') {
+			setHazardFormDetails(results.data);
+			setNewForm(JSON.stringify(results.data.form));
+			setOriginalForm(results.data.form);
+			setCategory(results.data.hazardCategory.hazardCategoryName);
 		} else {
-			const errors = getErrorMessage(results, 'hazardForms');
+			const errors = getErrorMessage(results, 'hazardFormByCategoryName');
 			setNotificationType(errors.notif);
 			setOpenNotification(true);
 		}
@@ -74,12 +75,12 @@ export default function HazardFormDetails() {
 		if (category != '' && newForm && newForm != '') {
 			if (urlParams.get('cat') === 'NewCategory') {
 				createNewHazardCategory (
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					{
 						form: JSON.stringify(newForm),
 						version: '1.0.0',
-						hazard_category: {hazard_category_name: category}
+						hazardCategory: {hazardCategoryName: category}
 					}
 				).then(res => {
 					handleOpen(res);
@@ -89,13 +90,13 @@ export default function HazardFormDetails() {
 				const newFormKeys = findAllKeysForSubmission(JSON.parse(newForm));
 				const newVersion = compareVersions(originalFormKeys, newFormKeys, hazardFormDetails?.version);
 				updateFormHazard (
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					{
-						id: JSON.stringify(hazardFormDetails?.id),
+						opLock: JSON.stringify(hazardFormDetails?.opLock),
 						form: JSON.stringify(newForm),
 						version: newVersion,
-						hazard_category: {hazard_category_name: category}
+						hazardCategory: {hazardCategoryName: category}
 					}
 				).then(res => {
 					handleOpen(res);
@@ -136,7 +137,7 @@ export default function HazardFormDetails() {
 			{user.isAdmin ? <><Typography
 									gutterBottom>{urlParams.get('cat') === 'NewCategory' ?
 				t(`hazardFormControl.Create`) :
-				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazard_category.hazard_category_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormDetails?.version}</strong>)
+				t(`hazardFormControl.Modify`)} <strong>{hazardFormDetails?.hazardCategory.hazardCategoryName}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormDetails?.version}</strong>)
 			</Typography>
 			<div style={{display: "flex", flexDirection: 'row'}}>
 				<div className="col-9">
@@ -170,7 +171,7 @@ export default function HazardFormDetails() {
 				<div className="col-3">
 					{hazardFormDetails?.children &&
 							<HazardFormChildList hazardFormChildList={hazardFormDetails.children}
-																	 category={hazardFormDetails?.hazard_category.hazard_category_name}/>}
+																	 category={hazardFormDetails?.hazardCategory.hazardCategoryName}/>}
 				</div>
 			</div>
 			<Notifications

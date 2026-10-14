@@ -87,10 +87,10 @@ export function EntriesTableCategory({
 								window.open(url, '_blank', 'noopener,noreferrer');
 								break;
 							case "hazardForms":
-								history.push(`/formdetails?cat=${e.row['hazard_category']['hazard_category_name']}`);
+								history.push(`/formdetails?cat=${e.row['hazardCategory']['hazardCategoryName']}`);
 								break;
 							case "hazardFormsChild":
-								history.push(`/hazardFormChildDetails?name=${e.row['hazard_form_child_name']}`);
+								history.push(`/hazardFormChildDetails?name=${e.row['hazardFormChildName']}`);
 								break;
 							case "unit":
 								if (canModify) {
@@ -115,11 +115,11 @@ export function EntriesTableCategory({
 							case "radioprotectionauthorization":
 								return row.authorization;
 							case "hazards":
-								return row.id_lab_has_hazards_child ?? row.id_lab_has_hazards;
+								return row.idLabHasHazardsChild ?? row.idLabHasHazards;
 							case "hazardForms":
-								return row.hazard_category.hazard_category_name;
+								return row.hazardCategory.hazardCategoryName;
 							case "hazardFormsChild":
-								return row.hazard_form_child_name;
+								return row.hazardFormChildName;
 							case "dispensation":
 								return row.dispensation;
 							case "assessment":

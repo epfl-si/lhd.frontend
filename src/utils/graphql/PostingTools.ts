@@ -166,15 +166,9 @@ export const updateFormHazard = async (
 ): Promise<any> => {
 	const query = `mutation updateFormHazard {
 							 updateForm (
-							 id: ${hazardForm.id},
+							 opLock: ${hazardForm.opLock},
 							 form: ${hazardForm.form},
-							 version: "${hazardForm.version}",
-							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 version: "${hazardForm.version}",)
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -189,12 +183,7 @@ export const createNewHazardCategory = async (
 							 createNewHazardCategory (
 							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
-							 hazard_category_name: "${hazardForm.hazard_category.hazard_category_name}",) {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 hazardCategoryName: "${hazardForm.hazardCategory.hazardCategoryName}",)
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -255,13 +244,8 @@ export const createNewHazardFormChild = async (
 							 createNewHazardFormChild (
 							 form: ${hazardForm.form},
 							 version: "${hazardForm.version}",
-							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}",
-							 category: "${hazardForm.category}") {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 hazardFormChildName: "${hazardForm.hazardFormChildName}",
+							 category: "${hazardForm.category}")
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -274,15 +258,9 @@ export const updateHazardFormChild = async (
 ): Promise<any> => {
 	const query = `mutation updateHazardFormChild {
 							 updateHazardFormChild (
-							 id: ${hazardForm.id},
+							 opLock: ${hazardForm.opLock},
 							 form: ${hazardForm.form},
-							 version: "${hazardForm.version}",
-							 hazard_form_child_name: "${hazardForm.hazard_form_child_name}") {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 version: "${hazardForm.version}")
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);

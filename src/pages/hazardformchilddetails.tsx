@@ -56,16 +56,17 @@ export default function HazardFormChildDetails() {
 
 	const loadFetch = async (name: string) => {
 		const results = await fetchHazardFormChild(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			name
 		);
-		if (results.status === 200 && results.data && typeof results.data !== 'string' && results.data[0]) {
-			setHazardFormChildDetails(results.data[0]);
-			setNewForm(JSON.stringify(results.data[0].form));
-			setName(results.data[0].hazard_form_child_name);
-			setCategory(results.data[0].parentForm.hazard_category.hazard_category_name);
-			setOriginalForm(results.data[0].form);
+
+		if (results.status === 200 && results.data && typeof results.data !== 'string') {
+			setHazardFormChildDetails(results.data);
+			setNewForm(JSON.stringify(results.data.form));
+			setName(results.data.hazardFormChildName);
+			setCategory(results.data.parentForm.hazardCategory.hazardCategoryName);
+			setOriginalForm(results.data.form);
 		} else {
 			const errors = getErrorMessage(results, 'hazardFormChildren');
 			setNotificationType(errors.notif);
@@ -77,12 +78,12 @@ export default function HazardFormChildDetails() {
 		if (name != '' && newForm && newForm != '') {
 			if (urlParams.get('name') === 'NewHazardFormChild') {
 				createNewHazardFormChild (
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					{
 						form: JSON.stringify(newForm),
 						version: '1.0.0',
-						hazard_form_child_name: name,
+						hazardFormChildName: name,
 						category: category
 					}
 				).then(res => {
@@ -93,13 +94,13 @@ export default function HazardFormChildDetails() {
 				const newFormKeys = findAllKeysForSubmission(JSON.parse(newForm));
 				const newVersion = compareVersions(originalFormKeys, newFormKeys, hazardFormChildDetails?.version);
 				updateHazardFormChild (
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					{
-						id: JSON.stringify(hazardFormChildDetails?.id),
+						opLock: JSON.stringify(hazardFormChildDetails?.opLock),
 						form: JSON.stringify(newForm),
 						version: newVersion,
-						hazard_form_child_name: name
+						hazardFormChildName: name
 					}
 				).then(res => {
 					handleOpen(res);
@@ -139,7 +140,7 @@ export default function HazardFormChildDetails() {
 	return <Box>
 			{user.isAdmin ? <><BackButton icon="#arrow-left" onClickButton={() => {history.push(`/formdetails?cat=${category}`)}} alwaysPresent={true}/>
 			{hazardFormChildDetails && <Typography
-				gutterBottom><strong>{hazardFormChildDetails?.hazard_form_child_name}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormChildDetails?.version}</strong>)
+				gutterBottom><strong>{hazardFormChildDetails?.hazardFormChildName}</strong> ({t(`hazardFormControl.newVersionCurrentIs`)} <strong>{hazardFormChildDetails?.version}</strong>)
 			</Typography>}
 			{urlParams.get('name') === 'NewHazardFormChild' && <TextField
 		  onChange={(event => {setName(event.target.value)})}
