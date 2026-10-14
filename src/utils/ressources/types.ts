@@ -160,7 +160,7 @@ export type profile = {
 }
 
 export type genericType = {
-	file_path?: string;
+	filePath?: string;
 	base64?: string;
 	source?: string;
 	ticket_number?: string;

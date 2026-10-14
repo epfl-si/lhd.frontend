@@ -70,7 +70,7 @@ export const DeleteTagDialog = ({
 									 onCancelClick={() => setOpenDialog(false)}
 									 cancelLabel={t('generic.cancelButton')}
 									 okLabel={t('generic.deleteButton')}
-									 title={t('hazard.deleteTag') + tag.tag.tag_name + "?"}>
+									 title={t('hazard.deleteTag') + tag.tag.tagName + "?"}>
 			</AlertDialog>}
 
 			<Notifications

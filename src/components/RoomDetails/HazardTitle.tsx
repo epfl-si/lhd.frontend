@@ -75,7 +75,7 @@ export const HazardTitle = ({
 
   const loadOtherRoomsForStaticMagneticField = async () => {
     const results = await fetchOtherRoomsForStaticMagneticField(
-      env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+      env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
       oidc.accessToken,
       room!.name
     );
@@ -100,7 +100,7 @@ export const HazardTitle = ({
   const loadTags = async () => {
     let savedTags: string[] = [];
     if (hazardAdditionalInfo && hazardAdditionalInfo.hazardsAdditionalInfoHasTag)
-      savedTags = hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo => addInfo.tag.tag_name);
+      savedTags = hazardAdditionalInfo.hazardsAdditionalInfoHasTag.map(addInfo => addInfo.tag.tagName);
     const results = await fetchTags(
       env().REACT_APP_GRAPHQL_ENDPOINT_URL,
       oidc.accessToken,
@@ -127,10 +127,10 @@ export const HazardTitle = ({
         <img style={{margin: '5px', width: '30px', height: '30px'}}
              src={getHazardImage(selectedHazardCategory)}/>
         <strong className="hazardTitle">{t(`hazards.`.concat(selectedHazardCategory))}</strong>
-        {hazardAdditionalInfo && hazardAdditionalInfo.modified_on && <label
+        {hazardAdditionalInfo && hazardAdditionalInfo.modifiedOn && <label
           style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
-          className="hazardTitle">({sprintf(t(`hazards.modification_info`), hazardAdditionalInfo.modified_by,
-          (new Date(hazardAdditionalInfo.modified_on)).toLocaleString('fr-CH', {
+          className="hazardTitle">({sprintf(t(`hazards.modification_info`), hazardAdditionalInfo.modifiedBy,
+          (new Date(hazardAdditionalInfo.modifiedOn)).toLocaleString('fr-CH', {
             year: 'numeric',
             month: 'numeric',
             day: 'numeric',
@@ -144,7 +144,7 @@ export const HazardTitle = ({
             <Tooltip title={decodeURIComponent(t?.comment || '')}>
               <Chip
                 className="chip"
-                label={t.tag.tag_name}
+                label={t.tag.tagName}
               />
             </Tooltip>)}
         </>}
@@ -160,7 +160,7 @@ export const HazardTitle = ({
           <Tooltip title={decodeURIComponent(addInfo?.comment || '')}>
             <Chip
               className="chip"
-              label={addInfo.tag.tag_name}
+              label={addInfo.tag.tagName}
               onClick={() => {
                 setOpenTagDialog(true);
                 setSelectedTag(addInfo);
@@ -206,7 +206,7 @@ export const HazardTitle = ({
       selectedFiles={selectedFiles}
       setSelectedFiles={setSelectedFiles}
       isReadonly={isReadonly}
-      selectedId={hazardAdditionalInfo?.id ?? ''}/>}
+      selectedId={hazardAdditionalInfo?.opLock ?? ''}/>}
     <Notifications
       open={openNotification}
       notification={notificationType}
@@ -216,7 +216,7 @@ export const HazardTitle = ({
       <TagDialog
         availableTags={availableTags}
         openDialog={openTagDialog}
-        additionalInfo={hazardAdditionalInfo?.id}
+        additionalInfo={hazardAdditionalInfo?.opLock}
         selectedTag={selectedTag}
         roomId={room?.opLock}
         categoryName={selectedHazardCategory}

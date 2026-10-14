@@ -25,7 +25,7 @@ export const SplitButton = ({
 	const anchorRef = React.useRef(null);
 	const [selectedIndex, setSelectedIndex] = React.useState(0);
 
-	const handleMenuItemClick = (event, index) => {
+	const handleMenuItemClick = (event: React.MouseEvent<HTMLLIElement, MouseEvent>, index: React.SetStateAction<number>) => {
 		setSelectedIndex(index);
 		setOpen(false);
 	};
@@ -34,7 +34,7 @@ export const SplitButton = ({
 		setOpen((prevOpen) => !prevOpen);
 	};
 
-	const handleClose = (event) => {
+	const handleClose = (event: { target: any; }) => {
 		if (anchorRef.current && anchorRef.current.contains(event.target)) {
 			return;
 		}
@@ -46,7 +46,7 @@ export const SplitButton = ({
 		options.length > 1 ?
 			<>
 				<ButtonGroup variant="contained" color="primary" ref={anchorRef} aria-label="split button">
-					<Button onClick={() => handleClick(options[selectedIndex])}>{options[selectedIndex]?.tag_name}</Button>
+					<Button onClick={() => handleClick(options[selectedIndex])}>{options[selectedIndex]?.tagName}</Button>
 					<Button color="primary"
 						size="small"
 						aria-controls={open ? 'split-button-menu' : undefined}
@@ -71,11 +71,11 @@ export const SplitButton = ({
 									<MenuList id="split-button-menu">
 										{options.map((option, index) => (
 											<MenuItem
-												key={option.tag_name}
+												key={option.tagName}
 												selected={index === selectedIndex}
 												onClick={(event) => handleMenuItemClick(event, index)}
 											>
-												{option.tag_name}
+												{option.tagName}
 											</MenuItem>
 										))}
 									</MenuList>
@@ -87,7 +87,7 @@ export const SplitButton = ({
 			</> :
 			<Chip
 				className="grayChip"
-				label={options[selectedIndex]?.tag_name?.toUpperCase()}
+				label={options[selectedIndex]?.tagName?.toUpperCase()}
 				onClick={() => handleClick(options[0])}
 			/>
 	);

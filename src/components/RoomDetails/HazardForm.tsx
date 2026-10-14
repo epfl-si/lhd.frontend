@@ -76,7 +76,7 @@ export const HazardForm = ({
 		onFocus={handleFocus}
 		onRender={handleRender}
 		options={optionsForm}
-		key={submission.id + action}
+		key={submission.opLock + action}
 		submission={submission.submission}
 		form={submission.form}/>
 	</div>
