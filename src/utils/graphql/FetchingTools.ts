@@ -878,15 +878,15 @@ export const fetchHazards = async (
 	const query: string = `query HazardFetch { 
 				hazardsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", queryString: "${queryString}") {
 					hazards {
-						lab_display
-						hazard_category_name
-						parent_submission
-						child_submission
-						id_lab_has_hazards_child
-						id_lab_has_hazards
-						global_comment
-						modified_by
-						modified_on
+						labDisplay
+						hazardCategoryName
+						parentSubmission
+						childSubmission
+						idLabHasHazardsChild
+						idLabHasHazards
+						globalComment
+						modifiedBy
+						modifiedOn
 						tags
 					}
 					totalCount
