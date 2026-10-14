@@ -33,9 +33,9 @@ export const HazardFormControl = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const columns: columnType[] = [
 		{field: "version", headerName: t(`hazardFormControl.version`), width: 200},
-		{field: "hazard_category_name", headerName: t(`hazardFormControl.category`), width: 200, valueGetter: (params) => {
-				if (params.row.hazard_category) {
-					return params.row.hazard_category.hazard_category_name;
+		{field: "hazardCategoryName", headerName: t(`hazardFormControl.category`), width: 200, valueGetter: (params) => {
+				if (params.row.hazardCategory) {
+					return params.row.hazardCategory.hazardCategoryName;
 				}
 				return "";
 			}}
@@ -51,7 +51,7 @@ export const HazardFormControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const resultsHazardCategory = await fetchHazardForms(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 

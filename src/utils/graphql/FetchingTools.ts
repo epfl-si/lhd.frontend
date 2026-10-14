@@ -639,16 +639,16 @@ export const fetchHazardFormDetails = async (
 	categoryName: string
 ): Promise<any> => {
 	const query = `query fetchHazardFormDetails {
-				hazardForms (where: { hazard_category: {hazard_category_name:	{ contains: "${categoryName}" }}}) {
-					id
+				hazardFormByCategoryName (categoryName: "${categoryName}") {
+					opLock
 					form
 					version
-					hazard_category {
-						hazard_category_name
+					hazardCategory {
+						hazardCategoryName
 					}
 					children {
 						version
-						hazard_form_child_name
+						hazardFormChildName
 					}
 				}
 			}`;
@@ -656,7 +656,7 @@ export const fetchHazardFormDetails = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.hazardForms,
+		data: result.data?.hazardFormByCategoryName,
 		errors: result.errors
 	};
 };
@@ -799,14 +799,14 @@ export const fetchHazardFormChild = async (
 	name: string
 ): Promise<any> => {
 	const query = `query fetchHazardFormChild {
-				hazardFormChildren (where: { hazard_form_child_name: {equals: "${name}"}}) {
-					id
+				hazardFormChildByName (name: "${name}") {
+					opLock
 					form
 					version
-					hazard_form_child_name
+					hazardFormChildName
 					parentForm {
-						hazard_category {
-							hazard_category_name
+						hazardCategory {
+							hazardCategoryName
 						}
 					}
 				}
@@ -815,7 +815,7 @@ export const fetchHazardFormChild = async (
 	const result = await doGraphQL(query, {}, address, authToken);
 	return {
 		status: result.status,
-		data: result.data?.hazardFormChildren,
+		data: result.data?.hazardFormChildByName,
 		errors: result.errors
 	};
 };

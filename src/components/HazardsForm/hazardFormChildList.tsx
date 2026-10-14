@@ -21,7 +21,7 @@ export const HazardFormChildList = ({
 	const [loading, setLoading] = useState(false);
 	const columns: columnType[] = [
 		{field: "version", headerName: t(`hazardFormControl.version`), width: 100},
-		{field: "hazard_form_child_name", headerName: t(`hazardFormControl.hazard_form_child_name`), width: 200}
+		{field: "hazardFormChildName", headerName: t(`hazardFormControl.hazard_form_child_name`), width: 200}
 	];
 
 	return <Box>
