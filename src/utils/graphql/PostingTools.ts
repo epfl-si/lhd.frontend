@@ -334,17 +334,12 @@ export const saveNewChemical = async (
 	authcode: string
 ): Promise<any> => {
 	const query = `mutation addChemical {
-								addChemical(auth_chem_en: "${name}",
-								cas_auth_chem: "${cas}",
-								flag_auth_chem: ${status},
+								addChemical(
+								authChemEn: "${name}",
+								casAuthChem: "${cas}",
+								flagAuthChem: ${status},
 								fastway: ${fastway},
-								auth_code: "${authcode}")
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								authCode: "${authcode}")
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -361,18 +356,13 @@ export const updateChemical = async (
 	authcode: string
 ): Promise<any> => {
 	const query = `mutation updateChemical {
-							 updateChemical(id: ${id},
-								auth_chem_en: "${name}",
-								cas_auth_chem: "${cas}",
-								flag_auth_chem: ${status},
+							 updateChemical(
+								opLock: ${id},
+								authChemEn: "${name}",
+								casAuthChem: "${cas}",
+								flagAuthChem: ${status},
 								fastway: ${fastway},
-								auth_code: "${authcode}")
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+								authCode: "${authcode}")
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -384,13 +374,7 @@ export const deleteChemical = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteChemical {
-							 deleteChemical(id: ${id})
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteChemical(opLock: ${id})
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);

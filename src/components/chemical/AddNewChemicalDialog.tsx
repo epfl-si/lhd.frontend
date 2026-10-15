@@ -34,17 +34,17 @@ export const AddNewChemicalDialog = ({
 		text: '',
 	});
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [cas, setCAS] = useState<string>(selectedChemical ? selectedChemical.cas_auth_chem : "");
-	const [name, setName] = useState<string>(selectedChemical ? selectedChemical.auth_chem_en : "");
-	const [status, setStatus] = useState<string>(selectedChemical ? (selectedChemical.flag_auth_chem ? t("chemical.active")! : t("chemical.archived")!) : '');
-	const [authCode, setAuthCode] = useState<string>(selectedChemical ? selectedChemical.auth_code : "");
+	const [cas, setCAS] = useState<string>(selectedChemical ? selectedChemical.casAuthChem : "");
+	const [name, setName] = useState<string>(selectedChemical ? selectedChemical.authChemEn : "");
+	const [status, setStatus] = useState<string>(selectedChemical ? (selectedChemical.flagAuthChem ? t("chemical.active")! : t("chemical.archived")!) : '');
+	const [authCode, setAuthCode] = useState<string>(selectedChemical ? selectedChemical.authCode : "");
 	const [fastway, setFastway] = useState<string>(selectedChemical ? (selectedChemical.fastway ? t("chemical.yes")! : t("chemical.no")!) : '');
 
 	useEffect(() => {
-		setCAS(selectedChemical ? selectedChemical.cas_auth_chem : '');
-		setName(selectedChemical ? selectedChemical.auth_chem_en : '');
-		setStatus(selectedChemical ? (selectedChemical.flag_auth_chem ? t("chemical.active")! : t("chemical.archived")!) : '');
-		setAuthCode(selectedChemical && selectedChemical.auth_code ? selectedChemical.auth_code : "");
+		setCAS(selectedChemical ? selectedChemical.casAuthChem : '');
+		setName(selectedChemical ? selectedChemical.authChemEn : '');
+		setStatus(selectedChemical ? (selectedChemical.flagAuthChem ? t("chemical.active")! : t("chemical.archived")!) : '');
+		setAuthCode(selectedChemical && selectedChemical.authCode ? selectedChemical.authCode : "");
 		setFastway(selectedChemical ? (selectedChemical.fastway ? t("chemical.yes")! : t("chemical.no")!) : '');
 	}, [openDialog, selectedChemical]);
 
@@ -52,9 +52,9 @@ export const AddNewChemicalDialog = ({
 		if ( cas !== '' && name !== '' && authCode !== '') {
 			if (selectedChemical) {
 				updateChemical(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
-					JSON.stringify(selectedChemical.id),
+					JSON.stringify(selectedChemical.opLock),
 					cas,
 					name,
 					status === t("chemical.active"),
@@ -65,7 +65,7 @@ export const AddNewChemicalDialog = ({
 				});
 			} else {
 				saveNewChemical(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					cas,
 					name,

@@ -51,25 +51,25 @@ export const ChemicalsControl = ({
 	const [totalCount, setTotalCount] = useState<number>(0);
 
 	const columnsLarge: columnType[] = [
-		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 200,
+		{field: "casAuthChem", headerName: t('chemical.CASNumber'), width: 200,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				params.row.cas_auth_chem
+				params.row.casAuthChem
 			)},
-		{field: "auth_chem_en", headerName: t('chemical.name'), width: 300,
+		{field: "authChemEn", headerName: t('chemical.name'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				params.row.auth_chem_en
+				params.row.authChemEn
 			)},
-		{field: "flag_auth_chem", headerName: t('chemical.status'), width: 80,
+		{field: "flagAuthChem", headerName: t('chemical.status'), width: 80,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
-				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
+				return <>{params.row.flagAuthChem ? t('chemical.active') : t('chemical.archived')}</>
 			}},
 		{field: "fastway", headerName: t('chemical.fastway'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 				return <>{params.row.fastway ? t('chemical.yes') : t('chemical.no')}</>
 			}},
-		{field: "auth_code", headerName: t('chemical.auth_code'), width: 300,
+		{field: "authCode", headerName: t('chemical.auth_code'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
-				params.row.auth_code
+				params.row.authCode
 			)},
 		// {field: "log", headerName: t('organism.log'), width: 100,
 		// 	renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
@@ -82,7 +82,7 @@ export const ChemicalsControl = ({
 		// 		return getFormattedDate(date);
 		// 	}
 		// },
-		{field: "id", headerName: t('chemical.actions'), width: 100,
+		{field: "opLock", headerName: t('chemical.actions'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
 				user.canEditChemicals ? <>
 					<Button size="icon"
@@ -97,21 +97,21 @@ export const ChemicalsControl = ({
 	];
 
 	const columnsMedium: columnType[] = [
-		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 150,
+		{field: "casAuthChem", headerName: t('chemical.CASNumber'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
 					<span>
-						<b>{params.row.cas_auth_chem}</b><br/>{params.row.auth_chem_en}
-						<br/><b>{params.row.fastway ? t('chemical.yes') : t('chemical.no')}</b><br/>{params.row.auth_code}
+						<b>{params.row.casAuthChem}</b><br/>{params.row.authChemEn}
+						<br/><b>{params.row.fastway ? t('chemical.yes') : t('chemical.no')}</b><br/>{params.row.authCode}
 					</span>
 				</div>
 			},
 		},
-		{field: "flag_auth_chem", headerName: t('chemical.status'), width: 80,
+		{field: "flagAuthChem", headerName: t('chemical.status'), width: 80,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
-				return <>{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</>
+				return <>{params.row.flagAuthChem ? t('chemical.active') : t('chemical.archived')}</>
 			}},
-		{field: "id", headerName: t('chemical.actions'), width: 100,
+		{field: "opLock", headerName: t('chemical.actions'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => (
 				user.canEditChemicals ? <>
 					<Button size="icon"
@@ -126,12 +126,12 @@ export const ChemicalsControl = ({
 	];
 
 	const columnsSmall: columnType[] = [
-		{field: "cas_auth_chem", headerName: t('chemical.CASNumber'), width: 300,
+		{field: "casAuthChem", headerName: t('chemical.CASNumber'), width: 300,
 			renderCell: (params: GridRenderCellParams<any, chemicalsType>) => {
 				return <div style={{lineHeight: '20px', fontSize: "smaller", display: "flex", flexDirection: 'column'}}>
-						<b>{params.row.cas_auth_chem} (<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>
-							{params.row.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}
-						</span>)</b>{params.row.auth_chem_en}
+						<b>{params.row.casAuthChem} (<span style={{fontStyle: 'italic', fontSize: 'xx-small'}}>
+							{params.row.flagAuthChem ? t('chemical.active') : t('chemical.archived')}
+						</span>)</b>{params.row.authChemEn}
 				</div>
 			}
 		}
@@ -151,7 +151,7 @@ export const ChemicalsControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchChemicals(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
 			PAGE_SIZE * page,
@@ -192,9 +192,9 @@ export const ChemicalsControl = ({
 
 	function deleteChem(data: chemicalsType) {
 		deleteChemical(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
-			JSON.stringify(data?.id),
+			JSON.stringify(data?.opLock),
 		).then(res => {
 			const errors = getErrorMessage(res, 'deleteChemical');
 			if(errors.errorCount == 0) {
@@ -213,7 +213,7 @@ export const ChemicalsControl = ({
 	const onExport = async () => {
 		setLoading(true);
 		const results = await fetchChemicals(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0, 0,
 			search
@@ -225,11 +225,11 @@ export const ChemicalsControl = ({
 				.join('_');
 			const parsedResults = results.data.chemicals.map((chem: chemicalsType) => {
 				return {
-					cas: chem.cas_auth_chem,
-					name: chem.auth_chem_en,
-					status: chem.flag_auth_chem ? t('chemical.active') : t('chemical.archived'),
+					cas: chem.casAuthChem,
+					name: chem.authChemEn,
+					status: chem.flagAuthChem ? t('chemical.active') : t('chemical.archived'),
 					fastway: chem.fastway ? t('chemical.yes') : t('chemical.no'),
-					authCode: chem.auth_code
+					authCode: chem.authCode
 				}
 			});
 			exportToExcel(parsedResults, getExportFileName(search !== '' ? `chem_${fileName}` : 'chem'));
