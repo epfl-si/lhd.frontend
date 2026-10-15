@@ -45,27 +45,27 @@ export const HazardsControl = ({
 	const [isTableReady, setIsTableReady] = React.useState<boolean>(false);
 	const columns = React.useRef([
 		{
-			field: "lab_display", headerName: t('room.name'), width: 150,
+			field: "labDisplay", headerName: t('room.name'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
-				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
+				<a href={`/roomdetails?room=${encodeURIComponent(params.row.labDisplay)}`} target="_blank">{params.row.labDisplay}</a>
 			)
 		},
 		{
-			field: "global_comment", headerName: t('hazards.global_comment'), width: 200, hide: true,
+			field: "globalComment", headerName: t('hazards.global_comment'), width: 200, hide: true,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
-				decodeURIComponent(params.row.global_comment)
+				decodeURIComponent(params.row.globalComment)
 			)
 		},
 		{
-			field: "modified_by", headerName: t('organism.updated_by'), width: 100,
+			field: "modifiedBy", headerName: t('organism.updated_by'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
-				params.row.modified_by
+				params.row.modifiedBy
 			)
 		},
 		{
-			field: "modified_on", headerName: t('organism.updated_on'), width: 100,
+			field: "modifiedOn", headerName: t('organism.updated_on'), width: 100,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
-				getFormattedDate(new Date(params.row.modified_on))
+				getFormattedDate(new Date(params.row.modifiedOn))
 			)
 		},
 		{
@@ -116,7 +116,7 @@ export const HazardsControl = ({
 
 	const loadCategories = async  () => {
 		const categories = await fetchHazardCategories(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 		if ( categories.status && categories.status === 200 && categories.data ) {
@@ -132,7 +132,7 @@ export const HazardsControl = ({
 		if (page != undefined && search != '') {
 			setLoading(true);
 			const results = await fetchHazards(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				PAGE_SIZE,
 				PAGE_SIZE * page,
@@ -172,20 +172,20 @@ export const HazardsControl = ({
 	const parseAndFlatResult = (hazards: hazardDetailsType[]) => {
 		const parsedHazards = hazards.map(h => {
 			return {
-				lab_display: h.lab_display,
-				id_lab_has_hazards_child: h.id_lab_has_hazards_child,
-				id_lab_has_hazards: h.id_lab_has_hazards,
-				child_submission: h.child_submission ? JSON.parse(h.child_submission).data : {},
-				parent_submission: JSON.parse(h.parent_submission).data,
-				global_comment: h.global_comment,
-				modified_by: h.modified_by,
-				modified_on: h.modified_on,
+				labDisplay: h.labDisplay,
+				idLabHasHazardsChild: h.idLabHasHazardsChild,
+				idLabHasHazards: h.idLabHasHazards,
+				childSubmission: h.childSubmission ? JSON.parse(h.childSubmission).data : {},
+				parentSubmission: JSON.parse(h.parentSubmission).data,
+				globalComment: h.globalComment,
+				modifiedBy: h.modifiedBy,
+				modifiedOn: h.modifiedOn,
 				tags: h.tags
 			};
 		});
 		const allKeys = new Set<string>();
 		for (const item of parsedHazards) {
-			for (const key of ['child_submission', 'parent_submission']) {
+			for (const key of ['childSubmission', 'parentSubmission']) {
 				if (item[key]) {
 					Object.keys(item[key]).forEach(k => {
 						if (k !== 'status' && k !== 'delete' && k !== 'canDeleteChildren') {
@@ -198,12 +198,12 @@ export const HazardsControl = ({
 		setKeys(Array.from(allKeys));
 		const result = parsedHazards.map(item => {
 			const flat = {
-				lab_display: item.lab_display,
-				id_lab_has_hazards_child: item.id_lab_has_hazards_child,
-				id_lab_has_hazards: item.id_lab_has_hazards,
-				global_comment: item.global_comment,
-				modified_by: item.modified_by,
-				modified_on: item.modified_on,
+				labDisplay: item.labDisplay,
+				idLabHasHazardsChild: item.idLabHasHazardsChild,
+				idLabHasHazards: item.idLabHasHazards,
+				globalComment: item.globalComment,
+				modifiedBy: item.modifiedBy,
+				modifiedOn: item.modifiedOn,
 				tags: item.tags
 			};
 
@@ -215,28 +215,28 @@ export const HazardsControl = ({
 							renderCell: (params: GridRenderCellParams<any, any>) => (
 								key === 'fileLink' && params.row.fileLink ?
 									<a href={params.row.fileLink}
-										 onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.id_lab_has_hazards_child, 'labHasHazardsChild')
+										 onClick={async e => await handleClickFileLink(e, oidc.accessToken, params.row.idLabHasHazardsChild, 'labHasHazardsChild')
 										 }>{params.row.fileLink.split('/').pop()}</a> :
 									<>{params.row[key]}</>
 							)
 						});
 				}
 			}
-			columns.current.push({field: "id_lab_has_hazards_child", headerName: t('organism.actions'), width: 300, disableExport: true,
+			columns.current.push({field: "idLabHasHazardsChild", headerName: t('organism.actions'), width: 300, disableExport: true,
 				renderCell: (params: GridRenderCellParams<any, any>) => (
 						user.canEditHazards ? <Button size="icon"
 										iconName={`#trash`}
 										onClick={() => {
 											setOpenDialog(true);
-											setSelectedHazard(params.row.id_lab_has_hazards_child);
-											setSelectedParentHazard(params.row.id_lab_has_hazards);
+											setSelectedHazard(params.row.idLabHasHazardsChild);
+											setSelectedParentHazard(params.row.idLabHasHazards);
 										}}/> : <></>
 				)
 			});
 			setIsTableReady(true)
 
 			// Overwrite with actual values
-			for ( const key of ['child_submission', 'parent_submission']) {
+			for ( const key of ['childSubmission', 'parentSubmission']) {
 				if (item[key]) {
 					Object.entries(item[key]).forEach(([k, v]) => {
 						if (k === 'chemical')
@@ -263,26 +263,26 @@ export const HazardsControl = ({
 		setIsTableReady(false);
 		setQueryString('');
 		setPage(0);
-		columns.current = [{field: "lab_display", headerName: t('room.name'), width: 150,
+		columns.current = [{field: "labDisplay", headerName: t('room.name'), width: 150,
 			renderCell: (params: GridRenderCellParams<any, any>) => (
-				<a href={`/roomdetails?room=${encodeURIComponent(params.row.lab_display)}`} target="_blank">{params.row.lab_display}</a>
+				<a href={`/roomdetails?room=${encodeURIComponent(params.row.labDisplay)}`} target="_blank">{params.row.labDisplay}</a>
 			)},
 			{
-				field: "global_comment", headerName: t('hazards.global_comment'), width: 200, hide: true,
+				field: "globalComment", headerName: t('hazards.global_comment'), width: 200, hide: true,
 				renderCell: (params: GridRenderCellParams<any, any>) => (
-					decodeURIComponent(params.row.global_comment)
+					decodeURIComponent(params.row.globalComment)
 				)
 			},
 			{
-				field: "modified_by", headerName: t('organism.updated_by'), width: 100,
+				field: "modifiedBy", headerName: t('organism.updated_by'), width: 100,
 				renderCell: (params: GridRenderCellParams<any, any>) => (
-					params.row.modified_by
+					params.row.modifiedBy
 				)
 			},
 			{
-				field: "modified_on", headerName: t('organism.updated_on'), width: 100,
+				field: "modifiedOn", headerName: t('organism.updated_on'), width: 100,
 				renderCell: (params: GridRenderCellParams<any, any>) => (
-					getFormattedDate(new Date(params.row.modified_on))
+					getFormattedDate(new Date(params.row.modifiedOn))
 				)
 			},
 			{
@@ -346,12 +346,12 @@ export const HazardsControl = ({
 				for (const obj of data) {
 					const newObj = {};
 					for (let key in obj) {
-						if (!['id_lab_has_hazards_child', 'id_lab_has_hazards', 'delete', 'status', 'canDeleteChildren'].includes(key)) {
+						if (!['idLabHasHazardsChild', 'idLabHasHazards', 'delete', 'status', 'canDeleteChildren'].includes(key)) {
 							switch (key) {
-								case 'modified_on':
+								case 'modifiedOn':
 									newObj[key] = getFormattedDate(new Date(obj[key]));
 									break;
-								case 'global_comment':
+								case 'globalComment':
 									newObj[key] = obj[key] ? decodeURIComponent(obj[key]) : '';
 									break;
 								case 'tags':
@@ -401,7 +401,7 @@ export const HazardsControl = ({
 					label={t(`hazard.category`)}
 					onChange={handleCategoryChange}
 				>
-					{categoryList.map(cat => <MenuItem key={cat.hazard_category_name} value={cat.hazard_category_name}>{cat.hazard_category_name}</MenuItem>)}
+					{categoryList.map(cat => <MenuItem key={cat.hazardCategoryName} value={cat.hazardCategoryName}>{cat.hazardCategoryName}</MenuItem>)}
 				</Select>
 				<MultipleAutocomplete
 						setPage={setPage}
