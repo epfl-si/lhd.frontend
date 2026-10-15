@@ -309,7 +309,7 @@ export const HazardsControl = ({
 	function handleHazardDelete() {
 		if (selectedHazard) {
 			deleteHazardChild(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				JSON.stringify(selectedHazard),
 			).then(res => {
@@ -318,7 +318,7 @@ export const HazardsControl = ({
 			});
 		} else if (selectedParentHazard) {
 			deleteHazard(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				JSON.stringify(selectedParentHazard),
 			).then(res => {
@@ -332,7 +332,7 @@ export const HazardsControl = ({
 		if ( user.canListHazards && search != '' ) {
 			setLoading(true);
 			const results = await fetchHazards(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				0,
 				0,
