@@ -855,7 +855,7 @@ export const fetchHazardCategories = async (
 ): Promise<any> => {
 	const query: string = `query categorylist {
 							hazardCategories {
-								hazard_category_name
+								hazardCategoryName
 							}
 						}`;
 
