@@ -371,6 +371,31 @@ export const fetchRooms = async (
 	};
 };
 
+export const fetchRoomsForAutocomplete = async (
+	address: string | undefined,
+	authToken: string | undefined,
+	take: number,
+	skip: number,
+	search: string
+): Promise<fetchRoomResultsTypeWithPagination> => {
+	const query: string = `query RoomsForAutocomplete { 
+				roomsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
+					rooms {
+						opLock
+						name
+					}
+					totalCount
+				},
+			}`;
+
+	const result = await doGraphQL(query, {}, address, authToken);
+	return {
+		status: result.status,
+		data: result.data?.roomsWithPagination,
+		errors: result.errors
+	};
+};
+
 export const fetchRoomsWithHazards = async (
 	address: string | undefined,
 	authToken: string | undefined,
@@ -943,30 +968,30 @@ export const fetchChemicalAuthorizations = async (
 	const query = `query fetchChemicalAuthorizations {
 		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
 			authorizations{
-			id
-			authorization
-			creation_date
-			expiration_date
-			renewals
-			unit {
-				name
+				opLock
+				authorization
+				creationDate
+				expirationDate
+				renewals
+				unit {
+					name
+				}
+				authorizationRooms {
+					name
+					isDeleted
+				}
+				authorizationHolders {
+					surname
+					name
+					sciper
+				}
+				status
+				authorizationChemicals {
+					casAuthChem
+					authChemEn
+					flagAuthChem
+				}
 			}
-			authorization_rooms {
-				name
-				isDeleted
-			}
-			authorization_holders {
-				surname
-				name
-				sciper
-			}
-			status
-			authorization_chemicals {
-				cas_auth_chem
-				auth_chem_en
-				flag_auth_chem
-			}
-		}
 			totalCount
 		}
 	}`;
@@ -990,33 +1015,33 @@ export const fetchRadioprotectionAuthorizations = async (
 	const query = `query fetchRadioprotectionAuthorizations {
 		authorizationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}", type: "${type}") {
 			authorizations{
-			id
-			authorization
-			creation_date
-			expiration_date
-			renewals
-			authority
-			unit {
-				id
-				name
+				opLock
+				authorization
+				creationDate
+				expirationDate
+				renewals
+				authority
+				unit {
+					opLock
+					name
+				}
+				authorizationRooms {
+					name
+					isDeleted
+				}
+				authorizationHolders {
+					surname
+					name
+					sciper
+				}
+				status
+				authorizationRadiations {
+					source
+				}
+				authorizationFiles {
+					filePath
+				}
 			}
-			authorization_rooms {
-				name
-				isDeleted
-			}
-			authorization_holders {
-				surname
-				name
-				sciper
-			}
-			status
-			authorization_radiations {
-				source
-			}
-			authorization_files {
-				file_path
-			}
-		}
 			totalCount
 		}
 	}`;
@@ -1136,28 +1161,28 @@ export const fetchChemicalAuthorizationsByRoom = async (
 ): Promise<any> => {
 	const query = `query fetchChemicalAuthorizationsByRoom {
 		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
-			id
+			opLock
 			authorization
-			creation_date
-			expiration_date
+			creationDate
+			expirationDate
 			renewals
 			type
 			unit {
 				name
 			}
-			authorization_rooms {
+			authorizationRooms {
 				name
 			}
-			authorization_holders {
+			authorizationHolders {
 				surname
 				name
 				sciper
 			}
 			status
-			authorization_chemicals {
-				cas_auth_chem
-				auth_chem_en
-				flag_auth_chem
+			authorizationChemicals {
+				casAuthChem
+				authChemEn
+				flagAuthChem
 			}
 		}
 	}`;
@@ -1178,25 +1203,25 @@ export const fetchRadioprotectionAuthorizationsByRoom = async (
 ): Promise<any> => {
 	const query = `query fetchRadioprotectionAuthorizationsByRoom {
 		authorizationsByRoom (roomId: ${JSON.stringify(roomId)}, type: "${type}") {
-			id
+			opLock
 			authorization
-			creation_date
-			expiration_date
+			creationDate
+			expirationDate
 			renewals
 			authority
 			unit {
 				name
 			}
-			authorization_rooms {
+			authorizationRooms {
 				name
 			}
-			authorization_holders {
+			authorizationHolders {
 				surname
 				name
 				sciper
 			}
 			status
-			authorization_radiations {
+			authorizationRadiations {
 				source
 			}
 		}

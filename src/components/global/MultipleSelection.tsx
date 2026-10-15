@@ -84,7 +84,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 				} else if (objectName === 'NewUnit') {
 					return suggestion.unitId != newValue.unitId;
 				} else if (objectName === 'NewRoom') {
-					return suggestion.id != newValue.id;
+					return suggestion.opLock != newValue.opLock;
 				}
 			});
 			setFilteredSuggestions(filtered);
@@ -112,7 +112,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 					} else if (objectName === 'NewUnit') {
 						return !currentlySelected.find(s => s.unitId == suggestion.unitId);
 					} else if (objectName === 'NewRoom') {
-						return !currentlySelected.find(s => s.id == suggestion.id);
+						return !currentlySelected.find(s => s.opLock == suggestion.opLock);
 					}
 				}) || [];
 				setFilteredSuggestions(filtered);

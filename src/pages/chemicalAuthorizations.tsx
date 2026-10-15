@@ -55,24 +55,24 @@ export const ChemicalsAuthorizationControl = ({
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				return <>{params.row.renewals}</>
 			}},
-		{field: "creation_date", headerName: t('authorization.createdDate'), flex: 0.1,
+		{field: "creationDate", headerName: t('authorization.createdDate'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
-				const date = new Date(params.row.creation_date);
+				const date = new Date(params.row.creationDate);
 				return getFormattedDate(date);
 			},},
-		{field: "expiration_date", headerName: t('authorization.expires'), flex: 0.1,
+		{field: "expirationDate", headerName: t('authorization.expires'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
-				const date = new Date(params.row.expiration_date);
+				const date = new Date(params.row.expirationDate);
 				return getFormattedDate(date);
 			},},
 		{field: "status", headerName: t('authorization.status'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
 				return <>{params.row.status}</>
 			}},
-		{field: "authorization_rooms", headerName: t('authorization.room'), flex: 0.1,
+		{field: "authorizationRooms", headerName: t('authorization.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 					<div className="form-card-div">
-						{params.row.authorization_rooms.map(item => {
+						{params.row.authorizationRooms.map(item => {
 								return (
 									item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 								)
@@ -81,10 +81,10 @@ export const ChemicalsAuthorizationControl = ({
 					</div>
 			),
 		},
-		{field: "authorization_holders", headerName: t('authorization.holders'), flex: 0.2,
+		{field: "authorizationHolders", headerName: t('authorization.holders'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div className="form-card-div">
-					{params.row.authorization_holders.map(item => {
+					{params.row.authorizationHolders.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 							)
@@ -93,12 +93,12 @@ export const ChemicalsAuthorizationControl = ({
 				</div>
 			),
 		},
-		{field: "authorization_chemicals", headerName: t('authorization.cas'), flex: 0.2,
+		{field: "authorizationChemicals", headerName: t('authorization.cas'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div className="form-card-div">
-					{params.row.authorization_chemicals.map(item => {
+					{params.row.authorizationChemicals.map(item => {
 							return (
-								<span>• {item.auth_chem_en} ({item.cas_auth_chem}) - <b style={{fontSize: "smaller"}}>{item.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
+								<span>• {item.authChemEn} ({item.casAuthChem}) - <b style={{fontSize: "smaller"}}>{item.flagAuthChem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
 							)
 						}
 					)}
@@ -116,19 +116,19 @@ export const ChemicalsAuthorizationControl = ({
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
 				</div>
 			}},
-		{field: "creation_date", headerName: t('authorization.createdDate'), flex: 0.1,
+		{field: "creationDate", headerName: t('authorization.createdDate'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
-				const date = new Date(params.row.creation_date);
-				const dateExp = new Date(params.row.expiration_date);
+				const date = new Date(params.row.creationDate);
+				const dateExp = new Date(params.row.expirationDate);
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
 					<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
 				</div>
 			}},
-		{field: "authorization_rooms", headerName: t('authorization.room'), flex: 0.1,
+		{field: "authorizationRooms", headerName: t('authorization.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.authorization_rooms.map(item => {
+					{params.row.authorizationRooms.map(item => {
 							return (
 								item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 							)
@@ -137,10 +137,10 @@ export const ChemicalsAuthorizationControl = ({
 				</div>
 			),
 		},
-		{field: "authorization_holders", headerName: t('authorization.holders'), flex: 0.2,
+		{field: "authorizationHolders", headerName: t('authorization.holders'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.authorization_holders.map(item => {
+					{params.row.authorizationHolders.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 							)
@@ -149,12 +149,12 @@ export const ChemicalsAuthorizationControl = ({
 				</div>
 			),
 		},
-		{field: "authorization_chemicals", headerName: t('authorization.cas'), flex: 0.2,
+		{field: "authorizationChemicals", headerName: t('authorization.cas'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, authorizationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.authorization_chemicals.map(item => {
+					{params.row.authorizationChemicals.map(item => {
 							return (
-								<span>• {item.auth_chem_en} ({item.cas_auth_chem}) - <b>{item.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
+								<span>• {item.authChemEn} ({item.casAuthChem}) - <b>{item.flagAuthChem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
 							)
 						}
 					)}
@@ -166,23 +166,23 @@ export const ChemicalsAuthorizationControl = ({
 	const columnsSmall: columnType[] = [
 		{field: "authorization", headerName: t('authorization.authorization'), flex: 0.2,
 		renderCell: (params: GridRenderCellParams<any, authorizationType>) => {
-			const date = new Date(params.row.creation_date);
-			const dateExp = new Date(params.row.expiration_date);
-			const rooms = params.row.authorization_rooms.map(item => {
+			const date = new Date(params.row.creationDate);
+			const dateExp = new Date(params.row.expirationDate);
+			const rooms = params.row.authorizationRooms.map(item => {
 					return (
 						item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 					)
 				}
 			);
-			const holders = params.row.authorization_holders.map(item => {
+			const holders = params.row.authorizationHolders.map(item => {
 					return (
 						<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 					)
 				}
 			);
-			const cas = params.row.authorization_chemicals.map(item => {
+			const cas = params.row.authorizationChemicals.map(item => {
 					return (
-						<span>• {item.auth_chem_en} ({item.cas_auth_chem}) - <b>{item.flag_auth_chem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
+						<span>• {item.authChemEn} ({item.casAuthChem}) - <b>{item.flagAuthChem ? t('chemical.active') : t('chemical.archived')}</b><br/></span>
 					)
 				}
 			);
@@ -212,7 +212,7 @@ export const ChemicalsAuthorizationControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchChemicalAuthorizations(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
 			PAGE_SIZE * page,
@@ -233,7 +233,7 @@ export const ChemicalsAuthorizationControl = ({
 	async function onExport () {
 		setLoading(true);
 		const results = await fetchChemicalAuthorizations(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0, 0,
 			search,
@@ -249,23 +249,23 @@ export const ChemicalsAuthorizationControl = ({
 		setLoading(false);
 	}
 
-	const ensureArray = (arr) => (arr && arr.length ? arr : [null]);
+	const ensureArray = (arr: any) => (arr && arr.length ? arr : [null]);
 	function flattenAuthorizations(data: any[]) {
 		return data.flatMap(auth => {
-				const rooms = ensureArray(auth.authorization_rooms);
-				const holders = ensureArray(auth.authorization_holders);
-				const chemicals = ensureArray(auth.authorization_chemicals);
+				const rooms = ensureArray(auth.authorizationRooms);
+				const holders = ensureArray(auth.authorizationHolders);
+				const chemicals = ensureArray(auth.authorizationChemicals);
 				return {
 					authorization: auth.authorization,
-					creation_date: getFormattedDate(new Date(auth.creation_date), "."),
-					expiration_date: getFormattedDate(new Date(auth.expiration_date), "."),
+					creationDate: getFormattedDate(new Date(auth.creationDate), "."),
+					expirationDate: getFormattedDate(new Date(auth.expirationDate), "."),
 					renewals: auth.renewals,
-					unit_name: auth.unit?.name,
+					unitName: auth.unit?.name,
 					status: auth.status,
 
 					room: rooms.map((r: any) => r ? `${r.name}${r.isDeleted ? ' (Deleted)' : ''}` : '').join('\n'),
 					holder: holders.map((h: any) => h ? `${h.name} ${h.surname} (${h.sciper})` : '').join('\n'),
-					cas: chemicals.map((c: any) => c ? `${c.cas_auth_chem} - ${c.auth_chem_en} (${c.flag_auth_chem ? t('chemical.active') : t('chemical.archived')})` : '').join('\n')
+					cas: chemicals.map((c: any) => c ? `${c.casAuthChem} - ${c.authChemEn} (${c.flagAuthChem ? t('chemical.active') : t('chemical.archived')})` : '').join('\n')
 				}
 			}
 		);

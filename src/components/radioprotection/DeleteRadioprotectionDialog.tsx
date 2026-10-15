@@ -36,9 +36,9 @@ export const DeleteRadioprotectionDialog = ({
 	function deleteDetails() {
 		if (auth) {
 			deleteAuthorization(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(auth.id)
+				JSON.stringify(auth.opLock)
 			).then(res => {
 				handleOpen(res);
 			});
