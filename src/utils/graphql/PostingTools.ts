@@ -105,13 +105,7 @@ export const deleteHazardChild = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteHazardChild {
-							 deleteHazardChild(id: ${id} )
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteHazardChild(opLock: ${id} )
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -123,13 +117,7 @@ export const deleteHazard = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteHazard {
-							 deleteHazard(id: ${id} )
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteHazard(opLock: ${id} )
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
