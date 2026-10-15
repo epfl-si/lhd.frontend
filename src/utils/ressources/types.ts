@@ -72,11 +72,11 @@ export type organismType = {
 }
 
 export type chemicalsType = {
-	id: string;
-	cas_auth_chem: string;
-	auth_chem_en: string;
-	flag_auth_chem: boolean;
-	auth_code: string;
+	opLock: string;
+	casAuthChem: string;
+	authChemEn: string;
+	flagAuthChem: boolean;
+	authCode: string;
 	fastway: boolean;
 }
 
