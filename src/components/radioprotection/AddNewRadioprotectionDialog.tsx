@@ -17,11 +17,16 @@ import Notifications from "../Table/Notifications";
 import {MenuItem, Select, TextField} from "@material-ui/core";
 import {Autocomplete, SelectChangeEvent} from "@mui/material";
 import {saveNewRadioprotection, updateRadioprotection} from '../../utils/graphql/PostingTools';
-import {fetchPeopleFromFullText, fetchRooms, fetchUnitsFromFullText} from "../../utils/graphql/FetchingTools";
+import {
+	fetchPeopleFromFullText,
+	fetchRoomsForAutocomplete,
+	fetchUnitsFromFullText
+} from "../../utils/graphql/FetchingTools";
 import {MultipleSelection} from "../global/MultipleSelection";
 import {Source} from "./SourceList";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import MultiFileUploader from "../global/MultiFileUploader";
+import {formatDateForPickers} from "../../utils/ressources/parser";
 
 interface AddNewRadioprotectionDialogProps {
 	openDialog: boolean;
@@ -48,8 +53,8 @@ export const AddNewRadioprotectionDialog = ({
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
 	const [unit, setUnit] = useState<lhdUnitsType | undefined>(selectedRadioprotection?.unit);
 	const [name, setName] = useState<string>(selectedRadioprotection ? selectedRadioprotection.authorization : "");
-	const [expDate, setExpDate] = useState<Date>(selectedRadioprotection ? selectedRadioprotection.expiration_date : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
-	const [creationDate, setCreationDate] = useState<Date>(selectedRadioprotection ? selectedRadioprotection.creation_date : new Date());
+	const [expDate, setExpDate] = useState<Date>(selectedRadioprotection ? selectedRadioprotection.expirationDate : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
+	const [creationDate, setCreationDate] = useState<Date>(selectedRadioprotection ? selectedRadioprotection.creationDate : new Date());
 	const [renewals, setRenewals] = useState<number>(selectedRadioprotection ? selectedRadioprotection.renewals : 0);
 	const [status, setStatus] = useState<string>(selectedRadioprotection ? selectedRadioprotection.status : 'Active');
 	const [authority, setAuthority] = useState<string | undefined>(selectedRadioprotection?.authority);
@@ -65,28 +70,28 @@ export const AddNewRadioprotectionDialog = ({
 	useEffect(() => {
 		setUnit(selectedRadioprotection?.unit);
 		setName(selectedRadioprotection ? selectedRadioprotection.authorization : "");
-		setExpDate(selectedRadioprotection ? selectedRadioprotection.expiration_date : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
-		setCreationDate(selectedRadioprotection ? selectedRadioprotection.creation_date : new Date());
+		setExpDate(selectedRadioprotection ? selectedRadioprotection.expirationDate : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
+		setCreationDate(selectedRadioprotection ? selectedRadioprotection.creationDate : new Date());
 		setRenewals(selectedRadioprotection ? selectedRadioprotection.renewals : 0);
 		setStatus(selectedRadioprotection ? selectedRadioprotection.status : 'Active');
 		setAuthority(selectedRadioprotection?.authority);
 
-		setSavedRooms(selectedRadioprotection ? selectedRadioprotection.authorization_rooms : []);
-		setSelectedRooms(selectedRadioprotection ? selectedRadioprotection.authorization_rooms : []);
+		setSavedRooms(selectedRadioprotection ? selectedRadioprotection.authorizationRooms : []);
+		setSelectedRooms(selectedRadioprotection ? selectedRadioprotection.authorizationRooms : []);
 
-		setSavedHolders(selectedRadioprotection ? selectedRadioprotection.authorization_holders : []);
-		setSelectedHolders(selectedRadioprotection ? selectedRadioprotection.authorization_holders : []);
+		setSavedHolders(selectedRadioprotection ? selectedRadioprotection.authorizationHolders : []);
+		setSelectedHolders(selectedRadioprotection ? selectedRadioprotection.authorizationHolders : []);
 
-		setSelectedFiles(selectedRadioprotection ? selectedRadioprotection.authorization_files : []);
+		setSelectedFiles(selectedRadioprotection ? selectedRadioprotection.authorizationFiles : []);
 
-		setSavedSources(selectedRadioprotection ? selectedRadioprotection.authorization_radiations : []);
-		setSelectedSources(selectedRadioprotection ? selectedRadioprotection.authorization_radiations : []);
+		setSavedSources(selectedRadioprotection ? selectedRadioprotection.authorizationRadiations : []);
+		setSelectedSources(selectedRadioprotection ? selectedRadioprotection.authorizationRadiations : []);
 		fetchUnitsList("");
 	}, [openDialog, selectedRadioprotection]);
 
 	const fetchUnitsList = async (newValue: string) => {
 		const results = await fetchUnitsFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue
 		);
@@ -107,16 +112,16 @@ export const AddNewRadioprotectionDialog = ({
 				authority,selectedSources,selectedHolders,selectedRooms, selectedFiles};
 			if (selectedRadioprotection) {
 				updateRadioprotection(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
-					JSON.stringify(selectedRadioprotection.id),
+					JSON.stringify(selectedRadioprotection.opLock),
 					radioprotection
 				).then(res => {
 					handleOpen(res, false);
 				});
 			} else {
 				saveNewRadioprotection(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					radioprotection
 				).then(res => {
@@ -152,25 +157,12 @@ export const AddNewRadioprotectionDialog = ({
 		setOpenNotification(false);
 	};
 
-	const formatDate = (date: Date) => {
-		try {
-			if (!date) return "";
-			date = new Date(date);
-			const year = date.getFullYear();
-			const month = String(date.getMonth() + 1).padStart(2, "0");
-			const day = String(date.getDate()).padStart(2, "0");
-			return `${year}-${month}-${day}`;
-		} catch ( e ) {
-			return date;
-		}
-	};
-
 	function getRoomTitle(room: roomDetailsType) {
 		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
 	}
 
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
-		const results = await fetchRooms(
+		const results = await fetchRoomsForAutocomplete(
 			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			100,0, "Room=" + newValue
@@ -189,7 +181,7 @@ export const AddNewRadioprotectionDialog = ({
 
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
 		const results = await fetchPeopleFromFullText(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			newValue
 		);
@@ -231,7 +223,7 @@ export const AddNewRadioprotectionDialog = ({
 						model={'authorization'}
 						selectedFiles={selectedFiles}
 						setSelectedFiles={setSelectedFiles}
-						selectedId={selectedRadioprotection?.id ?? ''} />
+						selectedId={selectedRadioprotection?.opLock ?? ''} />
 					<Autocomplete
 						value={unit}
 						onChange={(event: any, newValue: lhdUnitsType) => {setUnit(newValue)}}
@@ -263,14 +255,14 @@ export const AddNewRadioprotectionDialog = ({
 							label={t('authorization.created')}
 							type="date"
 							disabled={!!selectedRadioprotection}
-							value={formatDate(creationDate)}
+							value={formatDateForPickers(creationDate)}
 							onChange={(e) => setCreationDate(new Date(e.target.value))}
 							style={{flex: '1', margin: "5px"}}
 						/>
 						<TextField
 							label={t('authorization.expires')}
 							type="date"
-							value={formatDate(expDate)}
+							value={formatDateForPickers(expDate)}
 							onChange={(e) => {
 								const newDate = new Date(e.target.value);
 								setStatus(status === 'Expired' && newDate > new Date() ? 'Active' : status);

@@ -387,32 +387,26 @@ export const saveNewRadioprotection = async (
 ): Promise<any> => {
 	const query = `mutation addRadioprotection {
 								addAuthorization(
-									id_unit: ${JSON.stringify(radioprotection.unit.id)},
+									idUnit: ${JSON.stringify(radioprotection.unit.opLock)},
 									authorization: "${radioprotection.name}",
-									creation_date: "${getFormattedDate(new Date(radioprotection.creationDate))}",
-									expiration_date: "${getFormattedDate(new Date(radioprotection.expDate))}",
+									creationDate: "${getFormattedDate(new Date(radioprotection.creationDate))}",
+									expirationDate: "${getFormattedDate(new Date(radioprotection.expDate))}",
 									status: "${radioprotection.status}",
 									authority: "${radioprotection.authority}",
 									type: "IonisingRadiation",
 									radiations: [
-										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+										${radioprotection.selectedSources.map((auth: { source: string; status: string; }) => `{name: "${auth.source}", status: "${auth.status}"}`)}
 									],
 									holders: [
-										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
+										${radioprotection.selectedHolders.map((auth: { sciper: string; status: string; }) => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
 									],
 									rooms: [
-										${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+										${radioprotection.selectedRooms.map((auth: { name: string; status: string; }) => `{name: "${auth.name}", status: "${auth.status}"}`)}
 									],
 									files: [
-										${radioprotection.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+										${radioprotection.selectedFiles.map((ass: { filePath: string; status: string; base64: string; }) => `{path: "${ass.filePath}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -426,30 +420,24 @@ export const updateRadioprotection = async (
 ): Promise<any> => {
 	const query = `mutation updateRadioprotection {
 								updateAuthorization(
-									id: ${id},
-									id_unit: ${JSON.stringify(radioprotection.unit.id)},
-									expiration_date: "${getFormattedDate(new Date(radioprotection.expDate))}",
+									opLock: ${id},
+									idUnit: ${JSON.stringify(radioprotection.unit.opLock)},
+									expirationDate: "${getFormattedDate(new Date(radioprotection.expDate))}",
 									status: "${radioprotection.status}",
 									authority: "${radioprotection.authority}",
 									radiations: [
-										${radioprotection.selectedSources.map(auth => `{name: "${auth.source}", status: "${auth.status}"}`)}
+										${radioprotection.selectedSources.map((auth: { source: string; status: string; }) => `{name: "${auth.source}", status: "${auth.status}"}`)}
 									],
 									holders: [
-										${radioprotection.selectedHolders.map(auth => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
+										${radioprotection.selectedHolders.map((auth: { sciper: string; status: string; }) => `{sciper: ${auth.sciper}, status: "${auth.status}"}`)}
 									],
 									rooms: [
-										${radioprotection.selectedRooms.map(auth => `{name: "${auth.name}", status: "${auth.status}"}`)}
+										${radioprotection.selectedRooms.map((auth: { name: string; status: string; }) => `{name: "${auth.name}", status: "${auth.status}"}`)}
 									],
 									files: [
-										${radioprotection.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+										${radioprotection.selectedFiles.map((ass: { filePath: string; status: string; base64: string; }) => `{path: "${ass.filePath}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -461,13 +449,7 @@ export const deleteAuthorization = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteAuthorization {
-							 deleteAuthorization(id: ${id})
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteAuthorization(opLock: ${id})
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);

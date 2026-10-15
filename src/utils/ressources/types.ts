@@ -81,19 +81,19 @@ export type chemicalsType = {
 }
 
 export type authorizationType = {
-	id: string;
+	opLock: string;
 	authorization: string;
-	expiration_date: Date;
+	expirationDate: Date;
 	status: string;
-	creation_date: Date;
+	creationDate: Date;
 	renewals: number;
 	type: string;
 	unit: lhdUnitsType;
-	authorization_rooms: roomDetailsType[];
-	authorization_holders: personType[];
-	authorization_files: genericType[];
-	authorization_chemicals: chemicalsType[];
-	authorization_radiations: genericType[];
+	authorizationRooms: roomDetailsType[];
+	authorizationHolders: personType[];
+	authorizationFiles: genericType[];
+	authorizationChemicals: chemicalsType[];
+	authorizationRadiations: genericType[];
 	authority?: string;
 }
 
@@ -163,7 +163,7 @@ export type genericType = {
 	filePath?: string;
 	base64?: string;
 	source?: string;
-	ticket_number?: string;
+	ticketNumber?: string;
 	status?: 'New' | 'Deleted' | 'Default';
 };
 
