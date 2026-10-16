@@ -25,7 +25,13 @@ import {sprintf} from "sprintf-js";
 import {MutationLogsTable} from "../global/MutationLogsTable";
 import {CircularProgress} from "@mui/joy";
 import {formatDateForPickers} from "../../utils/ressources/parser";
-import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
+import {
+	commonFetchPeople,
+	commonFetchRoomList,
+	commonFetchUnitsListByRooms,
+	getPersonTitle,
+	getRoomTitle
+} from "../../utils/graphql/commonQueries";
 import {saveNewAssessment, updateAssessment} from "../../utils/graphql/PostingTools";
 import MultiFileUploader from "../global/MultiFileUploader";
 
@@ -189,10 +195,6 @@ export const AddNewAssessmentDialog = ({
 		setOpenNotification(false);
 	};
 
-	function getRoomTitle(room: roomDetailsType) {
-		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
-	}
-
 	function getUnitTitle(unit: lhdUnitsType) {
 		return unit.name;
 	}
@@ -208,10 +210,6 @@ export const AddNewAssessmentDialog = ({
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
 		return commonFetchPeople(oidc.accessToken, newValue, setNotificationType, setOpenNotification);
 	};
-
-	function getPersonTitle(person: personType) {
-		return person.name + ' ' + person.surname;
-	}
 
 	function onChangeTickets(changedTickets: genericType[]) {
 		setSelectedTickets(changedTickets);

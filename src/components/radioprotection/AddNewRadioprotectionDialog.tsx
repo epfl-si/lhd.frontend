@@ -27,6 +27,7 @@ import {Source} from "./SourceList";
 import {getErrorMessage} from "../../utils/graphql/Utils";
 import MultiFileUploader from "../global/MultiFileUploader";
 import {formatDateForPickers} from "../../utils/ressources/parser";
+import {getPersonTitle, getRoomTitle} from "../../utils/graphql/commonQueries";
 
 interface AddNewRadioprotectionDialogProps {
 	openDialog: boolean;
@@ -157,10 +158,6 @@ export const AddNewRadioprotectionDialog = ({
 		setOpenNotification(false);
 	};
 
-	function getRoomTitle(room: roomDetailsType) {
-		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
-	}
-
 	const fetchRoomList = async (newValue: string): Promise<roomDetailsType[]> => {
 		const results = await fetchRoomsForAutocomplete(
 			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
@@ -196,10 +193,6 @@ export const AddNewRadioprotectionDialog = ({
 		}
 		return [];
 	};
-
-	function getPersonTitle(person: personType) {
-		return person.name + ' ' + person.surname;
-	}
 
 	function onChangeSources(changedSources: genericType[]) {
 		setSelectedSources(changedSources);
