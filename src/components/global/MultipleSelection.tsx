@@ -181,7 +181,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 									{getCardTitle(item)}
 								</small>
 								{
-									objectName == 'Unit' ?
+									objectName == 'Unit' && item.profiles ?
 										<div className="displayFlexColumn">
 											{item.profiles.sort((a: profile, b: profile) => b.role.localeCompare(a.role))
 												.map((c: profile) => {

@@ -279,9 +279,9 @@ export const fetchUnitsByRoom = async (
 	rooms: string[]
 ): Promise<any> => {
 	const query: string = `query fetchUnitsByRoom { 
-						unitsByRoom (rooms: "${rooms.join(',')}") {
+						unitsByRoom (rooms: ${JSON.stringify(rooms)}) {
 							name
-							id
+							opLock
 						}
 					}`;
 
@@ -383,6 +383,7 @@ export const fetchRoomsForAutocomplete = async (
 					rooms {
 						opLock
 						name
+						isDeleted
 					}
 					totalCount
 				},
@@ -1064,37 +1065,37 @@ export const fetchDispensations = async (
 	const query = `query fetchDispensations {
 		dispensationsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
 			dispensations {
-				id
+				opLock
 				dispensation
-				date_start
-				date_end
+				dateStart
+				dateEnd
 				renewals
 				subject
-				subject_other
+				subjectOther
 				description
 				comment
-				created_by
-				created_on
-				modified_by
-				modified_on
-				dispensation_rooms {
+				createdBy
+				createdOn
+				modifiedBy
+				modifiedOn
+				dispensationRooms {
 					name
 					isDeleted
 				}
-				dispensation_units {
+				dispensationUnits {
 					name
 				}
-				dispensation_holders {
+				dispensationHolders {
 					surname
 					name
 					sciper
 				}
 				status
-				dispensation_tickets {
-					ticket_number
+				dispensationTickets {
+					ticketNumber
 				}
-				dispensation_files {
-					file_path
+				dispensationFiles {
+					filePath
 				}
 			}
 			totalCount

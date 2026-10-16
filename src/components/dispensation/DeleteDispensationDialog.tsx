@@ -36,9 +36,9 @@ export const DeleteDispensationDialog = ({
 	function deleteDetails() {
 		if (disp) {
 			deleteDispensation(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(disp.id)
+				JSON.stringify(disp.opLock)
 			).then(res => {
 				handleOpen(res);
 			});

@@ -53,12 +53,12 @@ export const AddNewDispensationDialog = ({
 	});
 	const now = new Date();
 	const [openNotification, setOpenNotification] = useState<boolean>(false);
-	const [expDate, setExpDate] = useState<Date>(selectedDispensation ? selectedDispensation.date_end : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
-	const [creationDate, setCreationDate] = useState<Date>(selectedDispensation ? selectedDispensation.date_start : new Date());
+	const [expDate, setExpDate] = useState<Date>(selectedDispensation ? selectedDispensation.dateEnd : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
+	const [creationDate, setCreationDate] = useState<Date>(selectedDispensation ? selectedDispensation.dateStart : new Date());
 	const [renewals, setRenewals] = useState<number>(selectedDispensation ? selectedDispensation.renewals : 0);
 	const [status, setStatus] = useState<string>(selectedDispensation ? selectedDispensation.status : 'Active');
 	const [subject, setSubject] = useState<string | undefined>(selectedDispensation?.subject);
-	const [other, setOther] = useState<string | undefined>(selectedDispensation?.subject_other);
+	const [other, setOther] = useState<string | undefined>(selectedDispensation?.subjectOther);
 	const [comment, setComment] = useState<string | undefined>(selectedDispensation?.comment);
 	const [description, setDescription] = useState<string | undefined>(selectedDispensation?.description);
 	const [savedRooms, setSavedRooms] = useState<roomDetailsType[]>([]);
@@ -78,28 +78,28 @@ export const AddNewDispensationDialog = ({
 	useEffect(() => {
 		loadSubjects();
 		loadHistory();
-		setExpDate(selectedDispensation ? selectedDispensation.date_end : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
-		setCreationDate(selectedDispensation ? selectedDispensation.date_start : new Date());
+		setExpDate(selectedDispensation ? selectedDispensation.dateEnd : new Date(now.getFullYear()+1,now.getMonth(),now.getDate()));
+		setCreationDate(selectedDispensation ? selectedDispensation.dateStart : new Date());
 		setRenewals(selectedDispensation ? selectedDispensation.renewals : 0);
 		setStatus(selectedDispensation ? selectedDispensation.status : 'Draft');
 		setSubject(selectedDispensation?.subject);
 		setComment(selectedDispensation ? selectedDispensation.comment : '');
 		setDescription(selectedDispensation ? selectedDispensation.description : '');
-		setOther(selectedDispensation ? selectedDispensation.subject_other : '')
+		setOther(selectedDispensation ? selectedDispensation.subjectOther : '')
 
-		setSavedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
-		setSelectedRooms(selectedDispensation ? selectedDispensation.dispensation_rooms : []);
+		setSavedRooms(selectedDispensation ? selectedDispensation.dispensationRooms : []);
+		setSelectedRooms(selectedDispensation ? selectedDispensation.dispensationRooms : []);
 
-		setSavedUnits(selectedDispensation ? selectedDispensation.dispensation_units : []);
-		setSelectedUnits(selectedDispensation ? selectedDispensation.dispensation_units : []);
+		setSavedUnits(selectedDispensation ? selectedDispensation.dispensationUnits : []);
+		setSelectedUnits(selectedDispensation ? selectedDispensation.dispensationUnits : []);
 
-		setSavedHolders(selectedDispensation ? selectedDispensation.dispensation_holders : []);
-		setSelectedHolders(selectedDispensation ? selectedDispensation.dispensation_holders : []);
+		setSavedHolders(selectedDispensation ? selectedDispensation.dispensationHolders : []);
+		setSelectedHolders(selectedDispensation ? selectedDispensation.dispensationHolders : []);
 
-		setSavedTickets(selectedDispensation ? selectedDispensation.dispensation_tickets : []);
-		setSelectedTickets(selectedDispensation ? selectedDispensation.dispensation_tickets : []);
+		setSavedTickets(selectedDispensation ? selectedDispensation.dispensationTickets : []);
+		setSelectedTickets(selectedDispensation ? selectedDispensation.dispensationTickets : []);
 
-		setSelectedFiles(selectedDispensation ? selectedDispensation.dispensation_files : []);
+		setSelectedFiles(selectedDispensation ? selectedDispensation.dispensationFiles : []);
 	}, [openDialog, selectedDispensation]);
 
 	const loadSubjects = async () => {
@@ -108,7 +108,7 @@ export const AddNewDispensationDialog = ({
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data){
-			setAvailableSubjects(results.data.map(disp => disp.subject));
+			setAvailableSubjects(results.data.map((disp: { subject: any; }) => disp.subject));
 		} else {
 			const errors = getErrorMessage(results, 'dispensationsWithPagination');
 			setNotificationType(errors.notif);
@@ -122,7 +122,7 @@ export const AddNewDispensationDialog = ({
 			const results = await fetchDispensationHistory(
 				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
 				oidc.accessToken,
-				selectedDispensation.id
+				selectedDispensation.opLock
 			);
 			if (results.status === 200 && results.data){
 				setHistory(results.data);
@@ -137,16 +137,16 @@ export const AddNewDispensationDialog = ({
 			subject,other,comment,description,selectedTickets,selectedHolders,selectedRooms, selectedUnits, selectedFiles};
 		if (selectedDispensation) {
 			updateDispensation(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(selectedDispensation.id),
+				JSON.stringify(selectedDispensation.opLock),
 				dispensation
 			).then(res => {
 				handleOpen(res, false);
 			});
 		} else {
 			saveNewDispensation(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				dispensation
 			).then(res => {
@@ -262,12 +262,12 @@ export const AddNewDispensationDialog = ({
 								model={'dispensation'}
 								selectedFiles={selectedFiles}
 								setSelectedFiles={setSelectedFiles}
-								selectedId={selectedDispensation?.id ?? ''} />
+								selectedId={selectedDispensation?.opLock ?? ''} />
 						</div>
 						{selectedDispensation && <div style={{display: "flex", flexDirection: "column"}}><label
 				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
-				className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedDispensation.created_by,
-							(new Date(selectedDispensation.created_on)).toLocaleString('fr-CH', {
+				className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedDispensation.createdBy,
+							(new Date(selectedDispensation.createdOn)).toLocaleString('fr-CH', {
 								year: 'numeric',
 								month: 'numeric',
 								day: 'numeric',
@@ -277,8 +277,8 @@ export const AddNewDispensationDialog = ({
 							}))}</label>
 				<label
 					style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
-					className="hazardTitle">{sprintf(t(`hazards.modification_info`), selectedDispensation.modified_by,
-									(new Date(selectedDispensation.modified_on)).toLocaleString('fr-CH', {
+					className="hazardTitle">{sprintf(t(`hazards.modification_info`), selectedDispensation.modifiedBy,
+									(new Date(selectedDispensation.modifiedOn)).toLocaleString('fr-CH', {
 										year: 'numeric',
 										month: 'numeric',
 										day: 'numeric',
@@ -405,7 +405,7 @@ export const AddNewDispensationDialog = ({
 						</div>
 						<div className="dispensation-panel">
 							<label className='labelDetails'>{t(`dispensation.tickets`)}</label>
-							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number' checkFormat={true}/>
+							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticketNumber' checkFormat={true}/>
 						</div>
 					</div>
 					<MutationLogsTable history={history} />
