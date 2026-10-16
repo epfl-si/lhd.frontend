@@ -15,7 +15,7 @@ interface SourceProps {
 	 * Action to be done at change selection
 	 */
 	onChangeSelection?: (currentlySelected: genericType[]) => void;
-	type: 'source' | 'ticket_number';
+	type: 'source' | 'ticketNumber';
 	checkFormat: boolean;
 }
 
@@ -122,7 +122,7 @@ export const Source = ({
 									>
 										<div>
 											<small className="text-muted">
-												{type === 'ticket_number' && checkFormat ? <a href={`https://go.epfl.ch/${item[type]}`} target="_blank">{item[type]}</a> : item[type]}
+												{type === 'ticketNumber' && checkFormat ? <a href={`https://go.epfl.ch/${item[type]}`} target="_blank">{item[type]}</a> : item[type]}
 											</small>
 										</div>
 									</FormCard></li>)

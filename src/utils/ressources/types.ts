@@ -98,25 +98,25 @@ export type authorizationType = {
 }
 
 export type dispensationType = {
-	id: string;
+	opLock: string;
 	dispensation: string;
 	renewals: number;
-	subject_other: string;
+	subjectOther: string;
 	description: string;
 	comment: string;
 	status: string;
-	date_start: Date;
-	date_end: Date;
-	created_by: string;
-	created_on: Date;
-	modified_by: string;
-	modified_on: Date;
+	dateStart: Date;
+	dateEnd: Date;
+	createdBy: string;
+	createdOn: Date;
+	modifiedBy: string;
+	modifiedOn: Date;
 	subject: string;
-	dispensation_rooms: roomDetailsType[];
-	dispensation_units: lhdUnitsType[];
-	dispensation_holders: personType[];
-	dispensation_tickets: genericType[];
-	dispensation_files: genericType[];
+	dispensationRooms: roomDetailsType[];
+	dispensationUnits: lhdUnitsType[];
+	dispensationHolders: personType[];
+	dispensationTickets: genericType[];
+	dispensationFiles: genericType[];
 }
 
 export type assessmentType = {

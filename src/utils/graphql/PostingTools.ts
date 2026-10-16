@@ -463,34 +463,28 @@ export const saveNewDispensation = async (
 	const query = `mutation addDispensation {
 								addDispensation(
 									subject: "${dispensation.subject}",
-									subject_other: "${dispensation.other}",
+									subjectOther: "${dispensation.other}",
 									description: "${encodeURIComponent(dispensation.description)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
-									date_start: "${getFormattedDate(new Date(dispensation.creationDate))}",
-									date_end: "${getFormattedDate(new Date(dispensation.expDate))}",
+									dateStart: "${getFormattedDate(new Date(dispensation.creationDate))}",
+									dateEnd: "${getFormattedDate(new Date(dispensation.expDate))}",
 									status: "${dispensation.status}",
 									tickets: [
-										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
+										${dispensation.selectedTickets.map((disp: { ticketNumber: string; status: string; }) => `{name: "${disp.ticketNumber}", status: "${disp.status}"}`)}
 									],
 									holders: [
-										${dispensation.selectedHolders.map(disp => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
+										${dispensation.selectedHolders.map((disp: { sciper: string; status: string; }) => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
 									],
 									rooms: [
-										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+										${dispensation.selectedRooms.map((disp: { name: string; status: string; }) => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
 									units: [
-										${dispensation.selectedUnits.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+										${dispensation.selectedUnits.map((disp: { name: string; status: string; }) => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
 									files: [
-										${dispensation.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+										${dispensation.selectedFiles.map((ass: { filePath: string; status: string; base64: string; }) => `{path: "${ass.filePath}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -504,35 +498,29 @@ export const updateDispensation = async (
 ): Promise<any> => {
 	const query = `mutation updateDispensation {
 								updateDispensation(
-									id: ${id},
-									date_end: "${getFormattedDate(new Date(dispensation.expDate))}",
+									opLock: ${id},
+									dateEnd: "${getFormattedDate(new Date(dispensation.expDate))}",
 									status: "${dispensation.status}",
 									subject: "${dispensation.subject}",
-									subject_other: "${dispensation.other}",
+									subjectOther: "${dispensation.other}",
 									description: "${encodeURIComponent(dispensation.description)}",
 									comment: "${encodeURIComponent(dispensation.comment)}",
 									tickets: [
-										${dispensation.selectedTickets.map(disp => `{name: "${disp.ticket_number}", status: "${disp.status}"}`)}
+										${dispensation.selectedTickets.map((disp: { ticketNumber: string; status: string; }) => `{name: "${disp.ticketNumber}", status: "${disp.status}"}`)}
 									],
 									holders: [
-										${dispensation.selectedHolders.map(disp => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
+										${dispensation.selectedHolders.map((disp: { sciper: string; status: string; }) => `{sciper: ${disp.sciper}, status: "${disp.status}"}`)}
 									],
 									rooms: [
-										${dispensation.selectedRooms.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+										${dispensation.selectedRooms.map((disp: { name: string; status: string; }) => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
 									units: [
-										${dispensation.selectedUnits.map(disp => `{name: "${disp.name}", status: "${disp.status}"}`)}
+										${dispensation.selectedUnits.map((disp: { name: string; status: string; }) => `{name: "${disp.name}", status: "${disp.status}"}`)}
 									],
 									files: [
-										${dispensation.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+										${dispensation.selectedFiles.map((ass: { filePath: string; status: string; base64: string; }) => `{path: "${ass.filePath}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -544,13 +532,7 @@ export const deleteDispensation = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteDispensation {
-							 deleteDispensation(id: ${id})
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteDispensation(opLock: ${id})
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);

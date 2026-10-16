@@ -1,5 +1,5 @@
 import {notificationType, personType, roomDetailsType} from "../ressources/types";
-import {fetchPeopleFromFullText, fetchRooms, fetchUnitsByRoom} from "./FetchingTools";
+import {fetchPeopleFromFullText, fetchRoomsForAutocomplete, fetchUnitsByRoom} from "./FetchingTools";
 import {env} from "../env";
 import {getErrorMessage} from "./Utils";
 
@@ -7,7 +7,7 @@ export const commonFetchRoomList = async (token: string | undefined,
 																					room: string,
 																					setNotificationType: (value: (((prevState: notificationType) => notificationType) | notificationType)) => void,
 																					setOpenNotification: (b: boolean) => void): Promise<roomDetailsType[]> => {
-	const results = await fetchRooms(
+	const results = await fetchRoomsForAutocomplete(
 		env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 		token,
 		100,0, "Room=" + room
@@ -31,7 +31,7 @@ export const commonFetchUnitsListByRooms = async (token: string | undefined,
 	if (selectedRooms.length > 0) {
 		const rooms = selectedRooms.filter(room => room.status !== 'Deleted').map(room => room.name);
 		const results = await fetchUnitsByRoom(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			token,
 			rooms
 		);
@@ -53,7 +53,7 @@ export const commonFetchPeople = async (token: string | undefined,
 																	setNotificationType: (value: (((prevState: notificationType) => notificationType) | notificationType)) => void,
 																	setOpenNotification: (b: boolean) => void): Promise<personType[]> => {
 	const results = await fetchPeopleFromFullText(
-		env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+		env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 		token,
 		name
 	);
