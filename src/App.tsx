@@ -61,6 +61,7 @@ function App() {
 		canListDispensations: false,
 		isCosec: false,
 		isManager: false,
+		canListLogs: false
 	});
 
 	useEffect(() => {
