@@ -317,7 +317,7 @@ export const RoomControl = ({
 			let results: fetchRoomResultsTypeWithPagination = {};
 			if (hazards.length == 1) {
 				results = await fetchRoomsWithHazards(
-					env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+					env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 					oidc.accessToken,
 					0, 0,
 					search ?? ''
