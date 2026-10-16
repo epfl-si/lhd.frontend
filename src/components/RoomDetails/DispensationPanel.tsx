@@ -35,13 +35,13 @@ export const DispensationPanel = ({
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.dispensation}-{params.row.renewals}</span>
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
-					<b style={{fontSize: "smaller"}}>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</b>
+					<b style={{fontSize: "smaller"}}>{params.row.subjectOther ? `${params.row.subject} (${params.row.subjectOther})` : params.row.subject}</b>
 				</div>
 			}},
 		{field: "creation_date", headerName: t('dispensation.created'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => {
-				const date = new Date(params.row.date_start);
-				const dateExp = new Date(params.row.date_end);
+				const date = new Date(params.row.dateStart);
+				const dateExp = new Date(params.row.dateEnd);
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
 					<span><b>{t('generic.to')}</b> {getFormattedDate(dateExp)}</span>
@@ -50,7 +50,7 @@ export const DispensationPanel = ({
 		{field: "dispensation_rooms", headerName: t('dispensation.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.dispensation_rooms.map(item => {
+					{params.row.dispensationRooms.map(item => {
 							return (
 								item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 							)
@@ -62,7 +62,7 @@ export const DispensationPanel = ({
 		{field: "dispensation_units", headerName: t('dispensation.unit'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div className="form-card-div">
-					{params.row.dispensation_units.map(item => {
+					{params.row.dispensationUnits.map(item => {
 							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 						}
 					)}
@@ -72,7 +72,7 @@ export const DispensationPanel = ({
 		{field: "dispensation_holders", headerName: t('dispensation.holders'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.dispensation_holders.map(item => {
+					{params.row.dispensationHolders.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 							)
@@ -81,12 +81,12 @@ export const DispensationPanel = ({
 				</div>
 			),
 		},
-		{field: "dispensation_tickets", headerName: t('dispensation.ticket'), flex: 0.2,
+		{field: "dispensation_tickets", headerName: t('dispensation.tickets'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, dispensationType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.dispensation_tickets.map(item => {
+					{params.row.dispensationTickets.map(item => {
 							return (
-								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
+								<span>• <a href={`https://go.epfl.ch/${item.ticketNumber}`} target="_blank">{item.ticketNumber}</a><br/></span>
 							)
 						}
 					)}
@@ -102,7 +102,7 @@ export const DispensationPanel = ({
 	const load = async () => {
 		setLoading(true);
 		const results = await fetchDispensations(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0,0,
 			`Room=${room}`
