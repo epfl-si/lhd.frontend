@@ -593,33 +593,27 @@ export const saveNewAssessment = async (
 	const query = `mutation addAssessmentDecision {
 								addAssessmentDecision (
 									subject: "${assessment.subject}",
-									subject_other: "${assessment.other}",
+									subjectOther: "${assessment.other}",
 									description: "${encodeURIComponent(assessment.description)}",
 									conclusion: "${encodeURIComponent(assessment.conclusion)}",
 									date: "${getFormattedDate(new Date(assessment.creationDate))}",
 									status: "${assessment.status}",
 									tickets: [
-										${assessment.selectedTickets.map(ass => `{name: "${ass.ticket_number}", status: "${ass.status}"}`)}
+										${assessment.selectedTickets.map((ass: { ticketNumber: string; status: string; }) => `{name: "${ass.ticketNumber}", status: "${ass.status}"}`)}
 									],
 									contacts: [
-										${assessment.selectedContacts.map(ass => `{sciper: ${ass.sciper}, status: "${ass.status}"}`)}
+										${assessment.selectedContacts.map((ass: { sciper: string; status: string; }) => `{sciper: ${ass.sciper}, status: "${ass.status}"}`)}
 									],
 									rooms: [
-										${assessment.selectedRooms.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+										${assessment.selectedRooms.map((ass: { name: string; status: string; }) => `{name: "${ass.name}", status: "${ass.status}"}`)}
 									],
 									units: [
-										${assessment.selectedUnits.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+										${assessment.selectedUnits.map((ass: { name: string; status: string; }) => `{name: "${ass.name}", status: "${ass.status}"}`)}
 									],
 									files: [
-										${assessment.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+										${assessment.selectedFiles.map((ass: { filePath: string; status: string; base64: string; }) => `{path: "${ass.filePath}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -633,35 +627,29 @@ export const updateAssessment = async (
 ): Promise<any> => {
 	const query = `mutation updateAssessmentDecision {
 								updateAssessmentDecision (
-									id: ${id},
+									opLock: ${id},
 									date: "${getFormattedDate(new Date(assessment.creationDate))}",
 									status: "${assessment.status}",
 									subject: "${assessment.subject}",
-									subject_other: "${assessment.other}",
+									subjectOther: "${assessment.other}",
 									description: "${encodeURIComponent(assessment.description)}",
 									conclusion: "${encodeURIComponent(assessment.conclusion)}",
 									tickets: [
-										${assessment.selectedTickets.map(ass => `{name: "${ass.ticket_number}", status: "${ass.status}"}`)}
+										${assessment.selectedTickets.map((ass: { ticketNumber: string; status: string; }) => `{name: "${ass.ticketNumber}", status: "${ass.status}"}`)}
 									],
 									contacts: [
-										${assessment.selectedContacts.map(ass => `{sciper: ${ass.sciper}, status: "${ass.status}"}`)}
+										${assessment.selectedContacts.map((ass: { sciper: string; status: string; }) => `{sciper: ${ass.sciper}, status: "${ass.status}"}`)}
 									],
 									rooms: [
-										${assessment.selectedRooms.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+										${assessment.selectedRooms.map((ass: { name: string; status: string; }) => `{name: "${ass.name}", status: "${ass.status}"}`)}
 									],
 									units: [
-										${assessment.selectedUnits.map(ass => `{name: "${ass.name}", status: "${ass.status}"}`)}
+										${assessment.selectedUnits.map((ass: { name: string; status: string; }) => `{name: "${ass.name}", status: "${ass.status}"}`)}
 									],
 									files: [
-										${assessment.selectedFiles.map(ass => `{path: "${ass.file_path}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
+										${assessment.selectedFiles.map((ass: { filePath: string; status: string; base64: string; }) => `{path: "${ass.filePath}", status: "${ass.status ?? 'Default'}"${ass.base64 ? `, base64: "${ass.base64}"` : ''}}`)}
 									],
 								)
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);
@@ -673,13 +661,7 @@ export const deleteAssessment = async (
 	id: string,
 ): Promise<any> => {
 	const query = `mutation deleteAssessmentDecision {
-							 deleteAssessmentDecision (id: ${id})
-							 {
-								errors {
-									message
-								}
-								isSuccess
-							}
+							 deleteAssessmentDecision (opLock: ${id})
 						}`;
 
 	return doGraphQL(query, {}, address, authToken);

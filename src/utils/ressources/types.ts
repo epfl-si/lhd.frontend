@@ -121,23 +121,23 @@ export type dispensationType = {
 }
 
 export type assessmentType = {
-	id: string;
+	opLock: string;
 	assessment: string;
-	subject_other: string;
+	subjectOther: string;
 	description: string;
 	conclusion: string;
 	status: string;
 	date: Date;
-	created_by: string;
-	created_on: Date;
-	modified_by: string;
-	modified_on: Date;
+	createdBy: string;
+	createdOn: Date;
+	modifiedBy: string;
+	modifiedOn: Date;
 	subject: string;
-	assessment_rooms: roomDetailsType[];
-	assessment_units: lhdUnitsType[];
-	assessment_contacts: personType[];
-	assessment_tickets: genericType[];
-	assessment_files: genericType[];
+	assessmentRooms: roomDetailsType[];
+	assessmentUnits: lhdUnitsType[];
+	assessmentContacts: personType[];
+	assessmentTickets: genericType[];
+	assessmentFiles: genericType[];
 }
 
 export type lhdUnitsType = {

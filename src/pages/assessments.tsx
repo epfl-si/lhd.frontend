@@ -57,7 +57,7 @@ export const AssessmentDecisionControl = ({
 			}},
 		{field: "subject", headerName: t('assessment.subject'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => {
-				return <>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</>
+				return <>{params.row.subjectOther ? `${params.row.subject} (${params.row.subjectOther})` : params.row.subject}</>
 			}},
 		{field: "date", headerName: t('assessment.date'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => {
@@ -68,10 +68,10 @@ export const AssessmentDecisionControl = ({
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => {
 				return <>{params.row.status}</>
 			}},
-		{field: "assessment_rooms", headerName: t('assessment.room'), flex: 0.1,
+		{field: "assessmentRooms", headerName: t('assessment.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 					<div className="form-card-div">
-						{params.row.assessment_rooms.map(item => {
+						{params.row.assessmentRooms.map(item => {
 								return (
 									item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 								)
@@ -80,20 +80,20 @@ export const AssessmentDecisionControl = ({
 					</div>
 			),
 		},
-		{field: "assessment_units", headerName: t('assessment.unit'), flex: 0.1,
+		{field: "assessmentUnits", headerName: t('assessment.unit'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div className="form-card-div">
-					{params.row.assessment_units.map(item => {
+					{params.row.assessmentUnits.map(item => {
 							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 						}
 					)}
 				</div>
 			),
 		},
-		{field: "assessment_contacts", headerName: t('assessment.contacts'), flex: 0.2,
+		{field: "assessmentContacts", headerName: t('assessment.contacts'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div className="form-card-div">
-					{params.row.assessment_contacts.map(item => {
+					{params.row.assessmentContacts.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 							)
@@ -102,12 +102,12 @@ export const AssessmentDecisionControl = ({
 				</div>
 			),
 		},
-		{field: "assessment_tickets", headerName: t('assessment.references'), flex: 0.2,
+		{field: "assessmentTickets", headerName: t('assessment.references'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div className="form-card-div">
-					{params.row.assessment_tickets.map(item => {
+					{params.row.assessmentTickets.map(item => {
 							return (
-								<span>• {item.ticket_number}<br/></span>
+								<span>• {item.ticketNumber}<br/></span>
 							)
 						}
 					)}
@@ -135,7 +135,7 @@ export const AssessmentDecisionControl = ({
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.assessment}</span>
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
-					<b style={{fontSize: "smaller"}}>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</b>
+					<b style={{fontSize: "smaller"}}>{params.row.subjectOther ? `${params.row.subject} (${params.row.subjectOther})` : params.row.subject}</b>
 				</div>
 			}},
 		{field: "creation_date", headerName: t('assessment.created'), flex: 0.1,
@@ -145,10 +145,10 @@ export const AssessmentDecisionControl = ({
 					<span><b>{t('generic.from')}</b> {getFormattedDate(date)}</span>
 				</div>
 			}},
-		{field: "assessment_rooms", headerName: t('assessment.room'), flex: 0.1,
+		{field: "assessmentRooms", headerName: t('assessment.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.assessment_rooms.map(item => {
+					{params.row.assessmentRooms.map(item => {
 							return (
 								item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 							)
@@ -157,20 +157,20 @@ export const AssessmentDecisionControl = ({
 				</div>
 			),
 		},
-		{field: "assessment_units", headerName: t('assessment.unit'), flex: 0.1,
+		{field: "assessmentUnits", headerName: t('assessment.unit'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div className="form-card-div">
-					{params.row.assessment_units.map(item => {
+					{params.row.assessmentUnits.map(item => {
 							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 						}
 					)}
 				</div>
 			),
 		},
-		{field: "assessment_contacts", headerName: t('assessment.contacts'), flex: 0.2,
+		{field: "assessmentContacts", headerName: t('assessment.contacts'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.assessment_contacts.map(item => {
+					{params.row.assessmentContacts.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 							)
@@ -179,12 +179,12 @@ export const AssessmentDecisionControl = ({
 				</div>
 			),
 		},
-		{field: "assessment_tickets", headerName: t('assessment.references'), flex: 0.2,
+		{field: "assessmentTickets", headerName: t('assessment.references'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.assessment_tickets.map(item => {
+					{params.row.assessmentTickets.map(item => {
 							return (
-								<span>• {item.ticket_number}<br/></span>
+								<span>• {item.ticketNumber}<br/></span>
 							)
 						}
 					)}
@@ -197,24 +197,24 @@ export const AssessmentDecisionControl = ({
 		{field: "assessment", headerName: t('assessment.assessment'), flex: 0.2,
 		renderCell: (params: GridRenderCellParams<any, assessmentType>) => {
 			const date = new Date(params.row.date);
-			const rooms = params.row.assessment_rooms.map(item => {
+			const rooms = params.row.assessmentRooms.map(item => {
 					return (
 						item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 					)
 				}
 			);
-			const contacts = params.row.assessment_contacts.map(item => {
+			const contacts = params.row.assessmentContacts.map(item => {
 					return (
 						<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 					)
 				}
 			);
-			const units= params.row.assessment_units.map(item => {
+			const units= params.row.assessmentUnits.map(item => {
 				return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 			});
-			const tickets = params.row.assessment_tickets.map(item => {
+			const tickets = params.row.assessmentTickets.map(item => {
 					return (
-						<span>• {item.ticket_number}<br/></span>
+						<span>• {item.ticketNumber}<br/></span>
 					)
 				}
 			);
@@ -245,7 +245,7 @@ export const AssessmentDecisionControl = ({
 	const loadFetch = async () => {
 		setLoading(true);
 		const results = await fetchAssessments(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			PAGE_SIZE,
 			PAGE_SIZE * page,
@@ -279,7 +279,7 @@ export const AssessmentDecisionControl = ({
 	const onExport = async () => {
 		setLoading(true);
 		const results = await fetchAssessments(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0, 0,
 			search
@@ -294,18 +294,18 @@ export const AssessmentDecisionControl = ({
 					assessment: ass.assessment,
 					date: formatDate(new Date(ass.date), true),
 					subject: ass.subject,
-					subject_other: ass.subject_other ?? '',
+					subjectOther: ass.subjectOther ?? '',
 					description: ass.description,
 					conclusion: ass.conclusion ?? '',
-					created_by: ass.created_by,
-					created_on: formatDate(new Date(ass.created_on), true),
-					modified_by: ass.modified_by,
-					modified_on: formatDate(new Date(ass.modified_on), true),
-					rooms: ass.assessment_rooms.map(room => room.name),
-					units: ass.assessment_units.map(unit => unit.name),
-					contacts: ass.assessment_contacts.map(holder => `${holder.name} ${holder.surname} (${holder.sciper})`),
+					createdBy: ass.createdBy,
+					createdOn: formatDate(new Date(ass.createdOn), true),
+					modifiedBy: ass.modifiedBy,
+					modifiedOn: formatDate(new Date(ass.modifiedOn), true),
+					rooms: ass.assessmentRooms.map(room => room.name),
+					units: ass.assessmentUnits.map(unit => unit.name),
+					contacts: ass.assessmentContacts.map(holder => `${holder.name} ${holder.surname} (${holder.sciper})`),
 					status: ass.status,
-					tickets: ass.assessment_tickets.map(ticket => ticket.ticket_number)
+					tickets: ass.assessmentTickets.map(ticket => ticket.ticketNumber)
 				}
 			});
 			exportToExcel(parsedResults, getExportFileName(search !== '' ? `assessments_${fileName}` : 'assessments'));

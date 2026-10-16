@@ -54,7 +54,7 @@ export const AddNewAssessmentDialog = ({
 	const [creationDate, setCreationDate] = useState<Date>(selectedAssessment ? selectedAssessment.date : new Date());
 	const [status, setStatus] = useState<string>(selectedAssessment ? selectedAssessment.status : 'Active');
 	const [subject, setSubject] = useState<string | undefined>(selectedAssessment?.subject);
-	const [other, setOther] = useState<string | undefined>(selectedAssessment?.subject_other);
+	const [other, setOther] = useState<string | undefined>(selectedAssessment?.subjectOther);
 	const [conclusion, setConclusion] = useState<string | undefined>(selectedAssessment?.conclusion);
 	const [description, setDescription] = useState<string | undefined>(selectedAssessment?.description);
 	const [savedRooms, setSavedRooms] = useState<roomDetailsType[]>([]);
@@ -78,30 +78,30 @@ export const AddNewAssessmentDialog = ({
 		setSubject(selectedAssessment?.subject);
 		setConclusion(selectedAssessment ? selectedAssessment.conclusion : '');
 		setDescription(selectedAssessment ? selectedAssessment.description : '');
-		setOther(selectedAssessment ? selectedAssessment.subject_other : '')
+		setOther(selectedAssessment ? selectedAssessment.subjectOther : '')
 
-		setSavedRooms(selectedAssessment ? selectedAssessment.assessment_rooms : []);
-		setSelectedRooms(selectedAssessment ? selectedAssessment.assessment_rooms : []);
+		setSavedRooms(selectedAssessment ? selectedAssessment.assessmentRooms : []);
+		setSelectedRooms(selectedAssessment ? selectedAssessment.assessmentRooms : []);
 
-		setSavedUnits(selectedAssessment ? selectedAssessment.assessment_units : []);
-		setSelectedUnits(selectedAssessment ? selectedAssessment.assessment_units : []);
+		setSavedUnits(selectedAssessment ? selectedAssessment.assessmentUnits : []);
+		setSelectedUnits(selectedAssessment ? selectedAssessment.assessmentUnits : []);
 
-		setSavedContacts(selectedAssessment ? selectedAssessment.assessment_contacts : []);
-		setSelectedContacts(selectedAssessment ? selectedAssessment.assessment_contacts : []);
+		setSavedContacts(selectedAssessment ? selectedAssessment.assessmentContacts : []);
+		setSelectedContacts(selectedAssessment ? selectedAssessment.assessmentContacts : []);
 
-		setSavedTickets(selectedAssessment ? selectedAssessment.assessment_tickets : []);
-		setSelectedTickets(selectedAssessment ? selectedAssessment.assessment_tickets : []);
+		setSavedTickets(selectedAssessment ? selectedAssessment.assessmentTickets : []);
+		setSelectedTickets(selectedAssessment ? selectedAssessment.assessmentTickets : []);
 
-		setSelectedFiles(selectedAssessment ? selectedAssessment.assessment_files : []);
+		setSelectedFiles(selectedAssessment ? selectedAssessment.assessmentFiles : []);
 	}, [openDialog, selectedAssessment]);
 
 	const loadSubjects = async () => {
 		const results = await fetchAssessmentSubjects(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data){
-			setAvailableSubjects(results.data.map(ass => ass.subject));
+			setAvailableSubjects(results.data.map((ass: { subject: string; }) => ass.subject));
 		} else {
 			const errors = getErrorMessage(results, 'assessmentSubjects');
 			setNotificationType(errors.notif);
@@ -113,9 +113,9 @@ export const AddNewAssessmentDialog = ({
 		setHistory([]);
 		if (selectedAssessment && openDialog) {
 			const results = await fetchAssessmentHistory(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				selectedAssessment.id
+				selectedAssessment.opLock
 			);
 			if (results.status === 200 && results.data){
 				setHistory(results.data);
@@ -129,16 +129,16 @@ export const AddNewAssessmentDialog = ({
 			subject,other,conclusion,description,selectedTickets,selectedContacts,selectedRooms, selectedUnits, selectedFiles};
 		if (selectedAssessment) {
 			updateAssessment(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(selectedAssessment.id),
+				JSON.stringify(selectedAssessment.opLock),
 				assessment
 			).then(res => {
 				handleOpen(res, false);
 			});
 		} else {
 			saveNewAssessment(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				assessment
 			).then(res => {
@@ -252,12 +252,12 @@ export const AddNewAssessmentDialog = ({
 								model={'assessment'}
 								selectedFiles={selectedFiles}
 								setSelectedFiles={setSelectedFiles}
-								selectedId={selectedAssessment?.id ?? ''} />
+								selectedId={selectedAssessment?.opLock ?? ''} />
 						</div>
 						{selectedAssessment && <div style={{display: "flex", flexDirection: "column"}}><label
 				style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
-				className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedAssessment.created_by,
-							(new Date(selectedAssessment.created_on)).toLocaleString('fr-CH', {
+				className="hazardTitle">{sprintf(t(`hazards.creation_info`), selectedAssessment.createdBy,
+							(new Date(selectedAssessment.createdOn)).toLocaleString('fr-CH', {
 								year: 'numeric',
 								month: 'numeric',
 								day: 'numeric',
@@ -267,8 +267,8 @@ export const AddNewAssessmentDialog = ({
 							}))}</label>
 				<label
 					style={{fontStyle: "italic", fontSize: "small", marginBottom: '0px'}}
-					className="hazardTitle">{sprintf(t(`hazards.modification_info`), selectedAssessment.modified_by,
-									(new Date(selectedAssessment.modified_on)).toLocaleString('fr-CH', {
+					className="hazardTitle">{sprintf(t(`hazards.modification_info`), selectedAssessment.modifiedBy,
+									(new Date(selectedAssessment.modifiedOn)).toLocaleString('fr-CH', {
 										year: 'numeric',
 										month: 'numeric',
 										day: 'numeric',
@@ -375,7 +375,7 @@ export const AddNewAssessmentDialog = ({
 						</div>
 						<div className="dispensation-panel">
 							<InputLabel style={{fontSize: "small", fontWeight: "bold"}}>{t("assessment.references")}</InputLabel>
-							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticket_number' checkFormat={false}/>
+							<Source selected={savedTickets} onChangeSelection={onChangeTickets} type='ticketNumber' checkFormat={false}/>
 						</div>
 					</div>
 					<MutationLogsTable history={history} />
