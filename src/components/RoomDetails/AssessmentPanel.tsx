@@ -35,7 +35,7 @@ export const AssessmentPanel = ({
 				return <div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
 					<span>{params.row.assessment}</span>
 					<b style={{fontSize: "smaller"}}>{params.row.status}</b>
-					<b style={{fontSize: "smaller"}}>{params.row.subject_other ? `${params.row.subject} (${params.row.subject_other})` : params.row.subject}</b>
+					<b style={{fontSize: "smaller"}}>{params.row.subjectOther ? `${params.row.subject} (${params.row.subjectOther})` : params.row.subject}</b>
 				</div>
 			}},
 		{field: "creation_date", headerName: t('assessment.created'), flex: 0.1,
@@ -48,7 +48,7 @@ export const AssessmentPanel = ({
 		{field: "assessment_rooms", headerName: t('assessment.room'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.assessment_rooms.map(item => {
+					{params.row.assessmentRooms.map(item => {
 							return (
 								item.isDeleted ? <span style={{color: "red", textDecoration: "line-through"}}>• {item.name}<br/></span> : <span>• <a href={`/roomdetails?room=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 							)
@@ -60,7 +60,7 @@ export const AssessmentPanel = ({
 		{field: "assessment_units", headerName: t('assessment.unit'), flex: 0.1,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div className="form-card-div">
-					{params.row.assessment_units.map(item => {
+					{params.row.assessmentUnits.map(item => {
 							return <span>• <a href={`/unitdetails?unit=${encodeURIComponent(item.name)}`} target="_blank">{item.name}</a><br/></span>
 						}
 					)}
@@ -70,7 +70,7 @@ export const AssessmentPanel = ({
 		{field: "assessment_contacts", headerName: t('assessment.contacts'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.assessment_contacts.map(item => {
+					{params.row.assessmentContacts.map(item => {
 							return (
 								<span>• {item.name} {item.surname} ({item.sciper})<br/></span>
 							)
@@ -82,9 +82,9 @@ export const AssessmentPanel = ({
 		{field: "assessment_tickets", headerName: t('assessment.tickets'), flex: 0.2,
 			renderCell: (params: GridRenderCellParams<any, assessmentType>) => (
 				<div style={{display: "flex", flexDirection: "column", fontSize: "smaller"}}>
-					{params.row.assessment_tickets.map(item => {
+					{params.row.assessmentTickets.map(item => {
 							return (
-								<span>• <a href={`https://go.epfl.ch/${item.ticket_number}`} target="_blank">{item.ticket_number}</a><br/></span>
+								<span>• <a href={`https://go.epfl.ch/${item.ticketNumber}`} target="_blank">{item.ticketNumber}</a><br/></span>
 							)
 						}
 					)}
@@ -100,7 +100,7 @@ export const AssessmentPanel = ({
 	const load = async () => {
 		setLoading(true);
 		const results = await fetchAssessments(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			0,0,
 			`Room=${room}`
