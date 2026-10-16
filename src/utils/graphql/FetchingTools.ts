@@ -407,7 +407,7 @@ export const fetchRoomsWithHazards = async (
 	const query: string = `query RoomFetch { 
 				roomsWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
 					rooms {
-						id
+						opLock
 						name
 						building
 						sector
@@ -419,8 +419,8 @@ export const fetchRoomsWithHazards = async (
 						}
 						hazardAdditionalInfo {
 							comment
-							hazard_category {
-								hazard_category_name
+							hazardCategory {
+								hazardCategoryName
 							}
 						}
 						hazards {
@@ -428,16 +428,16 @@ export const fetchRoomsWithHazards = async (
 							children {
 								submission
 							}
-							hazard_form_history {
-								hazard_form {
-									hazard_category {
-										hazard_category_name
+							hazardFormHistory {
+								hazardForm {
+									hazardCategory {
+										hazardCategoryName
 									}
 								}
 							}
 						}
-						lhd_units {
-							id
+						lhdUnits {
+							opLock
 							unitId
 							name
 							institute {
@@ -446,15 +446,24 @@ export const fetchRoomsWithHazards = async (
 									name
 								}
 							}
-							cosecs {
-								name
-								surname
-								email
-							}
-							professors {
-								name
-								surname
-								email
+							profiles {
+								role
+								expirationDate
+								unit {
+									name
+									institute {
+										name
+										school {
+											name
+										}
+									}
+								}
+								person {
+									name
+									surname
+									sciper
+									email
+								}
 							}
 						}
 					}
