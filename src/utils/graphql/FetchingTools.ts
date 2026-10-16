@@ -1146,7 +1146,7 @@ export const fetchDispensationHistory = async (
 	const query = `query fetchDispensationHistory {
 		mutationLogsByTable (tableName: ["Dispensation","DispensationHasTicket","DispensationHasRoom","DispensationHasHolder","DispensationHasUnit","DispensationHasFile"], 
 		tableIdentifier: ${JSON.stringify(dispensationId)}, 
-		excludedField: ["modifiedOn","idDispensation","modifiedBy"]) {
+		excludedField: ["modified_on","id_dispensation","modified_by","created_by","created_on","modifiedOn","idDispensation","modifiedBy","createdBy","createdOn"]) {
 			modifiedBy
 			modifiedOn
 			diffs {
@@ -1276,35 +1276,35 @@ export const fetchAssessments = async (
 	const query = `query fetchAssessments {
 		assessmentWithPagination (take: ${take}, skip: ${skip}, search: "${search}") {
 			assessment {
-				id
+				opLock
 				assessment
 				date
 				subject
-				subject_other
+				subjectOther
 				description
 				conclusion
-				created_by
-				created_on
-				modified_by
-				modified_on
-				assessment_rooms {
+				createdBy
+				createdOn
+				modifiedBy
+				modifiedOn
+				assessmentRooms {
 					name
 					isDeleted
 				}
-				assessment_units {
+				assessmentUnits {
 					name
 				}
-				assessment_contacts {
+				assessmentContacts {
 					surname
 					name
 					sciper
 				}
 				status
-				assessment_tickets {
-					ticket_number
+				assessmentTickets {
+					ticketNumber
 				}
-				assessment_files {
-					file_path
+				assessmentFiles {
+					filePath
 				}
 			}
 			totalCount
@@ -1343,10 +1343,11 @@ export const fetchAssessmentHistory = async (
 	id: string
 ): Promise<any> => {
 	const query = `query fetchAssessmentHistory {
-		mutationLogsByTable (tableName: "AssessmentDecision,AssessmentDecisionHasTicket,AssessmentDecisionHasFile,AssessmentDecisionHasRoom,AssessmentDecisionHasContact,AssessmentDecisionHasUnit", tableIdentifier: ${JSON.stringify(id)}, 
-		excludedField: "modified_on,id_assessment_and_decision,modified_by") {
-			modified_by
-			modified_on
+		mutationLogsByTable (tableName: ["AssessmentDecision","AssessmentDecisionHasTicket","AssessmentDecisionHasFile","AssessmentDecisionHasRoom","AssessmentDecisionHasContact","AssessmentDecisionHasUnit"], 
+		tableIdentifier: ${JSON.stringify(id)}, 
+		excludedField: ["modified_on","id_assessment_and_decision","modified_by","created_by","created_on","modifiedOn","idAssessmentAndDecision","modifiedBy","createdBy","createdOn"]) {
+			modifiedBy
+			modifiedOn
 			diffs {
 				field
 				before

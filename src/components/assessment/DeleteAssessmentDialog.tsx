@@ -36,9 +36,9 @@ export const DeleteAssessmentDialog = ({
 	function deleteDetails() {
 		if (assessment) {
 			deleteAssessment(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
-				JSON.stringify(assessment.id)
+				JSON.stringify(assessment.opLock)
 			).then(res => {
 				handleOpen(res);
 			});
