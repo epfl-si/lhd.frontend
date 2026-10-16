@@ -182,7 +182,7 @@ type schoolType = {
 }
 
 export type reportFile = {
-	id: string;
+	opLock: string;
 	name: string;
 	path: string;
 	unitName: string;
