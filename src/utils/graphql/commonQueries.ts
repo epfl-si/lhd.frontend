@@ -68,3 +68,11 @@ export const commonFetchPeople = async (token: string | undefined,
 	}
 	return [];
 };
+
+export function getRoomTitle(room: roomDetailsType) {
+	return room.isDeleted ? `${room.name} (Deleted)` : room.name;
+}
+
+export function getPersonTitle(person: personType) {
+	return person.name + ' ' + person.surname;
+}

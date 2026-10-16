@@ -27,7 +27,13 @@ import {MutationLogsTable} from "../global/MutationLogsTable";
 import {ConfirmSavingDispensationDialog} from "./ConfirmSavingDispensationDialog";
 import {CircularProgress} from "@mui/joy";
 import {formatDateForPickers} from "../../utils/ressources/parser";
-import {commonFetchPeople, commonFetchRoomList, commonFetchUnitsListByRooms} from "../../utils/graphql/commonQueries";
+import {
+	commonFetchPeople,
+	commonFetchRoomList,
+	commonFetchUnitsListByRooms,
+	getPersonTitle,
+	getRoomTitle
+} from "../../utils/graphql/commonQueries";
 import MultiFileUploader from "../global/MultiFileUploader";
 
 interface AddNewDispensationDialogProps {
@@ -199,10 +205,6 @@ export const AddNewDispensationDialog = ({
 		setOpenNotification(false);
 	};
 
-	function getRoomTitle(room: roomDetailsType) {
-		return room.isDeleted ? `${room.name} (${t("generic.deleted")})` : room.name;
-	}
-
 	function getUnitTitle(unit: lhdUnitsType) {
 		return unit.name;
 	}
@@ -218,10 +220,6 @@ export const AddNewDispensationDialog = ({
 	const fetchPeople = async (newValue: string): Promise<personType[]> => {
 		return commonFetchPeople(oidc.accessToken, newValue, setNotificationType, setOpenNotification);
 	};
-
-	function getPersonTitle(person: personType) {
-		return person.name + ' ' + person.surname;
-	}
 
 	function onChangeTickets(changedTickets: genericType[]) {
 		setSelectedTickets(changedTickets);
