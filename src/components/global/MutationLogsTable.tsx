@@ -30,7 +30,7 @@ export const MutationLogsTable = ({
 				</thead>
 				<tbody>
 				{history.map((group, groupIndex) =>
-					group.diffs.map((diff, diffIndex) => (
+					group.diffs.map((diff: { field: string; before: any; after: any; }, diffIndex: number) => (
 						<tr key={`${groupIndex}-${diffIndex}`}
 								style={{
 									borderTop: diffIndex === 0 ? "1px solid rgb(183 180 180)" : "1px dashed #ddd"
@@ -38,10 +38,10 @@ export const MutationLogsTable = ({
 							{diffIndex === 0 && (
 								<>
 									<td rowSpan={group.diffs.length} style={{width: '10%'}} className="table-mutation-logs">
-										{group.modified_on}
+										{group.modifiedOn}
 									</td>
 									<td rowSpan={group.diffs.length} style={{width: '10%'}} className="table-mutation-logs">
-										{group.modified_by}
+										{group.modifiedBy}
 									</td>
 								</>
 							)}
