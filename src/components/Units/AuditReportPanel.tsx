@@ -29,7 +29,7 @@ export const AuditReportPanel = ({
 
 	const loadReportFiles = async (unitId: string[]) => {
 		const reports = await fetchReportFiles(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken,
 			unitId
 		);
@@ -82,7 +82,7 @@ export const AuditReportPanel = ({
 							{report.reports.map(file => {
 								if(file && file.path) {
 									return <a style={{fontSize: 'small'}}
-														onClick={async e => await handleClickFileLink(e, oidc.accessToken, file.id, 'reportFile', file.name)}
+														onClick={async e => await handleClickFileLink(e, oidc.accessToken, file.opLock, 'reportFile', file.name)}
 														href={file.path}>
 										{extractDateAndStatus(file.name)}
 									</a>

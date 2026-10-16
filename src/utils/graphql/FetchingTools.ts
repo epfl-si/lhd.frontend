@@ -814,7 +814,7 @@ export const fetchReportFiles = async (
 ): Promise<fetchReportFiles> => {
 	const query = `query reportfiles($units: [String!]!) {
 	unitReportFiles (units: $units) {
-			id
+			opLock
 			name
 			path
 			unitName
