@@ -104,7 +104,7 @@ export const AddNewDispensationDialog = ({
 
 	const loadSubjects = async () => {
 		const results = await fetchDispensationSubjects(
-			env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+			env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 			oidc.accessToken
 		);
 		if (results.status === 200 && results.data){
@@ -120,7 +120,7 @@ export const AddNewDispensationDialog = ({
 		setHistory([]);
 		if (selectedDispensation && openDialog) {
 			const results = await fetchDispensationHistory(
-				env().REACT_APP_GRAPHQL_ENDPOINT_URL,
+				env().REACT_APP_GRAPHQL_BACKEND_ENDPOINT_URL,
 				oidc.accessToken,
 				selectedDispensation.opLock
 			);
