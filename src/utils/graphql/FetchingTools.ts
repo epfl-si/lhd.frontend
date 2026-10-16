@@ -724,6 +724,7 @@ export const fetchConnectedUser = async (
 							canEditAssessments
 							canListPeople
 							canListForms
+							canListLogs
 						}
 					}`;
 

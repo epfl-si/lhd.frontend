@@ -25,6 +25,7 @@ export type UserInfo = {
 	canEditAssessments?: boolean;
 	canListPeople?: boolean;
 	canListForms?: boolean;
+	canListLogs?: boolean;
 };
 
 export type notificationType = {
