@@ -90,7 +90,7 @@ export const UnitControl = ({
 				<div className="form-card-div">
 					{params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
 						.map(c => {
-							return <span>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+							return <span>{c.role}: {c.person.name} {c.person.surname}<br/></span>
 						})}
 				</div>
 			),
@@ -147,7 +147,7 @@ export const UnitControl = ({
 				<div className="form-card-div">
 					{params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
 						.map(c => {
-							return <span>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+							return <span>{c.role}: {c.person.name} {c.person.surname}<br/></span>
 						})}
 				</div>
 			),
@@ -186,7 +186,7 @@ export const UnitControl = ({
 				const names: string[] = [];
 				const cosecs = params.row.profiles.sort((a, b) => b.role.localeCompare(a.role))
 					.map(c => {
-						return <span><br/>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}</span>
+						return <span><br/>{c.role}: {c.person.name} {c.person.surname}</span>
 					});
 				if (params.row.institute && params.row.institute.name) {
 					names.push(params.row.institute.name);

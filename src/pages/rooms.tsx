@@ -103,7 +103,7 @@ export const RoomControl = ({
 												<div className="displayFlexColumn">
 													{item.profiles.sort((a, b) => b.role.localeCompare(a.role))
 														.map(c => {
-															return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+															return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role}: {c.person.name} {c.person.surname}<br/></span>
 														})}
 												</div>
 											}
@@ -158,7 +158,7 @@ export const RoomControl = ({
 													<div className="displayFlexColumn">
 														{item.profiles.sort((a, b) => b.role.localeCompare(a.role))
 															.map(c => {
-																return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+																return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role}: {c.person.name} {c.person.surname}<br/></span>
 															})}
 													</div>
 												}
@@ -229,7 +229,7 @@ export const RoomControl = ({
 													<div className="displayFlexColumn">
 														{item.profiles.sort((a, b) => b.role.localeCompare(a.role))
 															.map(c => {
-																return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></span>
+																return <span style={{lineHeight: 'normal', fontSize: 'smaller'}}>{c.role}: {c.person.name} {c.person.surname}<br/></span>
 															})}
 													</div>
 												}

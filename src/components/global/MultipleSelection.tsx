@@ -185,7 +185,7 @@ export const MultipleSelection = <Member extends Record<string, any>>({
 										<div className="displayFlexColumn">
 											{item.profiles.sort((a: profile, b: profile) => b.role.localeCompare(a.role))
 												.map((c: profile) => {
-													return <small>{c.role == 'Professor' ? '🎓' : '⛑️'} {c.person.name} {c.person.surname}<br/></small>
+													return <small>{c.role}: {c.person.name} {c.person.surname}<br/></small>
 												})}
 										</div>
 									: <></>
