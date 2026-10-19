@@ -247,6 +247,8 @@ export const HazardsControl = ({
 							flat[k] = v['name'];
 						else if (k === 'declassificationDate')
 							flat[k] = getFormattedDate(new Date(v));
+						else if (k === 'gas')
+							flat[k] = v['gas'];
 						else
 							flat[k] = v;
 					});
