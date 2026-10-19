@@ -119,9 +119,9 @@ export default function UnitDetails() {
 
 	function getPersonTitle(person: profile) {
 		if (person.expirationDate) {
-			return `${person.role == 'Professor' ? '🎓' : '⛑️'} ${person.person.name} ${person.person.surname} - ${getFormattedDate(new Date(person.expirationDate))}`;
+			return `${person.role}: ${person.person.name} ${person.person.surname} - ${getFormattedDate(new Date(person.expirationDate))}`;
 		} else {
-			return `⭐ ${person.role == 'Professor' ? '🎓' : '⛑️'} ${person.person.name} ${person.person.surname}`;
+			return `⭐ ${person.role}: ${person.person.name} ${person.person.surname}`;
 		}
 	}
 
