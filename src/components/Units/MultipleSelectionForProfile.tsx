@@ -123,12 +123,7 @@ export const MultipleSelectionForProfile = ({
 	function onChangeInput(newValue: string) {
 		if (newValue) {
 			setInputValue(newValue);
-			fetchData(newValue).then(r => {
-				let filtered: personType[] =  r.filter((suggestion) => {
-					return !currentlySelected.find(s => s.person.sciper == suggestion.sciper);
-				}) || [];
-				setFilteredSuggestions(filtered);
-			});
+			fetchData(newValue).then(r => setFilteredSuggestions(r));
 		} else {
 			setFilteredSuggestions([]);
 		}
