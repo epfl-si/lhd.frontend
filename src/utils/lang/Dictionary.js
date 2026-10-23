@@ -46,7 +46,7 @@ i18next.use(initReactI18next).init({
 				},
 				unit_details: {
 					personPlaceholder: 'Select a person',
-					profTab: 'Head of unit',
+					profTab: 'Unit roles',
 					cosecTab: 'COSECs',
 					subunitTab: 'Sub-Units',
 					title: 'Details on unit',
@@ -381,7 +381,7 @@ i18next.use(initReactI18next).init({
 				},
 				unit_details: {
 					personPlaceholder: 'Sélectionner une personne',
-					profTab: 'Head of unit',
+					profTab: 'Rôles de l\'unité',
 					cosecTab: 'COSECs',
 					subunitTab: 'Sous-Unités',
 					title: 'Détails de l\'unité',
