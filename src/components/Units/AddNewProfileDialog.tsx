@@ -32,6 +32,10 @@ export const AddNewProfileDialog = ({
 	const { t } = useTranslation();
 	const [roles, setRoles] = useState<string[]>();
 
+	const today = new Date();
+	const maxDate = new Date(today);
+	maxDate.setFullYear(today.getFullYear() + 2);
+
 	useEffect(() => {
 		fetchRoles();
 	}, [openDialog]);
@@ -74,6 +78,10 @@ export const AddNewProfileDialog = ({
 				value={formatDateForPickers(expirationDate)}
 				onChange={(e) => setExpirationDate(new Date(e.target.value))}
 				InputLabelProps={{ shrink: true }}
+				inputProps={{
+					min: formatDateForPickers(today),
+					max: formatDateForPickers(maxDate),
+				}}
 				fullWidth
 			/>
 
