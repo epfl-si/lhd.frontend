@@ -93,7 +93,7 @@ export function convertToTable(roomsList: roomDetailsType[], search: string) {
 		if ( r.lhdUnits && r.lhdUnits.length > 0 ) {
 			if ( result['Unit'] && result['Unit'].length > 0 ) {
 				result['Unit'].forEach(u => {
-					const ulower = u.toLowerCase();
+					const ulower = u.toLowerCase().replaceAll('*','');
 					const unit = r.lhdUnits.filter(un => un.name.toLowerCase().indexOf(ulower) > -1 ||
 						(un.institute && un.institute.name && un.institute.name.toLowerCase().indexOf(ulower) > -1) ||
 						(un.institute && un.institute.school && un.institute.school.name && un.institute.school.name.toLowerCase().indexOf(ulower) > -1)

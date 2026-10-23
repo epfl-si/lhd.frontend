@@ -1,10 +1,9 @@
-import {Autocomplete, debounce} from "@mui/material";
-import {TextField} from "@material-ui/core";
+import {Autocomplete, debounce, TextField} from "@mui/material";
 import React, {useCallback, useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import {useHistory} from "react-router-dom";
 import {splitCamelCase} from "../../utils/ressources/jsonUtils";
-import { OptionType } from "../../utils/ressources/types";
+import {OptionType} from "../../utils/ressources/types";
 
 interface MultipleAutocompleteProps {
 	setSearch: (search: string) => void;
@@ -137,7 +136,7 @@ export const MultipleAutocomplete = ({
 						{ title: "Dispensation="+query, encodedTitle: "Dispensation="+ encodeURIComponent(query) },
 						{ title: "Holder="+query, encodedTitle: "Holder="+ encodeURIComponent(query)},
 						{ title: "Room="+query, encodedTitle: "Room="+ encodeURIComponent(query)},
-						{ title: "Status="+query, encodedTitle: "Status="+ findDispensationStatus(encodeURIComponent(query.trim().toLowerCase())) },
+						{ title: "Status="+query, encodedTitle: "Status="+ (findDispensationStatus(encodeURIComponent(query.trim().toLowerCase())) ?? '') },
 						{ title: "Subject="+query, encodedTitle: "Subject="+ encodeURIComponent(query) },
 						{ title: "Ticket="+query, encodedTitle: "Ticket="+ encodeURIComponent(query)},
 						{ title: "Unit="+query, encodedTitle: "Unit="+ encodeURIComponent(query) },
@@ -185,7 +184,7 @@ export const MultipleAutocomplete = ({
 				multiple
 				options={options}
 				getOptionLabel={getOptionLabel}
-				isOptionEqualToValue={(option, value) => option.title == value.title}
+				isOptionEqualToValue={(option, value) => option.title === value.title}
 				getOptionDisabled={(option) => option.title.endsWith("=")}
 				disableCloseOnSelect
 				renderInput={(params) => (
