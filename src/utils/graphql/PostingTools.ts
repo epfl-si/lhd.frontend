@@ -44,7 +44,7 @@ export const updateUnit = async (
 							 profiles: [${details.profiles.map(profile => 
 								`{
 									status: "${profile.status}",
-									role: ${profile.role},
+									role: "${profile.role}",
 									${profile.expirationDate ? `expirationDate: "${formatDateForPickers(profile.expirationDate)}",` : ''}
 									person: {
 										name: "${profile.person.name}",

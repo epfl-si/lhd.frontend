@@ -20,9 +20,9 @@ i18next.use(initReactI18next).init({
 					floor: 'Floor',
 					addNewRoom: 'Add new room',
 					exportRoom: 'Export rooms',
-					units: 'Units (mandatory for cosecs ou professors export)',
+					units: 'Units (mandatory for cosecs ou Heads of unit export)',
 					cosecs: 'Cosecs',
-					profs: 'Professors',
+					profs: 'Heads of unit',
 					kind: {
 						name: 'Designation',
 					},
@@ -46,7 +46,7 @@ i18next.use(initReactI18next).init({
 				},
 				unit_details: {
 					personPlaceholder: 'Select a person',
-					profTab: 'Prof / Resp',
+					profTab: 'Head of unit',
 					cosecTab: 'COSECs',
 					subunitTab: 'Sub-Units',
 					title: 'Details on unit',
@@ -73,7 +73,7 @@ i18next.use(initReactI18next).init({
 					addNewUnit: 'Add new unit',
 					subUnit: 'SubUnit',
 					cosec: 'COSECs',
-					prof: 'Prof / Resp',
+					prof: 'Head of unit',
 				},
 				logout: 'Logout',
 				login: {
@@ -381,7 +381,7 @@ i18next.use(initReactI18next).init({
 				},
 				unit_details: {
 					personPlaceholder: 'Sélectionner une personne',
-					profTab: 'Prof / Resp',
+					profTab: 'Head of unit',
 					cosecTab: 'COSECs',
 					subunitTab: 'Sous-Unités',
 					title: 'Détails de l\'unité',
@@ -408,7 +408,7 @@ i18next.use(initReactI18next).init({
 					addNewUnit: 'Ajouter une nouvelle unité',
 					subUnit: 'SubUnit',
 					cosec: 'COSECs',
-					prof: 'Prof / Resp',
+					prof: 'Head of unit',
 				},
 				logout: 'Déconnexion',
 				login: {
